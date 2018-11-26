@@ -1,4 +1,6 @@
-package whg.WraithEngine;
+package whg.WraithEngine.utils;
+
+import whg.WraithEngine.core.Time;
 
 public class FPSLogger
 {

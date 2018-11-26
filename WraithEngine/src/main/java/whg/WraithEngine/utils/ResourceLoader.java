@@ -1,7 +1,10 @@
-package whg.WraithEngine;
+package whg.WraithEngine.utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import whg.WraithEngine.DisposableResource;
+import whg.WraithEngine.Shader;
 
 public class ResourceLoader
 {

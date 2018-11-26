@@ -6,7 +6,6 @@ import org.joml.Vector3f;
 import org.lwjgl.Version;
 import org.lwjgl.opengl.GL11;
 import whg.WraithEngine.DefaultGameLoop;
-import whg.WraithEngine.FileUtils;
 import whg.WraithEngine.Model;
 import whg.WraithEngine.FirstPersonCamera;
 import whg.WraithEngine.InitalizerEntity;
@@ -16,7 +15,6 @@ import whg.WraithEngine.Mesh;
 import whg.WraithEngine.ModelLoader;
 import whg.WraithEngine.ModelScene;
 import whg.WraithEngine.QuitGameListener;
-import whg.WraithEngine.ResourceLoader;
 import whg.WraithEngine.Shader;
 import whg.WraithEngine.SkinnedMesh;
 import whg.WraithEngine.SkinnedModel;
@@ -24,6 +22,8 @@ import whg.WraithEngine.Universe;
 import whg.WraithEngine.Window;
 import whg.WraithEngine.WindowManager;
 import whg.WraithEngine.World;
+import whg.WraithEngine.utils.FileUtils;
+import whg.WraithEngine.utils.ResourceLoader;
 
 public class RenderModel
 {

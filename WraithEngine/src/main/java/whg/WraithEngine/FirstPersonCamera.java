@@ -3,6 +3,9 @@ package whg.WraithEngine;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import whg.WraithEngine.core.Input;
+import whg.WraithEngine.core.Time;
+
 public class FirstPersonCamera implements Entity, Updateable
 {
 	private static final float MAX_ANGLE = (float)Math.toRadians(89);

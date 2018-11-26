@@ -3,6 +3,11 @@ package whg.WraithEngine;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
+import whg.WraithEngine.core.Input;
+import whg.WraithEngine.core.Time;
+import whg.WraithEngine.utils.FPSLogger;
+import whg.WraithEngine.utils.ResourceLoader;
+
 public class DefaultGameLoop implements RenderLoop
 {
 	private DefaultInputHandler _inputHandler;

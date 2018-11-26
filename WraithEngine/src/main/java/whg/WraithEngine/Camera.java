@@ -2,6 +2,8 @@ package whg.WraithEngine;
 
 import org.joml.Matrix4f;
 
+import whg.WraithEngine.core.Screen;
+
 public class Camera
 {
 	private Matrix4f _projectionMatrix;

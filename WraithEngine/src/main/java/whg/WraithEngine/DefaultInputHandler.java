@@ -2,6 +2,8 @@ package whg.WraithEngine;
 
 import org.lwjgl.glfw.GLFW;
 
+import whg.WraithEngine.core.Input;
+
 public class DefaultInputHandler implements KeyboardEventsHandler, MouseEventsHandler
 {
 	@Override

@@ -6,6 +6,8 @@ import java.util.HashMap;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
+import whg.WraithEngine.utils.ResourceLoader;
+
 public class Shader implements DisposableResource
 {
 	// ===== FIELDS =====

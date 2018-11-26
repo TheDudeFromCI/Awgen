@@ -9,6 +9,8 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import whg.WraithEngine.utils.ResourceLoader;
+
 public class Mesh implements DisposableResource
 {
 	private int _vboId;

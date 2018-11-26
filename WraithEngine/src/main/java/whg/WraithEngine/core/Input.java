@@ -1,4 +1,4 @@
-package whg.WraithEngine;
+package whg.WraithEngine.core;
 
 import java.util.HashMap;
 

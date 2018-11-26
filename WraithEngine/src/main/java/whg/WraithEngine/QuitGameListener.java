@@ -1,5 +1,7 @@
 package whg.WraithEngine;
 
+import whg.WraithEngine.core.Input;
+
 public class QuitGameListener implements Entity, Updateable
 {
 	private Window _window;

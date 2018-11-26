@@ -2,6 +2,8 @@ package whg.WraithEngine;
 
 import org.lwjgl.opengl.GL11;
 
+import whg.WraithEngine.core.Screen;
+
 public class DefaultWindowHandler implements WindowEventsHandler
 {
 	private Camera _camera;
