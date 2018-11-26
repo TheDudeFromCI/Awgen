@@ -5,7 +5,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.lwjgl.Version;
 import org.lwjgl.opengl.GL11;
-import whg.WraithEngine.DefaultGameLoop;
+
 import whg.WraithEngine.Model;
 import whg.WraithEngine.FirstPersonCamera;
 import whg.WraithEngine.InitalizerEntity;
@@ -22,6 +22,7 @@ import whg.WraithEngine.Universe;
 import whg.WraithEngine.Window;
 import whg.WraithEngine.WindowManager;
 import whg.WraithEngine.World;
+import whg.WraithEngine.gamelogic.DefaultGameLoop;
 import whg.WraithEngine.utils.FileUtils;
 import whg.WraithEngine.utils.ResourceLoader;
 

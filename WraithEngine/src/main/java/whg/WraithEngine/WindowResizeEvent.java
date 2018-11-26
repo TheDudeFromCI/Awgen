@@ -1,5 +1,7 @@
 package whg.WraithEngine;
 
+import whg.WraithEngine.gamelogic.RenderLoop;
+
 public class WindowResizeEvent implements GLFWEvent
 {
 	private Window _window;

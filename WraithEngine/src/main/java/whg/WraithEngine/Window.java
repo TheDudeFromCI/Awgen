@@ -7,6 +7,8 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
+import whg.WraithEngine.gamelogic.RenderLoop;
+
 public class Window
 {
 	private long _windowId;
