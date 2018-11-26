@@ -1,4 +1,4 @@
-package whg.WraithEngine;
+package whg.WraithEngine.window;
 
 public interface GLFWEvent
 {

@@ -1,4 +1,4 @@
-package whg.WraithEngine;
+package whg.WraithEngine.window;
 
 public class KeyPressedEvent implements GLFWEvent
 {

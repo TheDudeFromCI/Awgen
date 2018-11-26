@@ -1,4 +1,4 @@
-package whg.WraithEngine;
+package whg.WraithEngine.window;
 
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;

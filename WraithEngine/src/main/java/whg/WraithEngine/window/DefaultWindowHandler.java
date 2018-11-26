@@ -1,4 +1,4 @@
-package whg.WraithEngine;
+package whg.WraithEngine.window;
 
 import org.lwjgl.opengl.GL11;
 

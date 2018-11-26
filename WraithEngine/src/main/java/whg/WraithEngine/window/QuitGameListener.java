@@ -1,4 +1,4 @@
-package whg.WraithEngine;
+package whg.WraithEngine.window;
 
 import whg.WraithEngine.core.Input;
 import whg.WraithEngine.gamelogic.Entity;

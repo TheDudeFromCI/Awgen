@@ -1,9 +1,9 @@
 package whg.WraithEngine.gamelogic;
 
-import whg.WraithEngine.KeyboardEventsHandler;
-import whg.WraithEngine.MouseEventsHandler;
-import whg.WraithEngine.Window;
-import whg.WraithEngine.WindowEventsHandler;
+import whg.WraithEngine.window.KeyboardEventsHandler;
+import whg.WraithEngine.window.MouseEventsHandler;
+import whg.WraithEngine.window.Window;
+import whg.WraithEngine.window.WindowEventsHandler;
 
 public interface RenderLoop
 {

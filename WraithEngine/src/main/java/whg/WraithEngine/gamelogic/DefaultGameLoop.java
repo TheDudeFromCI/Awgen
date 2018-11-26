@@ -3,18 +3,18 @@ package whg.WraithEngine.gamelogic;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
-import whg.WraithEngine.DefaultInputHandler;
-import whg.WraithEngine.DefaultWindowHandler;
-import whg.WraithEngine.KeyboardEventsHandler;
-import whg.WraithEngine.MouseEventsHandler;
-import whg.WraithEngine.Window;
-import whg.WraithEngine.WindowEventsHandler;
 import whg.WraithEngine.core.Input;
 import whg.WraithEngine.core.Time;
 import whg.WraithEngine.rendering.Camera;
 import whg.WraithEngine.rendering.Universe;
 import whg.WraithEngine.utils.FPSLogger;
 import whg.WraithEngine.utils.ResourceLoader;
+import whg.WraithEngine.window.DefaultInputHandler;
+import whg.WraithEngine.window.DefaultWindowHandler;
+import whg.WraithEngine.window.KeyboardEventsHandler;
+import whg.WraithEngine.window.MouseEventsHandler;
+import whg.WraithEngine.window.Window;
+import whg.WraithEngine.window.WindowEventsHandler;
 
 public class DefaultGameLoop implements RenderLoop
 {

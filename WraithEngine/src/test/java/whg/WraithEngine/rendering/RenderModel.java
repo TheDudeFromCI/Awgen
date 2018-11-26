@@ -6,9 +6,6 @@ import org.joml.Vector3f;
 import org.lwjgl.Version;
 import org.lwjgl.opengl.GL11;
 
-import whg.WraithEngine.QuitGameListener;
-import whg.WraithEngine.Window;
-import whg.WraithEngine.WindowManager;
 import whg.WraithEngine.gamelogic.DefaultGameLoop;
 import whg.WraithEngine.gamelogic.FirstPersonCamera;
 import whg.WraithEngine.gamelogic.Location;
@@ -16,6 +13,9 @@ import whg.WraithEngine.utils.FileUtils;
 import whg.WraithEngine.utils.InitalizerEntity;
 import whg.WraithEngine.utils.ModelLoader;
 import whg.WraithEngine.utils.ResourceLoader;
+import whg.WraithEngine.window.QuitGameListener;
+import whg.WraithEngine.window.Window;
+import whg.WraithEngine.window.WindowManager;
 
 public class RenderModel
 {
