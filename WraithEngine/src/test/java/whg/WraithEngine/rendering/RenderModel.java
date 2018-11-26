@@ -6,6 +6,7 @@ import org.joml.Vector3f;
 import org.lwjgl.Version;
 import org.lwjgl.opengl.GL11;
 import whg.WraithEngine.DefaultGameLoop;
+import whg.WraithEngine.FileUtils;
 import whg.WraithEngine.Model;
 import whg.WraithEngine.FirstPersonCamera;
 import whg.WraithEngine.InitalizerEntity;
@@ -59,8 +60,8 @@ public class RenderModel
 				
 				world.getCamera().getLocation().setPosition(new Vector3f(0f, 3f, 5f));
 				
-				String path = "C:\\Users\\TheDudeFromCI\\Downloads\\twist_object.fbx";
-				ModelScene scene = ModelLoader.loadModel(new File(path));
+				File monkeyHeadModel = FileUtils.getResource("monkey_head.fbx");
+				ModelScene scene = ModelLoader.loadModel(monkeyHeadModel);
 				
 				SkinnedMesh monkey = (SkinnedMesh) scene._meshes.get(0);
 				Mesh floor = scene._meshes.get(1);
