@@ -9,6 +9,8 @@ import org.lwjgl.opengl.GL11;
 import whg.WraithEngine.gamelogic.DefaultGameLoop;
 import whg.WraithEngine.gamelogic.FirstPersonCamera;
 import whg.WraithEngine.gamelogic.Location;
+import whg.WraithEngine.gamelogic.Universe;
+import whg.WraithEngine.gamelogic.World;
 import whg.WraithEngine.utils.FileUtils;
 import whg.WraithEngine.utils.InitalizerEntity;
 import whg.WraithEngine.utils.ModelLoader;

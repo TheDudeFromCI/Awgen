@@ -3,7 +3,7 @@ package whg.WraithEngine.utils;
 import whg.WraithEngine.gamelogic.Entity;
 import whg.WraithEngine.gamelogic.Location;
 import whg.WraithEngine.gamelogic.Updateable;
-import whg.WraithEngine.rendering.World;
+import whg.WraithEngine.gamelogic.World;
 
 public abstract class InitalizerEntity implements Entity, Updateable
 {

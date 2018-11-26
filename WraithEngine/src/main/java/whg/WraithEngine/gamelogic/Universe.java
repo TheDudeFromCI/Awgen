@@ -1,4 +1,4 @@
-package whg.WraithEngine.rendering;
+package whg.WraithEngine.gamelogic;
 
 import java.util.ArrayList;
 
