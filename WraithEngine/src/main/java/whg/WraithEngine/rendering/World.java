@@ -1,8 +1,11 @@
-package whg.WraithEngine;
+package whg.WraithEngine.rendering;
 
 import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
+
+import whg.WraithEngine.gamelogic.Entity;
+import whg.WraithEngine.gamelogic.Updateable;
 
 public class World
 {

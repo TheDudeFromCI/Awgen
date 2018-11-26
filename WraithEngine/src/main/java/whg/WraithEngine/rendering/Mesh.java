@@ -1,4 +1,4 @@
-package whg.WraithEngine;
+package whg.WraithEngine.rendering;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import whg.WraithEngine.core.DisposableResource;
 import whg.WraithEngine.utils.ResourceLoader;
 
 public class Mesh implements DisposableResource

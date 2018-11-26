@@ -3,8 +3,8 @@ package whg.WraithEngine.utils;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import whg.WraithEngine.DisposableResource;
-import whg.WraithEngine.Shader;
+import whg.WraithEngine.core.DisposableResource;
+import whg.WraithEngine.rendering.Shader;
 
 public class ResourceLoader
 {

@@ -1,4 +1,4 @@
-package whg.WraithEngine;
+package whg.WraithEngine.rendering;
 
 import java.nio.FloatBuffer;
 

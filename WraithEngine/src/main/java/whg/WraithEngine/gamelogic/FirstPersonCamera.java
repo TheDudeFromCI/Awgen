@@ -1,10 +1,11 @@
-package whg.WraithEngine;
+package whg.WraithEngine.gamelogic;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import whg.WraithEngine.core.Input;
 import whg.WraithEngine.core.Time;
+import whg.WraithEngine.rendering.Camera;
 
 public class FirstPersonCamera implements Entity, Updateable
 {

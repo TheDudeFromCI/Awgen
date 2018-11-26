@@ -1,4 +1,4 @@
-package whg.WraithEngine;
+package whg.WraithEngine.gamelogic;
 
 public interface Updateable
 {

@@ -1,4 +1,4 @@
-package whg.WraithEngine;
+package whg.WraithEngine.utils;
 
 import java.io.File;
 import java.util.HashMap;
@@ -13,6 +13,13 @@ import org.lwjgl.assimp.AIScene;
 import org.lwjgl.assimp.AIVector3D;
 import org.lwjgl.assimp.AIVertexWeight;
 import org.lwjgl.assimp.Assimp;
+
+import whg.WraithEngine.rendering.Bone;
+import whg.WraithEngine.rendering.Mesh;
+import whg.WraithEngine.rendering.ModelScene;
+import whg.WraithEngine.rendering.Skeleton;
+import whg.WraithEngine.rendering.SkinnedMesh;
+import whg.WraithEngine.rendering.VertexData;
 
 public class ModelLoader
 {

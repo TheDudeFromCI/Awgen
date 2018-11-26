@@ -1,4 +1,6 @@
-package whg.WraithEngine;
+package whg.WraithEngine.rendering;
+
+import whg.WraithEngine.gamelogic.Location;
 
 public class SkinnedModel extends Model
 {

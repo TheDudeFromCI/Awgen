@@ -1,6 +1,9 @@
 package whg.WraithEngine;
 
 import whg.WraithEngine.core.Input;
+import whg.WraithEngine.gamelogic.Entity;
+import whg.WraithEngine.gamelogic.Location;
+import whg.WraithEngine.gamelogic.Updateable;
 
 public class QuitGameListener implements Entity, Updateable
 {

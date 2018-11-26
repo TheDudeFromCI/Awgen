@@ -3,16 +3,16 @@ package whg.WraithEngine.gamelogic;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
-import whg.WraithEngine.Camera;
 import whg.WraithEngine.DefaultInputHandler;
 import whg.WraithEngine.DefaultWindowHandler;
 import whg.WraithEngine.KeyboardEventsHandler;
 import whg.WraithEngine.MouseEventsHandler;
-import whg.WraithEngine.Universe;
 import whg.WraithEngine.Window;
 import whg.WraithEngine.WindowEventsHandler;
 import whg.WraithEngine.core.Input;
 import whg.WraithEngine.core.Time;
+import whg.WraithEngine.rendering.Camera;
+import whg.WraithEngine.rendering.Universe;
 import whg.WraithEngine.utils.FPSLogger;
 import whg.WraithEngine.utils.ResourceLoader;
 

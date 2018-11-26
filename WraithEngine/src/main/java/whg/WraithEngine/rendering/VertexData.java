@@ -1,4 +1,4 @@
-package whg.WraithEngine;
+package whg.WraithEngine.rendering;
 
 public class VertexData
 {
