@@ -2,6 +2,7 @@ package whg.WraithEngine.window;
 
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
@@ -22,6 +23,7 @@ public class Window
 	private Object _lock = new Object();
 	private GLFWEventQueue _eventQueue;
 	private MouseMoveEvent _mouseMoveEvent;
+	private boolean _initialized;
 	
 	public Window()
 	{
@@ -170,6 +172,16 @@ public class Window
 	
 	public void build()
 	{
+		if (_initialized)
+			return;
+		
+		GLFWErrorCallback.createPrint(System.err).set();
+		
+		if (!GLFW.glfwInit())
+			throw new IllegalStateException("Unable to initialize GLFW!");
+		
+		_initialized = true;
+
 		GLFW.glfwDefaultWindowHints();
 		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
 		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -228,5 +240,11 @@ public class Window
 			GLFW.glfwDestroyWindow(_windowId);
 			_windowId = MemoryUtil.NULL;
 		}
+		
+		GLFW.glfwTerminate();
+		GLFW.glfwSetErrorCallback(null).free();
+
+		_initialized = false;
+		_destroyed = false;
 	}
 }
