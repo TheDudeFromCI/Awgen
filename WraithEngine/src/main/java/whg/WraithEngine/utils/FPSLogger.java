@@ -23,6 +23,6 @@ public class FPSLogger
 		_frames = 0;
 		
 		float fps = 1f / average;
-		System.out.printf("FPS: %.3f\n", fps);
+		Log.debugf("FPS Logger: %.0ffps (~%.2fms)", fps, average);
 	}
 }

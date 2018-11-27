@@ -1,6 +1,7 @@
 package whg.WraithEngine.rendering;
 
 import java.io.File;
+
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.lwjgl.Version;
@@ -13,6 +14,7 @@ import whg.WraithEngine.gamelogic.Universe;
 import whg.WraithEngine.gamelogic.World;
 import whg.WraithEngine.utils.FileUtils;
 import whg.WraithEngine.utils.InitalizerEntity;
+import whg.WraithEngine.utils.Log;
 import whg.WraithEngine.utils.ModelLoader;
 import whg.WraithEngine.utils.ResourceLoader;
 import whg.WraithEngine.window.QuitGameListener;
@@ -23,7 +25,8 @@ public class RenderModel
 {
 	public static void main(String[] args)
 	{
-		System.out.println("LWJGL Version: " + Version.getVersion());
+		Log.trace("Starting WraithEngine.");
+		Log.debug("LWJGL Version: " + Version.getVersion());
 		
 		WindowManager windowManager = new WindowManager();
 		windowManager.init();
