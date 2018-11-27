@@ -1,9 +1,15 @@
 
 WraithEngine
 
-WraithEngine is a Java-based game engine, developed by Wraithaven Games, built around the concept of mixing various plugins to make games.
+WraithEngine is a Java-based game engine, developed by Wraithaven Games , built around the concept of mixing various plugins to make games.
 
-Why Use It?
+$
+
+What is it?
+
+WraithEngine is a game engine built around the focus of modularity and flexibility. The goal in mind when developing this engine was to push the concept of creating full length game environments using simple plugins and mods working together. Because of this system, it is possible for individuals with little to no experience to create creative games to explore and play with. With the engine being open source, anyone is allowed to build any plugin they wish for the engine and can distribute the combination as a full length game.
+
+Why use it?
 
 Yes, there's a lot of other game engines out there. Most are significantly nicer than this one. But the goal of WraithEngine is not to compete with them, but to offer a fun new way to develop games.
 
