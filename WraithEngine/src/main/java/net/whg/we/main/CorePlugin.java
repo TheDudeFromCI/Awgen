@@ -1,6 +1,12 @@
 package net.whg.we.main;
 
-public class CorePlugin implements Plugin
+/**
+ * This is the core plugin loader for WraithEngine. It is in charge of loading and sending events
+ * between plugins.
+ * 
+ * @author TheDudeFromCI
+ */
+public class CorePlugin extends BasePlugin
 {
 	@Override
 	public String getPluginName()
@@ -8,21 +14,6 @@ public class CorePlugin implements Plugin
 		return "Core";
 	}
 
-	@Override
-	public void initPlugin()
-	{
-	}
-
-	@Override
-	public void enablePlugin()
-	{
-	}
-
-	@Override
-	public void disablePlugin()
-	{
-	}
-	
 	@Override
 	public int getPriority()
 	{

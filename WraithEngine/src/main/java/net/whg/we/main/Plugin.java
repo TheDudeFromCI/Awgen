@@ -55,4 +55,18 @@ public interface Plugin
 	 * @return The priority value for this plugin.
 	 */
 	public int getPriority();
+	
+	/**
+	 * Checks if the plugin is currently enabled or not.
+	 * 
+	 * @return True if the plugin has been enabled. False otherwise.
+	 */
+	public boolean isEnabled();
+	
+	/**
+	 * Checks if the plugin is currently initialized or not.
+	 * 
+	 * @return True if the plugin has been initialized. False otherwise.
+	 */
+	public boolean isInitialized();
 }
