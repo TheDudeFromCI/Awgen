@@ -54,6 +54,13 @@ public class Log
 		System.out.println(format("ERROR", String.format(message, args)));
 	}
 	
+	public static void error(String message, Throwable exception)
+	{
+		// TODO Print stack trace
+		System.out.println(format("ERROR", message));
+		System.out.println(format("ERROR", exception.getMessage()));
+	}
+	
 	public static void fatal(String message)
 	{
 		System.out.println(format("FATAL", message));

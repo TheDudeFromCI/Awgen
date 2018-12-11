@@ -51,6 +51,8 @@ public interface Plugin
 	 * Gets the priority of the plugin. This value represents the order in which plugins are enabled
 	 * and disabled. Plugins with a lower value will be called before plugins with a higher value.
 	 * The default value for a plugin is 0. Values can be negative.
+	 * <br><br>
+	 * This value should not be changed during runtime.
 	 * 
 	 * @return The priority value for this plugin.
 	 */

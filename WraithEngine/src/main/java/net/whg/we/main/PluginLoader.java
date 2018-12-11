@@ -1,12 +1,26 @@
 package net.whg.we.main;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import whg.WraithEngine.utils.Log;
 
 class PluginLoader
 {
 	private ArrayList<Plugin> _plugins = new ArrayList<>();
+	private Comparator<Plugin> _pluginSorter;
+	
+	PluginLoader()
+	{
+		_pluginSorter = new Comparator<Plugin>()
+		{
+			@Override
+			public int compare(Plugin a, Plugin b)
+			{
+				return Integer.compare(a.getPriority(), b.getPriority());
+			}
+		};
+	}
 	
 	public void loadPlugin(Plugin plugin)
 	{
@@ -18,17 +32,23 @@ class PluginLoader
 		}
 		_plugins.add(plugin);
 		Log.debugf("Added plugin to list, %s", plugin.getPluginName());
-	}
-	
-	public void initializeAllPlugins()
-	{
-		Log.debug("Initializing plugins...");
-		for (Plugin p : _plugins)
+		
+		Log.tracef("Checking if %s is initialized.", plugin.getPluginName());
+		if (!plugin.isInitialized())
 		{
-			Log.debugf("Initializing %s.", p.getPluginName());
-			p.initPlugin();
+			Log.debugf("Initializing %s.", plugin.getPluginName());
+			plugin.initPlugin();
 		}
-		Log.debug("All plugins initialized.");
+		
+		Log.trace("Sorting plugins by priority.");
+		try
+		{
+			_plugins.sort(_pluginSorter);
+		}
+		catch (Exception exception)
+		{
+			Log.error("Failed to sort plugin list!", exception);
+		}
 	}
 	
 	public void enableAllPlugins()

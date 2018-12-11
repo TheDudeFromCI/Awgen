@@ -23,8 +23,7 @@ public class WraithEngine
 		// Load core plugins
 		pluginLoader.loadPlugin(new CorePlugin());
 		
-		// Initialize and enable plugins
-		pluginLoader.initializeAllPlugins();
+		// Enable plugins
 		pluginLoader.enableAllPlugins();
 	}
 }
