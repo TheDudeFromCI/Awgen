@@ -5,8 +5,7 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
-
-import whg.WraithEngine.utils.Log;
+import net.whg.we.utils.Log;
 
 public class GLFWBridge implements WindowBridge
 {

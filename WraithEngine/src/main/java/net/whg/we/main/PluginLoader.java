@@ -2,8 +2,7 @@ package net.whg.we.main;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-
-import whg.WraithEngine.utils.Log;
+import net.whg.we.utils.Log;
 
 class PluginLoader
 {

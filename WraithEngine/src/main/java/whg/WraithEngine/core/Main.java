@@ -5,7 +5,7 @@ import java.io.File;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
-
+import net.whg.we.utils.Log;
 import whg.WraithEngine.gamelogic.DefaultGameLoop;
 import whg.WraithEngine.gamelogic.FirstPersonCamera;
 import whg.WraithEngine.gamelogic.Location;
@@ -20,7 +20,6 @@ import whg.WraithEngine.rendering.SkinnedMesh;
 import whg.WraithEngine.rendering.SkinnedModel;
 import whg.WraithEngine.utils.FileUtils;
 import whg.WraithEngine.utils.InitalizerEntity;
-import whg.WraithEngine.utils.Log;
 import whg.WraithEngine.utils.ModelLoader;
 import whg.WraithEngine.utils.ResourceLoader;
 import whg.WraithEngine.window.QuitGameListener;

@@ -1,4 +1,4 @@
-package whg.WraithEngine.utils;
+package net.whg.we.utils;
 
 import java.time.LocalTime;
 
