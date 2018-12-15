@@ -1,5 +1,7 @@
 package net.whg.we.main;
 
+import net.whg.we.utils.Log;
+
 /**
  * The program entry class. This class is used for the purpose of initializing the plugin
  * loader, all core plugins, and hunting down and launching local plugins.
@@ -9,6 +11,11 @@ package net.whg.we.main;
 public class WraithEngine
 {
 	/**
+	 * The current version of WraithEngine being run.
+	 */
+	public static final String VERSION = "v0.0.1";
+
+	/**
 	 * The program entry method.
 	 * 
 	 * @param args - Arguments from command line. Used for determining program functions.
@@ -17,6 +24,17 @@ public class WraithEngine
 	 */
 	public static void main(String[] args)
 	{
+		// Log some automatic system info.
+		Log.trace("Starting WraithEngine.");
+		Log.debugf("WraithEngine Version: %s", VERSION);
+		Log.debugf("Operating System: %s", System.getProperty("os.name"));
+		Log.debugf("Operating System Arch: %s", System.getProperty("os.arch"));
+		Log.debugf("Java Version: %s", System.getProperty("java.version"));
+		Log.debugf("Java Vendor: %s", System.getProperty("java.vendor"));
+		Log.debugf("System User: %s", System.getProperty("user.name"));
+		Log.debugf("Working Directory: %s", System.getProperty("user.dir"));
+		Log.debugf("LWJGL Version: %s", org.lwjgl.Version.getVersion());
+
 		// Create plugin loader
 		PluginLoader pluginLoader = new PluginLoader();
 		
