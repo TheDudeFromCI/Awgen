@@ -26,7 +26,8 @@ public class GLFWBridge implements WindowBridge
 	@Override
 	public void setName(String name)
 	{
-		Log.tracef("Tried to update window name to '%s' from '%s'.", name, _name);
+		Log.tracef("Tried to update window name to '%s' from '%s'.", name,
+				_name);
 		Log.tracef("  Window state is currently %s.", getWindowStateName());
 
 		if (!canChangeName())
@@ -37,13 +38,13 @@ public class GLFWBridge implements WindowBridge
 
 		Log.debugf("Changed window name to '%s' from '%s'.", name, _name);
 		_name = name;
-		
+
 		// TODO If window is already built, update window name
 	}
-	
+
 	private String getWindowStateName()
 	{
-		switch(_windowState)
+		switch (_windowState)
 		{
 			case WINDOW_UNINITIALIZED_STATE:
 				return "Uninitialized";
@@ -73,7 +74,8 @@ public class GLFWBridge implements WindowBridge
 	@Override
 	public void setResizable(boolean resizable)
 	{
-		Log.tracef("Tried to update window isResizable to '%s' from '%s'.", resizable, _resizable);
+		Log.tracef("Tried to update window isResizable to '%s' from '%s'.",
+				resizable, _resizable);
 		Log.tracef("  Window state is currently %s.", getWindowStateName());
 
 		if (!canChangeResizable())
@@ -82,7 +84,8 @@ public class GLFWBridge implements WindowBridge
 			return;
 		}
 
-		Log.debugf("Changed window isResizable to '%s' from '%s'.", resizable, _resizable);
+		Log.debugf("Changed window isResizable to '%s' from '%s'.", resizable,
+				_resizable);
 		_resizable = resizable;
 	}
 
@@ -101,7 +104,8 @@ public class GLFWBridge implements WindowBridge
 	@Override
 	public void setVSync(boolean vSync)
 	{
-		Log.tracef("Tried to update window vsync to '%s' from '%s'.", vSync, _vSync);
+		Log.tracef("Tried to update window vsync to '%s' from '%s'.", vSync,
+				_vSync);
 		Log.tracef("  Window state is currently %s.", getWindowStateName());
 
 		if (!canChangeVSync())
@@ -119,16 +123,16 @@ public class GLFWBridge implements WindowBridge
 	{
 		return !isWindowOpen();
 	}
-	
+
 	public int getWindowState()
 	{
 		return _windowState;
 	}
-	
+
 	public boolean isWindowOpen()
 	{
-		return _windowState == WINDOW_OPEN_STATE ||
-				_windowState == WINDOW_REQUESTING_CLOSE_STATE;
+		return _windowState == WINDOW_OPEN_STATE
+				|| _windowState == WINDOW_REQUESTING_CLOSE_STATE;
 	}
 
 	@Override
@@ -176,15 +180,19 @@ public class GLFWBridge implements WindowBridge
 	public void setGraphicsBridge(GraphicsBridge bridge)
 	{
 		if (bridge == null)
-			throw new IllegalArgumentException("Cannot assign null GraphicsBridge!");
+			throw new IllegalArgumentException(
+					"Cannot assign null GraphicsBridge!");
 
-		Log.tracef("Tried to update window graphics bridge to %s.", bridge.getClass().getName());
+		Log.tracef("Tried to update window graphics bridge to %s.",
+				bridge.getClass().getName());
 		Log.tracef("  Window state is currently %s.", getWindowStateName());
 
 		if (isWindowOpen())
-			throw new IllegalStateException("Cannot update GraphicsBridge while window is open!");
+			throw new IllegalStateException(
+					"Cannot update GraphicsBridge while window is open!");
 
-		Log.debugf("Changed window graphics bridge to %s.", bridge.getClass().getName());
+		Log.debugf("Changed window graphics bridge to %s.",
+				bridge.getClass().getName());
 		_graphicsBridge = bridge;
 	}
 
@@ -192,38 +200,41 @@ public class GLFWBridge implements WindowBridge
 	public void buildWindow()
 	{
 		GLFWErrorCallback.createPrint(System.err).set();
-		
+
 		if (!GLFW.glfwInit())
 			throw new IllegalStateException("Unable to initialize GLFW!");
 
 		_windowState = WINDOW_OPEN_STATE;
-		
+
 		GLFW.glfwDefaultWindowHints();
 		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
 		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
 		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 3);
 		GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, 4);
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GLFW.GLFW_TRUE);
-		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
-		
+		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE,
+				GLFW.GLFW_OPENGL_CORE_PROFILE);
+
 		if (!_resizable)
 			GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_FALSE);
-		
-		_windowId = GLFW.glfwCreateWindow(_width, _height, _name, MemoryUtil.NULL, MemoryUtil.NULL);
+
+		_windowId = GLFW.glfwCreateWindow(_width, _height, _name,
+				MemoryUtil.NULL, MemoryUtil.NULL);
 		if (_windowId == 0)
 			throw new RuntimeException("Failed to create GLFW window!");
-		
-//		assignCallbacks();
-		
+
+		// assignCallbacks();
+
 		try (MemoryStack stack = MemoryStack.stackPush())
 		{
-			GLFWVidMode vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
+			GLFWVidMode vidmode =
+					GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
 
 			int x = (vidmode.width() - _width) / 2;
 			int y = (vidmode.height() - _height) / 2;
 			GLFW.glfwSetWindowPos(_windowId, x, y);
 		}
-				
+
 		GLFW.glfwShowWindow(_windowId);
 	}
 

@@ -17,22 +17,22 @@ public class Universe
 		for (World w : _toAdd)
 			_worlds.add(w);
 		_toAdd.clear();
-		
+
 		for (World w : _worlds)
 			w.update();
 	}
-	
+
 	public void render()
 	{
 		for (World w : _worlds)
 			w.render();
 	}
-	
+
 	public void addWorld(World world)
 	{
 		_toAdd.add(world);
 	}
-	
+
 	public void removeWorld(World world)
 	{
 		_toRemove.remove(world);

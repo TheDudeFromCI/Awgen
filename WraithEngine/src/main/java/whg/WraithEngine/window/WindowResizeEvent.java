@@ -7,7 +7,7 @@ public class WindowResizeEvent implements GLFWEvent
 	private Window _window;
 	private int _width;
 	private int _height;
-	
+
 	public WindowResizeEvent(Window window, int width, int height)
 	{
 		_window = window;

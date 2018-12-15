@@ -8,13 +8,13 @@ public class SkinnedModel extends Model
 	{
 		super(mesh, location, material);
 	}
-	
+
 	@Override
 	public void render(Camera camera)
 	{
 		getMaterial().bind();
 		getMaterial().setMVPUniform(camera, getLocation());
-		((SkinnedMesh)getMesh()).sendToShader(getMaterial().getShader());
+		((SkinnedMesh) getMesh()).sendToShader(getMaterial().getShader());
 		getMesh().render();
 	}
 }

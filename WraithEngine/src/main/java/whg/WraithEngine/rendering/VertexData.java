@@ -6,7 +6,7 @@ public class VertexData
 	private short[] _triangles;
 	private int[] _attributes;
 	private int _vertexSize;
-	
+
 	public VertexData(float[] data, short[] triangles, int[] attributes)
 	{
 		_data = data;
@@ -17,37 +17,37 @@ public class VertexData
 		for (int i : _attributes)
 			_vertexSize += i;
 	}
-	
+
 	public float[] getDataArray()
 	{
 		return _data;
 	}
-	
+
 	public int getVertexSize()
 	{
 		return _vertexSize;
 	}
-	
+
 	public int getVertexByteSize()
 	{
 		return _vertexSize * 4;
 	}
-	
+
 	public short[] getTriangles()
 	{
 		return _triangles;
 	}
-	
+
 	public int getTriangleCount()
 	{
 		return _triangles.length;
 	}
-	
+
 	public int getVertexCount()
 	{
 		return _data.length / _vertexSize;
 	}
-	
+
 	public int[] getAttributeSizes()
 	{
 		return _attributes;

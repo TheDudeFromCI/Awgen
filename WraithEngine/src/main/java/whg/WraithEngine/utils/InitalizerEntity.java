@@ -8,7 +8,7 @@ import whg.WraithEngine.gamelogic.World;
 public abstract class InitalizerEntity implements Entity, Updateable
 {
 	private World _world;
-	
+
 	public InitalizerEntity(World world)
 	{
 		_world = world;
@@ -26,6 +26,6 @@ public abstract class InitalizerEntity implements Entity, Updateable
 	{
 		return null;
 	}
-	
+
 	public abstract void run();
 }

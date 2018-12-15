@@ -9,17 +9,17 @@ import whg.WraithEngine.rendering.Shader;
 public class ResourceLoader
 {
 	private static ArrayList<DisposableResource> _resources = new ArrayList<>();
-	
+
 	public static void addResource(DisposableResource resource)
 	{
 		_resources.add(resource);
 	}
-	
+
 	public static void removeResource(DisposableResource resource)
 	{
 		_resources.remove(resource);
 	}
-	
+
 	public static void disposeAllResources()
 	{
 		for (int i = _resources.size() - 1; i >= 0; i--)
@@ -36,16 +36,18 @@ public class ResourceLoader
 		String vert, frag;
 		try
 		{
-			vert = FileUtils.loadFileAsString(FileUtils.getResource(null, name + ".vert"));
-			frag = FileUtils.loadFileAsString(FileUtils.getResource(null, name + ".frag"));
+			vert = FileUtils.loadFileAsString(
+					FileUtils.getResource(null, name + ".vert"));
+			frag = FileUtils.loadFileAsString(
+					FileUtils.getResource(null, name + ".frag"));
 		}
-		catch(IOException exception)
+		catch (IOException exception)
 		{
 			System.err.println("Failed to load shader!");
 			// TODO Return default shader
 			return null;
 		}
-		
+
 		Shader shader = new Shader(name, vert, frag);
 		return shader;
 	}

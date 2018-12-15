@@ -6,7 +6,7 @@ public class KeyPressedEvent implements GLFWEvent
 	private int _key;
 	private int _action;
 	private int _mods;
-	
+
 	public KeyPressedEvent(Window window, int key, int action, int mods)
 	{
 		_window = window;
@@ -18,6 +18,7 @@ public class KeyPressedEvent implements GLFWEvent
 	@Override
 	public void handleEvent()
 	{
-		_window.getRenderLoop().getKeyboardEventsHandler().onKeyPressed(_key, _action, _mods);
+		_window.getRenderLoop().getKeyboardEventsHandler().onKeyPressed(_key,
+				_action, _mods);
 	}
 }

@@ -2,7 +2,6 @@ package whg.WraithEngine.gamelogic;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
-
 import whg.WraithEngine.core.Input;
 import whg.WraithEngine.core.Time;
 import whg.WraithEngine.rendering.Camera;
@@ -22,7 +21,7 @@ public class DefaultGameLoop implements RenderLoop
 	private Camera _camera;
 	private FPSLogger _fpsLogger;
 	private Universe _universe;
-	
+
 	public DefaultGameLoop()
 	{
 		_camera = new Camera();
@@ -32,17 +31,17 @@ public class DefaultGameLoop implements RenderLoop
 		_inputHandler = new DefaultInputHandler();
 		_windowHandler = new DefaultWindowHandler(_camera);
 	}
-	
+
 	public Camera getCamera()
 	{
 		return _camera;
 	}
-	
+
 	public FPSLogger getFPSLogger()
 	{
 		return _fpsLogger;
 	}
-	
+
 	public Universe getUniverse()
 	{
 		return _universe;
@@ -52,15 +51,15 @@ public class DefaultGameLoop implements RenderLoop
 	public void loop(Window window)
 	{
 		// LOOP
-		while(!window.isRequestingClose())
+		while (!window.isRequestingClose())
 		{
 			Time.updateTime();
 			_fpsLogger.logFramerate();
 			window.pollEvents();
-			
+
 			_universe.update();
 			_universe.render();
-			
+
 			// ERROR CHECK
 			int error;
 			while ((error = GL11.glGetError()) != GL11.GL_NO_ERROR)
@@ -91,12 +90,12 @@ public class DefaultGameLoop implements RenderLoop
 				System.err.println("OpenGL Error. " + codeName);
 				window.requestClose();
 			}
-			
+
 			// FINISH
 			Input.endFrame();
 			window.endFrame();
 		}
-		
+
 		// DISPOSE
 		ResourceLoader.disposeAllResources();
 	}

@@ -12,17 +12,17 @@ public class FPSLogger
 	{
 		return 1f / Time.deltaTime();
 	}
-	
+
 	public void logFramerate()
 	{
 		_frames++;
 		if (Time.time() - _lastLog < 1f)
 			return;
-		
+
 		float average = (Time.time() - _lastLog) / _frames;
 		_lastLog = Time.time();
 		_frames = 0;
-		
+
 		float fps = 1f / average;
 		Log.debugf("FPS Logger: %.0ffps (~%.2fms)", fps, average);
 	}

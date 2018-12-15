@@ -9,7 +9,7 @@ public class QuitGameListener implements Entity, Updateable
 {
 	private Window _window;
 	private String _key;
-	
+
 	public QuitGameListener(Window window, String key)
 	{
 		_window = window;

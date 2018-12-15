@@ -1,22 +1,21 @@
 package whg.WraithEngine.core;
 
 import java.util.HashMap;
-
 import org.lwjgl.glfw.GLFW;
 
 public class Input
 {
 	private static boolean[] _keys = new boolean[350];
 	private static boolean[] _keysLastFrame = new boolean[350];
-	private static HashMap<String,Integer> _keyMap;
+	private static HashMap<String, Integer> _keyMap;
 	private static float _mouseX, _mouseY;
 	private static float _lastMouseX, _lastMouseY;
-	
+
 	static
 	{
 		loadDefaultKeyBindings();
 	}
-	
+
 	private static void loadDefaultKeyBindings()
 	{
 		_keyMap = new HashMap<>();
@@ -60,7 +59,7 @@ public class Input
 		_keyMap.put("7", GLFW.GLFW_KEY_7);
 		_keyMap.put("8", GLFW.GLFW_KEY_8);
 		_keyMap.put("9", GLFW.GLFW_KEY_9);
-		
+
 		// number pad keys
 		_keyMap.put("numpad 0", GLFW.GLFW_KEY_KP_0);
 		_keyMap.put("numpad 1", GLFW.GLFW_KEY_KP_1);
@@ -91,13 +90,13 @@ public class Input
 		_keyMap.put("caps lock", GLFW.GLFW_KEY_CAPS_LOCK);
 		_keyMap.put("number lock", GLFW.GLFW_KEY_NUM_LOCK);
 		_keyMap.put("enter", GLFW.GLFW_KEY_ENTER);
-		
+
 		// secondary keys
 		_keyMap.put("comma", GLFW.GLFW_KEY_COMMA);
 		_keyMap.put("period", GLFW.GLFW_KEY_PERIOD);
 		_keyMap.put("apostrophe", GLFW.GLFW_KEY_APOSTROPHE);
 		_keyMap.put("backspace", GLFW.GLFW_KEY_BACKSPACE);
-		
+
 		// edge keys
 		_keyMap.put("left shift", GLFW.GLFW_KEY_LEFT_SHIFT);
 		_keyMap.put("left control", GLFW.GLFW_KEY_LEFT_CONTROL);
@@ -115,24 +114,24 @@ public class Input
 		_keyMap.put("super", GLFW.GLFW_KEY_LEFT_SUPER);
 		_keyMap.put("numpad period", GLFW.GLFW_KEY_KP_DECIMAL);
 	}
-	
+
 	public static void setKeyPressed(int key, boolean pressed)
 	{
 		if (key < 0 || key >= 350)
 			return;
 		_keys[key] = pressed;
 	}
-	
+
 	public static boolean isKeyHeld(int key)
 	{
 		return _keys[key];
 	}
-	
+
 	public static boolean isKeyHeld(String key)
 	{
 		return isKeyHeld(getKeyId(key));
 	}
-	
+
 	public static boolean isKeyDown(int key)
 	{
 		return _keys[key] && !_keysLastFrame[key];
@@ -160,33 +159,33 @@ public class Input
 		_lastMouseX = _mouseX;
 		_lastMouseY = _mouseY;
 	}
-	
+
 	public static int getKeyId(String name)
 	{
 		return _keyMap.get(name);
 	}
-	
+
 	public static void setMousePosition(float mouseX, float mouseY)
 	{
 		_mouseX = mouseX;
 		_mouseY = mouseY;
 	}
-	
+
 	public static float getMouseX()
 	{
 		return _mouseX;
 	}
-	
+
 	public static float getMouseY()
 	{
 		return _mouseY;
 	}
-	
+
 	public static float getDeltaMouseX()
 	{
 		return _mouseX - _lastMouseX;
 	}
-	
+
 	public static float getDeltaMouseY()
 	{
 		return _mouseY - _lastMouseY;

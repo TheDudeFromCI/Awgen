@@ -8,10 +8,10 @@ import whg.WraithEngine.window.WindowEventsHandler;
 public interface RenderLoop
 {
 	public void loop(Window window);
-	
+
 	public WindowEventsHandler getWindowEventsHandler();
-	
+
 	public KeyboardEventsHandler getKeyboardEventsHandler();
-	
+
 	public MouseEventsHandler getMouseEventsHandler();
 }

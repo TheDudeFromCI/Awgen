@@ -5,12 +5,12 @@ import java.util.LinkedList;
 public class GLFWEventQueue
 {
 	private LinkedList<GLFWEvent> _events;
-	
+
 	public GLFWEventQueue()
 	{
 		_events = new LinkedList<>();
 	}
-	
+
 	public void addEvent(GLFWEvent event)
 	{
 		synchronized (_events)
@@ -18,7 +18,7 @@ public class GLFWEventQueue
 			_events.add(event);
 		}
 	}
-	
+
 	public void handleEvents()
 	{
 		synchronized (_events)
@@ -28,7 +28,7 @@ public class GLFWEventQueue
 			_events.clear();
 		}
 	}
-	
+
 	public void clearEvents()
 	{
 		synchronized (_events)
