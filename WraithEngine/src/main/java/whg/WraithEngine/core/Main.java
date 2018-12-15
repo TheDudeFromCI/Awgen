@@ -5,6 +5,7 @@ import java.io.File;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
+import net.whg.we.utils.FileUtils;
 import net.whg.we.utils.Log;
 import whg.WraithEngine.gamelogic.DefaultGameLoop;
 import whg.WraithEngine.gamelogic.FirstPersonCamera;
@@ -18,7 +19,6 @@ import whg.WraithEngine.rendering.ModelScene;
 import whg.WraithEngine.rendering.Shader;
 import whg.WraithEngine.rendering.SkinnedMesh;
 import whg.WraithEngine.rendering.SkinnedModel;
-import whg.WraithEngine.utils.FileUtils;
 import whg.WraithEngine.utils.InitalizerEntity;
 import whg.WraithEngine.utils.ModelLoader;
 import whg.WraithEngine.utils.ResourceLoader;
@@ -67,7 +67,7 @@ public class Main
 					
 					world.getCamera().getLocation().setPosition(new Vector3f(0f, 3f, 5f));
 					
-					File monkeyHeadModel = FileUtils.getResource("monkey_head.fbx");
+					File monkeyHeadModel = FileUtils.getResource(null, "monkey_head.fbx");
 					ModelScene scene = ModelLoader.loadModel(monkeyHeadModel);
 					
 					SkinnedMesh monkey = (SkinnedMesh) scene._meshes.get(0);

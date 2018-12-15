@@ -2,7 +2,7 @@ package whg.WraithEngine.utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
+import net.whg.we.utils.FileUtils;
 import whg.WraithEngine.core.DisposableResource;
 import whg.WraithEngine.rendering.Shader;
 
@@ -36,8 +36,8 @@ public class ResourceLoader
 		String vert, frag;
 		try
 		{
-			vert = FileUtils.loadFileAsString(FileUtils.getResource(name + ".vert"));
-			frag = FileUtils.loadFileAsString(FileUtils.getResource(name + ".frag"));
+			vert = FileUtils.loadFileAsString(FileUtils.getResource(null, name + ".vert"));
+			frag = FileUtils.loadFileAsString(FileUtils.getResource(null, name + ".frag"));
 		}
 		catch(IOException exception)
 		{
