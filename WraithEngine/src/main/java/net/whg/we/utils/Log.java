@@ -120,11 +120,12 @@ public class Log
 	 * 
 	 * @param message - The message to log.
 	 * @param exception - The exception to write.
+	 * @param args - Any formatted arguments to format into the message.
 	 */
-	public static void error(String message, Throwable exception)
+	public static void errorf(String message, Throwable exception, Object... args)
 	{
 		// TODO Print stack trace
-		System.out.println(format("ERROR", message));
+		System.out.println(format("ERROR", String.format(message, args)));
 		System.out.println(format("ERROR", exception.getMessage()));
 	}
 	
@@ -154,11 +155,12 @@ public class Log
 	 * 
 	 * @param message - The message to log.
 	 * @param exception - The exception to write.
+	 * @param args - Any formatted arguments to format into the message.
 	 */
-	public static void fatal(String message, Throwable exception)
+	public static void fatalf(String message, Throwable exception, Object... args)
 	{
 		// TODO Print stack trace
-		System.out.println(format("FATAL", message));
+		System.out.println(format("FATAL", String.format(message, args)));
 		System.out.println(format("FATAL", exception.getMessage()));
 	}
 

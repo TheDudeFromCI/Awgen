@@ -46,7 +46,7 @@ class PluginLoader
 		}
 		catch (Exception exception)
 		{
-			Log.error("Failed to sort plugin list!", exception);
+			Log.errorf("Failed to sort plugin list!", exception);
 		}
 	}
 	
