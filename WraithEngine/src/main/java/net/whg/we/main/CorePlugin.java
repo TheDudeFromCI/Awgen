@@ -30,7 +30,7 @@ public class CorePlugin extends BasePlugin
 		return 1000;
 	}
 
-	void loadPluginsFromFile()
+	void loadPluginsFromFile(PluginLoader pluginLoader)
 	{
 		File folder = FileUtils.getPluginFolder();
 
@@ -62,7 +62,10 @@ public class CorePlugin extends BasePlugin
 			}
 
 			Log.infof("Attempting to load plugin %s...", fileName);
-			attemptLoadPlugin(file);
+			Plugin plugin = attemptLoadPlugin(file);
+			
+			if (plugin != null)
+				pluginLoader.loadPlugin(plugin);
 		}
 	}
 

@@ -41,7 +41,11 @@ public class WraithEngine
 		PluginLoader pluginLoader = new PluginLoader();
 
 		// Load core plugins
-		pluginLoader.loadPlugin(new CorePlugin());
+		CorePlugin corePlugin = new CorePlugin();
+		pluginLoader.loadPlugin(corePlugin);
+		
+		// Load external plugins
+		corePlugin.loadPluginsFromFile(pluginLoader);
 
 		// Enable plugins
 		pluginLoader.enableAllPlugins();
