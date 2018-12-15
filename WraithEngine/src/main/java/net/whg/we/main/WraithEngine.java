@@ -1,5 +1,6 @@
 package net.whg.we.main;
 
+import org.lwjgl.Version;
 import net.whg.we.utils.Log;
 
 /**
@@ -35,7 +36,7 @@ public class WraithEngine
 		Log.debugf("Java Vendor: %s", System.getProperty("java.vendor"));
 		Log.debugf("System User: %s", System.getProperty("user.name"));
 		Log.debugf("Working Directory: %s", System.getProperty("user.dir"));
-		Log.debugf("LWJGL Version: %s", org.lwjgl.Version.getVersion());
+		Log.debugf("LWJGL Version: %s", Version.getVersion());
 
 		// Create plugin loader
 		PluginLoader pluginLoader = new PluginLoader();
