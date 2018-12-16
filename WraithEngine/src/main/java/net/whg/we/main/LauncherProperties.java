@@ -44,6 +44,8 @@ class LauncherProperties
 
 			// Send properties to object
 			{
+				Log.indent();
+
 				Log.trace("Loading 'ConsoleApplication' value.");
 				if (map.containsKey("ConsoleApplication"))
 				{
@@ -58,6 +60,8 @@ class LauncherProperties
 					map.put("ConsoleApplication", properties._isConsoleApplication);
 					updateYamlFile = true;
 				}
+
+				Log.unindent();
 			}
 
 			// Update yaml if needed
@@ -94,9 +98,13 @@ class LauncherProperties
 		LauncherProperties properties = new LauncherProperties();
 		HashMap<String, Object> map = new HashMap<>();
 
+		Log.indent();
+
 		Log.debugf("Setting default 'ConsoleApplication' property to %s.",
 				properties._isConsoleApplication);
 		map.put("ConsoleApplication", properties._isConsoleApplication);
+
+		Log.unindent();
 
 		try
 		{

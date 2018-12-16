@@ -27,6 +27,9 @@ public class WraithEngine
 	 */
 	public static void main(String[] args)
 	{
+		// Set default log parameters
+		Log.setLogLevel(Log.TRACE);
+
 		// Log some automatic system info
 		Log.trace("Starting WraithEngine.");
 		Log.debugf("WraithEngine Version: %s", VERSION);
