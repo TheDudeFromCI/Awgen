@@ -125,4 +125,9 @@ class LauncherProperties
 	private LauncherProperties()
 	{
 	}
+
+	public boolean isConsoleApplication()
+	{
+		return _isConsoleApplication;
+	}
 }

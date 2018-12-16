@@ -1,6 +1,6 @@
-package whg.WraithEngine.rendering.hardware;
+package net.whg.we.window;
 
-public interface WindowBridge
+public interface Window
 {
 	public void setName(String name);
 
@@ -27,8 +27,6 @@ public interface WindowBridge
 	public int getWidth();
 
 	public int getHeight();
-
-	public void setGraphicsBridge(GraphicsBridge bridge);
 
 	public void buildWindow();
 

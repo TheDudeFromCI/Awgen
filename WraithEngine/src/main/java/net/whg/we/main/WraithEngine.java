@@ -2,6 +2,8 @@ package net.whg.we.main;
 
 import org.lwjgl.Version;
 import net.whg.we.utils.Log;
+import net.whg.we.window.GLFWWindow;
+import net.whg.we.window.Window;
 
 /**
  * The program entry class. This class is used for the purpose of initializing
@@ -42,7 +44,6 @@ public class WraithEngine
 		Log.debugf("LWJGL Version: %s", Version.getVersion());
 
 		// Load the launcher properties
-		@SuppressWarnings("unused")
 		LauncherProperties properties = LauncherProperties.loadLauncherProperties();
 
 		// Create plugin loader
@@ -57,5 +58,15 @@ public class WraithEngine
 
 		// Enable plugins
 		pluginLoader.enableAllPlugins();
+
+		// Launch game window, if needed
+		if (!properties.isConsoleApplication())
+		{
+			Window window = new GLFWWindow();
+			window.setName("WraithEngine");
+			window.setResizable(false);
+			window.setVSync(false);
+			// window.buildWindow();
+		}
 	}
 }
