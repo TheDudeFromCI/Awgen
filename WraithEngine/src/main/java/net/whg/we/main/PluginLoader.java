@@ -21,7 +21,7 @@ class PluginLoader
 		};
 	}
 
-	public void loadPlugin(Plugin plugin)
+	void loadPlugin(Plugin plugin)
 	{
 		if (_plugins.contains(plugin))
 		{
@@ -51,7 +51,7 @@ class PluginLoader
 		}
 	}
 
-	public void enableAllPlugins()
+	void enableAllPlugins()
 	{
 		Log.debug("Enabling plugins...");
 		for (Plugin p : _plugins)
@@ -62,7 +62,7 @@ class PluginLoader
 		Log.debug("All plugins enabled.");
 	}
 
-	public void disableAllPlugins()
+	void disableAllPlugins()
 	{
 		Log.debug("Disabling plugins...");
 		for (Plugin p : _plugins)
