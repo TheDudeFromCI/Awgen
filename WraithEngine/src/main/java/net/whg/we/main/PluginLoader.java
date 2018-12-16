@@ -11,28 +11,21 @@ class PluginLoader
 
 	PluginLoader()
 	{
-		_pluginSorter = new Comparator<Plugin>()
-		{
-			@Override
-			public int compare(Plugin a, Plugin b)
-			{
-				return Integer.compare(a.getPriority(), b.getPriority());
-			}
-		};
+		_pluginSorter = (a, b) -> Integer.compare(a.getPriority(), b.getPriority());
 	}
 
 	void loadPlugin(Plugin plugin)
 	{
 		if (_plugins.contains(plugin))
 		{
-			Log.tracef(
-					"Failed to add plugin %s to list, plugin already exists.",
+			Log.tracef("Failed to add plugin %s to list, plugin already exists.",
 					plugin.getPluginName());
 			return;
 		}
 		_plugins.add(plugin);
 		Log.debugf("Added plugin to list, %s", plugin.getPluginName());
 
+		Log.indent();
 		Log.tracef("Checking if %s is initialized.", plugin.getPluginName());
 		if (!plugin.isInitialized())
 		{
@@ -41,6 +34,8 @@ class PluginLoader
 		}
 
 		Log.trace("Sorting plugins by priority.");
+		Log.unindent();
+
 		try
 		{
 			_plugins.sort(_pluginSorter);
@@ -54,22 +49,30 @@ class PluginLoader
 	void enableAllPlugins()
 	{
 		Log.debug("Enabling plugins...");
+		Log.indent();
+
 		for (Plugin p : _plugins)
 		{
 			Log.debugf("Enabling %s.", p.getPluginName());
 			p.enablePlugin();
 		}
+
+		Log.unindent();
 		Log.debug("All plugins enabled.");
 	}
 
 	void disableAllPlugins()
 	{
 		Log.debug("Disabling plugins...");
+		Log.indent();
+
 		for (Plugin p : _plugins)
 		{
 			Log.debugf("Disabling %s.", p.getPluginName());
 			p.disablePlugin();
 		}
+
+		Log.unindent();
 		Log.debug("All plugins disabled.");
 	}
 }
