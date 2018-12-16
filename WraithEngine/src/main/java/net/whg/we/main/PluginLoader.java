@@ -29,12 +29,33 @@ class PluginLoader
 		Log.tracef("Checking if %s is initialized.", plugin.getPluginName());
 		if (!plugin.isInitialized())
 		{
-			Log.debugf("Initializing %s.", plugin.getPluginName());
-			plugin.initPlugin();
+			// Mark the current indention level.
+			int indent = Log.getIndentLevel();
+
+			try
+			{
+				Log.debugf("Initializing %s.", plugin.getPluginName());
+
+				Log.indent();
+				plugin.initPlugin();
+
+				// Reset the indention to previous value, in case something went wrong while
+				// initializing the plugin.
+				Log.setIndentLevel(indent);
+			}
+			catch (Exception exception)
+			{
+				// As the plugin has failed to initialize, we can assume any ajustments to the
+				// log indention level have never been corrected. Let's do that now.
+				Log.setIndentLevel(indent);
+
+				Log.errorf("Failed to initialize plugin %s!", exception, plugin.getPluginName());
+				Log.warnf("Unloading uninitialized plugin, %s.", plugin.getPluginName());
+				_plugins.remove(plugin);
+			}
 		}
 
 		Log.trace("Sorting plugins by priority.");
-		Log.unindent();
 
 		try
 		{
@@ -44,6 +65,8 @@ class PluginLoader
 		{
 			Log.errorf("Failed to sort plugin list!", exception);
 		}
+
+		Log.unindent();
 	}
 
 	void enableAllPlugins()
@@ -54,7 +77,20 @@ class PluginLoader
 		for (Plugin p : _plugins)
 		{
 			Log.debugf("Enabling %s.", p.getPluginName());
-			p.enablePlugin();
+
+			int indent = Log.getIndentLevel();
+			Log.indent();
+
+			try
+			{
+				p.enablePlugin();
+				Log.setIndentLevel(indent);
+			}
+			catch (Exception exception)
+			{
+				Log.setIndentLevel(indent);
+				Log.errorf("Failed to enable plugin %s!", exception, p.getPluginName());
+			}
 		}
 
 		Log.unindent();
@@ -69,7 +105,20 @@ class PluginLoader
 		for (Plugin p : _plugins)
 		{
 			Log.debugf("Disabling %s.", p.getPluginName());
-			p.disablePlugin();
+
+			int indent = Log.getIndentLevel();
+			Log.indent();
+
+			try
+			{
+				p.disablePlugin();
+				Log.setIndentLevel(indent);
+			}
+			catch (Exception exception)
+			{
+				Log.setIndentLevel(indent);
+				Log.errorf("Failed to disable plugin %s!", exception, p.getPluginName());
+			}
 		}
 
 		Log.unindent();

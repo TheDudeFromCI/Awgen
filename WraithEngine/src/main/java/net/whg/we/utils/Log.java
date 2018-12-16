@@ -69,6 +69,21 @@ public class Log
 	}
 
 	/**
+	 * Sets the indent level to a specific value. If the value is negative, the
+	 * value is set to zero.
+	 *
+	 * @param indent
+	 *            - The new indent level.
+	 */
+	public static void setIndentLevel(int indent)
+	{
+		_indent = indent;
+
+		if (_indent < 0)
+			_indent = 0;
+	}
+
+	/**
 	 * Increases the indent for future log entrys by one.
 	 */
 	public static void indent()
@@ -77,7 +92,8 @@ public class Log
 	}
 
 	/**
-	 * Decreases the indent for future log entrys by one.
+	 * Decreases the indent for future log entrys by one. If the value is already at
+	 * zero, nothing happens.
 	 */
 	public static void unindent()
 	{
