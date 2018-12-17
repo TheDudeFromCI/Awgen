@@ -2,10 +2,10 @@ package whg.WraithEngine.gamelogic;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
+import net.whg.we.utils.FPSLogger;
+import net.whg.we.utils.Time;
 import whg.WraithEngine.core.Input;
-import whg.WraithEngine.core.Time;
 import whg.WraithEngine.rendering.Camera;
-import whg.WraithEngine.utils.FPSLogger;
 import whg.WraithEngine.utils.ResourceLoader;
 import whg.WraithEngine.window.DefaultInputHandler;
 import whg.WraithEngine.window.DefaultWindowHandler;

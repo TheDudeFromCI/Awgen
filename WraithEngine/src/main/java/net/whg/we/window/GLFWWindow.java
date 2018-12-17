@@ -8,9 +8,9 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
+import net.whg.we.utils.FPSLogger;
 import net.whg.we.utils.Log;
-import whg.WraithEngine.core.Time;
-import whg.WraithEngine.utils.FPSLogger;
+import net.whg.we.utils.Time;
 
 public class GLFWWindow implements Window
 {
@@ -233,11 +233,10 @@ public class GLFWWindow implements Window
 
 			GL11.glClearColor(0.2f, 0.4f, 0.8f, 1f);
 
-			FPSLogger fps = new FPSLogger();
 			while (_windowState == WINDOW_OPEN_STATE)
 			{
 				Time.updateTime();
-				fps.logFramerate();
+				FPSLogger.logFramerate();
 
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
