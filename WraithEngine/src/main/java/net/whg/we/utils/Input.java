@@ -3,11 +3,31 @@ package net.whg.we.utils;
 import java.util.HashMap;
 import org.lwjgl.glfw.GLFW;
 
+/**
+ * Represents the current input states for mouse and keyboard.
+ *
+ * @author TheDudeFromCI
+ */
 public class Input
 {
+	/**
+	 * The bit operator for the Shift key modifier.
+	 */
 	public static final int SHIFT_MODIFIER = 1;
+
+	/**
+	 * The bit operator for the Control key modifier.
+	 */
 	public static final int CONTROL_MODIFIER = 2;
+
+	/**
+	 * The bit operator for the Alt key modifier.
+	 */
 	public static final int ALT_MODIFIER = 4;
+
+	/**
+	 * The bit operator for the Super key modifier.
+	 */
 	public static final int SUPER_MODIFIER = 8;
 
 	private static boolean[] _keys = new boolean[350];
@@ -120,43 +140,102 @@ public class Input
 		_keyMap.put("numpad period", GLFW.GLFW_KEY_KP_DECIMAL);
 	}
 
+	/**
+	 * Changes the internal key state for a single key.
+	 *
+	 * @param key
+	 *            - The key who's state was changed.
+	 * @param pressed
+	 *            - True if the key was just changed, false otherwise.
+	 */
 	public static void setKeyPressed(int key, boolean pressed)
 	{
 		if (key < 0 || key >= 350)
+		{
+			Log.debugf("Tried to update unknown key %d.", key);
 			return;
+		}
+
+		Log.tracef("Set key %d to state %s.", key, pressed);
 		_keys[key] = pressed;
 	}
 
+	/**
+	 * Gets whether or not the requested key is currently being held.
+	 *
+	 * @param key
+	 *            - The id of the key to check for.
+	 * @return True if the key is currently being held, false otherwise.
+	 */
 	public static boolean isKeyHeld(int key)
 	{
 		return _keys[key];
 	}
 
+	/**
+	 * Gets whether or not the requested key is currently being held.
+	 *
+	 * @param key
+	 *            - The name of the key to check for.
+	 * @return True if the key is currently being held, false otherwise.
+	 */
 	public static boolean isKeyHeld(String key)
 	{
 		return isKeyHeld(getKeyId(key));
 	}
 
+	/**
+	 * Checks if a key was just pressed on this frame.
+	 *
+	 * @param key
+	 *            - The id of the key to check for.
+	 * @return True if the key was pressed down on this frame.
+	 */
 	public static boolean isKeyDown(int key)
 	{
 		return _keys[key] && !_keysLastFrame[key];
 	}
 
+	/**
+	 * Checks if a key was just pressed on this frame.
+	 *
+	 * @param key
+	 *            - The name of the key to check for.
+	 * @return True if the key was pressed down on this frame.
+	 */
 	public static boolean isKeyDown(String key)
 	{
 		return isKeyDown(getKeyId(key));
 	}
 
+	/**
+	 * Checks if a key was just released on this frame.
+	 *
+	 * @param key
+	 *            - The id of the key to check for.
+	 * @return True if the key was released on this frame.
+	 */
 	public static boolean isKeyUp(int key)
 	{
 		return !_keys[key] && _keysLastFrame[key];
 	}
 
+	/**
+	 * Checks if a key was just released on this frame.
+	 *
+	 * @param key
+	 *            - The name of the key to check for.
+	 * @return True if the key was released on this frame.
+	 */
 	public static boolean isKeyUp(String key)
 	{
 		return isKeyUp(getKeyId(key));
 	}
 
+	/**
+	 * This should be called once at the end of frame. Updates key and mouse delta
+	 * states.
+	 */
 	public static void endFrame()
 	{
 		for (int i = 0; i < _keys.length; i++)
@@ -165,32 +244,75 @@ public class Input
 		_lastMouseY = _mouseY;
 	}
 
+	/**
+	 * Gets the id of a key by name.
+	 *
+	 * @param name
+	 *            - The name of the key to look for.
+	 * @return The id of the key, of -1 if the key was not found.
+	 */
 	public static int getKeyId(String name)
 	{
-		return _keyMap.get(name);
+		Integer key = _keyMap.get(name);
+
+		if (key == null)
+			return -1;
+
+		return key;
 	}
 
+	/**
+	 * Changes the location of the mouse. This should only be called by the a window
+	 * listener.
+	 *
+	 * @param mouseX
+	 *            - The X position of the mouse.
+	 * @param mouseY
+	 *            - The Y position of the mouse.
+	 */
 	public static void setMousePosition(float mouseX, float mouseY)
 	{
 		_mouseX = mouseX;
 		_mouseY = mouseY;
 	}
 
+	/**
+	 * Gets the X position of the mouse on the screen.
+	 *
+	 * @return The X position of the mouse.
+	 */
 	public static float getMouseX()
 	{
 		return _mouseX;
 	}
 
+	/**
+	 * Gets the Y position of the mouse on the screen.
+	 *
+	 * @return The Y position of the mouse.
+	 */
 	public static float getMouseY()
 	{
 		return _mouseY;
 	}
 
+	/**
+	 * Gets the difference in X position of the mouse between this frame and the
+	 * previous frame.
+	 *
+	 * @return The delta mouse X.
+	 */
 	public static float getDeltaMouseX()
 	{
 		return _mouseX - _lastMouseX;
 	}
 
+	/**
+	 * Gets the difference in Y position of the mouse between this frame and the
+	 * previous frame.
+	 *
+	 * @return The delta mouse Y.
+	 */
 	public static float getDeltaMouseY()
 	{
 		return _mouseY - _lastMouseY;
