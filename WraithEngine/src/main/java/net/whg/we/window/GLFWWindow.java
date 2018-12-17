@@ -7,6 +7,7 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
+import net.whg.we.utils.Log;
 
 public class GLFWWindow implements Window
 {
@@ -28,6 +29,7 @@ public class GLFWWindow implements Window
 			return;
 
 		_name = name;
+		Log.infof("Changed window title to %s.", name);
 
 		if (_window != null)
 			_window.addEvent(() ->
@@ -43,6 +45,7 @@ public class GLFWWindow implements Window
 			return;
 
 		_resizable = resizable;
+		Log.infof("Changed window resizable to %s.", resizable);
 
 		if (_window != null)
 			_window.addEvent(() ->
@@ -58,6 +61,7 @@ public class GLFWWindow implements Window
 			return;
 
 		_vSync = vSync;
+		Log.infof("Changed window VSync to %s.", vSync);
 
 		if (_window != null)
 			_window.addEvent(() ->
@@ -74,6 +78,7 @@ public class GLFWWindow implements Window
 
 		_width = width;
 		_height = height;
+		Log.infof("Changed window size to %dx%d.", width, height);
 
 		if (_window != null)
 			_window.addEvent(() ->
@@ -90,12 +95,23 @@ public class GLFWWindow implements Window
 	@Override
 	public void buildWindow()
 	{
+		Log.info("Building GLFW window.");
+		Log.indent();
+
 		synchronized (_lock)
 		{
+			Log.trace("Requesting default error output stream.");
 			GLFWErrorCallback.createPrint(System.err).set();
 
 			if (!GLFW.glfwInit())
+			{
+				Log.unindent();
 				throw new IllegalStateException("Unable to initialize GLFW!");
+			}
+
+			Log.trace("Setting window default hints.");
+			Log.debug("Requesting OpenGL version 3.3");
+			Log.trace("Requesting Subsampling 4.");
 
 			GLFW.glfwDefaultWindowHints();
 			GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
@@ -105,48 +121,62 @@ public class GLFWWindow implements Window
 			GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GLFW.GLFW_TRUE);
 			GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
 
+			Log.tracef("Requesting resizable, %s", _resizable);
 			if (!_resizable)
 				GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_FALSE);
 
+			Log.trace("Building hidden window.");
 			_windowId =
 					GLFW.glfwCreateWindow(_width, _height, _name, MemoryUtil.NULL, MemoryUtil.NULL);
+			Log.tracef("  Recieved window id %d.", _windowId);
 			if (_windowId == 0)
 				throw new RuntimeException("Failed to create GLFW window!");
 
-			GLFW.glfwSetWindowSizeCallback(_windowId, (long window, int width, int height) ->
+			Log.trace("Creating GLFW callbacks.");
 			{
-				if (_window != null)
-					_window.addEvent(() ->
-					{
-						_window.setSizeInstant(_width, _height);
-					});
-			});
+				Log.indent();
 
-			GLFW.glfwSetKeyCallback(_windowId,
-					(long window, int key, int scancode, int action, int mods) ->
-					{
-						final KeyState state;
+				Log.trace("Creating window size callback.");
+				GLFW.glfwSetWindowSizeCallback(_windowId, (long window, int width, int height) ->
+				{
+					if (_window != null)
+						_window.addEvent(() ->
+						{
+							_window.setSizeInstant(_width, _height);
+						});
+				});
 
-						if (action == GLFW.GLFW_PRESS)
-							state = KeyState.PRESSED;
-						else if (action == GLFW.GLFW_RELEASE)
-							state = KeyState.RELEASED;
-						else
-							state = KeyState.REPEATED;
+				Log.trace("Creating key callback.");
+				GLFW.glfwSetKeyCallback(_windowId,
+						(long window, int key, int scancode, int action, int mods) ->
+						{
+							final KeyState state;
 
-						if (_window != null)
-							_window.addEvent(() ->
-							{
-								_window.onKey(key, state, mods);
-							});
-					});
+							if (action == GLFW.GLFW_PRESS)
+								state = KeyState.PRESSED;
+							else if (action == GLFW.GLFW_RELEASE)
+								state = KeyState.RELEASED;
+							else
+								state = KeyState.REPEATED;
 
-			GLFW.glfwSetCursorPosCallback(_windowId, (long window, double mouseX, double mouseY) ->
-			{
-				_mouseX = (float) mouseX;
-				_mouseY = (float) mouseY;
-			});
+							if (_window != null)
+								_window.addEvent(() ->
+								{
+									_window.onKey(key, state, mods);
+								});
+						});
 
+				Log.trace("Creating mouse position callback.");
+				GLFW.glfwSetCursorPosCallback(_windowId,
+						(long window, double mouseX, double mouseY) ->
+						{
+							_mouseX = (float) mouseX;
+							_mouseY = (float) mouseY;
+						});
+				Log.unindent();
+			}
+
+			Log.trace("Centering window on primary monitor.");
 			try (MemoryStack stack = MemoryStack.stackPush())
 			{
 				GLFWVidMode vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
@@ -154,24 +184,37 @@ public class GLFWWindow implements Window
 				int x = (vidmode.width() - _width) / 2;
 				int y = (vidmode.height() - _height) / 2;
 				GLFW.glfwSetWindowPos(_windowId, x, y);
+
+				Log.tracef("Set window location to %d, %d.", x, y);
 			}
 
+			Log.trace("Making window visible.");
 			GLFW.glfwShowWindow(_windowId);
 		}
+
+		Log.unindent();
 	}
 
 	@Override
 	public void disposeWindow()
 	{
 		if (!isWindowOpen())
+		{
+			Log.warn("Tried to dispose window, but window is not currently open.");
 			return;
+		}
 
+		Log.info("Disposing GLFW window.");
 		synchronized (_lock)
 		{
+			Log.debug("  Freeing all callbacks.");
 			Callbacks.glfwFreeCallbacks(_windowId);
+
+			Log.debug("  Destroying window.");
 			GLFW.glfwDestroyWindow(_windowId);
 			_windowId = MemoryUtil.NULL;
 
+			Log.debug("  Destroying GLFW instance.");
 			GLFW.glfwTerminate();
 			GLFW.glfwSetErrorCallback(null).free();
 		}
@@ -180,6 +223,7 @@ public class GLFWWindow implements Window
 	@Override
 	public void requestClose()
 	{
+		Log.debug("Requesting window to close.");
 		synchronized (_lock)
 		{
 			GLFW.glfwSetWindowShouldClose(_windowId, true);
@@ -208,6 +252,8 @@ public class GLFWWindow implements Window
 	@Override
 	public void linkToOpenGL()
 	{
+		Log.info("Linking GLFW window to OpenGL.");
+
 		synchronized (_lock)
 		{
 			GLFW.glfwMakeContextCurrent(_windowId);

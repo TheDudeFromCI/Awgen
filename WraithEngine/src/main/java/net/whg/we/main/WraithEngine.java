@@ -1,6 +1,7 @@
 package net.whg.we.main;
 
 import org.lwjgl.Version;
+import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import net.whg.we.utils.FPSLogger;
 import net.whg.we.utils.Input;
@@ -125,6 +126,9 @@ public class WraithEngine
 
 			Log.debug("Disposing game.");
 			// Nothing to dispose.
+
+			Log.debug("Disposing OpenGL.");
+			GL.setCapabilities(null);
 		}
 
 		Log.trace("Closing WraithEngine.");
