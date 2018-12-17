@@ -1,11 +1,16 @@
 package net.whg.we.window;
 
+import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 import net.whg.we.utils.Log;
+import whg.WraithEngine.core.Time;
+import whg.WraithEngine.utils.FPSLogger;
 
 public class GLFWWindow implements Window
 {
@@ -21,6 +26,7 @@ public class GLFWWindow implements Window
 	private int _width = 640;
 	private int _height = 480;
 	private long _windowId = 0;
+	private Object _lock = new Object();
 
 	@Override
 	public void setName(String name)
@@ -209,8 +215,98 @@ public class GLFWWindow implements Window
 		GLFW.glfwShowWindow(_windowId);
 	}
 
+	public void loop()
+	{
+		if (_windowState != WINDOW_OPEN_STATE)
+			return;
+
+		Thread t = new Thread(() ->
+		{
+			GLFW.glfwMakeContextCurrent(_windowId);
+
+			if (_vSync)
+				GLFW.glfwSwapInterval(1);
+			else
+				GLFW.glfwSwapInterval(0);
+
+			GL.createCapabilities();
+
+			GL11.glClearColor(0.2f, 0.4f, 0.8f, 1f);
+
+			FPSLogger fps = new FPSLogger();
+			while (_windowState == WINDOW_OPEN_STATE)
+			{
+				Time.updateTime();
+				fps.logFramerate();
+
+				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+
+				synchronized (_lock)
+				{
+					GLFW.glfwSwapBuffers(_windowId);
+					GLFW.glfwPollEvents();
+				}
+			}
+		});
+		t.setName("Rendering");
+		t.start();
+
+		while (!GLFW.glfwWindowShouldClose(_windowId))
+		{
+			GLFW.glfwWaitEvents();
+			synchronized (_lock)
+			{
+				if (_windowState == WINDOW_REQUESTING_CLOSE_STATE)
+					GLFW.glfwSetWindowShouldClose(_windowId, true);
+			}
+		}
+
+		_windowState = WINDOW_REQUESTING_CLOSE_STATE;
+	}
+
+	// private void assignCallbacks()
+	// {
+	// GLFW.glfwSetWindowSizeCallback(_windowId,
+	// (long window, int width, int height) ->
+	// {
+	// _eventQueue.addEvent(
+	// new WindowResizeEvent(this, width, height));
+	// });
+	//
+	// GLFW.glfwSetKeyCallback(_windowId,
+	// (long window, int key, int scancode, int action, int mods) ->
+	// {
+	// _eventQueue.addEvent(
+	// new KeyPressedEvent(this, key, action, mods));
+	// });
+	//
+	// GLFW.glfwSetCursorPosCallback(_windowId,
+	// (long window, double mouseX, double mouseY) ->
+	// {
+	// synchronized (_mouseMoveEvent)
+	// {
+	// _mouseMoveEvent.setMousePos((float) mouseX,
+	// (float) mouseY);
+	// }
+	// });
+	// }
+
 	@Override
 	public void disposeWindow()
 	{
+		if (!isWindowOpen())
+			return;
+
+		synchronized (_lock)
+		{
+			Callbacks.glfwFreeCallbacks(_windowId);
+			GLFW.glfwDestroyWindow(_windowId);
+			_windowId = MemoryUtil.NULL;
+		}
+
+		GLFW.glfwTerminate();
+		GLFW.glfwSetErrorCallback(null).free();
+
+		_windowState = WINDOW_DISPOSED_STATE;
 	}
 }
