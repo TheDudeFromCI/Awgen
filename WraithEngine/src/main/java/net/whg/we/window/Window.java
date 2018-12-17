@@ -1,34 +1,26 @@
 package net.whg.we.window;
 
-public interface Window
+interface Window
 {
-	public void setName(String name);
+	void setQueuedWindow(QueuedWindow window);
 
-	public boolean canChangeName();
+	void setName(String name);
 
-	public String getName();
+	void setResizable(boolean resizable);
 
-	public void setResizable(boolean resizable);
+	void setVSync(boolean vSync);
 
-	public boolean canChangeResizable();
+	void setSize(int width, int height);
 
-	public boolean isResizable();
+	void buildWindow();
 
-	public void setVSync(boolean vSync);
+	void requestClose();
 
-	public boolean canChangeVSync();
+	void disposeWindow();
 
-	public boolean isVSync();
+	boolean endFrame();
 
-	public void setWindowSize(int width, int height);
+	void updateWindow();
 
-	public boolean canChangeWindowSize();
-
-	public int getWidth();
-
-	public int getHeight();
-
-	public void buildWindow();
-
-	public void disposeWindow();
+	void linkToOpenGL();
 }
