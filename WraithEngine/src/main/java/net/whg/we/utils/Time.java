@@ -37,6 +37,16 @@ public class Time
 	}
 
 	/**
+	 * Resets this timer to zero, assuming no time has ever passed.
+	 */
+	public static void resetTime()
+	{
+		_startMs = -1;
+		_time = 0f;
+		_delta = 0f;
+	}
+
+	/**
 	 * Gets the current amount of time passed in seconds since the Timer was first
 	 * called.
 	 *
@@ -49,7 +59,7 @@ public class Time
 
 	/**
 	 * Gets the current delta time in seconds of the previous frame.
-	 * 
+	 *
 	 * @return The delta time of the previous frame in seconds.
 	 */
 	public static float deltaTime()

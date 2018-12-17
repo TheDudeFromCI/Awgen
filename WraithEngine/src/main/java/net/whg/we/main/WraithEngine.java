@@ -1,12 +1,10 @@
 package net.whg.we.main;
 
 import org.lwjgl.Version;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
+import net.whg.we.gamelogic.DefaultGameLoop;
 import net.whg.we.gamelogic.DefaultWindowListener;
-import net.whg.we.utils.FPSLogger;
+import net.whg.we.gamelogic.GameLoop;
 import net.whg.we.utils.Log;
-import net.whg.we.utils.Time;
 import net.whg.we.window.QueuedWindow;
 import net.whg.we.window.WindowBuilder;
 
@@ -76,29 +74,8 @@ public class WraithEngine
 					.setVSync(false).setListener(new DefaultWindowListener()).build();
 			Log.unindent();
 
-			Log.trace("Starting game loop.");
-
-			Log.trace("Setting default OpenGL clear color. (0.2f, 0.4f, 0.8f, 1f)");
-			GL11.glClearColor(0.2f, 0.4f, 0.8f, 1f);
-
-			while (true)
-			{
-				Time.updateTime();
-				FPSLogger.logFramerate();
-
-				float v = (float) Math.sin(Time.time() * 4f) * 0.5f + 0.5f;
-				GL11.glClearColor(v, v, v, 1f);
-				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-
-				if (window.endFrame())
-					break;
-			}
-
-			Log.debug("Disposing game.");
-			// Nothing to dispose.
-
-			Log.debug("Disposing OpenGL.");
-			GL.setCapabilities(null);
+			GameLoop loop = new DefaultGameLoop(window);
+			loop.loop();
 		}
 
 		Log.trace("Closing WraithEngine.");
