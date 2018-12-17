@@ -1,4 +1,4 @@
-package whg.WraithEngine.core;
+package net.whg.we.utils;
 
 public class Screen
 {

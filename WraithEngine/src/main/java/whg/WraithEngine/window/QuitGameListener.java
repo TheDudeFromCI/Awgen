@@ -1,6 +1,6 @@
 package whg.WraithEngine.window;
 
-import whg.WraithEngine.core.Input;
+import net.whg.we.utils.Input;
 import whg.WraithEngine.gamelogic.Entity;
 import whg.WraithEngine.gamelogic.Location;
 import whg.WraithEngine.gamelogic.Updateable;

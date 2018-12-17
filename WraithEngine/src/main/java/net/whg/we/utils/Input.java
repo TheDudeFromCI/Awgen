@@ -1,10 +1,15 @@
-package whg.WraithEngine.core;
+package net.whg.we.utils;
 
 import java.util.HashMap;
 import org.lwjgl.glfw.GLFW;
 
 public class Input
 {
+	public static final int SHIFT_MODIFIER = 1;
+	public static final int CONTROL_MODIFIER = 2;
+	public static final int ALT_MODIFIER = 4;
+	public static final int SUPER_MODIFIER = 8;
+
 	private static boolean[] _keys = new boolean[350];
 	private static boolean[] _keysLastFrame = new boolean[350];
 	private static HashMap<String, Integer> _keyMap;

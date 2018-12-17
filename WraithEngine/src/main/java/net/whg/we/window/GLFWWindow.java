@@ -18,6 +18,8 @@ public class GLFWWindow implements Window
 	private long _windowId = 0;
 	private QueuedWindow _window;
 	private Object _lock = new Object();
+	private float _mouseX;
+	private float _mouseY;
 
 	@Override
 	public void setName(String name)
@@ -111,29 +113,39 @@ public class GLFWWindow implements Window
 			if (_windowId == 0)
 				throw new RuntimeException("Failed to create GLFW window!");
 
-			// GLFW.glfwSetWindowSizeCallback(_windowId,
-			// (long window, int width, int height) ->
-			// {
-			// _eventQueue.addEvent(
-			// new WindowResizeEvent(this, width, height));
-			// });
-			//
-			// GLFW.glfwSetKeyCallback(_windowId,
-			// (long window, int key, int scancode, int action, int mods) ->
-			// {
-			// _eventQueue.addEvent(
-			// new KeyPressedEvent(this, key, action, mods));
-			// });
-			//
-			// GLFW.glfwSetCursorPosCallback(_windowId,
-			// (long window, double mouseX, double mouseY) ->
-			// {
-			// synchronized (_mouseMoveEvent)
-			// {
-			// _mouseMoveEvent.setMousePos((float) mouseX,
-			// (float) mouseY);
-			// }
-			// });
+			GLFW.glfwSetWindowSizeCallback(_windowId, (long window, int width, int height) ->
+			{
+				if (_window != null)
+					_window.addEvent(() ->
+					{
+						_window.setSizeInstant(_width, _height);
+					});
+			});
+
+			GLFW.glfwSetKeyCallback(_windowId,
+					(long window, int key, int scancode, int action, int mods) ->
+					{
+						final KeyState state;
+
+						if (action == GLFW.GLFW_PRESS)
+							state = KeyState.PRESSED;
+						else if (action == GLFW.GLFW_RELEASE)
+							state = KeyState.RELEASED;
+						else
+							state = KeyState.REPEATED;
+
+						if (_window != null)
+							_window.addEvent(() ->
+							{
+								_window.onKey(key, state, mods);
+							});
+					});
+
+			GLFW.glfwSetCursorPosCallback(_windowId, (long window, double mouseX, double mouseY) ->
+			{
+				_mouseX = (float) mouseX;
+				_mouseY = (float) mouseY;
+			});
 
 			try (MemoryStack stack = MemoryStack.stackPush())
 			{
@@ -183,6 +195,9 @@ public class GLFWWindow implements Window
 	@Override
 	public boolean endFrame()
 	{
+		if (_window != null)
+			_window.onMouseMove(_mouseX, _mouseY);
+
 		synchronized (_lock)
 		{
 			GLFW.glfwSwapBuffers(_windowId);

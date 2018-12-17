@@ -1,7 +1,7 @@
 package whg.WraithEngine.window;
 
 import org.lwjgl.glfw.GLFW;
-import whg.WraithEngine.core.Input;
+import net.whg.we.utils.Input;
 
 public class DefaultInputHandler
 		implements KeyboardEventsHandler, MouseEventsHandler

@@ -1,7 +1,7 @@
 package whg.WraithEngine.rendering;
 
 import org.joml.Matrix4f;
-import whg.WraithEngine.core.Screen;
+import net.whg.we.utils.Screen;
 import whg.WraithEngine.gamelogic.Location;
 
 public class Camera

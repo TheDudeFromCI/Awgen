@@ -3,10 +3,14 @@ package net.whg.we.main;
 import org.lwjgl.Version;
 import org.lwjgl.opengl.GL11;
 import net.whg.we.utils.FPSLogger;
+import net.whg.we.utils.Input;
 import net.whg.we.utils.Log;
+import net.whg.we.utils.Screen;
 import net.whg.we.utils.Time;
+import net.whg.we.window.KeyState;
 import net.whg.we.window.QueuedWindow;
 import net.whg.we.window.WindowBuilder;
+import net.whg.we.window.WindowListener;
 
 /**
  * The program entry class. This class is used for the purpose of initializing
@@ -66,12 +70,39 @@ public class WraithEngine
 		Log.trace("Checking if application is a console application.");
 		if (!properties.isConsoleApplication())
 		{
+			WindowListener windowListener = new WindowListener()
+			{
+				@Override
+				public void onWindowResized(int width, int height)
+				{
+					Screen.updateSize(width, height);
+					// _camera.rebuildProjectionMatrix();
+					GL11.glViewport(0, 0, width, height);
+				}
+
+				@Override
+				public void onKey(int key, KeyState state, int mods)
+				{
+					if (state == KeyState.PRESSED)
+						Input.setKeyPressed(key, true);
+					else if (state == KeyState.RELEASED)
+						Input.setKeyPressed(key, false);
+				}
+
+				@Override
+				public void onMouseMoved(float mouseX, float mouseY)
+				{
+					Input.setMousePosition(mouseX, mouseY);
+				}
+
+			};
+
 			Log.debug("Building game window.");
 
 			Log.indent();
-			QueuedWindow window =
-					new WindowBuilder(WindowBuilder.WINDOW_ENGINE_GLFW).setName("Untitled Project")
-							.setResizable(false).setSize(640, 480).setVSync(false).build();
+			QueuedWindow window = new WindowBuilder(WindowBuilder.WINDOW_ENGINE_GLFW)
+					.setName("Untitled Project").setResizable(false).setSize(640, 480)
+					.setVSync(false).setListener(windowListener).build();
 			Log.unindent();
 
 			Log.trace("Starting game loop.");

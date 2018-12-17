@@ -14,6 +14,7 @@ public class QueuedWindow
 	private boolean _vSync;
 	private int _width;
 	private int _height;
+	private WindowListener _listener;
 
 	QueuedWindow(Window window)
 	{
@@ -35,6 +36,11 @@ public class QueuedWindow
 		}
 
 		_window.disposeWindow();
+	}
+
+	public void setWindowListener(WindowListener listener)
+	{
+		_listener = listener;
 	}
 
 	Window getWindow()
@@ -150,6 +156,21 @@ public class QueuedWindow
 	{
 		_width = width;
 		_height = height;
+
+		if (_listener != null)
+			_listener.onWindowResized(width, height);
+	}
+
+	void onKey(int key, KeyState state, int mods)
+	{
+		if (_listener != null)
+			_listener.onKey(key, state, mods);
+	}
+
+	void onMouseMove(float mouseX, float mouseY)
+	{
+		if (_listener != null)
+			_listener.onMouseMoved(mouseX, mouseY);
 	}
 
 	public boolean endFrame()

@@ -30,6 +30,12 @@ public class WindowBuilder
 		windowThread.start();
 	}
 
+	public WindowBuilder setListener(WindowListener listener)
+	{
+		_window.setWindowListener(listener);
+		return this;
+	}
+
 	public WindowBuilder setName(String name)
 	{
 		if (_built)
