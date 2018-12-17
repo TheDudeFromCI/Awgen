@@ -1,12 +1,7 @@
 package net.whg.we.main;
 
 import org.lwjgl.Version;
-import net.whg.we.gamelogic.DefaultGameLoop;
-import net.whg.we.gamelogic.DefaultWindowListener;
-import net.whg.we.gamelogic.GameLoop;
 import net.whg.we.utils.Log;
-import net.whg.we.window.QueuedWindow;
-import net.whg.we.window.WindowBuilder;
 
 /**
  * The program entry class. This class is used for the purpose of initializing
@@ -46,9 +41,6 @@ public class WraithEngine
 		Log.debugf("Working Directory: %s", System.getProperty("user.dir"));
 		Log.debugf("LWJGL Version: %s", Version.getVersion());
 
-		// Load the launcher properties
-		LauncherProperties properties = LauncherProperties.loadLauncherProperties();
-
 		// Create plugin loader
 		PluginLoader pluginLoader = new PluginLoader();
 
@@ -62,21 +54,8 @@ public class WraithEngine
 		// Enable plugins
 		pluginLoader.enableAllPlugins();
 
-		// Launch game window, if needed
-		Log.trace("Checking if application is a console application.");
-		if (!properties.isConsoleApplication())
-		{
-			Log.debug("Building game window.");
-
-			Log.indent();
-			QueuedWindow window = new WindowBuilder(WindowBuilder.WINDOW_ENGINE_GLFW)
-					.setName("Untitled Project").setResizable(false).setSize(640, 480)
-					.setVSync(false).setListener(new DefaultWindowListener()).build();
-			Log.unindent();
-
-			GameLoop loop = new DefaultGameLoop(window);
-			loop.loop();
-		}
+		// Begin main operations
+		corePlugin.start();
 
 		Log.trace("Closing WraithEngine.");
 	}
