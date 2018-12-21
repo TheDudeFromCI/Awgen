@@ -1,7 +1,9 @@
 package net.whg.we.rendering.opengl;
 
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 import net.whg.we.rendering.Graphics;
+import net.whg.we.rendering.ScreenClearType;
 import net.whg.we.rendering.VMesh;
 import whg.WraithEngine.rendering.VertexData;
 
@@ -17,5 +19,24 @@ public class OpenGLGraphics implements Graphics
 	public VMesh prepareMesh(VertexData vertexData)
 	{
 		return new GLVMesh(vertexData);
+	}
+
+	@Override
+	public void clearScreenPass(ScreenClearType screenClear)
+	{
+		switch (screenClear)
+		{
+			case CLEAR_COLOR:
+				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+				return;
+			case CLEAR_DEPTH:
+				GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+				return;
+			case CLEAR_COLOR_AND_DEPTH:
+				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+				return;
+			default:
+				throw new IllegalArgumentException("Unknown screen clear operation!");
+		}
 	}
 }

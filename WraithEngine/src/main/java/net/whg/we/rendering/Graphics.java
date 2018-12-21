@@ -7,4 +7,6 @@ public interface Graphics
 	public void init();
 
 	public VMesh prepareMesh(VertexData vertexData);
+
+	public void clearScreenPass(ScreenClearType screenClear);
 }
