@@ -6,7 +6,7 @@ import net.whg.we.utils.Input;
 import net.whg.we.utils.Time;
 import whg.WraithEngine.rendering.Camera;
 
-public class FirstPersonCamera implements Entity, Updateable
+public class FirstPersonCamera
 {
 	private static final float MAX_ANGLE = (float) Math.toRadians(89);
 	private static final float TAU = (float) Math.PI * 2f;
@@ -60,13 +60,10 @@ public class FirstPersonCamera implements Entity, Updateable
 
 	private void updateCameraRotation()
 	{
-		float yaw =
-				Input.getDeltaMouseX() * Time.deltaTime() * _mouseSensitivity;
-		float pitch =
-				Input.getDeltaMouseY() * Time.deltaTime() * _mouseSensitivity;
+		float yaw = Input.getDeltaMouseX() * Time.deltaTime() * _mouseSensitivity;
+		float pitch = Input.getDeltaMouseY() * Time.deltaTime() * _mouseSensitivity;
 
-		_rotationBuffer.x =
-				clamp(_baseRotation.x - pitch, -MAX_ANGLE, MAX_ANGLE);
+		_rotationBuffer.x = clamp(_baseRotation.x - pitch, -MAX_ANGLE, MAX_ANGLE);
 		_rotationBuffer.y = (_baseRotation.y - yaw) % TAU;
 		_rotationBuffer.z = _baseRotation.z;
 
@@ -139,13 +136,11 @@ public class FirstPersonCamera implements Entity, Updateable
 		return x;
 	}
 
-	@Override
 	public Location getLocation()
 	{
 		return _camera.getLocation();
 	}
 
-	@Override
 	public void update()
 	{
 		updateCameraPosition();
