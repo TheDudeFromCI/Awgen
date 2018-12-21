@@ -10,6 +10,8 @@ import org.yaml.snakeyaml.Yaml;
 import net.whg.we.gamelogic.DefaultGameLoop;
 import net.whg.we.gamelogic.DefaultWindowListener;
 import net.whg.we.gamelogic.GameLoop;
+import net.whg.we.rendering.Graphics;
+import net.whg.we.rendering.GraphicsFactory;
 import net.whg.we.utils.FileUtils;
 import net.whg.we.utils.Log;
 import net.whg.we.window.QueuedWindow;
@@ -23,6 +25,9 @@ import net.whg.we.window.WindowBuilder;
  */
 public class CorePlugin extends BasePlugin
 {
+	private QueuedWindow _window;
+	private Graphics _graphics;
+
 	@Override
 	public String getPluginName()
 	{
@@ -107,14 +112,27 @@ public class CorePlugin extends BasePlugin
 		{
 			Log.debug("Building game window.");
 
+			_graphics = GraphicsFactory.createInstance(GraphicsFactory.OPENGL_ENGINE);
+
 			Log.indent();
 			QueuedWindow window = new WindowBuilder(WindowBuilder.WINDOW_ENGINE_GLFW)
 					.setName("Untitled Project").setResizable(false).setSize(640, 480)
-					.setVSync(false).setListener(new DefaultWindowListener()).build();
+					.setVSync(false).setListener(new DefaultWindowListener())
+					.setGraphicsEngine(_graphics).build();
 			Log.unindent();
 
 			GameLoop loop = new DefaultGameLoop(window);
 			loop.loop();
 		}
+	}
+
+	public QueuedWindow getWindow()
+	{
+		return _window;
+	}
+
+	public Graphics getGraphics()
+	{
+		return _graphics;
 	}
 }

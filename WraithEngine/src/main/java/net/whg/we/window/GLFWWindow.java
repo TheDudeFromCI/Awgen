@@ -4,9 +4,9 @@ import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
+import net.whg.we.rendering.Graphics;
 import net.whg.we.utils.Log;
 
 public class GLFWWindow implements Window
@@ -250,14 +250,14 @@ public class GLFWWindow implements Window
 	}
 
 	@Override
-	public void linkToOpenGL()
+	public void initGraphics(Graphics graphics)
 	{
 		Log.info("Linking GLFW window to OpenGL.");
 
 		synchronized (_lock)
 		{
 			GLFW.glfwMakeContextCurrent(_windowId);
-			GL.createCapabilities();
+			graphics.init();
 
 			if (_vSync)
 				GLFW.glfwSwapInterval(1);

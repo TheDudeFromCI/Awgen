@@ -1,11 +1,14 @@
 package net.whg.we.window;
 
+import net.whg.we.rendering.Graphics;
+
 public class WindowBuilder
 {
 	public static final int WINDOW_ENGINE_GLFW = 0;
 
 	private QueuedWindow _window;
 	private boolean _built;
+	private Graphics _graphics;
 
 	public WindowBuilder(int engine)
 	{
@@ -72,14 +75,22 @@ public class WindowBuilder
 		return this;
 	}
 
+	public WindowBuilder setGraphicsEngine(Graphics graphics)
+	{
+		_graphics = graphics;
+		return this;
+	}
+
 	public QueuedWindow build()
 	{
 		if (_built)
 			throw new IllegalStateException("Window already built!");
+		if (_graphics == null)
+			throw new IllegalStateException("Graphics engine not assigned!");
 
 		_built = true;
 		_window.buildWindow();
-		_window.linkToOpenGL();
+		_window.initGraphics(_graphics);
 		return _window;
 	}
 }

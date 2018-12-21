@@ -1,6 +1,7 @@
 package net.whg.we.window;
 
 import java.util.LinkedList;
+import net.whg.we.rendering.Graphics;
 
 public class QueuedWindow
 {
@@ -210,9 +211,9 @@ public class QueuedWindow
 		}
 	}
 
-	void linkToOpenGL()
+	void initGraphics(Graphics graphics)
 	{
 		blockUntilRequestsFinish();
-		_window.linkToOpenGL();
+		_window.initGraphics(graphics);
 	}
 }

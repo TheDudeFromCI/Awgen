@@ -1,5 +1,7 @@
 package net.whg.we.window;
 
+import net.whg.we.rendering.Graphics;
+
 interface Window
 {
 	void setQueuedWindow(QueuedWindow window);
@@ -22,5 +24,5 @@ interface Window
 
 	void updateWindow();
 
-	void linkToOpenGL();
+	void initGraphics(Graphics graphics);
 }

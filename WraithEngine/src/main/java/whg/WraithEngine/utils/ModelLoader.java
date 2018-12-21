@@ -12,8 +12,9 @@ import org.lwjgl.assimp.AIScene;
 import org.lwjgl.assimp.AIVector3D;
 import org.lwjgl.assimp.AIVertexWeight;
 import org.lwjgl.assimp.Assimp;
+import net.whg.we.rendering.Graphics;
+import net.whg.we.rendering.Mesh;
 import whg.WraithEngine.rendering.Bone;
-import whg.WraithEngine.rendering.Mesh;
 import whg.WraithEngine.rendering.ModelScene;
 import whg.WraithEngine.rendering.Skeleton;
 import whg.WraithEngine.rendering.SkinnedMesh;
@@ -21,12 +22,11 @@ import whg.WraithEngine.rendering.VertexData;
 
 public class ModelLoader
 {
-	public static ModelScene loadModel(File file)
+	public static ModelScene loadModel(File file, Graphics graphics)
 	{
 		AIScene scene = Assimp.aiImportFile(file.toString(),
 				Assimp.aiProcess_Triangulate | Assimp.aiProcess_GenSmoothNormals
-						| Assimp.aiProcess_FlipUVs
-						| Assimp.aiProcess_CalcTangentSpace
+						| Assimp.aiProcess_FlipUVs | Assimp.aiProcess_CalcTangentSpace
 						| Assimp.aiProcess_LimitBoneWeights);
 
 		ModelScene we_scene = new ModelScene();
@@ -96,8 +96,7 @@ public class ModelLoader
 
 					String boneName = bone.mName().dataString();
 					Matrix4f boneOffset = assimpMatrix(bone.mOffsetMatrix());
-					Matrix4f bonePose =
-							findDefaultPose(scene.mRootNode(), boneName);
+					Matrix4f bonePose = findDefaultPose(scene.mRootNode(), boneName);
 
 					bones[b] = new Bone(boneName, boneOffset, bonePose, null);
 
@@ -109,30 +108,26 @@ public class ModelLoader
 
 						if (!boneIndexMap.containsKey(vertexIndex))
 						{
-							vertices[(fIndex + sizeOfVertexUnrigged) + 0] = b;
-							vertices[(fIndex + sizeOfVertexUnrigged) + 2] =
-									weight.mWeight();
+							vertices[fIndex + sizeOfVertexUnrigged + 0] = b;
+							vertices[fIndex + sizeOfVertexUnrigged + 2] = weight.mWeight();
 							boneIndexMap.put(vertexIndex, 1);
 						}
 						else if (boneIndexMap.get(vertexIndex) == 1)
 						{
-							vertices[(fIndex + sizeOfVertexUnrigged) + 1] = b;
-							vertices[(fIndex + sizeOfVertexUnrigged) + 3] =
-									weight.mWeight();
+							vertices[fIndex + sizeOfVertexUnrigged + 1] = b;
+							vertices[fIndex + sizeOfVertexUnrigged + 3] = weight.mWeight();
 							boneIndexMap.put(vertexIndex, 2);
 						}
 						else if (boneIndexMap.get(vertexIndex) == 2)
 						{
-							vertices[(fIndex + sizeOfVertexUnrigged) + 4] = b;
-							vertices[(fIndex + sizeOfVertexUnrigged) + 6] =
-									weight.mWeight();
+							vertices[fIndex + sizeOfVertexUnrigged + 4] = b;
+							vertices[fIndex + sizeOfVertexUnrigged + 6] = weight.mWeight();
 							boneIndexMap.put(vertexIndex, 3);
 						}
 						else if (boneIndexMap.get(vertexIndex) == 3)
 						{
-							vertices[(fIndex + sizeOfVertexUnrigged) + 5] = b;
-							vertices[(fIndex + sizeOfVertexUnrigged) + 7] =
-									weight.mWeight();
+							vertices[fIndex + sizeOfVertexUnrigged + 5] = b;
+							vertices[fIndex + sizeOfVertexUnrigged + 7] = weight.mWeight();
 							boneIndexMap.put(vertexIndex, 4);
 						}
 						// TODO If a vertex has more than 4 bone parents, only
@@ -143,22 +138,18 @@ public class ModelLoader
 
 				Bone rootBone = findRootBone(bones, scene.mRootNode());
 
-				AIMatrix4x4 inverseRootTransformRaw =
-						scene.mRootNode().mTransformation();
-				Matrix4f inverseRootTransform =
-						assimpMatrix(inverseRootTransformRaw);
+				AIMatrix4x4 inverseRootTransformRaw = scene.mRootNode().mTransformation();
+				Matrix4f inverseRootTransform = assimpMatrix(inverseRootTransformRaw);
 
-				Skeleton skeleton =
-						new Skeleton(inverseRootTransform, bones, rootBone);
+				Skeleton skeleton = new Skeleton(inverseRootTransform, bones, rootBone);
 
 				int[] attributes = new int[]
 				{
 						3, 3, 4, 4
 				};
-				VertexData vertexData =
-						new VertexData(vertices, triangles, attributes);
-				SkinnedMesh we_mesh = new SkinnedMesh(mesh.mName().dataString(),
-						vertexData, skeleton);
+				VertexData vertexData = new VertexData(vertices, triangles, attributes);
+				SkinnedMesh we_mesh =
+						new SkinnedMesh(mesh.mName().dataString(), vertexData, graphics, skeleton);
 
 				we_scene._meshes.add(we_mesh);
 			}
@@ -168,9 +159,8 @@ public class ModelLoader
 				{
 						3, 3
 				};
-				VertexData vertexData =
-						new VertexData(vertices, triangles, attributes);
-				Mesh we_mesh = new Mesh(mesh.mName().dataString(), vertexData);
+				VertexData vertexData = new VertexData(vertices, triangles, attributes);
+				Mesh we_mesh = new Mesh(mesh.mName().dataString(), vertexData, graphics);
 
 				we_scene._meshes.add(we_mesh);
 			}
@@ -219,8 +209,7 @@ public class ModelLoader
 
 			if (b == null)
 			{
-				b = new Bone(n.mName().dataString(),
-						assimpMatrix(n.mTransformation()).invert(),
+				b = new Bone(n.mName().dataString(), assimpMatrix(n.mTransformation()).invert(),
 						assimpMatrix(n.mTransformation()), null);
 			}
 

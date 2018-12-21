@@ -1,5 +1,6 @@
 package whg.WraithEngine.rendering;
 
+import net.whg.we.rendering.Mesh;
 import whg.WraithEngine.gamelogic.Entity;
 import whg.WraithEngine.gamelogic.Location;
 
