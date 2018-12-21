@@ -6,5 +6,4 @@ import net.whg.we.rendering.Mesh;
 public class ModelScene
 {
 	public ArrayList<Mesh> _meshes = new ArrayList<>();
-	public ArrayList<Animation> _animations = new ArrayList<>();
 }

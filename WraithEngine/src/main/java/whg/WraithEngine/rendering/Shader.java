@@ -4,10 +4,8 @@ import java.nio.FloatBuffer;
 import java.util.HashMap;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
-import whg.WraithEngine.core.DisposableResource;
-import whg.WraithEngine.utils.ResourceLoader;
 
-public class Shader implements DisposableResource
+public class Shader
 {
 	// ===== FIELDS =====
 
@@ -31,8 +29,7 @@ public class Shader implements DisposableResource
 		if (GL20.glGetShaderi(vId, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE)
 		{
 			String logMessage = GL20.glGetShaderInfoLog(vId);
-			throw new RuntimeException(
-					"Failed to compiled vertex shader! '" + logMessage + "'");
+			throw new RuntimeException("Failed to compiled vertex shader! '" + logMessage + "'");
 		}
 
 		GL20.glShaderSource(fId, frag);
@@ -41,8 +38,7 @@ public class Shader implements DisposableResource
 		if (GL20.glGetShaderi(fId, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE)
 		{
 			String logMessage = GL20.glGetShaderInfoLog(fId);
-			throw new RuntimeException(
-					"Failed to compiled fragment shader! '" + logMessage + "'");
+			throw new RuntimeException("Failed to compiled fragment shader! '" + logMessage + "'");
 		}
 
 		_shaderId = GL20.glCreateProgram();
@@ -53,14 +49,12 @@ public class Shader implements DisposableResource
 		if (GL20.glGetProgrami(_shaderId, GL20.GL_LINK_STATUS) != GL11.GL_TRUE)
 		{
 			String logMessage = GL20.glGetProgramInfoLog(_shaderId);
-			throw new RuntimeException(
-					"Failed to link shader program! '" + logMessage + "'");
+			throw new RuntimeException("Failed to link shader program! '" + logMessage + "'");
 		}
 
 		GL20.glDeleteShader(vId);
 		GL20.glDeleteShader(fId);
 
-		ResourceLoader.addResource(this);
 		ShaderDatabase.loadShader(this);
 	}
 
@@ -117,7 +111,6 @@ public class Shader implements DisposableResource
 			return;
 
 		_disposed = true;
-		ResourceLoader.removeResource(this);
 		ShaderDatabase.unloadShader(this);
 		GL20.glDeleteProgram(_shaderId);
 
@@ -143,7 +136,6 @@ public class Shader implements DisposableResource
 		GL20.glUniformMatrix4fv(location, false, mat);
 	}
 
-	@Override
 	public boolean isDisposed()
 	{
 		return _disposed;
