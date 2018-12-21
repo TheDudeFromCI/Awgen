@@ -174,6 +174,12 @@ public class QueuedWindow
 			_listener.onMouseMoved(mouseX, mouseY);
 	}
 
+	/**
+	 * Called at the end of each rendered frame to push the image to the monitor and
+	 * poll input events.
+	 *
+	 * @return True if the window has requested a close. False otherwise.
+	 */
 	public boolean endFrame()
 	{
 		synchronized (_events)

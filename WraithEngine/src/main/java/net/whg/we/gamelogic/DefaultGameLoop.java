@@ -1,20 +1,20 @@
 package net.whg.we.gamelogic;
 
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
+import net.whg.we.main.CorePlugin;
+import net.whg.we.rendering.ScreenClearType;
+import net.whg.we.utils.Color;
 import net.whg.we.utils.FPSLogger;
 import net.whg.we.utils.Log;
 import net.whg.we.utils.Time;
-import net.whg.we.window.QueuedWindow;
 
 public class DefaultGameLoop implements GameLoop
 {
 	private boolean _shouldClose;
-	private QueuedWindow _window;
+	private CorePlugin _core;
 
-	public DefaultGameLoop(QueuedWindow window)
+	public DefaultGameLoop(CorePlugin core)
 	{
-		_window = window;
+		_core = core;
 	}
 
 	@Override
@@ -22,11 +22,9 @@ public class DefaultGameLoop implements GameLoop
 	{
 		_shouldClose = false;
 
-		Log.trace("Setting default OpenGL clear color. (0.2f, 0.4f, 0.8f, 1f)");
-		GL11.glClearColor(0.2f, 0.4f, 0.8f, 1f);
-
 		Time.resetTime();
 		FPSLogger.resetLogTimer();
+		Color color = new Color();
 
 		Log.trace("Starting default update loop.");
 		while (!_shouldClose)
@@ -34,25 +32,24 @@ public class DefaultGameLoop implements GameLoop
 			Time.updateTime();
 			FPSLogger.logFramerate();
 
-			float v = (float) Math.sin(Time.time() * 4f) * 0.5f + 0.5f;
-			GL11.glClearColor(v, v, v, 1f);
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+			color.setLumosity((float) Math.sin(Time.time() * 4f) * 0.5f + 0.5f);
+			_core.getGraphics().setClearScreenColor(color);
+			_core.getGraphics().clearScreenPass(ScreenClearType.CLEAR_COLOR);
 
-			if (_window.endFrame())
+			if (_core.getWindow().endFrame())
 				break;
 		}
 
 		Log.debug("Disposing game.");
 		// Nothing to dispose.
 
-		Log.debug("Disposing OpenGL.");
-		GL.setCapabilities(null);
+		_core.getGraphics().dispose();
 	}
 
 	@Override
 	public void requestClose()
 	{
 		_shouldClose = true;
-		_window.requestClose();
+		_core.getWindow().requestClose();
 	}
 }

@@ -115,13 +115,13 @@ public class CorePlugin extends BasePlugin
 			_graphics = GraphicsFactory.createInstance(GraphicsFactory.OPENGL_ENGINE);
 
 			Log.indent();
-			QueuedWindow window = new WindowBuilder(WindowBuilder.WINDOW_ENGINE_GLFW)
+			_window = new WindowBuilder(WindowBuilder.WINDOW_ENGINE_GLFW)
 					.setName("Untitled Project").setResizable(false).setSize(640, 480)
 					.setVSync(false).setListener(new DefaultWindowListener())
 					.setGraphicsEngine(_graphics).build();
 			Log.unindent();
 
-			GameLoop loop = new DefaultGameLoop(window);
+			GameLoop loop = new DefaultGameLoop(this);
 			loop.loop();
 		}
 	}

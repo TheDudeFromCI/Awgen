@@ -5,6 +5,8 @@ import org.lwjgl.opengl.GL11;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.ScreenClearType;
 import net.whg.we.rendering.VMesh;
+import net.whg.we.utils.Color;
+import net.whg.we.utils.Log;
 import whg.WraithEngine.rendering.VertexData;
 
 public class OpenGLGraphics implements Graphics
@@ -38,5 +40,18 @@ public class OpenGLGraphics implements Graphics
 			default:
 				throw new IllegalArgumentException("Unknown screen clear operation!");
 		}
+	}
+
+	@Override
+	public void setClearScreenColor(Color color)
+	{
+		GL11.glClearColor(color.r, color.g, color.b, color.a);
+	}
+
+	@Override
+	public void dispose()
+	{
+		Log.debug("Disposing OpenGL.");
+		GL.setCapabilities(null);
 	}
 }
