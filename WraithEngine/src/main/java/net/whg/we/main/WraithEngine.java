@@ -15,7 +15,7 @@ public class WraithEngine
 	/**
 	 * The current version of WraithEngine being run.
 	 */
-	public static final String VERSION = "v0.0.1";
+	public static final String VERSION = "v0.1.0";
 
 	/**
 	 * The program entry method.
@@ -41,18 +41,15 @@ public class WraithEngine
 		Log.debugf("Working Directory: %s", System.getProperty("user.dir"));
 		Log.debugf("LWJGL Version: %s", Version.getVersion());
 
-		// Create plugin loader
-		PluginLoader pluginLoader = new PluginLoader();
-
 		// Load core plugins
 		CorePlugin corePlugin = new CorePlugin();
-		pluginLoader.loadPlugin(corePlugin);
+		PluginLoader.loadPlugin(corePlugin);
 
 		// Load external plugins
-		corePlugin.loadPluginsFromFile(pluginLoader);
+		corePlugin.loadPluginsFromFile();
 
 		// Enable plugins
-		pluginLoader.enableAllPlugins();
+		PluginLoader.enableAllPlugins();
 
 		// Begin main operations
 		corePlugin.start();
