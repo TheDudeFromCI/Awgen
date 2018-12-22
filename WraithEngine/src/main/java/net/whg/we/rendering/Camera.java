@@ -1,4 +1,4 @@
-package whg.WraithEngine.rendering;
+package net.whg.we.rendering;
 
 import org.joml.Matrix4f;
 import net.whg.we.gamelogic.Location;

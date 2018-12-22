@@ -1,7 +1,6 @@
 package net.whg.we.rendering;
 
 import java.util.ArrayList;
-import whg.WraithEngine.rendering.Camera;
 
 public class RenderGroup
 {

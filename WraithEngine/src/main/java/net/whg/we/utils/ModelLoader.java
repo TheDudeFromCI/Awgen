@@ -12,13 +12,13 @@ import org.lwjgl.assimp.AIScene;
 import org.lwjgl.assimp.AIVector3D;
 import org.lwjgl.assimp.AIVertexWeight;
 import org.lwjgl.assimp.Assimp;
+import net.whg.we.rendering.Bone;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.Mesh;
-import whg.WraithEngine.rendering.Bone;
-import whg.WraithEngine.rendering.ModelScene;
-import whg.WraithEngine.rendering.Skeleton;
-import whg.WraithEngine.rendering.SkinnedMesh;
-import whg.WraithEngine.rendering.VertexData;
+import net.whg.we.rendering.ModelScene;
+import net.whg.we.rendering.Skeleton;
+import net.whg.we.rendering.SkinnedMesh;
+import net.whg.we.rendering.VertexData;
 
 public class ModelLoader
 {

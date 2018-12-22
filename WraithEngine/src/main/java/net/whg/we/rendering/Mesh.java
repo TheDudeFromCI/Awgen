@@ -1,7 +1,5 @@
 package net.whg.we.rendering;
 
-import whg.WraithEngine.rendering.VertexData;
-
 public class Mesh
 {
 	private String _meshName;

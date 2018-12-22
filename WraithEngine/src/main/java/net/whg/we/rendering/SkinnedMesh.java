@@ -1,9 +1,7 @@
-package whg.WraithEngine.rendering;
+package net.whg.we.rendering;
 
 import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
-import net.whg.we.rendering.Graphics;
-import net.whg.we.rendering.Mesh;
 
 public class SkinnedMesh extends Mesh
 {

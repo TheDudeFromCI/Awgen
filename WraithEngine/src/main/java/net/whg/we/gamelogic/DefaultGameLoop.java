@@ -4,8 +4,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.joml.Quaternionf;
 import net.whg.we.main.CorePlugin;
+import net.whg.we.rendering.Camera;
+import net.whg.we.rendering.Material;
 import net.whg.we.rendering.RenderGroup;
 import net.whg.we.rendering.ScreenClearType;
+import net.whg.we.rendering.Shader;
 import net.whg.we.scene.Model;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.FPSLogger;
@@ -15,9 +18,6 @@ import net.whg.we.utils.Input;
 import net.whg.we.utils.Log;
 import net.whg.we.utils.ModelLoader;
 import net.whg.we.utils.Time;
-import whg.WraithEngine.rendering.Camera;
-import whg.WraithEngine.rendering.Material;
-import whg.WraithEngine.rendering.Shader;
 
 public class DefaultGameLoop implements GameLoop
 {

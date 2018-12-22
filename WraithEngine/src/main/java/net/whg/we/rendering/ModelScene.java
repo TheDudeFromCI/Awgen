@@ -1,7 +1,6 @@
-package whg.WraithEngine.rendering;
+package net.whg.we.rendering;
 
 import java.util.ArrayList;
-import net.whg.we.rendering.Mesh;
 
 public class ModelScene
 {

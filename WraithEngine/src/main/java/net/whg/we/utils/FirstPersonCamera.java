@@ -3,7 +3,7 @@ package net.whg.we.utils;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import net.whg.we.gamelogic.Location;
-import whg.WraithEngine.rendering.Camera;
+import net.whg.we.rendering.Camera;
 
 public class FirstPersonCamera
 {

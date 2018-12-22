@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import net.whg.we.rendering.VMesh;
-import whg.WraithEngine.rendering.VertexData;
+import net.whg.we.rendering.VertexData;
 
 public class GLVMesh implements VMesh
 {
