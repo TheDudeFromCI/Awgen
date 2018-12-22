@@ -59,6 +59,9 @@ public class FirstPersonCamera
 
 	private void updateCameraRotation()
 	{
+		if (!Screen.isMouseLocked())
+			return;
+
 		float yaw = Input.getDeltaMouseX() * Time.deltaTime() * _mouseSensitivity;
 		float pitch = Input.getDeltaMouseY() * Time.deltaTime() * _mouseSensitivity;
 
