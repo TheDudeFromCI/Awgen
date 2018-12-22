@@ -1,4 +1,4 @@
-package whg.WraithEngine.gamelogic;
+package net.whg.we.gamelogic;
 
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;

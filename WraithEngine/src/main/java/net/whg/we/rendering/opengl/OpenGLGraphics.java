@@ -15,6 +15,7 @@ public class OpenGLGraphics implements Graphics
 	public void init()
 	{
 		GL.createCapabilities();
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
 	@Override

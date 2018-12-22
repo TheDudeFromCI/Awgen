@@ -3,7 +3,7 @@ package whg.WraithEngine.rendering;
 import java.nio.FloatBuffer;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
-import whg.WraithEngine.gamelogic.Location;
+import net.whg.we.gamelogic.Location;
 
 public class Material
 {
