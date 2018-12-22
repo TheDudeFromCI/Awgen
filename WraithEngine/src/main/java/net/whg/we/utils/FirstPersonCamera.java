@@ -1,10 +1,8 @@
-package whg.WraithEngine.gamelogic;
+package net.whg.we.utils;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import net.whg.we.gamelogic.Location;
-import net.whg.we.utils.Input;
-import net.whg.we.utils.Time;
 import whg.WraithEngine.rendering.Camera;
 
 public class FirstPersonCamera
