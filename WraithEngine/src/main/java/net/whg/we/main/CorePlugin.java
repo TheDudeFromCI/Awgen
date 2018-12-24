@@ -27,6 +27,7 @@ public class CorePlugin extends BasePlugin
 {
 	private QueuedWindow _window;
 	private Graphics _graphics;
+	private GameLoop _loop;
 
 	@Override
 	public String getPluginName()
@@ -104,6 +105,15 @@ public class CorePlugin extends BasePlugin
 
 	void start()
 	{
+		if (_loop != null)
+			_loop.loop();
+	}
+
+	@Override
+	public void initPlugin()
+	{
+		super.initPlugin();
+
 		LauncherProperties properties = LauncherProperties.loadLauncherProperties(this);
 
 		// Launch game window, if needed
@@ -121,8 +131,7 @@ public class CorePlugin extends BasePlugin
 					.setGraphicsEngine(_graphics).build();
 			Log.unindent();
 
-			GameLoop loop = new DefaultGameLoop(this);
-			loop.loop();
+			_loop = new DefaultGameLoop(this);
 		}
 	}
 
