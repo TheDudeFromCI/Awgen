@@ -64,10 +64,16 @@ public class FileUtils
 	 */
 	public static File getResourcesFolder(Plugin plugin)
 	{
-		File file = new File(getPluginFolder(), RESOURCE_FOLDER_NAME);
+		File file = new File(getCoreFolder(), RESOURCE_FOLDER_NAME);
 
 		if (plugin != null)
+		{
 			file = new File(file, plugin.getPluginName());
+			Log.tracef("Loading resource folder for plugin %s at %s.", plugin.getPluginName(),
+					file);
+		}
+		else
+			Log.tracef("Loading global resource folder, at %s.", file);
 
 		if (!file.exists())
 			file.mkdirs();
@@ -101,11 +107,19 @@ public class FileUtils
 	 */
 	public static File getResource(Plugin plugin, String name)
 	{
+		Log.debugf("Attempting to load resource %s/%s", plugin.getPluginName(), name);
+
 		name = name.replace('/', File.separatorChar);
 		File file = new File(getResourcesFolder(plugin), name);
 
+		Log.tracef("  Full Path: %s", file);
+
 		if (!file.exists())
+		{
+			Log.warnf("Failed to load resource %s/%s, file not found!", plugin.getPluginName(),
+					name);
 			return null;
+		}
 
 		return file;
 	}
