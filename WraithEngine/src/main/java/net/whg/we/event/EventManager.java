@@ -69,7 +69,20 @@ public class EventManager
 
 	/**
 	 * Searchs the database for a specific event caller based on the name of the
-	 * event caller and the plugin it is assigned to, and returns the first
+	 * event caller and returns the first reference.
+	 *
+	 * @param name
+	 *            - The name of the event caller.
+	 * @return The event caller, or null if it is not found.
+	 */
+	public static EventCaller<?> getEventCaller(String name)
+	{
+		return getEventCaller(null, name);
+	}
+
+	/**
+	 * Searchs the database for a specific event caller based on the name of the
+	 * event caller and the plugin it is assigned to and returns the first
 	 * reference. If a plugin is not specified, then only the event caller names are
 	 * considered.
 	 *
