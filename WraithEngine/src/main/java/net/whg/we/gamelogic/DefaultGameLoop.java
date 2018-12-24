@@ -17,11 +17,11 @@ import net.whg.we.utils.FirstPersonCamera;
 import net.whg.we.utils.Input;
 import net.whg.we.utils.Log;
 import net.whg.we.utils.ModelLoader;
+import net.whg.we.utils.Screen;
 import net.whg.we.utils.Time;
 
 public class DefaultGameLoop implements GameLoop
 {
-	private boolean _shouldClose;
 	private CorePlugin _core;
 
 	public DefaultGameLoop(CorePlugin core)
@@ -33,7 +33,6 @@ public class DefaultGameLoop implements GameLoop
 	public void loop()
 	{
 		// Initialize
-		_shouldClose = false;
 		Time.resetTime();
 		FPSLogger.resetLogTimer();
 		_core.getGraphics().setClearScreenColor(new Color(0.2f, 0.4f, 0.8f));
@@ -57,22 +56,36 @@ public class DefaultGameLoop implements GameLoop
 		Material defaultMaterial = new Material(defaultShader);
 
 		RenderGroup renderGroup = new RenderGroup();
-		Model model =
-				new Model(ModelLoader.loadModel(FileUtils.getResource(_core, "monkey_head.fbx"),
-						_core.getGraphics())._meshes.get(0), defaultMaterial);
-		model.getLocation().setRotation(new Quaternionf().rotateX(-3.1415f / 2f));
-		renderGroup.addRenderable(model);
+		Model monkey, quad;
+
+		{
+			monkey = new Model(
+					ModelLoader.loadModel(FileUtils.getResource(_core, "monkey_head.fbx"),
+							_core.getGraphics())._meshes.get(0),
+					defaultMaterial);
+			monkey.getLocation().setRotation(new Quaternionf().rotateX(-3.1415f / 2f));
+			renderGroup.addRenderable(monkey);
+
+			quad = new Model(ModelLoader.loadModel(FileUtils.getResource(_core, "floor.obj"),
+					_core.getGraphics())._meshes.get(0), defaultMaterial);
+			renderGroup.addRenderable(quad);
+		}
 
 		Camera camera = new Camera();
 		FirstPersonCamera firstPerson = new FirstPersonCamera(camera);
 
 		Log.trace("Starting default update loop.");
-		while (!_shouldClose)
+		while (true)
 		{
 			// Update
 			Time.updateTime();
 			FPSLogger.logFramerate();
 			firstPerson.update();
+
+			if (Input.isKeyDown("q"))
+				Screen.setMouseLocked(!Screen.isMouseLocked());
+			if (Input.isKeyDown("escape"))
+				_core.getWindow().requestClose();
 
 			// Render
 			_core.getGraphics().clearScreenPass(ScreenClearType.CLEAR_COLOR_AND_DEPTH);
@@ -85,15 +98,10 @@ public class DefaultGameLoop implements GameLoop
 		}
 
 		Log.debug("Disposing game.");
-		model.getMesh().dispose();
+		monkey.getMesh().dispose();
+		quad.getMesh().dispose();
+		defaultShader.dispose();
 
 		_core.getGraphics().dispose();
-	}
-
-	@Override
-	public void requestClose()
-	{
-		_shouldClose = true;
-		_core.getWindow().requestClose();
 	}
 }

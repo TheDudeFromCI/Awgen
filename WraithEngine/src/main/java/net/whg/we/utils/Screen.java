@@ -1,5 +1,8 @@
 package net.whg.we.utils;
 
+import net.whg.we.main.CorePlugin;
+import net.whg.we.main.PluginLoader;
+
 /**
  * A utility class for talking to the screen.
  *
@@ -9,6 +12,7 @@ public class Screen
 {
 	private static int _width = 640;
 	private static int _height = 480;
+	private static boolean _mouseLocked;
 
 	/**
 	 * Changes the internal referenced size of the screen. This should only be
@@ -26,8 +30,34 @@ public class Screen
 	}
 
 	/**
+	 * Checks if the mouse if currently locked to the screen.
+	 *
+	 * @return True if the mouse is locked to the screen. False otherwise.
+	 */
+	public static boolean isMouseLocked()
+	{
+		return _mouseLocked;
+	}
+
+	/**
+	 * Attempts to lock or unlock the mouse from the screen.
+	 *
+	 * @param mouseLocked
+	 *            - Whether to lock the mouse (if true) or unlock the mouse (if
+	 *            false).
+	 */
+	public static void setMouseLocked(boolean mouseLocked)
+	{
+		Log.infof("Set cursor locked to %s.", mouseLocked);
+
+		CorePlugin core = (CorePlugin) PluginLoader.GetPlugin("Core");
+		core.getWindow().setCursorEnabled(!mouseLocked);
+		_mouseLocked = mouseLocked;
+	}
+
+	/**
 	 * Gets the current width of the screen in pixels.
-	 * 
+	 *
 	 * @return The width of the screen.
 	 */
 	public static int width()
@@ -37,7 +67,7 @@ public class Screen
 
 	/**
 	 * Gets the current height of the screen in pixels.
-	 * 
+	 *
 	 * @return The height of the screen.
 	 */
 	public static int height()
@@ -47,7 +77,7 @@ public class Screen
 
 	/**
 	 * Gets the current aspect ratio of the screen.
-	 * 
+	 *
 	 * @return The aspect ration of the screen.
 	 */
 	public static float aspect()

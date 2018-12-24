@@ -1,6 +1,7 @@
 package net.whg.we.utils;
 
 import java.time.LocalTime;
+import java.util.HashMap;
 
 /**
  * Logs events to file and to console. Events are ignored if below the intended
@@ -55,60 +56,75 @@ public class Log
 	 */
 	public static final int SPACES_PER_INDENT = 2;
 
-	private static int _indent = 0;
+	private static HashMap<String, Integer> _indent = new HashMap<>();
 	private static int _logLevel = INFO;
 
 	/**
-	 * Gets the current indent value for the log.
+	 * Gets the current indent value for the log. Indent levels are specific to a
+	 * thread, and are stored by the name of the thread.
 	 *
 	 * @return The current indent value.
 	 */
 	public static int getIndentLevel()
 	{
-		return _indent;
+		String thread = Thread.currentThread().getName();
+		return _indent.get(thread);
 	}
 
 	/**
 	 * Sets the indent level to a specific value. If the value is negative, the
-	 * value is set to zero.
+	 * value is set to zero. Indent levels are specific to a thread, and are stored
+	 * by the name of the thread.
 	 *
 	 * @param indent
 	 *            - The new indent level.
 	 */
 	public static void setIndentLevel(int indent)
 	{
-		_indent = indent;
+		if (indent < 0)
+			indent = 0;
 
-		if (_indent < 0)
-			_indent = 0;
+		String thread = Thread.currentThread().getName();
+		_indent.put(thread, indent);
 	}
 
 	/**
-	 * Increases the indent for future log entrys by one.
+	 * Increases the indent for future log entrys by one. Indent levels are specific
+	 * to a thread, and are stored by the name of the thread.
 	 */
 	public static void indent()
 	{
-		_indent++;
+		String thread = Thread.currentThread().getName();
+
+		int indent = _indent.getOrDefault(thread, 0) + 1;
+		_indent.put(thread, indent);
 	}
 
 	/**
 	 * Decreases the indent for future log entrys by one. If the value is already at
-	 * zero, nothing happens.
+	 * zero, nothing happens. Indent levels are specific to a thread, and are stored
+	 * by the name of the thread.
 	 */
 	public static void unindent()
 	{
-		_indent--;
+		String thread = Thread.currentThread().getName();
 
-		if (_indent < 0)
-			_indent = 0;
+		int indent = _indent.getOrDefault(thread, 0) - 1;
+
+		if (indent < 0)
+			indent = 0;
+
+		_indent.put(thread, indent);
 	}
 
 	/**
-	 * Resets the indent level for future log entrys to default. (Zero)
+	 * Resets the indent level for future log entrys to default. (Zero) Indent
+	 * levels are specific to a thread, and are stored by the name of the thread.
 	 */
 	public static void resetIndent()
 	{
-		_indent = 0;
+		String thread = Thread.currentThread().getName();
+		_indent.put(thread, 0);
 	}
 
 	/**
@@ -157,7 +173,7 @@ public class Log
 		if (_logLevel > TRACE)
 			return;
 
-		System.out.println(format("TRACE", message));
+		push(format("TRACE", message));
 	}
 
 	/**
@@ -173,7 +189,7 @@ public class Log
 		if (_logLevel > TRACE)
 			return;
 
-		System.out.println(format("TRACE", String.format(message, args)));
+		push(format("TRACE", String.format(message, args)));
 	}
 
 	/**
@@ -187,7 +203,7 @@ public class Log
 		if (_logLevel > DEBUG)
 			return;
 
-		System.out.println(format("DEBUG", message));
+		push(format("DEBUG", message));
 	}
 
 	/**
@@ -203,7 +219,7 @@ public class Log
 		if (_logLevel > DEBUG)
 			return;
 
-		System.out.println(format("DEBUG", String.format(message, args)));
+		push(format("DEBUG", String.format(message, args)));
 	}
 
 	/**
@@ -217,7 +233,7 @@ public class Log
 		if (_logLevel > INFO)
 			return;
 
-		System.out.println(format("INFO", message));
+		push(format("INFO", message));
 	}
 
 	/**
@@ -233,7 +249,7 @@ public class Log
 		if (_logLevel > INFO)
 			return;
 
-		System.out.println(format("INFO", String.format(message, args)));
+		push(format("INFO", String.format(message, args)));
 	}
 
 	/**
@@ -247,7 +263,7 @@ public class Log
 		if (_logLevel > WARN)
 			return;
 
-		System.out.println(format("WARN", message));
+		push(format("WARN", message));
 	}
 
 	/**
@@ -263,7 +279,7 @@ public class Log
 		if (_logLevel > WARN)
 			return;
 
-		System.out.println(format("WARN", String.format(message, args)));
+		push(format("WARN", String.format(message, args)));
 	}
 
 	/**
@@ -277,7 +293,7 @@ public class Log
 		if (_logLevel > ERROR)
 			return;
 
-		System.out.println(format("ERROR", message));
+		push(format("ERROR", message));
 	}
 
 	/**
@@ -293,7 +309,7 @@ public class Log
 		if (_logLevel > ERROR)
 			return;
 
-		System.out.println(format("ERROR", String.format(message, args)));
+		push(format("ERROR", String.format(message, args)));
 	}
 
 	/**
@@ -312,11 +328,11 @@ public class Log
 		if (_logLevel > ERROR)
 			return;
 
-		System.out.println(format("ERROR", String.format(message, args)));
-		System.out.println(format("ERROR", "Exception Thrown: " + exception.toString()));
+		push(format("ERROR", String.format(message, args)));
+		push(format("ERROR", "Exception Thrown: " + exception.toString()));
 
 		for (StackTraceElement st : exception.getStackTrace())
-			System.out.println(format("ERROR", "  at " + st.toString()));
+			push(format("ERROR", "  at " + st.toString()));
 	}
 
 	/**
@@ -327,7 +343,7 @@ public class Log
 	 */
 	public static void fatal(String message)
 	{
-		System.out.println(format("FATAL", message));
+		push(format("FATAL", message));
 	}
 
 	/**
@@ -340,7 +356,7 @@ public class Log
 	 */
 	public static void fatalf(String message, Object... args)
 	{
-		System.out.println(format("FATAL", String.format(message, args)));
+		push(format("FATAL", String.format(message, args)));
 	}
 
 	/**
@@ -356,11 +372,16 @@ public class Log
 	 */
 	public static void fatalf(String message, Throwable exception, Object... args)
 	{
-		System.out.println(format("FATAL", String.format(message, args)));
-		System.out.println(format("FATAL", "Exception Thrown: " + exception.toString()));
+		push(format("FATAL", String.format(message, args)));
+		push(format("FATAL", "Exception Thrown: " + exception.toString()));
 
 		for (StackTraceElement st : exception.getStackTrace())
-			System.out.println(format("FATAL", "  at " + st.toString()));
+			push(format("FATAL", "  at " + st.toString()));
+	}
+
+	private synchronized static void push(String message)
+	{
+		System.out.println(message);
 	}
 
 	private static String format(String type, String message)
@@ -369,15 +390,18 @@ public class Log
 
 		String format;
 
-		if (_indent > 0)
+		String thread = Thread.currentThread().getName();
+		int indent = _indent.getOrDefault(thread, 0);
+
+		if (indent > 0)
 		{
-			int spaces = _indent * SPACES_PER_INDENT + message.length();
-			format = "[%02d:%02d:%02d][%-5s] %" + spaces + "s";
+			int spaces = indent * SPACES_PER_INDENT + message.length();
+			format = "[%02d:%02d:%02d][%-5s][%s] %" + spaces + "s";
 		}
 		else
-			format = "[%02d:%02d:%02d][%-5s] %s";
+			format = "[%02d:%02d:%02d][%-5s][%s] %s";
 
 		return String.format(format, time.getHour(), time.getMinute(), time.getSecond(), type,
-				message);
+				thread, message);
 	}
 }

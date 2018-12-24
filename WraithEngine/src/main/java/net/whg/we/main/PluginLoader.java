@@ -4,17 +4,33 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import net.whg.we.utils.Log;
 
-class PluginLoader
+public class PluginLoader
 {
-	private ArrayList<Plugin> _plugins = new ArrayList<>();
-	private Comparator<Plugin> _pluginSorter;
+	private static ArrayList<Plugin> _plugins = new ArrayList<>();
+	private static Comparator<Plugin> _pluginSorter;
 
-	PluginLoader()
+	static
 	{
 		_pluginSorter = (a, b) -> Integer.compare(a.getPriority(), b.getPriority());
 	}
 
-	void loadPlugin(Plugin plugin)
+	/**
+	 * Attempts to load a plugin by the given name. Case sensitive.
+	 *
+	 * @param name
+	 *            - The name of the plugin to load.
+	 * @return The first plugin found with the given name or null if no plugin is
+	 *         found.
+	 */
+	public static Plugin GetPlugin(String name)
+	{
+		for (Plugin p : _plugins)
+			if (p.getPluginName().equals(name))
+				return p;
+		return null;
+	}
+
+	static void loadPlugin(Plugin plugin)
 	{
 		if (_plugins.contains(plugin))
 		{
@@ -69,7 +85,7 @@ class PluginLoader
 		Log.unindent();
 	}
 
-	void enableAllPlugins()
+	static void enableAllPlugins()
 	{
 		Log.debug("Enabling plugins...");
 		Log.indent();
@@ -97,7 +113,7 @@ class PluginLoader
 		Log.debug("All plugins enabled.");
 	}
 
-	void disableAllPlugins()
+	static void disableAllPlugins()
 	{
 		Log.debug("Disabling plugins...");
 		Log.indent();

@@ -16,6 +16,7 @@ public class QueuedWindow
 	private int _width;
 	private int _height;
 	private WindowListener _listener;
+	private boolean _cursorEnabled = true;
 
 	QueuedWindow(Window window)
 	{
@@ -55,6 +56,24 @@ public class QueuedWindow
 		{
 			_window.buildWindow();
 		});
+	}
+
+	public void setCursorEnabled(boolean cursorEnabled)
+	{
+		addRequest(() ->
+		{
+			_window.setCursorEnabled(cursorEnabled);
+		});
+	}
+
+	void setCursorEnabledInstant(boolean cursorEnabled)
+	{
+		_cursorEnabled = cursorEnabled;
+	}
+
+	public boolean isCursorEnabled()
+	{
+		return _cursorEnabled;
 	}
 
 	public void requestClose()

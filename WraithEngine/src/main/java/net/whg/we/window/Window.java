@@ -25,4 +25,6 @@ interface Window
 	void updateWindow();
 
 	void initGraphics(Graphics graphics);
+
+	void setCursorEnabled(boolean cursorEnabled);
 }

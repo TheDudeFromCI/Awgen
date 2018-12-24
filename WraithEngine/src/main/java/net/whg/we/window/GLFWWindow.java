@@ -277,4 +277,13 @@ public class GLFWWindow implements Window
 	{
 		GLFW.glfwWaitEventsTimeout(0.001f);
 	}
+
+	@Override
+	public void setCursorEnabled(boolean cursorEnabled)
+	{
+		if (cursorEnabled)
+			GLFW.glfwSetInputMode(_windowId, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+		else
+			GLFW.glfwSetInputMode(_windowId, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+	}
 }
