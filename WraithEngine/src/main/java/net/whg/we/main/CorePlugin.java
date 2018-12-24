@@ -104,7 +104,7 @@ public class CorePlugin extends BasePlugin
 
 	void start()
 	{
-		LauncherProperties properties = LauncherProperties.loadLauncherProperties();
+		LauncherProperties properties = LauncherProperties.loadLauncherProperties(this);
 
 		// Launch game window, if needed
 		Log.trace("Checking if application is a console application.");

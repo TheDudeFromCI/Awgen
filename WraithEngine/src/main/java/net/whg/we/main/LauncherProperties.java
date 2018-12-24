@@ -13,9 +13,9 @@ import net.whg.we.utils.Log;
 
 class LauncherProperties
 {
-	static LauncherProperties loadLauncherProperties()
+	static LauncherProperties loadLauncherProperties(CorePlugin _core)
 	{
-		File file = new File(FileUtils.getCoreFolder(), "properties.yml");
+		File file = new File(FileUtils.getResourcesFolder(_core), "properties.yml");
 
 		if (!file.exists())
 		{
