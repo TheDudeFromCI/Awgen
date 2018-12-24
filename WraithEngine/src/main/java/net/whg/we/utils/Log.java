@@ -293,7 +293,9 @@ public class Log
 		if (_logLevel > ERROR)
 			return;
 
+		push(format("ERROR", "--------------"));
 		push(format("ERROR", message));
+		push(format("ERROR", "--------------"));
 	}
 
 	/**
@@ -309,7 +311,9 @@ public class Log
 		if (_logLevel > ERROR)
 			return;
 
+		push(format("ERROR", "--------------"));
 		push(format("ERROR", String.format(message, args)));
+		push(format("ERROR", "--------------"));
 	}
 
 	/**
@@ -328,11 +332,13 @@ public class Log
 		if (_logLevel > ERROR)
 			return;
 
+		push(format("ERROR", "--------------"));
 		push(format("ERROR", String.format(message, args)));
 		push(format("ERROR", "Exception Thrown: " + exception.toString()));
 
 		for (StackTraceElement st : exception.getStackTrace())
 			push(format("ERROR", "  at " + st.toString()));
+		push(format("ERROR", "--------------"));
 	}
 
 	/**
@@ -343,7 +349,9 @@ public class Log
 	 */
 	public static void fatal(String message)
 	{
+		push(format("FATAL", "=============="));
 		push(format("FATAL", message));
+		push(format("FATAL", "=============="));
 	}
 
 	/**
@@ -356,7 +364,9 @@ public class Log
 	 */
 	public static void fatalf(String message, Object... args)
 	{
+		push(format("FATAL", "=============="));
 		push(format("FATAL", String.format(message, args)));
+		push(format("FATAL", "=============="));
 	}
 
 	/**
@@ -372,11 +382,13 @@ public class Log
 	 */
 	public static void fatalf(String message, Throwable exception, Object... args)
 	{
+		push(format("FATAL", "=============="));
 		push(format("FATAL", String.format(message, args)));
 		push(format("FATAL", "Exception Thrown: " + exception.toString()));
 
 		for (StackTraceElement st : exception.getStackTrace())
 			push(format("FATAL", "  at " + st.toString()));
+		push(format("FATAL", "=============="));
 	}
 
 	private synchronized static void push(String message)
