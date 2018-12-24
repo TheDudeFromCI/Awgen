@@ -2,6 +2,7 @@ package net.whg.we.event;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import net.whg.we.utils.Log;
 
 public abstract class EventCallerBase<T extends Listener> implements EventCaller<T>
 {
@@ -15,6 +16,9 @@ public abstract class EventCallerBase<T extends Listener> implements EventCaller
 	@Override
 	public void addListener(T listener)
 	{
+		Log.infof("Adding a listener %s, to the event caller %s from the plugin %s.",
+				listener.getClass().getName(), getName(), getPlugin().getPluginName());
+
 		synchronized (_lock)
 		{
 			if (_listeners.contains(listener))
@@ -37,6 +41,9 @@ public abstract class EventCallerBase<T extends Listener> implements EventCaller
 	@Override
 	public void removeListener(T listener)
 	{
+		Log.infof("Removed a listener %s, from the event caller %s from the plugin %s.",
+				listener.getClass().getName(), getName(), getPlugin().getPluginName());
+
 		synchronized (_lock)
 		{
 			if (_isInEvent)
@@ -52,6 +59,9 @@ public abstract class EventCallerBase<T extends Listener> implements EventCaller
 	@Override
 	public void dispose()
 	{
+		Log.infof("Disposed the event caller %s from the plugin %s", getName(),
+				getPlugin().getPluginName());
+
 		synchronized (_lock)
 		{
 			if (_isInEvent)

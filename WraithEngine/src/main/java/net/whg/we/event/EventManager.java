@@ -97,12 +97,15 @@ public class EventManager
 	{
 		if (plugin == null)
 		{
+			Log.debugf("Searching local database for %s event caller.", name);
 			for (EventCaller<?> caller : _eventCallers)
 				if (caller.getName().equals(name))
 					return caller;
 			return null;
 		}
 
+		Log.debugf("Searching local database for %s event caller from the plugin %s.", name,
+				plugin.getPluginName());
 		for (EventCaller<?> caller : _eventCallers)
 			if (caller.getPlugin() == plugin && caller.getName().equals(name))
 				return caller;
@@ -118,6 +121,8 @@ public class EventManager
 	 */
 	public static List<EventCaller<?>> getEventCallers(String name)
 	{
+		Log.debugf("Searching local database for all event callers with the name %s.", name);
+
 		ArrayList<EventCaller<?>> list = new ArrayList<>();
 
 		for (EventCaller<?> caller : _eventCallers)
