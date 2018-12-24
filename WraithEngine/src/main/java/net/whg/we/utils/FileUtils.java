@@ -10,7 +10,7 @@ import net.whg.we.main.Plugin;
 /**
  * A collection of various utility functions for dealing with file and folder
  * management.
- * 
+ *
  * @author TheDudeFromCI
  */
 public class FileUtils
@@ -27,7 +27,7 @@ public class FileUtils
 
 	/**
 	 * Gets the working directory for the current application.
-	 * 
+	 *
 	 * @return The current working directory.
 	 */
 	public static File getCoreFolder()
@@ -37,9 +37,9 @@ public class FileUtils
 	}
 
 	/**
-	 * Gets the current plugin folder for accessing all plugins. If the folder
-	 * does not exist yet, it is created.
-	 * 
+	 * Gets the current plugin folder for accessing all plugins. If the folder does
+	 * not exist yet, it is created.
+	 *
 	 * @return The plugin folder.
 	 */
 	public static File getPluginFolder()
@@ -53,10 +53,10 @@ public class FileUtils
 	}
 
 	/**
-	 * Gets the current resource folder for the specified plugin. If a plugin is
-	 * not defined, the global resource folder is returned instead. If the
-	 * folder does not exist yet, it is created.
-	 * 
+	 * Gets the current resource folder for the specified plugin. If a plugin is not
+	 * defined, the global resource folder is returned instead. If the folder does
+	 * not exist yet, it is created.
+	 *
 	 * @param plugin
 	 *            - The plugin to access the resources for.
 	 * @return The resource folder for a certain plugin, or the global resource
@@ -64,7 +64,7 @@ public class FileUtils
 	 */
 	public static File getResourcesFolder(Plugin plugin)
 	{
-		File file = new File(getCoreFolder(), RESOURCE_FOLDER_NAME);
+		File file = new File(getPluginFolder(), RESOURCE_FOLDER_NAME);
 
 		if (plugin != null)
 			file = new File(file, plugin.getPluginName());
@@ -76,26 +76,25 @@ public class FileUtils
 	}
 
 	/**
-	 * Returns a specific resource by name. The name of a resource is defined as
-	 * the path to the resource and name of the resource relative to the global
-	 * resource folder. Folder subdirectories are seperated by the character
-	 * '/'. This is useful for obtaining resources globally or resources from
-	 * another plugin. If the plugin argument is not defined, then the global
-	 * resource folder is used. If a plugin is defined, then resources are
-	 * referenced from that plugin's local resource folder. <br>
+	 * Returns a specific resource by name. The name of a resource is defined as the
+	 * path to the resource and name of the resource relative to the global resource
+	 * folder. Folder subdirectories are seperated by the character '/'. This is
+	 * useful for obtaining resources globally or resources from another plugin. If
+	 * the plugin argument is not defined, then the global resource folder is used.
+	 * If a plugin is defined, then resources are referenced from that plugin's
+	 * local resource folder. <br>
 	 * <br>
 	 * Example:
-	 * 
+	 *
 	 * <pre>
 	 * path / to / resource.png
 	 * </pre>
-	 * 
+	 *
 	 * @param plugin
-	 *            - The plugin to get the resource from, or null to access
-	 *            resources globally.
+	 *            - The plugin to get the resource from, or null to access resources
+	 *            globally.
 	 * @param name
-	 *            - The path to a resource and the name of the resource to
-	 *            return.
+	 *            - The path to a resource and the name of the resource to return.
 	 * @return The resource at the specified location, or null if no resource is
 	 *         found.
 	 * @see {@link #getResourcesFolder}
@@ -112,9 +111,9 @@ public class FileUtils
 	}
 
 	/**
-	 * Loads a file and reads all contents into a string. Throws exceptions if
-	 * file cannot be read.
-	 * 
+	 * Loads a file and reads all contents into a string. Throws exceptions if file
+	 * cannot be read.
+	 *
 	 * @param file
 	 *            - The file to read string data from.
 	 * @return The file's contents in a single string.
@@ -123,8 +122,7 @@ public class FileUtils
 	 * @throws IOException
 	 *             If the file cannot be read.
 	 */
-	public static String loadFileAsString(File file)
-			throws FileNotFoundException, IOException
+	public static String loadFileAsString(File file) throws FileNotFoundException, IOException
 	{
 		StringBuilder sb = new StringBuilder();
 
