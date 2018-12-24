@@ -5,7 +5,7 @@
 
 	<groupId>org.wraithaven.games</groupId>
 	<artifactId>WraithEngine</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>v0.1.0a</version>
 	<packaging>jar</packaging>
 
 	<name>WraithEngine</name>
@@ -18,12 +18,14 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
-	
+
 	<profiles>
 		<profile>
 			<id>lwjgl-natives-linux</id>
 			<activation>
-				<os><family>unix</family></os>
+				<os>
+					<family>unix</family>
+				</os>
 			</activation>
 			<properties>
 				<lwjgl.natives>natives-linux</lwjgl.natives>
@@ -32,7 +34,9 @@
 		<profile>
 			<id>lwjgl-natives-macos</id>
 			<activation>
-				<os><family>mac</family></os>
+				<os>
+					<family>mac</family>
+				</os>
 			</activation>
 			<properties>
 				<lwjgl.natives>natives-macos</lwjgl.natives>
@@ -41,13 +45,42 @@
 		<profile>
 			<id>lwjgl-natives-windows</id>
 			<activation>
-				<os><family>windows</family></os>
+				<os>
+					<family>windows</family>
+				</os>
 			</activation>
 			<properties>
 				<lwjgl.natives>natives-windows</lwjgl.natives>
 			</properties>
 		</profile>
 	</profiles>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.2.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<finalName>${project.artifactId}-${project.version}</finalName>
+						<transformers>
+							<transformer
+								implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+								<mainClass>net.whg.we.main.WraithEngine</mainClass>
+							</transformer>
+						</transformers>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 	<dependencies>
 		<dependency>
