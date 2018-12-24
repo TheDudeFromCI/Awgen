@@ -46,7 +46,7 @@ public class DefaultGameLoop implements GameLoop
 		}
 
 		Log.debug("Disposing game.");
-		_eventCaller.onLoopInitialized();
+		_eventCaller.onLoopDisposed();
 
 		_core.getGraphics().dispose();
 	}
