@@ -1,6 +1,7 @@
 package net.whg.we.event;
 
 import java.util.ArrayList;
+import java.util.List;
 import net.whg.we.main.Plugin;
 import net.whg.we.utils.Log;
 
@@ -31,6 +32,15 @@ public class EventManager
 			return;
 		}
 
+		for (EventCaller<?> caller : _eventCallers)
+			if (caller.getPlugin() == eventCaller.getPlugin()
+					&& caller.getName().equals(eventCaller.getName()))
+			{
+				Log.warnf("Another event caller '%s' already registered for this plugin %s!",
+						eventCaller.getName(), eventCaller.getPlugin().getPluginName());
+				return;
+			}
+
 		_eventCallers.add(eventCaller);
 	}
 
@@ -60,20 +70,48 @@ public class EventManager
 	/**
 	 * Searchs the database for a specific event caller based on the name of the
 	 * event caller and the plugin it is assigned to, and returns the first
-	 * reference.
-	 * 
+	 * reference. If a plugin is not specified, then only the event caller names are
+	 * considered.
+	 *
 	 * @param plugin
-	 *            - The plugin that owns the event caller.
+	 *            - The plugin that owns the event caller. If null, only the names
+	 *            of the event callers are checked.
 	 * @param name
 	 *            - The name of the event caller.
 	 * @return The event caller, or null if it is not found.
 	 */
 	public static EventCaller<?> getEventCaller(Plugin plugin, String name)
 	{
+		if (plugin == null)
+		{
+			for (EventCaller<?> caller : _eventCallers)
+				if (caller.getName().equals(name))
+					return caller;
+			return null;
+		}
+
 		for (EventCaller<?> caller : _eventCallers)
 			if (caller.getPlugin() == plugin && caller.getName().equals(name))
 				return caller;
 		return null;
+	}
+
+	/**
+	 * Gets a list of all event callers with the specified name.
+	 *
+	 * @param name
+	 *            - The name of the event callers to search for.
+	 * @return A list of event callers with the specified name.
+	 */
+	public static List<EventCaller<?>> getEventCallers(String name)
+	{
+		ArrayList<EventCaller<?>> list = new ArrayList<>();
+
+		for (EventCaller<?> caller : _eventCallers)
+			if (caller.getName().equals(name))
+				list.add(caller);
+
+		return list;
 	}
 
 	/**
