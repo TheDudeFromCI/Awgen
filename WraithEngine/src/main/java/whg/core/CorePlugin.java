@@ -15,6 +15,9 @@ import net.whg.we.window.WindowBuilder;
  */
 public class CorePlugin implements Plugin
 {
+	public static final String RENDERING_EVENTCALLER = "Core Rendering";
+	public static final String PHYSICS_EVENTCALLER = "Core Physics";
+
 	private GraphicsThread _graphicsThread;
 	private PhysicsThread _physicsThread;
 	private QueuedWindow _window;
@@ -28,6 +31,10 @@ public class CorePlugin implements Plugin
 	@Override
 	public void initPlugin()
 	{
+		_graphicsThread = new GraphicsThread(this);
+		_physicsThread = new PhysicsThread();
+
+		_graphicsThread.build();
 	}
 
 	public QueuedWindow getWindow()
@@ -43,11 +50,6 @@ public class CorePlugin implements Plugin
 	@Override
 	public void enablePlugin()
 	{
-		_graphicsThread = new GraphicsThread();
-		_physicsThread = new PhysicsThread();
-
-		_graphicsThread.build();
-
 		Log.indent();
 		_window = new WindowBuilder(WindowBuilder.WINDOW_ENGINE_GLFW).setName("Untitled Project")
 				.setResizable(false).setSize(640, 480).setVSync(false)
@@ -61,6 +63,6 @@ public class CorePlugin implements Plugin
 	@Override
 	public int getPriority()
 	{
-		return -10000;
+		return 10000;
 	}
 }
