@@ -17,6 +17,7 @@ import net.whg.we.utils.Color;
 import net.whg.we.utils.FileUtils;
 import net.whg.we.utils.FirstPersonCamera;
 import net.whg.we.utils.Input;
+import net.whg.we.utils.Log;
 import net.whg.we.utils.ModelLoader;
 import net.whg.we.utils.Screen;
 import whg.core.CorePlugin;
@@ -60,30 +61,41 @@ public class TestPlugin implements Plugin, RenderingListener
 	@Override
 	public void onGraphicsInit()
 	{
-		_core.getGraphics().setClearScreenColor(new Color(0.2f, 0.4f, 0.8f));
-
-		File shaderFile = FileUtils.getResource(this, "normal_shader.glsl");
-		ShaderResource shaderResource = (ShaderResource) ResourceLoader.loadResource(shaderFile);
-		shaderResource.compileShader();
-		_defaultShader = shaderResource.getData();
-		_defaultMaterial = new Material(_defaultShader);
-
-		_renderGroup = new RenderGroup();
-
+		try
 		{
-			_monkeyModel =
-					new Model(ModelLoader.loadModel(FileUtils.getResource(_core, "monkey_head.fbx"),
-							_core.getGraphics())._meshes.get(0), _defaultMaterial);
-			_monkeyModel.getLocation().setRotation(new Quaternionf().rotateX(-3.1415f / 2f));
-			_renderGroup.addRenderable(_monkeyModel);
+			_core.getGraphics().setClearScreenColor(new Color(0.2f, 0.4f, 0.8f));
 
-			_floorModel = new Model(ModelLoader.loadModel(FileUtils.getResource(_core, "floor.obj"),
-					_core.getGraphics())._meshes.get(0), _defaultMaterial);
-			_renderGroup.addRenderable(_floorModel);
+			File shaderFile = FileUtils.getResource(this, "normal_shader.glsl");
+			ShaderResource shaderResource =
+					(ShaderResource) ResourceLoader.loadResource(shaderFile);
+			shaderResource.compileShader();
+			_defaultShader = shaderResource.getData();
+			_defaultMaterial = new Material(_defaultShader);
+
+			_renderGroup = new RenderGroup();
+
+			{
+				_monkeyModel = new Model(
+						ModelLoader.loadModel(FileUtils.getResource(this, "monkey_head.fbx"),
+								_core.getGraphics())._meshes.get(0),
+						_defaultMaterial);
+				_monkeyModel.getLocation().setRotation(new Quaternionf().rotateX(-3.1415f / 2f));
+				_renderGroup.addRenderable(_monkeyModel);
+
+				_floorModel =
+						new Model(ModelLoader.loadModel(FileUtils.getResource(this, "floor.obj"),
+								_core.getGraphics())._meshes.get(0), _defaultMaterial);
+				_renderGroup.addRenderable(_floorModel);
+			}
+
+			_camera = new Camera();
+			_firstPerson = new FirstPersonCamera(_camera);
 		}
-
-		_camera = new Camera();
-		_firstPerson = new FirstPersonCamera(_camera);
+		catch (Exception exception)
+		{
+			Log.fatalf("Failed to initialize scene!", exception);
+			_core.getWindow().requestClose();
+		}
 	}
 
 	@Override
@@ -99,12 +111,20 @@ public class TestPlugin implements Plugin, RenderingListener
 	@Override
 	public void onFinalPrepareRender()
 	{
-		_firstPerson.update();
+		try
+		{
+			_firstPerson.update();
 
-		if (Input.isKeyDown("q"))
-			Screen.setMouseLocked(!Screen.isMouseLocked());
-		if (Input.isKeyDown("escape"))
+			if (Input.isKeyDown("q"))
+				Screen.setMouseLocked(!Screen.isMouseLocked());
+			if (Input.isKeyDown("escape"))
+				_core.getWindow().requestClose();
+		}
+		catch (Exception exception)
+		{
+			Log.fatalf("Failed to render scene!", exception);
 			_core.getWindow().requestClose();
+		}
 	}
 
 	@Override
@@ -117,6 +137,7 @@ public class TestPlugin implements Plugin, RenderingListener
 		}
 		catch (Exception exception)
 		{
+			Log.fatalf("Failed to render scene!", exception);
 			_core.getWindow().requestClose();
 		}
 	}
