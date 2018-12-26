@@ -1,8 +1,8 @@
 package net.whg.we.gamelogic;
 
 import net.whg.we.event.EventCallerBase;
-import net.whg.we.main.CorePlugin;
 import net.whg.we.main.Plugin;
+import whg.core.CorePlugin;
 
 public class GameLoopEventCaller extends EventCallerBase<GameLoopListener>
 {

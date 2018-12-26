@@ -1,7 +1,7 @@
 package net.whg.we.utils;
 
-import net.whg.we.main.CorePlugin;
 import net.whg.we.main.PluginLoader;
+import whg.core.CorePlugin;
 
 /**
  * A utility class for talking to the screen.

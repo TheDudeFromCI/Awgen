@@ -1,4 +1,4 @@
-package net.whg.we.main;
+package whg.core;
 
 import java.io.File;
 import java.io.FileNotFoundException;

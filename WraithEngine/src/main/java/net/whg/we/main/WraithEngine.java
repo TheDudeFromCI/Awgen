@@ -41,19 +41,9 @@ public class WraithEngine
 		Log.debugf("Working Directory: %s", System.getProperty("user.dir"));
 		Log.debugf("LWJGL Version: %s", Version.getVersion());
 
-		// Load core plugins
-		CorePlugin corePlugin = new CorePlugin();
-		PluginLoader.loadPlugin(corePlugin);
-
-		// Load external plugins
-		corePlugin.loadPluginsFromFile();
-
-		// Enable plugins
-		PluginLoader.enableAllPlugins();
-
-		// Begin main operations
-		corePlugin.start();
-
-		Log.trace("Closing WraithEngine.");
+		// Load plugins
+		PluginLoader pluginLoader = new PluginLoader();
+		pluginLoader.loadPluginsFromFile();
+		pluginLoader.enableAllPlugins();
 	}
 }

@@ -1,11 +1,11 @@
 package net.whg.we.gamelogic;
 
 import net.whg.we.event.EventManager;
-import net.whg.we.main.CorePlugin;
 import net.whg.we.utils.FPSLogger;
 import net.whg.we.utils.Input;
 import net.whg.we.utils.Log;
 import net.whg.we.utils.Time;
+import whg.core.CorePlugin;
 
 public class DefaultGameLoop implements GameLoop
 {

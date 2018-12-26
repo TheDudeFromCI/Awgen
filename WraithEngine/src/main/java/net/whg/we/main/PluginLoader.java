@@ -1,7 +1,15 @@
 package net.whg.we.main;
 
+import java.io.File;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Map;
+import org.yaml.snakeyaml.Yaml;
+import net.whg.we.utils.FileUtils;
 import net.whg.we.utils.Log;
 
 public class PluginLoader
@@ -30,7 +38,75 @@ public class PluginLoader
 		return null;
 	}
 
-	static void loadPlugin(Plugin plugin)
+	void loadPluginsFromFile()
+	{
+		File folder = FileUtils.getPluginFolder();
+
+		for (File file : folder.listFiles())
+		{
+			String fileName = file.getName();
+
+			if (file.isDirectory())
+			{
+				Log.warnf("File '%s' is in plugin folder, but is a directory!", fileName);
+				continue;
+			}
+
+			if (!file.canRead())
+			{
+				Log.warnf("File '%s' is in plugin folder, but is not cannot be read!", fileName);
+				continue;
+			}
+
+			if (!fileName.endsWith(".jar"))
+			{
+				Log.warnf("File '%s' is in plugin folder, but is not a jar file", fileName);
+				continue;
+			}
+
+			Log.infof("Attempting to load plugin %s...", fileName);
+			Plugin plugin = attemptLoadPlugin(file);
+
+			if (plugin != null)
+				loadPlugin(plugin);
+		}
+	}
+
+	private Plugin attemptLoadPlugin(File file)
+	{
+		try
+		{
+			URL[] url = new URL[]
+			{
+					file.toURI().toURL()
+			};
+			URLClassLoader classLoader = new URLClassLoader(url, this.getClass().getClassLoader());
+			InputStream pluginProperties = classLoader.getResourceAsStream("plugin.yml");
+
+			Yaml yaml = new Yaml();
+			Map<String, Object> map = yaml.load(pluginProperties);
+
+			String mainClassPath = (String) map.get("MainClass");
+
+			Class<?> mainClass = Class.forName(mainClassPath, true, classLoader);
+			Plugin plugin = (Plugin) mainClass.newInstance();
+
+			return plugin;
+		}
+		catch (MalformedURLException exception)
+		{
+			Log.errorf("Failed to read file for plugin %s!", exception, file.getName());
+			return null;
+		}
+		catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| ClassCastException exception)
+		{
+			Log.errorf("Failed to load main class for plugin %s!", exception, file.getName());
+			return null;
+		}
+	}
+
+	private void loadPlugin(Plugin plugin)
 	{
 		if (_plugins.contains(plugin))
 		{
@@ -42,33 +118,28 @@ public class PluginLoader
 		Log.debugf("Added plugin to list, %s", plugin.getPluginName());
 
 		Log.indent();
-		Log.tracef("Checking if %s is initialized.", plugin.getPluginName());
-		if (!plugin.isInitialized())
+		// Mark the current indention level.
+		int indent = Log.getIndentLevel();
+
+		try
 		{
-			// Mark the current indention level.
-			int indent = Log.getIndentLevel();
+			Log.debugf("Initializing %s.", plugin.getPluginName());
+			Log.indent();
 
-			try
-			{
-				Log.debugf("Initializing %s.", plugin.getPluginName());
+			plugin.initPlugin();
 
-				Log.indent();
-				plugin.initPlugin();
+			// Reset the indention to previous value, in case the plugin forgot to reset it
+			Log.setIndentLevel(indent);
+		}
+		catch (Exception exception)
+		{
+			// As the plugin has failed to initialize, we can assume any ajustments to the
+			// log indention level have never been corrected. Let's do that now.
+			Log.setIndentLevel(indent);
 
-				// Reset the indention to previous value, in case something went wrong while
-				// initializing the plugin.
-				Log.setIndentLevel(indent);
-			}
-			catch (Exception exception)
-			{
-				// As the plugin has failed to initialize, we can assume any ajustments to the
-				// log indention level have never been corrected. Let's do that now.
-				Log.setIndentLevel(indent);
-
-				Log.errorf("Failed to initialize plugin %s!", exception, plugin.getPluginName());
-				Log.warnf("Unloading uninitialized plugin, %s.", plugin.getPluginName());
-				_plugins.remove(plugin);
-			}
+			Log.errorf("Failed to initialize plugin %s!", exception, plugin.getPluginName());
+			Log.warnf("Unloading uninitialized plugin, %s.", plugin.getPluginName());
+			_plugins.remove(plugin);
 		}
 
 		Log.trace("Sorting plugins by priority.");
@@ -85,7 +156,7 @@ public class PluginLoader
 		Log.unindent();
 	}
 
-	static void enableAllPlugins()
+	void enableAllPlugins()
 	{
 		Log.debug("Enabling plugins...");
 		Log.indent();
@@ -111,33 +182,5 @@ public class PluginLoader
 
 		Log.unindent();
 		Log.debug("All plugins enabled.");
-	}
-
-	static void disableAllPlugins()
-	{
-		Log.debug("Disabling plugins...");
-		Log.indent();
-
-		for (Plugin p : _plugins)
-		{
-			Log.debugf("Disabling %s.", p.getPluginName());
-
-			int indent = Log.getIndentLevel();
-			Log.indent();
-
-			try
-			{
-				p.disablePlugin();
-				Log.setIndentLevel(indent);
-			}
-			catch (Exception exception)
-			{
-				Log.setIndentLevel(indent);
-				Log.errorf("Failed to disable plugin %s!", exception, p.getPluginName());
-			}
-		}
-
-		Log.unindent();
-		Log.debug("All plugins disabled.");
 	}
 }
