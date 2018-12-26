@@ -90,7 +90,7 @@ public abstract class EventCallerBase<T extends Listener> implements EventCaller
 				}
 				catch (Exception exception)
 				{
-					exception.printStackTrace();
+					Log.errorf("Uncaught exception thrown from event listener!", exception);
 				}
 			}
 
