@@ -106,7 +106,7 @@ public class PluginLoader
 		}
 	}
 
-	private void loadPlugin(Plugin plugin)
+	void loadPlugin(Plugin plugin)
 	{
 		if (_plugins.contains(plugin))
 		{

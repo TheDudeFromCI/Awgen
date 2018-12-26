@@ -15,7 +15,7 @@ public class WraithEngine
 	/**
 	 * The current version of WraithEngine being run.
 	 */
-	public static final String VERSION = "v0.1.0";
+	public static final String VERSION = "v0.1.0a";
 
 	/**
 	 * The program entry method.
@@ -44,6 +44,25 @@ public class WraithEngine
 		// Load plugins
 		PluginLoader pluginLoader = new PluginLoader();
 		pluginLoader.loadPluginsFromFile();
+
+		// Load input arguments as additional plugins to load
+		for (int i = 0; i < args.length; i++)
+		{
+			Log.infof("Additional plugin specified by input argument, %s. Initializing.", args[i]);
+			try
+			{
+				Class<?> mainClass =
+						Class.forName(args[i], true, ClassLoader.getSystemClassLoader());
+				Plugin plugin = (Plugin) mainClass.newInstance();
+				pluginLoader.loadPlugin(plugin);
+			}
+			catch (Exception exception)
+			{
+				Log.errorf("Failed to load plugin from input argument! %s", exception, args[i]);
+			}
+		}
+
+		// Enable plugins
 		pluginLoader.enableAllPlugins();
 	}
 }
