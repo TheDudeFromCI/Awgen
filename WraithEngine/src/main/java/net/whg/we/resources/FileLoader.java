@@ -2,7 +2,7 @@ package net.whg.we.resources;
 
 import java.io.File;
 
-public interface FileLoader
+public interface FileLoader<T>
 {
 	/**
 	 * Gets a string array of file types that are supported by the this file loader.
@@ -27,7 +27,7 @@ public interface FileLoader
 	 * @return A resource representing the file, or null if the file could not be
 	 *         loaded.
 	 */
-	public Resource loadFile(File file);
+	public Resource<T> loadFile(File file);
 
 	/**
 	 * Gets the priority level for this file loader. When loading a file, the file

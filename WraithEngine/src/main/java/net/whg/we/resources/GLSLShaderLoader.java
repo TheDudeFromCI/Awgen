@@ -3,9 +3,10 @@ package net.whg.we.resources;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import net.whg.we.rendering.Shader;
 import net.whg.we.utils.Log;
 
-public class GLSLShaderLoader implements FileLoader
+public class GLSLShaderLoader implements FileLoader<Shader>
 {
 	private String[] _supportedShaderTypes =
 	{
@@ -19,7 +20,7 @@ public class GLSLShaderLoader implements FileLoader
 	}
 
 	@Override
-	public Resource loadFile(File file)
+	public Resource<Shader> loadFile(File file)
 	{
 		try (BufferedReader in = new BufferedReader(new FileReader(file)))
 		{

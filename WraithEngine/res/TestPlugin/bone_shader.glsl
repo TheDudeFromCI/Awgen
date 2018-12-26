@@ -1,3 +1,5 @@
+name=bone_shader
+---
 #version 330
 #define MAX_BONES 128
 
@@ -22,4 +24,16 @@ void main()
 	gl_Position = _mvpMat * pos;
 	
 	normal = _normal;
+}
+---
+---
+#version 330 core
+
+in vec3 normal;
+
+out vec4 color;
+
+void main()
+{
+	color = vec4(normal * 0.5 + 0.5, 1.0);
 }

@@ -2,6 +2,8 @@ package whg.core;
 
 import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Graphics;
+import net.whg.we.resources.GLSLShaderLoader;
+import net.whg.we.resources.ResourceLoader;
 import net.whg.we.utils.Log;
 import net.whg.we.window.QueuedWindow;
 import net.whg.we.window.WindowBuilder;
@@ -30,10 +32,14 @@ public class CorePlugin implements Plugin
 	@Override
 	public void initPlugin()
 	{
+		// Build event threads
 		_graphicsThread = new GraphicsThread(this);
 		_physicsThread = new PhysicsThread();
 
 		_graphicsThread.build();
+
+		// Build resource loaders
+		ResourceLoader.addFileLoader(new GLSLShaderLoader());
 	}
 
 	public QueuedWindow getWindow()

@@ -8,7 +8,7 @@ package net.whg.we.resources;
  *
  * @author TheDudeFromCI
  */
-public interface ReloadableResource extends Resource
+public interface ReloadableResource<T> extends Resource<T>
 {
 	/**
 	 * Check if the resource needs to be reloaded. This should only be called from

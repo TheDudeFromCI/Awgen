@@ -7,8 +7,8 @@ import net.whg.we.utils.Log;
 
 public class ResourceLoader
 {
-	private static ArrayList<FileLoader> _fileLoaders = new ArrayList<>();
-	private static ArrayList<FileLoader> _fileLoaderBuffer = new ArrayList<>();
+	private static ArrayList<FileLoader<?>> _fileLoaders = new ArrayList<>();
+	private static ArrayList<FileLoader<?>> _fileLoaderBuffer = new ArrayList<>();
 
 	/**
 	 * Loads a file as a resource.<br>
@@ -22,19 +22,19 @@ public class ResourceLoader
 	 *            - The file to load.
 	 * @return A loaded resource for the file, or null if the file cannot be loaded.
 	 */
-	public static Resource loadResource(File file)
+	public static Resource<?> loadResource(File file)
 	{
 		Log.infof("Loading the resource %s.", file.getName());
 
 		String fileType = FileUtils.getFileType(file);
 
-		FileLoader loader = null;
+		FileLoader<?> loader = null;
 
 		synchronized (_fileLoaderBuffer)
 		{
 			synchronized (_fileLoaders)
 			{
-				for (FileLoader l : _fileLoaders)
+				for (FileLoader<?> l : _fileLoaders)
 					for (String s : l.getTargetFileTypes())
 						if (s.equals(fileType))
 							_fileLoaderBuffer.add(loader);
@@ -50,7 +50,7 @@ public class ResourceLoader
 			if (Log.getLogLevel() <= Log.TRACE)
 			{
 				Log.trace("  Finding available file loaders...");
-				for (FileLoader l : _fileLoaderBuffer)
+				for (FileLoader<?> l : _fileLoaderBuffer)
 					Log.tracef("   * ", l.getClass().getName());
 			}
 
@@ -64,7 +64,7 @@ public class ResourceLoader
 				int pri = Integer.MIN_VALUE;
 				for (int i = 0; i < _fileLoaderBuffer.size(); i++)
 				{
-					FileLoader fl = _fileLoaderBuffer.get(i);
+					FileLoader<?> fl = _fileLoaderBuffer.get(i);
 					if (fl.getPriority() > pri)
 					{
 						pri = fl.getPriority();
@@ -88,7 +88,7 @@ public class ResourceLoader
 	 * @param fileLoader
 	 *            - The file loader to add.
 	 */
-	public static void addFileLoader(FileLoader fileLoader)
+	public static void addFileLoader(FileLoader<?> fileLoader)
 	{
 		Log.debugf("Adding a file loader to the ResourceLoader, %s.",
 				fileLoader.getClass().getName());
@@ -108,7 +108,7 @@ public class ResourceLoader
 	 * @param fileLoader
 	 *            - The file loader to remove.
 	 */
-	public static void removeFileLoader(FileLoader fileLoader)
+	public static void removeFileLoader(FileLoader<?> fileLoader)
 	{
 		Log.debugf("Removing a file loader from the ResourceLoader, %s.",
 				fileLoader.getClass().getName());

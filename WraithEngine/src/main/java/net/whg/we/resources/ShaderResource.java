@@ -8,7 +8,7 @@ import net.whg.we.utils.Log;
  *
  * @author TheDudeFromCI
  */
-public class ShaderResource implements Resource
+public class ShaderResource implements Resource<Shader>
 {
 	private ShaderProperties _properties;
 	private String _vertShader;
@@ -27,7 +27,7 @@ public class ShaderResource implements Resource
 	}
 
 	@Override
-	public Object getData()
+	public Shader getData()
 	{
 		if (_shader == null)
 			Log.warnf("Attempting to retrieve shader %s from resource, but shader not compiled!",

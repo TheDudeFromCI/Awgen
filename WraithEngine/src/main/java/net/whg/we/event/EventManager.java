@@ -81,6 +81,76 @@ public class EventManager
 	}
 
 	/**
+	 * A shorthand method for quickly finding an event caller and adding a listener
+	 * to it. If a plugin is not defined, then all plugins are checked, and the
+	 * first event caller with the requested name is returned.
+	 *
+	 * @param eventCallerPlugin
+	 *            - The plugin that owns the event caller, or null to search all
+	 *            plugins.
+	 * @param eventCallerName
+	 *            - The name of the event caller.
+	 * @param listener
+	 *            - The listener to add to the event caller.
+	 */
+	public static <T extends Listener> void registerListener(Plugin eventCallerPlugin,
+			String eventCallerName, T listener)
+	{
+		@SuppressWarnings("unchecked")
+		EventCaller<T> caller = (EventCaller<T>) getEventCaller(eventCallerPlugin, eventCallerName);
+
+		if (caller == null)
+		{
+			if (eventCallerPlugin == null)
+				Log.warnf("Failed to register listener %s! Failed to find event caller %s.",
+						listener.getClass().getName(), eventCallerName);
+			else
+				Log.warnf(
+						"Failed to register listener %s! Failed to find event caller %s from the plugin %s.",
+						listener.getClass().getName(), eventCallerName,
+						eventCallerPlugin.getPluginName());
+			return;
+		}
+
+		caller.addListener(listener);
+	}
+
+	/**
+	 * A shorthand method for quickly finding an event caller and removing a
+	 * listener from it. If a plugin is not defined, then all plugins are checked,
+	 * and the first event caller with the requested name is returned.
+	 *
+	 * @param eventCallerPlugin
+	 *            - The plugin that owns the event caller, or null to search all
+	 *            plugins.
+	 * @param eventCallerName
+	 *            - The name of the event caller.
+	 * @param listener
+	 *            - The listener to remove from the event caller.
+	 */
+	public static <T extends Listener> void unregisterListener(Plugin eventCallerPlugin,
+			String eventCallerName, T listener)
+	{
+		@SuppressWarnings("unchecked")
+		EventCaller<T> caller = (EventCaller<T>) getEventCaller(eventCallerPlugin, eventCallerName);
+
+		if (caller == null)
+		{
+			if (eventCallerPlugin == null)
+				Log.warnf("Failed to unregister listener %s! Failed to find event caller %s.",
+						listener.getClass().getName(), eventCallerName);
+			else
+				Log.warnf(
+						"Failed to unregister listener %s! Failed to find event caller %s from the plugin %s.",
+						listener.getClass().getName(), eventCallerName,
+						eventCallerPlugin.getPluginName());
+			return;
+		}
+
+		caller.removeListener(listener);
+	}
+
+	/**
 	 * Searchs the database for a specific event caller based on the name of the
 	 * event caller and the plugin it is assigned to and returns the first
 	 * reference. If a plugin is not specified, then only the event caller names are

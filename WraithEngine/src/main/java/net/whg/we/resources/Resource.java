@@ -6,7 +6,7 @@ package net.whg.we.resources;
  *
  * @author TheDudeFromCI
  */
-public interface Resource
+public interface Resource<T>
 {
 	/**
 	 * Gets the raw data this resource represents. This should only be called from
@@ -14,5 +14,5 @@ public interface Resource
 	 *
 	 * @return The data for this resource.
 	 */
-	public Object getData();
+	public T getData();
 }

@@ -16,9 +16,9 @@ public interface Plugin
 
 	/**
 	 * Initializes the plugin. This is preformed once, when a plugin is first added
-	 * to the class path. This process should be used for building data specific to
-	 * this plugin as well as registering any event callers. This method may be
-	 * called before other plugins or libraries are loaded.
+	 * to the class path. This process should be used for registering event callers
+	 * and file loaders. This method may be called before other plugins or libraries
+	 * are loaded.
 	 */
 	public void initPlugin();
 
