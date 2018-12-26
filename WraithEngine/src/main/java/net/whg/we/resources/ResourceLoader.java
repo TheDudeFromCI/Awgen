@@ -37,7 +37,7 @@ public class ResourceLoader
 				for (FileLoader<?> l : _fileLoaders)
 					for (String s : l.getTargetFileTypes())
 						if (s.equals(fileType))
-							_fileLoaderBuffer.add(loader);
+							_fileLoaderBuffer.add(l);
 			}
 
 			if (_fileLoaderBuffer.isEmpty())
@@ -51,14 +51,11 @@ public class ResourceLoader
 			{
 				Log.trace("  Finding available file loaders...");
 				for (FileLoader<?> l : _fileLoaderBuffer)
-					Log.tracef("   * ", l.getClass().getName());
+					Log.tracef("   * %s", l.getClass().getName());
 			}
 
 			if (_fileLoaderBuffer.size() == 1)
-			{
 				loader = _fileLoaderBuffer.get(0);
-				_fileLoaderBuffer.clear();
-			}
 			else
 			{
 				int pri = Integer.MIN_VALUE;
@@ -71,9 +68,9 @@ public class ResourceLoader
 						loader = fl;
 					}
 				}
-
-				_fileLoaderBuffer.clear();
 			}
+
+			_fileLoaderBuffer.clear();
 		}
 
 		Log.debugf("Loading resource %s using the file loader, %s.", file.getName(),
