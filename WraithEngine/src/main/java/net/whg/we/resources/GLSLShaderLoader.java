@@ -53,7 +53,7 @@ public class GLSLShaderLoader implements FileLoader<Shader>
 						throw new RuntimeException(
 								"Unable to parse shader file format! Too many states defined.");
 				}
-				if (mode == 0)
+				else if (mode == 0)
 				{
 					// Load shader property
 					if (line.startsWith("name="))
