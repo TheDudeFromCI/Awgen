@@ -1,11 +1,11 @@
 package net.whg.we.scene;
 
-import net.whg.we.gamelogic.Location;
 import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.LocationHolder;
 import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;
 import net.whg.we.rendering.Renderable;
+import net.whg.we.utils.Location;
 
 public class Model implements Renderable, LocationHolder
 {

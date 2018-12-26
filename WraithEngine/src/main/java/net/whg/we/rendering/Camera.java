@@ -1,7 +1,7 @@
 package net.whg.we.rendering;
 
 import org.joml.Matrix4f;
-import net.whg.we.gamelogic.Location;
+import net.whg.we.utils.Location;
 import net.whg.we.utils.Screen;
 
 public class Camera

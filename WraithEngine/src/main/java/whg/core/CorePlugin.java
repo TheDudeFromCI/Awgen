@@ -1,6 +1,5 @@
 package whg.core;
 
-import net.whg.we.gamelogic.DefaultWindowListener;
 import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.utils.Log;

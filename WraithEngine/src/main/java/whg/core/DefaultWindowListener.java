@@ -1,4 +1,4 @@
-package net.whg.we.gamelogic;
+package whg.core;
 
 import org.lwjgl.opengl.GL11;
 import net.whg.we.utils.Input;

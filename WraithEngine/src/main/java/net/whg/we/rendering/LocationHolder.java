@@ -1,6 +1,6 @@
 package net.whg.we.rendering;
 
-import net.whg.we.gamelogic.Location;
+import net.whg.we.utils.Location;
 
 public interface LocationHolder
 {
