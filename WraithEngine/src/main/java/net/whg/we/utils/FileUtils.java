@@ -155,7 +155,7 @@ public class FileUtils
 
 	/**
 	 * Gets the file type (file extension) of the specified file.
-	 * 
+	 *
 	 * @param file
 	 *            - The file to get the type of.
 	 * @return A string representing the file extension of this file, or null if
@@ -169,6 +169,6 @@ public class FileUtils
 		if (lastDot == -1)
 			return null;
 
-		return fileName.substring(lastDot);
+		return fileName.substring(lastDot + 1);
 	}
 }
