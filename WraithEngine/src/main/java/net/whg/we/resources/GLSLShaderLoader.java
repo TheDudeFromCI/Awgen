@@ -8,7 +8,7 @@ import net.whg.we.utils.Log;
 
 public class GLSLShaderLoader implements FileLoader<Shader>
 {
-	private String[] _supportedShaderTypes =
+	private static final String[] FILE_TYPES =
 	{
 			"glsl"
 	};
@@ -16,7 +16,7 @@ public class GLSLShaderLoader implements FileLoader<Shader>
 	@Override
 	public String[] getTargetFileTypes()
 	{
-		return _supportedShaderTypes;
+		return FILE_TYPES;
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package whg.core;
 import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.resources.GLSLShaderLoader;
+import net.whg.we.resources.MeshSceneLoader;
 import net.whg.we.resources.ResourceLoader;
 import net.whg.we.window.QueuedWindow;
 
@@ -37,6 +38,7 @@ public class CorePlugin implements Plugin
 
 		// Build resource loaders
 		ResourceLoader.addFileLoader(new GLSLShaderLoader());
+		ResourceLoader.addFileLoader(new MeshSceneLoader());
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import net.whg.we.rendering.Material;
 import net.whg.we.rendering.RenderGroup;
 import net.whg.we.rendering.ScreenClearType;
 import net.whg.we.rendering.Shader;
+import net.whg.we.resources.MeshSceneResource;
 import net.whg.we.resources.ResourceLoader;
 import net.whg.we.resources.ShaderResource;
 import net.whg.we.scene.Model;
@@ -18,7 +19,6 @@ import net.whg.we.utils.FileUtils;
 import net.whg.we.utils.FirstPersonCamera;
 import net.whg.we.utils.Input;
 import net.whg.we.utils.Log;
-import net.whg.we.utils.ModelLoader;
 import net.whg.we.utils.Screen;
 import whg.core.CorePlugin;
 import whg.core.RenderingEventCaller.RenderingListener;
@@ -75,16 +75,17 @@ public class TestPlugin implements Plugin, RenderingListener
 			_renderGroup = new RenderGroup();
 
 			{
-				_monkeyModel = new Model(
-						ModelLoader.loadModel(FileUtils.getResource(this, "monkey_head.fbx"),
-								_core.getGraphics())._meshes.get(0),
-						_defaultMaterial);
+				MeshSceneResource monkeyResource = (MeshSceneResource) ResourceLoader
+						.loadResource(FileUtils.getResource(this, "monkey_head.fbx"));
+				monkeyResource.compile(_core.getGraphics());
+				_monkeyModel = new Model(monkeyResource.getData()._meshes.get(0), _defaultMaterial);
 				_monkeyModel.getLocation().setRotation(new Quaternionf().rotateX(-3.1415f / 2f));
 				_renderGroup.addRenderable(_monkeyModel);
 
-				_floorModel =
-						new Model(ModelLoader.loadModel(FileUtils.getResource(this, "floor.obj"),
-								_core.getGraphics())._meshes.get(0), _defaultMaterial);
+				MeshSceneResource floorResource = (MeshSceneResource) ResourceLoader
+						.loadResource(FileUtils.getResource(this, "floor.obj"));
+				floorResource.compile(_core.getGraphics());
+				_floorModel = new Model(floorResource.getData()._meshes.get(0), _defaultMaterial);
 				_renderGroup.addRenderable(_floorModel);
 			}
 
