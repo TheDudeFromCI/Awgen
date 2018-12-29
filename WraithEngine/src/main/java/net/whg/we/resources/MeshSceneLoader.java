@@ -17,7 +17,14 @@ import net.whg.we.rendering.Bone;
 import net.whg.we.rendering.MeshScene;
 import net.whg.we.rendering.Skeleton;
 import net.whg.we.rendering.VertexData;
+import net.whg.we.utils.Log;
 
+/**
+ * Loads a mesh scene file. These can contain either a single mesh, or multiple
+ * meshes,
+ *
+ * @author TheDudeFromCI
+ */
 public class MeshSceneLoader implements FileLoader<MeshScene>
 {
 	private static final String[] FILE_TYPES =
@@ -135,6 +142,7 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 	public Resource<MeshScene> loadFile(File file)
 	{
 		// Load the file
+		Log.infof("Loading model: %s", file.getName());
 		AIScene scene = Assimp.aiImportFile(file.toString(),
 				Assimp.aiProcess_Triangulate | Assimp.aiProcess_GenSmoothNormals
 						| Assimp.aiProcess_FlipUVs | Assimp.aiProcess_CalcTangentSpace
@@ -254,7 +262,6 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 				AIMatrix4x4 inverseRootTransformRaw = scene.mRootNode().mTransformation();
 				Matrix4f inverseRootTransform = assimpMatrix(inverseRootTransformRaw);
 
-				@SuppressWarnings("unused")
 				Skeleton skeleton = new Skeleton(inverseRootTransform, bones, rootBone);
 
 				int[] attributes = new int[]
