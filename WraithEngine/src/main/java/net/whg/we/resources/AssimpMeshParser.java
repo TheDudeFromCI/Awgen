@@ -2,38 +2,22 @@ package net.whg.we.resources;
 
 import org.lwjgl.assimp.AIFace;
 import org.lwjgl.assimp.AIMesh;
-import org.lwjgl.assimp.AIScene;
 import org.lwjgl.assimp.AIVector3D;
 import net.whg.we.rendering.VertexData;
 
 class AssimpMeshParser
 {
-	private static final int VERT_POS_SIZE = 3;
-	private static final int VERT_NORMAL_SIZE = 3;
-	private static final int VERT_BONE_INDEX_SIZE = 4;
-	private static final int VERT_BONE_WEIGHT_SIZE = 4;
+	static final int VERT_POS_SIZE = 3;
+	static final int VERT_NORMAL_SIZE = 3;
+	static final int VERT_BONE_INDEX_SIZE = 4;
+	static final int VERT_BONE_WEIGHT_SIZE = 4;
 
-	private static final int VERTEX_SIZE = VERT_POS_SIZE + VERT_NORMAL_SIZE;
-	private static final int VERTEX_SIZE_RIGGED =
+	static final int VERTEX_SIZE = VERT_POS_SIZE + VERT_NORMAL_SIZE;
+	static final int VERTEX_SIZE_RIGGED =
 			VERTEX_SIZE + VERT_BONE_INDEX_SIZE + VERT_BONE_WEIGHT_SIZE;
 
-	private AIScene _scene;
-
-	AssimpMeshParser(AIScene scene)
+	static UncompiledMesh loadMesh(AIMesh mesh)
 	{
-		_scene = scene;
-	}
-
-	int getMeshCount()
-	{
-		return _scene.mNumMeshes();
-	}
-
-	UncompiledMesh loadMesh(int meshId)
-	{
-		// Get the referenced mesh
-		AIMesh mesh = AIMesh.create(_scene.mMeshes().get(meshId));
-
 		// Count mesh information
 		int boneCount = mesh.mNumBones();
 		int vertexCount = mesh.mNumVertices();
@@ -75,30 +59,21 @@ class AssimpMeshParser
 			triangles[index++] = (short) face.mIndices().get(2);
 		}
 
+		// Assign attributes tag
+		int[] attributes;
 		if (boneCount > 0)
-		{
-			// Assign attributes tag
-			// int[] attributes = new int[]
-			// {
-			// VERT_POS_SIZE, VERT_NORMAL_SIZE, VERT_BONE_INDEX_SIZE, VERT_BONE_WEIGHT_SIZE
-			// };
-
-			// Load bone weights
-			// TODO
-
-			return null;
-		}
+			attributes = new int[]
+			{
+					VERT_POS_SIZE, VERT_NORMAL_SIZE, VERT_BONE_INDEX_SIZE, VERT_BONE_WEIGHT_SIZE
+			};
 		else
-		{
-			// Assign attributes tag
-			int[] attributes = new int[]
+			attributes = new int[]
 			{
 					VERT_POS_SIZE, VERT_NORMAL_SIZE
 			};
 
-			// Compile vertex data
-			VertexData vertexData = new VertexData(vertices, triangles, attributes);
-			return new UncompiledMesh(meshName, vertexData, null);
-		}
+		// Compile vertex data
+		VertexData vertexData = new VertexData(vertices, triangles, attributes);
+		return new UncompiledMesh(meshName, vertexData);
 	}
 }

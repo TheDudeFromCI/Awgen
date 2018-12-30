@@ -2,57 +2,43 @@ package net.whg.we.resources;
 
 import java.io.File;
 import java.util.ArrayList;
+import org.lwjgl.assimp.AIMesh;
 import org.lwjgl.assimp.AIScene;
 import org.lwjgl.assimp.Assimp;
 
 class AssimpSceneParser
 {
-	private AIScene _scene;
-	private AssimpMeshParser _meshParser;
-	private ArrayList<UncompiledMesh> _meshes;
-
-	AssimpSceneParser(File file)
+	static ArrayList<UncompiledMesh> load(File file)
 	{
 		// Load the scene file
-		_scene = Assimp.aiImportFile(file.toString(),
+		AIScene scene = Assimp.aiImportFile(file.toString(),
 				Assimp.aiProcess_Triangulate | Assimp.aiProcess_GenSmoothNormals
 						| Assimp.aiProcess_FlipUVs | Assimp.aiProcess_CalcTangentSpace
 						| Assimp.aiProcess_LimitBoneWeights);
 
-		// If the scene cannot be loaded, cancel
-		if (_scene == null)
-			return;
+		// If scene could not be loaded, return null
+		if (scene == null)
+			return null;
 
-		// Initialize the file parsers
-		_meshParser = new AssimpMeshParser(_scene);
-	}
+		// Count scene information
+		int meshCount = scene.mNumMeshes();
 
-	boolean isSceneLoaded()
-	{
-		return _scene != null;
-	}
+		ArrayList<UncompiledMesh> meshes = new ArrayList<>();
 
-	void dispose()
-	{
-		_scene.free();
-	}
-
-	void load()
-	{
-		_meshes = new ArrayList<>();
-		for (int i = 0; i < _meshParser.getMeshCount(); i++)
+		// Load scene meshes
+		for (int i = 0; i < meshCount; i++)
 		{
-			UncompiledMesh mesh = _meshParser.loadMesh(i);
+			AIMesh mesh = AIMesh.create(scene.mMeshes().get(i));
 
-			if (mesh == null)
-				continue;
+			UncompiledMesh meshData = AssimpMeshParser.loadMesh(mesh);
+			AssimpSkeletonParser.loadSkeleton(scene, mesh, meshData);
 
-			_meshes.add(mesh);
+			if (meshData != null)
+				meshes.add(meshData);
 		}
-	}
 
-	ArrayList<UncompiledMesh> getMeshes()
-	{
-		return _meshes;
+		// Cleanup and return
+		scene.free();
+		return meshes;
 	}
 }

@@ -12,11 +12,10 @@ public class UncompiledMesh
 	private String _name;
 	private Skeleton _skeleton;
 
-	public UncompiledMesh(String name, VertexData vertexData, Skeleton skeleton)
+	public UncompiledMesh(String name, VertexData vertexData)
 	{
 		_name = name;
 		_vertexData = vertexData;
-		_skeleton = skeleton;
 	}
 
 	public Mesh compile(Graphics graphics)
@@ -24,5 +23,25 @@ public class UncompiledMesh
 		if (_skeleton == null)
 			return new Mesh(_name, _vertexData, graphics);
 		return new SkinnedMesh(_name, _vertexData, graphics, _skeleton);
+	}
+
+	public VertexData getVertexData()
+	{
+		return _vertexData;
+	}
+
+	public String getName()
+	{
+		return _name;
+	}
+
+	public Skeleton getSkeleton()
+	{
+		return _skeleton;
+	}
+
+	public void setSkeleton(Skeleton skeleton)
+	{
+		_skeleton = skeleton;
 	}
 }
