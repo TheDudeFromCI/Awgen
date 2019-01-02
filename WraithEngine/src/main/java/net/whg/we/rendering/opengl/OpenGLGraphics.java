@@ -2,9 +2,13 @@ package net.whg.we.rendering.opengl;
 
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL45;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.ScreenClearType;
+import net.whg.we.rendering.TextureProperties;
 import net.whg.we.rendering.VMesh;
+import net.whg.we.rendering.VTexture;
 import net.whg.we.rendering.VertexData;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.Log;
@@ -16,12 +20,14 @@ public class OpenGLGraphics implements Graphics
 	{
 		GL.createCapabilities();
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
+
+		checkForErrors("Init OpenGL");
 	}
 
 	@Override
 	public VMesh prepareMesh(VertexData vertexData)
 	{
-		return new GLVMesh(vertexData);
+		return new GLVMesh(this, vertexData);
 	}
 
 	@Override
@@ -54,5 +60,61 @@ public class OpenGLGraphics implements Graphics
 	{
 		Log.debug("Disposing OpenGL.");
 		GL.setCapabilities(null);
+	}
+
+	@Override
+	public VTexture prepareTexture(TextureProperties properties)
+	{
+		return new GLVTexture(this, properties);
+	}
+
+	public void checkForErrors(String state)
+	{
+		checkForErrors(Log.DEBUG, state);
+	}
+
+	public void checkForErrors(int logLevel, String state)
+	{
+		if (Log.getLogLevel() > logLevel)
+			return;
+
+		int error;
+		while ((error = GL11.glGetError()) != GL11.GL_NO_ERROR)
+		{
+			String errorName;
+
+			switch (error)
+			{
+				case GL11.GL_INVALID_ENUM:
+					errorName = "Invalid Enum";
+					break;
+				case GL11.GL_INVALID_VALUE:
+					errorName = "Invalid Value";
+					break;
+				case GL11.GL_INVALID_OPERATION:
+					errorName = "Invalid Operation";
+					break;
+				case GL11.GL_STACK_OVERFLOW:
+					errorName = "Stack Overflow";
+					break;
+				case GL11.GL_STACK_UNDERFLOW:
+					errorName = "Stack Underflow";
+					break;
+				case GL11.GL_OUT_OF_MEMORY:
+					errorName = "Out of Memory";
+					break;
+				case GL30.GL_INVALID_FRAMEBUFFER_OPERATION:
+					errorName = "Invalid Framebuffer Operation";
+					break;
+				case GL45.GL_CONTEXT_LOST:
+					errorName = "Context Lost";
+					break;
+				default:
+					errorName = "Unknown Error";
+					break;
+			}
+
+			Log.errorf("OpenGL Error Detected! %s (%s)", errorName, state);
+		}
 	}
 }

@@ -136,6 +136,15 @@ public class Shader
 		GL20.glUniformMatrix4fv(location, false, mat);
 	}
 
+	public void setUniformInt(String name, int value)
+	{
+		if (_disposed)
+			throw new IllegalStateException("Shader already disposed!");
+
+		int location = getUniformLocation(name);
+		GL20.glUniform1i(location, value);
+	}
+
 	public boolean isDisposed()
 	{
 		return _disposed;

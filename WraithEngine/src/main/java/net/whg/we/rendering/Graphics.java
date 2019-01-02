@@ -8,6 +8,8 @@ public interface Graphics
 
 	public VMesh prepareMesh(VertexData vertexData);
 
+	public VTexture prepareTexture(TextureProperties properties);
+
 	public void clearScreenPass(ScreenClearType screenClear);
 
 	public void setClearScreenColor(Color color);

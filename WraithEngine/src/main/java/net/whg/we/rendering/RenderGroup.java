@@ -24,4 +24,20 @@ public class RenderGroup
 		for (Renderable r : _renderables)
 			r.render(camera);
 	}
+
+	public void forEach(RenderableAction action)
+	{
+		for (Renderable r : _renderables)
+			action.run(r);
+	}
+
+	public void clear()
+	{
+		_renderables.clear();
+	}
+
+	public static interface RenderableAction
+	{
+		public void run(Renderable r);
+	}
 }

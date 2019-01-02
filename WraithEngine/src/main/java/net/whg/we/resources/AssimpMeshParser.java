@@ -9,10 +9,11 @@ class AssimpMeshParser
 {
 	static final int VERT_POS_SIZE = 3;
 	static final int VERT_NORMAL_SIZE = 3;
+	static final int VERT_TEXTURE_SIZE = 2;
 	static final int VERT_BONE_INDEX_SIZE = 4;
 	static final int VERT_BONE_WEIGHT_SIZE = 4;
 
-	static final int VERTEX_SIZE = VERT_POS_SIZE + VERT_NORMAL_SIZE;
+	static final int VERTEX_SIZE = VERT_POS_SIZE + VERT_NORMAL_SIZE + VERT_TEXTURE_SIZE;
 	static final int VERTEX_SIZE_RIGGED =
 			VERTEX_SIZE + VERT_BONE_INDEX_SIZE + VERT_BONE_WEIGHT_SIZE;
 
@@ -42,6 +43,18 @@ class AssimpMeshParser
 			vertices[index++] = normal.y();
 			vertices[index++] = normal.z();
 
+			if (mesh.mTextureCoords(0) == null)
+			{
+				vertices[index++] = 0f;
+				vertices[index++] = 0f;
+			}
+			else
+			{
+				AIVector3D uv = mesh.mTextureCoords(0).get(v);
+				vertices[index++] = uv.x();
+				vertices[index++] = uv.y();
+			}
+
 			// Add bone weight buffer, if needed
 			if (boneCount > 0)
 				index += VERT_BONE_INDEX_SIZE + VERT_BONE_WEIGHT_SIZE;
@@ -64,12 +77,13 @@ class AssimpMeshParser
 		if (boneCount > 0)
 			attributes = new int[]
 			{
-					VERT_POS_SIZE, VERT_NORMAL_SIZE, VERT_BONE_INDEX_SIZE, VERT_BONE_WEIGHT_SIZE
+					VERT_POS_SIZE, VERT_NORMAL_SIZE, VERT_TEXTURE_SIZE, VERT_BONE_INDEX_SIZE,
+					VERT_BONE_WEIGHT_SIZE
 			};
 		else
 			attributes = new int[]
 			{
-					VERT_POS_SIZE, VERT_NORMAL_SIZE
+					VERT_POS_SIZE, VERT_NORMAL_SIZE, VERT_TEXTURE_SIZE
 			};
 
 		// Compile vertex data

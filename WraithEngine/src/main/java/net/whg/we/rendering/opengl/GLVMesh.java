@@ -9,17 +9,21 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import net.whg.we.rendering.VMesh;
 import net.whg.we.rendering.VertexData;
+import net.whg.we.utils.Log;
 
 public class GLVMesh implements VMesh
 {
+	private OpenGLGraphics _opengl;
 	private int _vboId;
 	private int _vaoId;
 	private int _indexId;
 	private int _indexCount;
 	private boolean _disposed;
 
-	public GLVMesh(VertexData vertexData)
+	public GLVMesh(OpenGLGraphics opengl, VertexData vertexData)
 	{
+		_opengl = opengl;
+
 		FloatBuffer vertexBuffer = BufferUtils.createFloatBuffer(vertexData.getDataArray().length);
 		vertexBuffer.put(vertexData.getDataArray());
 		vertexBuffer.flip();
@@ -56,6 +60,8 @@ public class GLVMesh implements VMesh
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 
 		GL30.glBindVertexArray(0);
+
+		_opengl.checkForErrors("Loaded Mesh");
 	}
 
 	@Override
@@ -71,6 +77,8 @@ public class GLVMesh implements VMesh
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 
 		GL30.glBindVertexArray(0);
+
+		_opengl.checkForErrors(Log.TRACE, "Rendered Mesh");
 	}
 
 	@Override
@@ -83,6 +91,9 @@ public class GLVMesh implements VMesh
 		GL15.glDeleteBuffers(_vboId);
 		GL15.glDeleteBuffers(_indexId);
 		GL30.glDeleteVertexArrays(_vaoId);
+
+		_opengl.checkForErrors("Disposed Mesh");
+
 	}
 
 	@Override
