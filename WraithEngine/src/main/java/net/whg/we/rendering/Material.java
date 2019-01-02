@@ -13,11 +13,22 @@ public class Material
 	private Matrix4f _viewMatrix = new Matrix4f();
 	private Matrix4f _modelMatrix = new Matrix4f();
 	private Matrix4f _mvpMatrix = new Matrix4f();
+	private Texture[] _textures;
 
 	public Material(Shader shader)
 	{
 		_shader = shader;
 		_matrixFloatBuffer = BufferUtils.createFloatBuffer(16);
+	}
+
+	public void setTextures(Texture[] textures)
+	{
+		_textures = textures;
+	}
+
+	public Texture[] getTextures()
+	{
+		return _textures;
 	}
 
 	public Shader getShader()
@@ -28,6 +39,12 @@ public class Material
 	public void bind()
 	{
 		_shader.bind();
+
+		if (_textures != null)
+		{
+			for (int i = 0; i < _textures.length; i++)
+				_textures[i].bind(i);
+		}
 	}
 
 	public void setMVPUniform(Camera camera, Location entityLocation)
