@@ -4,8 +4,9 @@ import java.nio.FloatBuffer;
 import java.util.HashMap;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import net.whg.we.resources.DisposableResource;
 
-public class Shader
+public class Shader implements DisposableResource
 {
 	// ===== FIELDS =====
 
@@ -105,6 +106,12 @@ public class Shader
 		_uniforms.put(name, location);
 	}
 
+	public int getShaderId()
+	{
+		return _shaderId;
+	}
+
+	@Override
 	public void dispose()
 	{
 		if (_disposed)
@@ -145,6 +152,7 @@ public class Shader
 		GL20.glUniform1i(location, value);
 	}
 
+	@Override
 	public boolean isDisposed()
 	{
 		return _disposed;

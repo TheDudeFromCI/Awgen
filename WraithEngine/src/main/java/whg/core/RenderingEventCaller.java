@@ -115,7 +115,7 @@ public class RenderingEventCaller extends EventCallerBase<RenderingListener>
 	}
 
 	@Override
-	protected void runEvent(RenderingListener t, int index)
+	protected void runEvent(RenderingListener t, int index, Object[] args)
 	{
 		switch (index)
 		{

@@ -1,6 +1,8 @@
 package net.whg.we.rendering;
 
-public class Texture
+import net.whg.we.resources.DisposableResource;
+
+public class Texture implements DisposableResource
 {
 	private TextureProperties _properties;
 	private VTexture _textureRaw;
@@ -20,6 +22,7 @@ public class Texture
 		_textureRaw.bind(textureSlot);
 	}
 
+	@Override
 	public void dispose()
 	{
 		if (_disposed)
@@ -29,6 +32,7 @@ public class Texture
 		_textureRaw.dispose();
 	}
 
+	@Override
 	public boolean isDisposed()
 	{
 		return _disposed;

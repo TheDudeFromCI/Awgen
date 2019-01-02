@@ -1,23 +1,26 @@
 package net.whg.we.scene;
 
-import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.LocationHolder;
 import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;
-import net.whg.we.rendering.Renderable;
 import net.whg.we.utils.Location;
 
-public class Model implements Renderable, LocationHolder
+public class Model implements LocationHolder
 {
-	private Mesh _mesh;
+	private SubMesh[] _submeshes;
 	private Location _location;
-	private Material _material;
 
-	public Model(Mesh mesh, Material material)
+	public Model(Mesh[] meshes, Material[] materials)
 	{
-		_mesh = mesh;
-		_material = material;
+		if (meshes.length != materials.length)
+			throw new IllegalArgumentException(
+					"Mesh array and Material array must be the same length!");
+
+		_submeshes = new SubMesh[meshes.length];
 		_location = new Location();
+
+		for (int i = 0; i < _submeshes.length; i++)
+			_submeshes[i] = new SubMesh(meshes[i], materials[i], this);
 	}
 
 	@Override
@@ -26,26 +29,13 @@ public class Model implements Renderable, LocationHolder
 		return _location;
 	}
 
-	@Override
-	public void render(Camera camera)
+	public int getSubMeshCount()
 	{
-		_material.bind();
-		_material.setMVPUniform(camera, _location);
-		_mesh.render();
+		return _submeshes.length;
 	}
 
-	public Mesh getMesh()
+	public SubMesh getSubMesh(int index)
 	{
-		return _mesh;
-	}
-
-	public Material getMaterial()
-	{
-		return _material;
-	}
-
-	public void setMaterial(Material material)
-	{
-		_material = material;
+		return _submeshes[index];
 	}
 }

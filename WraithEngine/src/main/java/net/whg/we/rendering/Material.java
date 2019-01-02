@@ -7,23 +7,33 @@ import net.whg.we.utils.Location;
 
 public class Material
 {
+	// FIELDS
 	private Shader _shader;
+	private Texture[] _textures;
+
+	// BUFFERS
 	private FloatBuffer _matrixFloatBuffer;
 	private Matrix4f _projectionMatrix = new Matrix4f();
 	private Matrix4f _viewMatrix = new Matrix4f();
 	private Matrix4f _modelMatrix = new Matrix4f();
 	private Matrix4f _mvpMatrix = new Matrix4f();
-	private Texture[] _textures;
+	private float _sorterId;
 
 	public Material(Shader shader)
 	{
 		_shader = shader;
 		_matrixFloatBuffer = BufferUtils.createFloatBuffer(16);
+		_sorterId = (float) Math.random();
 	}
 
 	public void setTextures(Texture[] textures)
 	{
 		_textures = textures;
+	}
+
+	public float getSorterId()
+	{
+		return _sorterId + _shader.getShaderId();
 	}
 
 	public Texture[] getTextures()

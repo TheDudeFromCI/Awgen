@@ -2,8 +2,19 @@ package net.whg.we.event;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import net.whg.we.main.Plugin;
 import net.whg.we.utils.Log;
 
+/**
+ * A default setup for an event caller, which handles most common functions for
+ * you. This class is thread safe and handles error catching. This default setup
+ * only requires the {@link #runEvent(Listener, int)} method to be defined for
+ * local event callers. For registered event callers, it is recommended to also
+ * define the {@link #getName()} and {@link #getPlugin()} methods as well.
+ *
+ * @param <T>
+ *            - The type of listener this event calls to.
+ */
 public abstract class EventCallerBase<T extends Listener> implements EventCaller<T>
 {
 	protected ArrayList<T> _listeners = new ArrayList<>();
@@ -12,6 +23,12 @@ public abstract class EventCallerBase<T extends Listener> implements EventCaller
 	private boolean _isInEvent;
 	private Object _lock = new Object();
 	private boolean _disposeOnFinish;
+	private String _defaultName;
+
+	public EventCallerBase()
+	{
+		_defaultName = getClass().getName();
+	}
 
 	@Override
 	public void addListener(T listener)
@@ -76,7 +93,19 @@ public abstract class EventCallerBase<T extends Listener> implements EventCaller
 		}
 	}
 
-	protected void callEvent(int index)
+	@Override
+	public String getName()
+	{
+		return _defaultName;
+	}
+
+	@Override
+	public Plugin getPlugin()
+	{
+		return null;
+	}
+
+	protected void callEvent(int index, Object... args)
 	{
 		synchronized (_lock)
 		{
@@ -86,7 +115,7 @@ public abstract class EventCallerBase<T extends Listener> implements EventCaller
 			{
 				try
 				{
-					runEvent(t, index);
+					runEvent(t, index, args);
 				}
 				catch (Exception exception)
 				{
@@ -116,5 +145,5 @@ public abstract class EventCallerBase<T extends Listener> implements EventCaller
 		}
 	}
 
-	protected abstract void runEvent(T t, int index);
+	protected abstract void runEvent(T t, int index, Object[] args);
 }
