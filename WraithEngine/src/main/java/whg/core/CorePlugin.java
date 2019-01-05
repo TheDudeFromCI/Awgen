@@ -5,6 +5,7 @@ import net.whg.we.rendering.Graphics;
 import net.whg.we.resources.GLSLShaderLoader;
 import net.whg.we.resources.MeshSceneLoader;
 import net.whg.we.resources.ResourceLoader;
+import net.whg.we.resources.TextureLoader;
 import net.whg.we.window.QueuedWindow;
 
 /**
@@ -39,6 +40,7 @@ public class CorePlugin implements Plugin
 		// Build resource loaders
 		ResourceLoader.addFileLoader(new GLSLShaderLoader());
 		ResourceLoader.addFileLoader(new MeshSceneLoader());
+		ResourceLoader.addFileLoader(new TextureLoader());
 	}
 
 	@Override

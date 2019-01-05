@@ -1,10 +1,7 @@
 package whg.test;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
 import org.joml.Math;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -18,11 +15,11 @@ import net.whg.we.rendering.ScreenClearType;
 import net.whg.we.rendering.Shader;
 import net.whg.we.rendering.ShaderDatabase;
 import net.whg.we.rendering.Texture;
-import net.whg.we.rendering.TextureProperties;
 import net.whg.we.resources.DisposableResource;
 import net.whg.we.resources.MeshSceneResource;
 import net.whg.we.resources.ResourceLoader;
 import net.whg.we.resources.ShaderResource;
+import net.whg.we.resources.TextureResource;
 import net.whg.we.scene.Model;
 import net.whg.we.scene.RenderPass;
 import net.whg.we.utils.Color;
@@ -79,36 +76,12 @@ public class TestPlugin implements Plugin, RenderingListener
 		return shader;
 	}
 
-	private Texture loadTexture(String name) throws IOException
+	private Texture loadTexture(String name)
 	{
-		TextureProperties properties = new TextureProperties();
-		BufferedImage image = ImageIO.read(FileUtils.getResource(this, name));
-
-		Color[] pixels = new Color[image.getWidth() * image.getHeight()];
-		int[] rgb = image.getRGB(0, 0, image.getWidth(), image.getHeight(), new int[pixels.length],
-				0, image.getWidth());
-
-		int index;
-		float r, g, b, a;
-		for (int y = 0; y < image.getHeight(); y++)
-		{
-			for (int x = 0; x < image.getWidth(); x++)
-			{
-				index = y * image.getWidth() + x;
-
-				r = (rgb[index] >> 16) / 255f;
-				g = (rgb[index] >> 8) / 255f;
-				b = rgb[index] / 255f;
-				a = (rgb[index] >> 24) / 255f;
-				pixels[index] = new Color(r, g, b, a);
-			}
-		}
-
-		properties.setPixels(pixels, image.getWidth(), image.getHeight());
-
-		Texture texture = new Texture(_core.getGraphics().prepareTexture(properties), properties);
-		_resources.add(texture);
-		return texture;
+		TextureResource textureRes =
+				(TextureResource) ResourceLoader.loadResource(FileUtils.getResource(this, name));
+		textureRes.compile(_core.getGraphics());
+		return textureRes.getData();
 	}
 
 	private Material loadMaterial(Shader shader, Texture texture)
