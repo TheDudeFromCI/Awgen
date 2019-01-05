@@ -3,6 +3,7 @@ package net.whg.we.resources;
 import java.util.ArrayList;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.MeshScene;
+import net.whg.we.utils.Log;
 
 public class MeshSceneResource implements Resource<MeshScene>
 {
@@ -27,6 +28,12 @@ public class MeshSceneResource implements Resource<MeshScene>
 
 	public void compile(Graphics graphics)
 	{
+		if (_scene != null)
+		{
+			Log.warn("Cannot compile mesh scene! Mesh Scene already compiled.");
+			return;
+		}
+
 		_scene = new MeshScene();
 
 		for (UncompiledMesh mesh : _meshes)

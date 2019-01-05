@@ -13,7 +13,6 @@ import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;
 import net.whg.we.rendering.ScreenClearType;
 import net.whg.we.rendering.Shader;
-import net.whg.we.rendering.ShaderDatabase;
 import net.whg.we.rendering.Texture;
 import net.whg.we.resources.DisposableResource;
 import net.whg.we.resources.MeshSceneResource;
@@ -69,7 +68,7 @@ public class TestPlugin implements Plugin, RenderingListener
 	{
 		File shaderFile = FileUtils.getResource(this, name);
 		ShaderResource shaderResource = (ShaderResource) ResourceLoader.loadResource(shaderFile);
-		shaderResource.compileShader();
+		shaderResource.compileShader(_core.getGraphics());
 		Shader shader = shaderResource.getData();
 		_resources.add(shader);
 
@@ -138,7 +137,7 @@ public class TestPlugin implements Plugin, RenderingListener
 			Texture texture = loadTexture("textures/male_casualsuit06_diffuse.png");
 			Material material = loadMaterial(shader, texture);
 
-			ShaderDatabase.bindShader(shader);
+			shader.bind();
 			shader.setUniformInt("_diffuse", 0);
 
 			{

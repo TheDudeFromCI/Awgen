@@ -10,6 +10,8 @@ public interface Graphics
 
 	public VTexture prepareTexture(TextureProperties properties);
 
+	public VShader prepareShader(String vert, String geo, String frag);
+
 	public void clearScreenPass(ScreenClearType screenClear);
 
 	public void setClearScreenColor(Color color);

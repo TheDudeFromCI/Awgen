@@ -8,6 +8,7 @@ import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.ScreenClearType;
 import net.whg.we.rendering.TextureProperties;
 import net.whg.we.rendering.VMesh;
+import net.whg.we.rendering.VShader;
 import net.whg.we.rendering.VTexture;
 import net.whg.we.rendering.VertexData;
 import net.whg.we.utils.Color;
@@ -15,6 +16,11 @@ import net.whg.we.utils.Log;
 
 public class OpenGLGraphics implements Graphics
 {
+	public static final int TEXTURE_SLOTS = 8;
+
+	private int _boundShaderId;
+	private int[] _boundTextureIds = new int[TEXTURE_SLOTS];
+
 	@Override
 	public void init()
 	{
@@ -116,5 +122,31 @@ public class OpenGLGraphics implements Graphics
 
 			Log.errorf("OpenGL Error Detected! %s (%s)", errorName, state);
 		}
+	}
+
+	int getBoundShaderId()
+	{
+		return _boundShaderId;
+	}
+
+	void setBoundShaderId(int boundShaderId)
+	{
+		_boundShaderId = boundShaderId;
+	}
+
+	int getBoundTextureId(int slot)
+	{
+		return _boundTextureIds[slot];
+	}
+
+	void setBoundTextureId(int slot, int boundTextureId)
+	{
+		_boundTextureIds[slot] = boundTextureId;
+	}
+
+	@Override
+	public VShader prepareShader(String vert, String geo, String frag)
+	{
+		return new GLVShader(this, vert, geo, frag);
 	}
 }

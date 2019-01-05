@@ -1,5 +1,6 @@
 package net.whg.we.resources;
 
+import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.Shader;
 import net.whg.we.utils.Log;
 
@@ -12,7 +13,6 @@ public class ShaderResource implements Resource<Shader>
 {
 	private ShaderProperties _properties;
 	private String _vertShader;
-	@SuppressWarnings("unused") // TODO Make shaders support geometry shaders.
 	private String _geoShader;
 	private String _fragShader;
 	private Shader _shader;
@@ -35,12 +35,12 @@ public class ShaderResource implements Resource<Shader>
 		return _shader;
 	}
 
-	public boolean needsCompiling()
+	public boolean isCompiled()
 	{
-		return _shader == null;
+		return _shader != null;
 	}
 
-	public void compileShader()
+	public void compileShader(Graphics graphics)
 	{
 		if (_shader != null)
 		{
@@ -48,6 +48,7 @@ public class ShaderResource implements Resource<Shader>
 			return;
 		}
 
-		_shader = new Shader(_properties.getName(), _vertShader, _fragShader);
+		_shader = new Shader(_properties.getName(),
+				graphics.prepareShader(_vertShader, _geoShader, _fragShader));
 	}
 }

@@ -59,7 +59,7 @@ public class Material
 
 	public void setMVPUniform(Camera camera, Location entityLocation)
 	{
-		ShaderDatabase.bindShader(_shader);
+		_shader.bind();
 
 		camera.getProjectionMatrix(_projectionMatrix);
 		camera.getViewMatrix(_viewMatrix);
