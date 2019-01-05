@@ -8,6 +8,7 @@ public class TextureResource implements Resource<Texture>
 {
 	private Texture _texture;
 	private TextureProperties _properties;
+	private String _fileName;
 
 	TextureResource(TextureProperties properties)
 	{
@@ -28,5 +29,17 @@ public class TextureResource implements Resource<Texture>
 	public void compile(Graphics graphics)
 	{
 		_texture = new Texture(graphics.prepareTexture(_properties), _properties);
+	}
+
+	@Override
+	public String getFileName()
+	{
+		return _fileName;
+	}
+
+	@Override
+	public void setFileName(String name)
+	{
+		_fileName = name;
 	}
 }

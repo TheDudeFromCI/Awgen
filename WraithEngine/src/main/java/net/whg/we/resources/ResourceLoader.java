@@ -75,7 +75,12 @@ public class ResourceLoader
 
 		Log.debugf("Loading resource %s using the file loader, %s.", file.getName(),
 				loader.getClass().getName());
-		return loader.loadFile(file);
+		Resource<?> resource = loader.loadFile(file);
+
+		if (resource != null)
+			resource.setFileName(file.toString());
+
+		return resource;
 	}
 
 	/**

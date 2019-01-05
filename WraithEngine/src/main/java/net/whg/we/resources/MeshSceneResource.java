@@ -9,6 +9,7 @@ public class MeshSceneResource implements Resource<MeshScene>
 {
 	private MeshScene _scene;
 	private ArrayList<UncompiledMesh> _meshes;
+	private String _fileName;
 
 	public MeshSceneResource(ArrayList<UncompiledMesh> meshes)
 	{
@@ -38,5 +39,17 @@ public class MeshSceneResource implements Resource<MeshScene>
 
 		for (UncompiledMesh mesh : _meshes)
 			_scene._meshes.add(mesh.compile(graphics));
+	}
+
+	@Override
+	public String getFileName()
+	{
+		return _fileName;
+	}
+
+	@Override
+	public void setFileName(String name)
+	{
+		_fileName = name;
 	}
 }

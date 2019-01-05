@@ -15,4 +15,8 @@ public interface Resource<T>
 	 * @return The data for this resource.
 	 */
 	public T getData();
+
+	public String getFileName();
+
+	public void setFileName(String name);
 }
