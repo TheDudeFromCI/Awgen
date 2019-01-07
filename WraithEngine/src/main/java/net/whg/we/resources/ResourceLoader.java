@@ -24,6 +24,11 @@ public class ResourceLoader
 	 */
 	public static Resource<?> loadResource(File file)
 	{
+		// Check to see if the resource is already loaded
+		String resourceName = file.toString();
+		if (ResourceDatabase.hasResource(resourceName))
+			return ResourceDatabase.getResource(resourceName);
+
 		Log.infof("Loading the resource %s.", file.getName());
 
 		String fileType = FileUtils.getFileType(file);
@@ -78,7 +83,10 @@ public class ResourceLoader
 		Resource<?> resource = loader.loadFile(file);
 
 		if (resource != null)
-			resource.setFileName(file.toString());
+		{
+			resource.setFileName(resourceName);
+			ResourceDatabase.addResource(resourceName, resource);
+		}
 
 		return resource;
 	}

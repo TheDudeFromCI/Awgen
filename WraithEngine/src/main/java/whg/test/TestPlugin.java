@@ -1,7 +1,6 @@
 package whg.test;
 
 import java.io.File;
-import java.util.ArrayList;
 import org.joml.Math;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -14,8 +13,8 @@ import net.whg.we.rendering.Mesh;
 import net.whg.we.rendering.ScreenClearType;
 import net.whg.we.rendering.Shader;
 import net.whg.we.rendering.Texture;
-import net.whg.we.resources.DisposableResource;
 import net.whg.we.resources.MeshSceneResource;
+import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.resources.ResourceLoader;
 import net.whg.we.resources.ShaderResource;
 import net.whg.we.resources.TextureResource;
@@ -37,7 +36,6 @@ public class TestPlugin implements Plugin, RenderingListener
 	private Model _monkeyModel;
 	private FirstPersonCamera _firstPerson;
 	private Camera _camera;
-	private ArrayList<DisposableResource> _resources = new ArrayList<>();
 	private RenderPass _renderPass = new RenderPass();
 
 	@Override
@@ -70,7 +68,6 @@ public class TestPlugin implements Plugin, RenderingListener
 		ShaderResource shaderResource = (ShaderResource) ResourceLoader.loadResource(shaderFile);
 		shaderResource.compileShader(_core.getGraphics());
 		Shader shader = shaderResource.getData();
-		_resources.add(shader);
 
 		return shader;
 	}
@@ -113,8 +110,6 @@ public class TestPlugin implements Plugin, RenderingListener
 			meshes[i] = scene.getData()._meshes.get(i);
 			materials[i] = mat;
 			Log.trace("Loaded Mesh: " + meshes[i].getMeshName());
-
-			_resources.add(meshes[i]);
 		}
 
 		Model model = new Model(meshes, materials);
@@ -208,8 +203,6 @@ public class TestPlugin implements Plugin, RenderingListener
 	@Override
 	public void onGraphicsDispose()
 	{
-		for (DisposableResource res : _resources)
-			res.dispose();
-		_resources.clear();
+		ResourceDatabase.disposeAll();
 	}
 }

@@ -1,6 +1,7 @@
 package net.whg.we.resources;
 
 import java.util.HashMap;
+import net.whg.we.utils.Log;
 
 public class ResourceDatabase
 {
@@ -44,10 +45,15 @@ public class ResourceDatabase
 
 	public static void disposeAll()
 	{
+		Log.info("Disposing all resources.");
 		synchronized (_resourceReferences)
 		{
 			for (String resName : _resourceReferences.keySet())
+			{
+				Log.debugf("Disposing resources %s.", resName);
 				_resourceReferences.get(resName).dispose();
+			}
+
 			_resourceReferences.clear();
 		}
 	}
