@@ -1,6 +1,5 @@
 package whg.test;
 
-import java.io.File;
 import org.joml.Math;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -16,10 +15,9 @@ import net.whg.we.rendering.Texture;
 import net.whg.we.resources.MeshSceneResource;
 import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.resources.ResourceLoader;
-import net.whg.we.resources.ShaderResource;
-import net.whg.we.resources.TextureResource;
 import net.whg.we.scene.Model;
 import net.whg.we.scene.RenderPass;
+import net.whg.we.scene.SceneUtils;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.FileUtils;
 import net.whg.we.utils.FirstPersonCamera;
@@ -60,24 +58,6 @@ public class TestPlugin implements Plugin, RenderingListener
 	public int getPriority()
 	{
 		return 0;
-	}
-
-	private Shader loadShader(String name)
-	{
-		File shaderFile = FileUtils.getResource(this, name);
-		ShaderResource shaderResource = (ShaderResource) ResourceLoader.loadResource(shaderFile);
-		shaderResource.compileShader(_core.getGraphics());
-		Shader shader = shaderResource.getData();
-
-		return shader;
-	}
-
-	private Texture loadTexture(String name)
-	{
-		TextureResource textureRes =
-				(TextureResource) ResourceLoader.loadResource(FileUtils.getResource(this, name));
-		textureRes.compile(_core.getGraphics());
-		return textureRes.getData();
 	}
 
 	private Material loadMaterial(Shader shader, Texture texture)
@@ -128,8 +108,9 @@ public class TestPlugin implements Plugin, RenderingListener
 		{
 			_core.getGraphics().setClearScreenColor(new Color(0.2f, 0.4f, 0.8f));
 
-			Shader shader = loadShader("normal_shader.glsl");
-			Texture texture = loadTexture("textures/male_casualsuit06_diffuse.png");
+			Shader shader = SceneUtils.loadShader(this, "normal_shader.glsl", _core.getGraphics());
+			Texture texture = SceneUtils.loadTexture(this, "textures/male_casualsuit06_diffuse.png",
+					_core.getGraphics());
 			Material material = loadMaterial(shader, texture);
 
 			shader.bind();
