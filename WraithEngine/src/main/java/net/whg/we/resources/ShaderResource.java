@@ -69,4 +69,14 @@ public class ShaderResource implements Resource<Shader>
 	{
 		_fileName = name;
 	}
+
+	@Override
+	public void dispose()
+	{
+		if (_shader == null)
+			return;
+
+		_shader.dispose();
+		_shader = null;
+	}
 }

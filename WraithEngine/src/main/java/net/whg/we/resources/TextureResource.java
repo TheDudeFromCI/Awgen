@@ -42,4 +42,14 @@ public class TextureResource implements Resource<Texture>
 	{
 		_fileName = name;
 	}
+
+	@Override
+	public void dispose()
+	{
+		if (_texture == null)
+			return;
+
+		_texture.dispose();
+		_texture = null;
+	}
 }

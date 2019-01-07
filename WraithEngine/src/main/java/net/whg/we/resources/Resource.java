@@ -19,4 +19,6 @@ public interface Resource<T>
 	public String getFileName();
 
 	public void setFileName(String name);
+
+	public void dispose();
 }

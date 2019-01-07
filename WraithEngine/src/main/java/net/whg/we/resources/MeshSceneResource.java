@@ -39,6 +39,9 @@ public class MeshSceneResource implements Resource<MeshScene>
 
 		for (UncompiledMesh mesh : _meshes)
 			_scene._meshes.add(mesh.compile(graphics));
+
+		// Free memory
+		_meshes = null;
 	}
 
 	@Override
@@ -51,5 +54,15 @@ public class MeshSceneResource implements Resource<MeshScene>
 	public void setFileName(String name)
 	{
 		_fileName = name;
+	}
+
+	@Override
+	public void dispose()
+	{
+		if (_scene == null)
+			return;
+
+		_scene.dispose();
+		_scene = null;
 	}
 }
