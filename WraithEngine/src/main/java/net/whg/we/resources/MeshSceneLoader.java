@@ -25,7 +25,7 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 	}
 
 	@Override
-	public Resource<MeshScene> loadFile(File file)
+	public Resource<MeshScene> loadFile(File file, AssetProperties assetProperties)
 	{
 		ArrayList<UncompiledMesh> uncompiledMeshes = AssimpSceneParser.load(file);
 

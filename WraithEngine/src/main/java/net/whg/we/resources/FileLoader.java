@@ -24,10 +24,13 @@ public interface FileLoader<T>
 	 *
 	 * @param file
 	 *            - The file to load.
+	 * @param properties
+	 *            - The properties file attached to this file, or null if no
+	 *            properties file was found.
 	 * @return A resource representing the file, or null if the file could not be
 	 *         loaded.
 	 */
-	public Resource<T> loadFile(File file);
+	public Resource<T> loadFile(File file, AssetProperties properties);
 
 	/**
 	 * Gets the priority level for this file loader. When loading a file, the file

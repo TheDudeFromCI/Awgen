@@ -22,7 +22,7 @@ public class TextureLoader implements FileLoader<Texture>
 	}
 
 	@Override
-	public Resource<Texture> loadFile(File file)
+	public Resource<Texture> loadFile(File file, AssetProperties assetProperties)
 	{
 		try
 		{

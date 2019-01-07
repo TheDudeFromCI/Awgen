@@ -80,7 +80,7 @@ public class ResourceLoader
 
 		Log.debugf("Loading resource %s using the file loader, %s.", file.getName(),
 				loader.getClass().getName());
-		Resource<?> resource = loader.loadFile(file);
+		Resource<?> resource = loader.loadFile(file, AssetPropertiesParser.loadProperties(file));
 
 		if (resource != null)
 		{

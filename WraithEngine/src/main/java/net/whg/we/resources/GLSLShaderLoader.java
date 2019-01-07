@@ -20,7 +20,7 @@ public class GLSLShaderLoader implements FileLoader<Shader>
 	}
 
 	@Override
-	public Resource<Shader> loadFile(File file)
+	public Resource<Shader> loadFile(File file, AssetProperties assetProperties)
 	{
 		try (BufferedReader in = new BufferedReader(new FileReader(file)))
 		{
