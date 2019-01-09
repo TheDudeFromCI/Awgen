@@ -30,7 +30,7 @@ public class Mesh implements DisposableResource
 		return _vMesh.isDisposed();
 	}
 
-	public String getMeshName()
+	public String getName()
 	{
 		return _meshName;
 	}

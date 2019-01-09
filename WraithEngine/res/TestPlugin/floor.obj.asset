@@ -1,0 +1,10 @@
+materials:
+  default:
+    shader: normal_shader.glsl
+    textures:
+      diffuse: textures/male_casualsuit06_diffuse.png
+models:
+  Floor:
+    0a:
+      mesh: Plane
+      material: default

@@ -10,6 +10,7 @@ public class Material
 	// FIELDS
 	private Shader _shader;
 	private Texture[] _textures;
+	private String _name;
 
 	// BUFFERS
 	private FloatBuffer _matrixFloatBuffer;
@@ -19,9 +20,10 @@ public class Material
 	private Matrix4f _mvpMatrix = new Matrix4f();
 	private float _sorterId;
 
-	public Material(Shader shader)
+	public Material(Shader shader, String name)
 	{
 		_shader = shader;
+		_name = name;
 		_matrixFloatBuffer = BufferUtils.createFloatBuffer(16);
 		_sorterId = (float) Math.random();
 	}
@@ -44,6 +46,11 @@ public class Material
 	public Shader getShader()
 	{
 		return _shader;
+	}
+
+	public String getName()
+	{
+		return _name;
 	}
 
 	public void bind()

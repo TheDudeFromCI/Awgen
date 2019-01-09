@@ -2,6 +2,7 @@ package net.whg.we.resources;
 
 import java.io.File;
 import java.util.ArrayList;
+import net.whg.we.main.Plugin;
 import net.whg.we.utils.FileUtils;
 import net.whg.we.utils.Log;
 
@@ -22,7 +23,7 @@ public class ResourceLoader
 	 *            - The file to load.
 	 * @return A loaded resource for the file, or null if the file cannot be loaded.
 	 */
-	public static Resource<?> loadResource(File file)
+	public static Resource<?> loadResource(Plugin plugin, File file)
 	{
 		// Check to see if the resource is already loaded
 		String resourceName = file.toString();
@@ -80,7 +81,8 @@ public class ResourceLoader
 
 		Log.debugf("Loading resource %s using the file loader, %s.", file.getName(),
 				loader.getClass().getName());
-		Resource<?> resource = loader.loadFile(file, AssetPropertiesParser.loadProperties(file));
+		Resource<?> resource =
+				loader.loadFile(file, AssetPropertiesParser.loadProperties(plugin, file));
 
 		if (resource != null)
 		{

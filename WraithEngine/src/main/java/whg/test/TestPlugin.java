@@ -7,19 +7,12 @@ import net.whg.we.event.EventManager;
 import net.whg.we.main.Plugin;
 import net.whg.we.main.PluginLoader;
 import net.whg.we.rendering.Camera;
-import net.whg.we.rendering.Material;
-import net.whg.we.rendering.Mesh;
 import net.whg.we.rendering.ScreenClearType;
-import net.whg.we.rendering.Shader;
-import net.whg.we.rendering.Texture;
-import net.whg.we.resources.MeshSceneResource;
 import net.whg.we.resources.ResourceDatabase;
-import net.whg.we.resources.ResourceLoader;
 import net.whg.we.scene.Model;
 import net.whg.we.scene.RenderPass;
 import net.whg.we.scene.SceneUtils;
 import net.whg.we.utils.Color;
-import net.whg.we.utils.FileUtils;
 import net.whg.we.utils.FirstPersonCamera;
 import net.whg.we.utils.Input;
 import net.whg.we.utils.Log;
@@ -60,47 +53,6 @@ public class TestPlugin implements Plugin, RenderingListener
 		return 0;
 	}
 
-	private Material loadMaterial(Shader shader, Texture texture)
-	{
-		return loadMaterial(shader, new Texture[]
-		{
-				texture
-		});
-	}
-
-	private Material loadMaterial(Shader shader, Texture[] textures)
-	{
-		Material material = new Material(shader);
-		material.setTextures(textures);
-		return material;
-	}
-
-	private Model loadModel(String name, boolean rotate, Material mat)
-	{
-		MeshSceneResource scene =
-				(MeshSceneResource) ResourceLoader.loadResource(FileUtils.getResource(this, name));
-		scene.compile(_core.getGraphics());
-
-		int subMeshCount = scene.getData()._meshes.size();
-		Mesh[] meshes = new Mesh[subMeshCount];
-		Material[] materials = new Material[subMeshCount];
-
-		for (int i = 0; i < subMeshCount; i++)
-		{
-			meshes[i] = scene.getData()._meshes.get(i);
-			materials[i] = mat;
-			Log.trace("Loaded Mesh: " + meshes[i].getMeshName());
-		}
-
-		Model model = new Model(meshes, materials);
-		_renderPass.addModel(model);
-
-		if (rotate)
-			model.getLocation().setRotation(new Quaternionf().rotateX(-3.1415f / 2f));
-
-		return model;
-	}
-
 	@Override
 	public void onGraphicsInit()
 	{
@@ -108,20 +60,18 @@ public class TestPlugin implements Plugin, RenderingListener
 		{
 			_core.getGraphics().setClearScreenColor(new Color(0.2f, 0.4f, 0.8f));
 
-			Shader shader = SceneUtils.loadShader(this, "normal_shader.glsl", _core.getGraphics());
-			Texture texture = SceneUtils.loadTexture(this, "textures/male_casualsuit06_diffuse.png",
-					_core.getGraphics());
-			Material material = loadMaterial(shader, texture);
-
-			shader.bind();
-			shader.setUniformInt("_diffuse", 0);
-
 			{
-				_monkeyModel = loadModel("monkey_head.fbx", true, material);
-				loadModel("floor.obj", false, material);
+				_monkeyModel = SceneUtils.loadModel(this, "monkey_head.fbx", _core.getGraphics());
+				Model floor = SceneUtils.loadModel(this, "floor.obj", _core.getGraphics());
+				Model human = SceneUtils.loadModel(this, "BaseHuman.fbx", _core.getGraphics());
 
-				Model human = loadModel("BaseHuman.fbx", false, material);
+				_monkeyModel.getLocation()
+						.setRotation(new Quaternionf().rotateX((float) (-Math.PI / 2f)));
 				human.getLocation().setPosition(new Vector3f(0f, 0f, -5f));
+
+				_renderPass.addModel(_monkeyModel);
+				_renderPass.addModel(floor);
+				_renderPass.addModel(human);
 			}
 
 			_camera = new Camera();

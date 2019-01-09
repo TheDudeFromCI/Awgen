@@ -5,16 +5,17 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
+import net.whg.we.main.Plugin;
 import net.whg.we.utils.Log;
 
 public class AssetPropertiesParser
 {
-	public static AssetProperties loadProperties(File file)
+	public static AssetProperties loadProperties(Plugin plugin, File file)
 	{
 		File folder = file.getParentFile();
 		String assetName = file.getName();
 
-		String propertiesName = assetName + File.separatorChar + ".asset";
+		String propertiesName = assetName + ".asset";
 		File propertiesFile = new File(folder, propertiesName);
 
 		if (!propertiesFile.exists())
@@ -23,8 +24,8 @@ public class AssetPropertiesParser
 		Yaml yaml = new Yaml();
 		try
 		{
-			Map<String, Object> map = yaml.load(new FileReader(file));
-			AssetProperties properties = new AssetProperties(map);
+			Map<String, Object> map = yaml.load(new FileReader(propertiesFile));
+			AssetProperties properties = new AssetProperties(plugin, map);
 			return properties;
 		}
 		catch (FileNotFoundException e)
