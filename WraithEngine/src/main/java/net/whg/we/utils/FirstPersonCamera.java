@@ -83,6 +83,9 @@ public class FirstPersonCamera
 
 	private void updateCameraPosition()
 	{
+		if (!Screen.isMouseLocked())
+			return;
+
 		Vector3f velocity = new Vector3f();
 		float movementSpeed = 7f;
 
