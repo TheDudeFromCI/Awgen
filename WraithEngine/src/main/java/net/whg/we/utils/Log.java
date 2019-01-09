@@ -173,7 +173,7 @@ public class Log
 		if (_logLevel > TRACE)
 			return;
 
-		push(format("TRACE", message));
+		format("TRACE", message);
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class Log
 		if (_logLevel > TRACE)
 			return;
 
-		push(format("TRACE", String.format(message, args)));
+		format("TRACE", String.format(message, args));
 	}
 
 	/**
@@ -203,7 +203,7 @@ public class Log
 		if (_logLevel > DEBUG)
 			return;
 
-		push(format("DEBUG", message));
+		format("DEBUG", message);
 	}
 
 	/**
@@ -219,7 +219,7 @@ public class Log
 		if (_logLevel > DEBUG)
 			return;
 
-		push(format("DEBUG", String.format(message, args)));
+		format("DEBUG", String.format(message, args));
 	}
 
 	/**
@@ -233,7 +233,7 @@ public class Log
 		if (_logLevel > INFO)
 			return;
 
-		push(format("INFO", message));
+		format("INFO", message);
 	}
 
 	/**
@@ -249,7 +249,7 @@ public class Log
 		if (_logLevel > INFO)
 			return;
 
-		push(format("INFO", String.format(message, args)));
+		format("INFO", String.format(message, args));
 	}
 
 	/**
@@ -263,7 +263,7 @@ public class Log
 		if (_logLevel > WARN)
 			return;
 
-		push(format("WARN", message));
+		format("WARN", message);
 	}
 
 	/**
@@ -279,7 +279,7 @@ public class Log
 		if (_logLevel > WARN)
 			return;
 
-		push(format("WARN", String.format(message, args)));
+		format("WARN", String.format(message, args));
 	}
 
 	/**
@@ -293,9 +293,9 @@ public class Log
 		if (_logLevel > ERROR)
 			return;
 
-		push(format("ERROR", "--------------"));
-		push(format("ERROR", message));
-		push(format("ERROR", "--------------"));
+		format("ERROR", "--------------");
+		format("ERROR", message);
+		format("ERROR", "--------------");
 	}
 
 	/**
@@ -311,9 +311,9 @@ public class Log
 		if (_logLevel > ERROR)
 			return;
 
-		push(format("ERROR", "--------------"));
-		push(format("ERROR", String.format(message, args)));
-		push(format("ERROR", "--------------"));
+		format("ERROR", "--------------");
+		format("ERROR", String.format(message, args));
+		format("ERROR", "--------------");
 	}
 
 	/**
@@ -332,13 +332,13 @@ public class Log
 		if (_logLevel > ERROR)
 			return;
 
-		push(format("ERROR", "--------------"));
-		push(format("ERROR", String.format(message, args)));
-		push(format("ERROR", "Exception Thrown: " + exception.toString()));
+		format("ERROR", "--------------");
+		format("ERROR", String.format(message, args));
+		format("ERROR", "Exception Thrown: " + exception.toString());
 
 		for (StackTraceElement st : exception.getStackTrace())
-			push(format("ERROR", "  at " + st.toString()));
-		push(format("ERROR", "--------------"));
+			format("ERROR", "  at " + st.toString());
+		format("ERROR", "--------------");
 	}
 
 	/**
@@ -349,9 +349,9 @@ public class Log
 	 */
 	public static void fatal(String message)
 	{
-		push(format("FATAL", "=============="));
-		push(format("FATAL", message));
-		push(format("FATAL", "=============="));
+		format("FATAL", "==============");
+		format("FATAL", message);
+		format("FATAL", "==============");
 	}
 
 	/**
@@ -364,9 +364,9 @@ public class Log
 	 */
 	public static void fatalf(String message, Object... args)
 	{
-		push(format("FATAL", "=============="));
-		push(format("FATAL", String.format(message, args)));
-		push(format("FATAL", "=============="));
+		format("FATAL", "==============");
+		format("FATAL", String.format(message, args));
+		format("FATAL", "==============");
 	}
 
 	/**
@@ -382,13 +382,13 @@ public class Log
 	 */
 	public static void fatalf(String message, Throwable exception, Object... args)
 	{
-		push(format("FATAL", "=============="));
-		push(format("FATAL", String.format(message, args)));
-		push(format("FATAL", "Exception Thrown: " + exception.toString()));
+		format("FATAL", "==============");
+		format("FATAL", String.format(message, args));
+		format("FATAL", "Exception Thrown: " + exception.toString());
 
 		for (StackTraceElement st : exception.getStackTrace())
-			push(format("FATAL", "  at " + st.toString()));
-		push(format("FATAL", "=============="));
+			format("FATAL", "  at " + st.toString());
+		format("FATAL", "==============");
 	}
 
 	private synchronized static void push(String message)
@@ -396,7 +396,7 @@ public class Log
 		System.out.println(message);
 	}
 
-	private static String format(String type, String message)
+	private static void format(String type, String message)
 	{
 		LocalTime time = LocalTime.now();
 
@@ -413,7 +413,35 @@ public class Log
 		else
 			format = "[%02d:%02d:%02d][%-5s][%s] %s";
 
-		return String.format(format, time.getHour(), time.getMinute(), time.getSecond(), type,
-				thread, message);
+		// Count number of lines
+		int lines = 1;
+		for (int i = 0; i < message.length(); i++)
+			if (message.charAt(i) == '\n')
+				lines++;
+
+		// If only a single line, push instantly
+		if (lines == 1)
+		{
+			push(String.format(format, time.getHour(), time.getMinute(), time.getSecond(), type,
+					thread, message));
+			return;
+		}
+
+		// If multiple lines, push as we solve them.
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < message.length(); i++)
+		{
+			char c = message.charAt(i);
+			if (c == '\n')
+			{
+				push(String.format(format, time.getHour(), time.getMinute(), time.getSecond(), type,
+						thread, sb.toString()));
+				sb.setLength(0);
+			}
+			else
+				sb.append(c);
+		}
+		push(String.format(format, time.getHour(), time.getMinute(), time.getSecond(), type, thread,
+				sb.toString()));
 	}
 }
