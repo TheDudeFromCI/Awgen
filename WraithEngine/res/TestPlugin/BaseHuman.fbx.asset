@@ -1,18 +1,18 @@
 materials:
   skin:
-    shader: unlit_diffuse.glsl
+    shader: vertex_lit.glsl
     textures:
       diffuse: textures/young_lightskinned_male_diffuse2.png
   eye:
-    shader: unlit_diffuse.glsl
+    shader: vertex_lit.glsl
     textures:
       diffuse: textures/blue_eye.png
   suit:
-    shader: unlit_diffuse.glsl
+    shader: vertex_lit.glsl
     textures:
       diffuse: textures/male_casualsuit06_diffuse.png
   hair:
-    shader: unlit_diffuse.glsl
+    shader: vertex_lit.glsl
     textures:
       diffuse: textures/short01_diffuse.png
 models:
