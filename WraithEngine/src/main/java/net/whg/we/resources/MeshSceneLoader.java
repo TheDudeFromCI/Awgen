@@ -44,21 +44,21 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 
 	private void loadDependencies(AssetProperties assetProperties, MeshSceneResource scene)
 	{
-		for (String material : assetProperties.getKeys("materials"))
+		YamlFile yaml = assetProperties.getYaml();
+		for (String material : yaml.getKeys("materials"))
 		{
-			String shaderName = assetProperties.getString("materials", material, "shader");
+			String shaderName = yaml.getString("materials", material, "shader");
 			File shader = FileUtils.getResource(assetProperties.getPlugin(), shaderName);
 			UncompiledMaterial mat =
 					new UncompiledMaterial(assetProperties.getPlugin(), material, shader);
 
-			Set<String> textureList = assetProperties.getKeys("materials", material, "textures");
+			Set<String> textureList = yaml.getKeys("materials", material, "textures");
 			File[] textureFiles = new File[textureList.size()];
 
 			int textureIndex = 0;
 			for (String textureId : textureList)
 			{
-				String textureName =
-						assetProperties.getString("materials", material, "textures", textureId);
+				String textureName = yaml.getString("materials", material, "textures", textureId);
 				textureFiles[textureIndex++] =
 						FileUtils.getResource(assetProperties.getPlugin(), textureName);
 			}
@@ -67,7 +67,7 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 			scene.addMaterial(mat);
 		}
 
-		for (String model : assetProperties.getKeys("models"))
+		for (String model : yaml.getKeys("models"))
 		{
 			String[] meshes;
 			String[] materials;
@@ -75,10 +75,10 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 			ArrayList<String> meshList = new ArrayList<>();
 			ArrayList<String> materialList = new ArrayList<>();
 
-			for (String submeshId : assetProperties.getKeys("models", model))
+			for (String submeshId : yaml.getKeys("models", model))
 			{
-				meshList.add(assetProperties.getString("models", model, submeshId, "mesh"));
-				materialList.add(assetProperties.getString("models", model, submeshId, "material"));
+				meshList.add(yaml.getString("models", model, submeshId, "mesh"));
+				materialList.add(yaml.getString("models", model, submeshId, "material"));
 			}
 
 			meshes = new String[meshList.size()];
