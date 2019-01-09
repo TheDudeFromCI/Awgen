@@ -1,4 +1,4 @@
-name=normal_shader
+name=unlit_diffuse
 ---
 #version 330
 
@@ -9,21 +9,25 @@ layout(location = 1) in vec3 _normal;
 layout(location = 2) in vec2 _uv;
 
 out vec3 normal;
+out vec2 uv;
 
 void main()
 {
 	gl_Position = _mvpMat * vec4(_vertPos, 1.0);
-	normal = _normal;
+	uv = _uv;
 }
 ---
 ---
 #version 330 core
 
-in vec3 normal;
+uniform sampler2D _diffuse;
+
+in vec2 uv;
 
 out vec4 color;
 
 void main()
 {
-	color = vec4(normal * 0.5 + 0.5, 1.0);
+	vec4 tex = texture(_diffuse, uv);
+	color = vec4(tex.rgb, 1.0);
 }
