@@ -8,7 +8,6 @@ import net.whg.we.main.Plugin;
 import net.whg.we.main.PluginLoader;
 import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.ScreenClearType;
-import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.scene.Model;
 import net.whg.we.scene.RenderPass;
 import net.whg.we.scene.SceneUtils;
@@ -67,6 +66,7 @@ public class TestPlugin implements Plugin, RenderingListener
 
 				_monkeyModel.getLocation()
 						.setRotation(new Quaternionf().rotateX((float) (-Math.PI / 2f)));
+				_monkeyModel.getLocation().setScale(new Vector3f(0.25f, 0.25f, 0.25f));
 				human.getLocation().setPosition(new Vector3f(0f, 0f, -5f));
 
 				_renderPass.addModel(_monkeyModel);
@@ -134,6 +134,5 @@ public class TestPlugin implements Plugin, RenderingListener
 	@Override
 	public void onGraphicsDispose()
 	{
-		ResourceDatabase.disposeAll();
 	}
 }

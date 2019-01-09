@@ -3,6 +3,7 @@ package whg.core;
 import net.whg.we.event.EventManager;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.GraphicsFactory;
+import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.utils.FPSLogger;
 import net.whg.we.utils.Input;
 import net.whg.we.utils.Log;
@@ -73,6 +74,8 @@ class GraphicsThread
 				}
 
 				_renderEvents.onGraphicsDispose();
+
+				ResourceDatabase.disposeAll();
 				_graphics.dispose();
 			}
 			catch (Exception exception)
