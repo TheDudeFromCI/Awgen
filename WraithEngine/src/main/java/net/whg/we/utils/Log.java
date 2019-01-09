@@ -405,8 +405,11 @@ public class Log
 		System.out.println(message);
 	}
 
+	// String.Format can be slow and can allocate more memory. Consider switching to
+	// using only string builders from the pool.
 	private static void format(String type, String message)
 	{
+		// Gather required information
 		LocalTime time = LocalTime.now();
 
 		String format;
@@ -417,7 +420,8 @@ public class Log
 		if (indent > 0)
 		{
 			int spaces = indent * SPACES_PER_INDENT + message.length();
-			format = "[%02d:%02d:%02d][%-5s][%s] %" + spaces + "s";
+			format = "[%02d:%02d:%02d][%-5s][%s] %" + spaces + "s"; // This statement seems like an
+																	// extra memory allocation
 		}
 		else
 			format = "[%02d:%02d:%02d][%-5s][%s] %s";
@@ -450,6 +454,8 @@ public class Log
 			else
 				sb.append(c);
 		}
+
+		// Push the last line and cleanup.
 		push(String.format(format, time.getHour(), time.getMinute(), time.getSecond(), type, thread,
 				sb.toString()));
 		_stringBuilders.put(sb);
