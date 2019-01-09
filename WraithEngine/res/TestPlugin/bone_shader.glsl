@@ -1,5 +1,3 @@
-name=bone_shader
----
 #version 330
 #define MAX_BONES 128
 

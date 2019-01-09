@@ -1,5 +1,3 @@
-name=normal_shader
----
 #version 330
 
 uniform mat4 _mvpMat;

@@ -1,5 +1,3 @@
-name=unlit_diffuse
----
 #version 330
 
 uniform mat4 _mvpMat;

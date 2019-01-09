@@ -1,5 +1,3 @@
-name=vertex_lit
----
 #version 330
 
 uniform mat4 _mvpMat;
