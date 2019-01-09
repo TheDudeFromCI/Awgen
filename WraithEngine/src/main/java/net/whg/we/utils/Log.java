@@ -58,6 +58,15 @@ public class Log
 
 	private static HashMap<String, Integer> _indent = new HashMap<>();
 	private static int _logLevel = INFO;
+	private static ObjectPool<PoolableStringBuilder> _stringBuilders =
+			new ObjectPool<PoolableStringBuilder>()
+			{
+				@Override
+				protected PoolableStringBuilder build()
+				{
+					return new PoolableStringBuilder();
+				}
+			};
 
 	/**
 	 * Gets the current indent value for the log. Indent levels are specific to a
@@ -428,7 +437,7 @@ public class Log
 		}
 
 		// If multiple lines, push as we solve them.
-		StringBuilder sb = new StringBuilder();
+		PoolableStringBuilder sb = _stringBuilders.get();
 		for (int i = 0; i < message.length(); i++)
 		{
 			char c = message.charAt(i);
@@ -436,12 +445,13 @@ public class Log
 			{
 				push(String.format(format, time.getHour(), time.getMinute(), time.getSecond(), type,
 						thread, sb.toString()));
-				sb.setLength(0);
+				sb.clear();
 			}
 			else
 				sb.append(c);
 		}
 		push(String.format(format, time.getHour(), time.getMinute(), time.getSecond(), type, thread,
 				sb.toString()));
+		_stringBuilders.put(sb);
 	}
 }
