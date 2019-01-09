@@ -1,9 +1,6 @@
 package net.whg.we.resources;
 
-import java.io.File;
 import java.util.ArrayList;
-import net.whg.we.main.Plugin;
-import net.whg.we.utils.FileUtils;
 import net.whg.we.utils.Log;
 
 public class ResourceLoader
@@ -23,16 +20,13 @@ public class ResourceLoader
 	 *            - The file to load.
 	 * @return A loaded resource for the file, or null if the file cannot be loaded.
 	 */
-	public static Resource<?> loadResource(Plugin plugin, File file)
+	public static Resource<?> loadResource(ResourceFile resource)
 	{
 		// Check to see if the resource is already loaded
-		String resourceName = file.toString();
-		if (ResourceDatabase.hasResource(resourceName))
-			return ResourceDatabase.getResource(resourceName);
+		if (ResourceDatabase.hasResource(resource))
+			return ResourceDatabase.getResource(resource);
 
-		Log.infof("Loading the resource %s.", file.getName());
-
-		String fileType = FileUtils.getFileType(file);
+		Log.infof("Loading the resource %s.", resource);
 
 		FileLoader<?> loader = null;
 
@@ -42,14 +36,14 @@ public class ResourceLoader
 			{
 				for (FileLoader<?> l : _fileLoaders)
 					for (String s : l.getTargetFileTypes())
-						if (s.equals(fileType))
+						if (s.equals(resource.getFileExtension()))
 							_fileLoaderBuffer.add(l);
 			}
 
 			if (_fileLoaderBuffer.isEmpty())
 			{
 				Log.warnf("Failed to load the resource %s, not a supported file type!",
-						file.getName());
+						resource.getName());
 				return null;
 			}
 
@@ -79,18 +73,17 @@ public class ResourceLoader
 			_fileLoaderBuffer.clear();
 		}
 
-		Log.debugf("Loading resource %s using the file loader, %s.", file.getName(),
+		Log.debugf("Loading resource %s using the file loader, %s.", resource.getName(),
 				loader.getClass().getName());
-		Resource<?> resource =
-				loader.loadFile(file, AssetPropertiesParser.loadProperties(plugin, file));
+		Resource<?> res = loader.loadFile(resource);
 
-		if (resource != null)
+		if (res != null)
 		{
-			resource.setFileName(resourceName);
-			ResourceDatabase.addResource(resourceName, resource);
+			res.setResourceFile(resource);
+			ResourceDatabase.addResource(resource, res);
 		}
 
-		return resource;
+		return res;
 	}
 
 	/**

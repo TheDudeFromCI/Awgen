@@ -34,7 +34,7 @@ public class ResourceFile
 
 		_file = FileUtils.getResource(plugin, name);
 		_assetExtension = FileUtils.getFileType(_file);
-		_propertiesFile = new File(_file.getAbsolutePath() + File.separatorChar + ".asset");
+		_propertiesFile = new File(_file.getAbsolutePath() + ".asset");
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class ResourceFile
 
 	/**
 	 * Checks if this resource currently exists or not.
-	 * 
+	 *
 	 * @return True if this resource exists, false otherwise.
 	 */
 	public boolean exists()
@@ -96,5 +96,22 @@ public class ResourceFile
 	public File getPropertiesFile()
 	{
 		return _propertiesFile;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "[Resource: " + _plugin + "/" + _name + "]";
+	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		if (!(other instanceof ResourceFile))
+			return false;
+
+		ResourceFile a = (ResourceFile) other;
+
+		return _plugin == a._plugin && _name.equals(a._name);
 	}
 }

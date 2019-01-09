@@ -1,31 +1,26 @@
 package net.whg.we.resources;
 
-import java.io.File;
-import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Texture;
 
 public class UncompiledMaterial
 {
-	private Plugin _plugin;
 	private String _name;
 	private ShaderResource _shader;
 	private TextureResource[] _textures;
 
-	public UncompiledMaterial(Plugin plugin, String name, File shaderResource)
+	public UncompiledMaterial(String name, ResourceFile shaderResource)
 	{
-		_plugin = plugin;
 		_name = name;
-		_shader = (ShaderResource) ResourceLoader.loadResource(_plugin, shaderResource);
+		_shader = (ShaderResource) ResourceLoader.loadResource(shaderResource);
 	}
 
-	public void setTextures(File... textureResources)
+	public void setTextures(ResourceFile... textureResources)
 	{
 		_textures = new TextureResource[textureResources.length];
 		for (int i = 0; i < _textures.length; i++)
-			_textures[i] =
-					(TextureResource) ResourceLoader.loadResource(_plugin, textureResources[i]);
+			_textures[i] = (TextureResource) ResourceLoader.loadResource(textureResources[i]);
 	}
 
 	public Material compile(Graphics graphics)

@@ -16,7 +16,7 @@ public class ShaderResource implements Resource<Shader>
 	private String _geoShader;
 	private String _fragShader;
 	private Shader _shader;
-	private String _fileName;
+	private ResourceFile _resource;
 
 	public ShaderResource(ShaderProperties properties, String vertShader, String geoShader,
 			String fragShader)
@@ -59,15 +59,15 @@ public class ShaderResource implements Resource<Shader>
 	}
 
 	@Override
-	public String getFileName()
+	public ResourceFile getResourceFile()
 	{
-		return _fileName;
+		return _resource;
 	}
 
 	@Override
-	public void setFileName(String name)
+	public void setResourceFile(ResourceFile resource)
 	{
-		_fileName = name;
+		_resource = resource;
 	}
 
 	@Override

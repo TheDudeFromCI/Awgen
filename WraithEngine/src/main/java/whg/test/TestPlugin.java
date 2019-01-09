@@ -8,6 +8,7 @@ import net.whg.we.main.Plugin;
 import net.whg.we.main.PluginLoader;
 import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.ScreenClearType;
+import net.whg.we.resources.ResourceFile;
 import net.whg.we.scene.Model;
 import net.whg.we.scene.RenderPass;
 import net.whg.we.scene.SceneUtils;
@@ -60,9 +61,12 @@ public class TestPlugin implements Plugin, RenderingListener
 			_core.getGraphics().setClearScreenColor(new Color(0.2f, 0.4f, 0.8f));
 
 			{
-				_monkeyModel = SceneUtils.loadModel(this, "monkey_head.fbx", _core.getGraphics());
-				Model floor = SceneUtils.loadModel(this, "floor.obj", _core.getGraphics());
-				Model human = SceneUtils.loadModel(this, "BaseHuman.fbx", _core.getGraphics());
+				_monkeyModel = SceneUtils.loadModel(new ResourceFile(this, "monkey_head.fbx"),
+						_core.getGraphics());
+				Model floor = SceneUtils.loadModel(new ResourceFile(this, "floor.obj"),
+						_core.getGraphics());
+				Model human = SceneUtils.loadModel(new ResourceFile(this, "BaseHuman.fbx"),
+						_core.getGraphics());
 
 				_monkeyModel.getLocation()
 						.setRotation(new Quaternionf().rotateX((float) (-Math.PI / 2f)));

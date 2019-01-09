@@ -1,7 +1,5 @@
 package net.whg.we.resources;
 
-import java.io.File;
-
 public interface FileLoader<T>
 {
 	/**
@@ -30,7 +28,7 @@ public interface FileLoader<T>
 	 * @return A resource representing the file, or null if the file could not be
 	 *         loaded.
 	 */
-	public Resource<T> loadFile(File file, AssetProperties properties);
+	public Resource<T> loadFile(ResourceFile resource);
 
 	/**
 	 * Gets the priority level for this file loader. When loading a file, the file

@@ -16,9 +16,25 @@ public interface Resource<T>
 	 */
 	public T getData();
 
-	public String getFileName();
+	/**
+	 * Gets the resource file this resource represents. This can be used for
+	 * identification purposes, or future file acessing.
+	 *
+	 * @return The resource file this resource represents.
+	 */
+	public ResourceFile getResourceFile();
 
-	public void setFileName(String name);
+	/**
+	 * Sets the resource file this resource represents. This can be used for
+	 * identification purposes, or future file acessing.
+	 * 
+	 * @param resource
+	 *            - The resource file.
+	 */
+	public void setResourceFile(ResourceFile resource);
 
+	/**
+	 * Disposes this resource.
+	 */
 	public void dispose();
 }

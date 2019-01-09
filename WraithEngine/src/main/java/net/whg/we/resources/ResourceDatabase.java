@@ -5,9 +5,9 @@ import net.whg.we.utils.Log;
 
 public class ResourceDatabase
 {
-	private static HashMap<String, Resource<?>> _resourceReferences = new HashMap<>();
+	private static HashMap<ResourceFile, Resource<?>> _resourceReferences = new HashMap<>();
 
-	public static boolean hasResource(String resourceName)
+	public static boolean hasResource(ResourceFile resourceName)
 	{
 		synchronized (_resourceReferences)
 		{
@@ -15,7 +15,7 @@ public class ResourceDatabase
 		}
 	}
 
-	public static Resource<?> getResource(String resourceName)
+	public static Resource<?> getResource(ResourceFile resourceName)
 	{
 		synchronized (_resourceReferences)
 		{
@@ -23,7 +23,7 @@ public class ResourceDatabase
 		}
 	}
 
-	public static void addResource(String resourceName, Resource<?> resource)
+	public static void addResource(ResourceFile resourceName, Resource<?> resource)
 	{
 		synchronized (_resourceReferences)
 		{
@@ -31,7 +31,7 @@ public class ResourceDatabase
 		}
 	}
 
-	public static void removeResource(String resourceName)
+	public static void removeResource(ResourceFile resourceName)
 	{
 		Resource<?> res;
 		synchronized (_resourceReferences)
@@ -48,7 +48,7 @@ public class ResourceDatabase
 		Log.info("Disposing all resources.");
 		synchronized (_resourceReferences)
 		{
-			for (String resName : _resourceReferences.keySet())
+			for (ResourceFile resName : _resourceReferences.keySet())
 			{
 				Log.debugf("Disposing resources %s.", resName);
 				_resourceReferences.get(resName).dispose();

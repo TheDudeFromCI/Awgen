@@ -1,10 +1,8 @@
 package net.whg.we.resources;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Set;
 import net.whg.we.rendering.MeshScene;
-import net.whg.we.utils.FileUtils;
 
 /**
  * Loads a mesh scene file. These can contain either a single mesh, or multiple
@@ -27,40 +25,40 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 	}
 
 	@Override
-	public Resource<MeshScene> loadFile(File file, AssetProperties assetProperties)
+	public Resource<MeshScene> loadFile(ResourceFile resource)
 	{
-		ArrayList<UncompiledMesh> uncompiledMeshes = AssimpSceneParser.load(file);
+		ArrayList<UncompiledMesh> uncompiledMeshes = AssimpSceneParser.load(resource.getFile());
 
 		if (uncompiledMeshes == null)
 			return null;
 
 		MeshSceneResource scene = new MeshSceneResource(uncompiledMeshes);
 
-		if (assetProperties != null)
-			loadDependencies(assetProperties, scene);
+		if (resource.getPropertiesFile() != null)
+			loadDependencies(resource, scene);
 
 		return scene;
 	}
 
-	private void loadDependencies(AssetProperties assetProperties, MeshSceneResource scene)
+	private void loadDependencies(ResourceFile resource, MeshSceneResource scene)
 	{
-		YamlFile yaml = assetProperties.getYaml();
+		YamlFile yaml = new YamlFile();
+		yaml.load(resource.getPropertiesFile());
+
 		for (String material : yaml.getKeys("materials"))
 		{
 			String shaderName = yaml.getString("materials", material, "shader");
-			File shader = FileUtils.getResource(assetProperties.getPlugin(), shaderName);
-			UncompiledMaterial mat =
-					new UncompiledMaterial(assetProperties.getPlugin(), material, shader);
+			ResourceFile shaderResource = new ResourceFile(resource.getPlugin(), shaderName);
+			UncompiledMaterial mat = new UncompiledMaterial(material, shaderResource);
 
 			Set<String> textureList = yaml.getKeys("materials", material, "textures");
-			File[] textureFiles = new File[textureList.size()];
+			ResourceFile[] textureFiles = new ResourceFile[textureList.size()];
 
 			int textureIndex = 0;
 			for (String textureId : textureList)
 			{
 				String textureName = yaml.getString("materials", material, "textures", textureId);
-				textureFiles[textureIndex++] =
-						FileUtils.getResource(assetProperties.getPlugin(), textureName);
+				textureFiles[textureIndex++] = new ResourceFile(resource.getPlugin(), textureName);
 			}
 
 			mat.setTextures(textureFiles);

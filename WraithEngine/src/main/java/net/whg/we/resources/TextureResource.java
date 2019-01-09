@@ -8,7 +8,7 @@ public class TextureResource implements Resource<Texture>
 {
 	private Texture _texture;
 	private TextureProperties _properties;
-	private String _fileName;
+	private ResourceFile _resource;
 
 	TextureResource(TextureProperties properties)
 	{
@@ -32,15 +32,15 @@ public class TextureResource implements Resource<Texture>
 	}
 
 	@Override
-	public String getFileName()
+	public ResourceFile getResourceFile()
 	{
-		return _fileName;
+		return _resource;
 	}
 
 	@Override
-	public void setFileName(String name)
+	public void setResourceFile(ResourceFile resource)
 	{
-		_fileName = name;
+		_resource = resource;
 	}
 
 	@Override

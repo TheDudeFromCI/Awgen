@@ -1,7 +1,6 @@
 package net.whg.we.resources;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import javax.imageio.ImageIO;
 import net.whg.we.rendering.Texture;
 import net.whg.we.rendering.TextureProperties;
@@ -22,11 +21,11 @@ public class TextureLoader implements FileLoader<Texture>
 	}
 
 	@Override
-	public Resource<Texture> loadFile(File file, AssetProperties assetProperties)
+	public Resource<Texture> loadFile(ResourceFile resource)
 	{
 		try
 		{
-			BufferedImage image = ImageIO.read(file);
+			BufferedImage image = ImageIO.read(resource.getFile());
 
 			TextureProperties properties = new TextureProperties();
 			Color[] pixels = new Color[image.getWidth() * image.getHeight()];
@@ -54,7 +53,7 @@ public class TextureLoader implements FileLoader<Texture>
 		}
 		catch (Exception exception)
 		{
-			Log.errorf("Failed to read image file, %s!", exception, file.getAbsolutePath());
+			Log.errorf("Failed to read image file, %s!", exception, resource);
 			return null;
 		}
 	}
