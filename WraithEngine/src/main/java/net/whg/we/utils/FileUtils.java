@@ -53,27 +53,22 @@ public class FileUtils
 	}
 
 	/**
-	 * Gets the current resource folder for the specified plugin. If a plugin is not
-	 * defined, the global resource folder is returned instead. If the folder does
-	 * not exist yet, it is created.
+	 * Gets the current resource folder for the specified plugin.
 	 *
 	 * @param plugin
 	 *            - The plugin to access the resources for.
-	 * @return The resource folder for a certain plugin, or the global resource
-	 *         folder if no plugin is defined.
+	 * @return The resource folder for a certain plugin, or null if no plugin is
+	 *         defined.
 	 */
 	public static File getResourcesFolder(Plugin plugin)
 	{
-		File file = new File(getCoreFolder(), RESOURCE_FOLDER_NAME);
+		if (plugin == null)
+			return null;
 
-		if (plugin != null)
-		{
-			file = new File(file, plugin.getPluginName());
-			Log.tracef("Loading resource folder for plugin %s at %s.", plugin.getPluginName(),
-					file);
-		}
-		else
-			Log.tracef("Loading global resource folder, at %s.", file);
+		File file = new File(getCoreFolder(), RESOURCE_FOLDER_NAME);
+		file = new File(file, plugin.getPluginName());
+
+		Log.tracef("Loading resource folder for plugin %s at %s.", plugin.getPluginName(), file);
 
 		if (!file.exists())
 			file.mkdirs();
@@ -83,12 +78,8 @@ public class FileUtils
 
 	/**
 	 * Returns a specific resource by name. The name of a resource is defined as the
-	 * path to the resource and name of the resource relative to the global resource
-	 * folder. Folder subdirectories are seperated by the character '/'. This is
-	 * useful for obtaining resources globally or resources from another plugin. If
-	 * the plugin argument is not defined, then the global resource folder is used.
-	 * If a plugin is defined, then resources are referenced from that plugin's
-	 * local resource folder. <br>
+	 * path to the resource and name of the resource relative to the plugin resource
+	 * folder. Folder subdirectories are seperated by the character '/'. <br>
 	 * <br>
 	 * Example:
 	 *
@@ -97,16 +88,21 @@ public class FileUtils
 	 * </pre>
 	 *
 	 * @param plugin
-	 *            - The plugin to get the resource from, or null to access resources
-	 *            globally.
+	 *            - The plugin to get the resource from.
 	 * @param name
-	 *            - The path to a resource and the name of the resource to return.
+	 *            - The path to a resource relative to the plugin resource folder.
 	 * @return The resource at the specified location, or null if no resource is
 	 *         found.
 	 * @see {@link #getResourcesFolder}
 	 */
 	public static File getResource(Plugin plugin, String name)
 	{
+		if (plugin == null)
+		{
+			Log.warnf("Plugin not defined! Cannot retrieve resource %s!", name);
+			return null;
+		}
+
 		Log.debugf("Attempting to load resource %s/%s", plugin.getPluginName(), name);
 
 		name = name.replace('/', File.separatorChar);
