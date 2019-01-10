@@ -101,7 +101,7 @@ public class ResourceFile
 	@Override
 	public String toString()
 	{
-		return "[Resource: " + _plugin + "/" + _name + "]";
+		return "[Resource: " + _plugin.getPluginName() + "/" + _name + "]";
 	}
 
 	@Override
