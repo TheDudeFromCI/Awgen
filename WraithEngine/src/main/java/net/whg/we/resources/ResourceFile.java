@@ -114,4 +114,10 @@ public class ResourceFile
 
 		return _plugin == a._plugin && _name.equals(a._name);
 	}
+
+	@Override
+	public int hashCode()
+	{
+		return _name.hashCode();
+	}
 }
