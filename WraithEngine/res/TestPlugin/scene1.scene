@@ -1,0 +1,15 @@
+models:
+  Human:
+    file: BaseHuman.fbx
+    pos: 0, 0, -5
+    rot: 0, 0, 0
+    scale: 1, 1, 1
+  Monkey Head:
+    file: monkey_head.fbx
+    pos: 0, 0, 0
+    rot: 0, 0, -1.14159265358
+    scale: 0.25, 0.25, 0.25
+  Floor:
+    file: floor.obj
+    pos: 0, 0, 0
+    scale: 1, 1, 1
