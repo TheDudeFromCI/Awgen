@@ -12,6 +12,7 @@ import net.whg.we.resources.ResourceFile;
 import net.whg.we.scene.Model;
 import net.whg.we.scene.RenderPass;
 import net.whg.we.scene.SceneUtils;
+import net.whg.we.threads.PhysicsEventCaller.PhysicsListener;
 import net.whg.we.threads.RenderingEventCaller.RenderingListener;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.FirstPersonCamera;
@@ -21,7 +22,7 @@ import net.whg.we.utils.Screen;
 import net.whg.we.utils.Time;
 import whg.core.CorePlugin;
 
-public class TestPlugin implements Plugin, RenderingListener
+public class TestPlugin implements Plugin, RenderingListener, PhysicsListener
 {
 	private CorePlugin _core;
 	private Model _monkeyModel;
@@ -45,6 +46,7 @@ public class TestPlugin implements Plugin, RenderingListener
 	{
 		_core = (CorePlugin) PluginLoader.GetPlugin("Core");
 		EventManager.registerListener(_core, CorePlugin.RENDERING_EVENTCALLER, this);
+		EventManager.registerListener(_core, CorePlugin.PHYSICS_EVENTCALLER, this);
 	}
 
 	@Override
@@ -79,7 +81,6 @@ public class TestPlugin implements Plugin, RenderingListener
 			}
 
 			_camera = new Camera();
-			_firstPerson = new FirstPersonCamera(_camera);
 			_renderPass.setCamera(_camera);
 		}
 		catch (Exception exception)
@@ -92,8 +93,6 @@ public class TestPlugin implements Plugin, RenderingListener
 	@Override
 	public void onPrepareRender()
 	{
-		float y = (float) (Math.sin(Time.time()) + 1f);
-		_monkeyModel.getLocation().setPosition(new Vector3f(0f, y, 0f));
 	}
 
 	@Override
@@ -104,20 +103,6 @@ public class TestPlugin implements Plugin, RenderingListener
 	@Override
 	public void onFinalPrepareRender()
 	{
-		try
-		{
-			_firstPerson.update();
-
-			if (Input.isKeyDown("q"))
-				Screen.setMouseLocked(!Screen.isMouseLocked());
-			if (Input.isKeyDown("escape"))
-				_core.getWindow().requestClose();
-		}
-		catch (Exception exception)
-		{
-			Log.fatalf("Failed to render scene!", exception);
-			_core.getWindow().requestClose();
-		}
 	}
 
 	@Override
@@ -138,5 +123,58 @@ public class TestPlugin implements Plugin, RenderingListener
 	@Override
 	public void onGraphicsDispose()
 	{
+	}
+
+	@Override
+	public void onPhysicsInit()
+	{
+	}
+
+	@Override
+	public void onUpdate()
+	{
+		if (_monkeyModel == null)
+			return;
+
+		float y = (float) (Math.sin(Time.time()) + 1f);
+		_monkeyModel.getLocation().setPosition(new Vector3f(0f, y, 0f));
+	}
+
+	@Override
+	public void onLateUpdate()
+	{
+	}
+
+	@Override
+	public void onPhysicsDispose()
+	{
+	}
+
+	@Override
+	public void onInputUpdate()
+	{
+		try
+		{
+			if (_firstPerson == null)
+			{
+				if (_camera == null)
+					return;
+
+				Log.debug("Creating First Person Camera controller.");
+				_firstPerson = new FirstPersonCamera(_camera);
+			}
+
+			_firstPerson.update();
+
+			if (Input.isKeyDown("q"))
+				Screen.setMouseLocked(!Screen.isMouseLocked());
+			if (Input.isKeyDown("escape"))
+				_core.requestClose();
+		}
+		catch (Exception exception)
+		{
+			Log.fatalf("Failed to update input!", exception);
+			_core.requestClose();
+		}
 	}
 }

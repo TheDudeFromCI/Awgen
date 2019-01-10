@@ -9,7 +9,7 @@ public class PhysicsThread extends ThreadInstance
 {
 	private CorePlugin _core;
 	private PhysicsEventCaller _eventCaller;
-	private boolean _running;
+	private boolean _running = true;
 
 	PhysicsThread(CorePlugin core)
 	{

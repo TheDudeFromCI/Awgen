@@ -52,7 +52,7 @@ public class PhysicsEventCaller extends EventCallerBase<PhysicsListener>
 		 * Called once every input update frame. Frames are called by the input
 		 * framerate as defined by {@link net.whg.we.utils.Time#getInputFramerate()}.
 		 */
-		public void onInputUpdateEvent();
+		public void onInputUpdate();
 	}
 
 	private CorePlugin _core;
@@ -121,7 +121,7 @@ public class PhysicsEventCaller extends EventCallerBase<PhysicsListener>
 				break;
 
 			case ON_INPUT_UPDATE_EVENT:
-				t.onInputUpdateEvent();
+				t.onInputUpdate();
 				break;
 
 			default:
