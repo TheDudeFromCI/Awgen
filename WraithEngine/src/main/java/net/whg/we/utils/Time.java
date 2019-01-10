@@ -13,7 +13,7 @@ public class Time
 	private static float _delta;
 	private static long _startMs = -1;
 	private static float _physicsFPS = 50f;
-	private static float _inputFPS = 120f;
+	private static float _inputFPS = 250f;
 
 	/**
 	 * Called once at the start of a frame to calculate the amount of time passed,
@@ -91,7 +91,7 @@ public class Time
 
 	/**
 	 * Gets the target number of frames the input loop will be called per second.
-	 * 
+	 *
 	 * @return The target framerate of the input update loop.
 	 */
 	public static float getInputFramerate()
@@ -101,7 +101,7 @@ public class Time
 
 	/**
 	 * Gets the length of time in seconds each input frame lasts.
-	 * 
+	 *
 	 * @return The delta time of a single input update frame.
 	 */
 	public static float getInputDelta()

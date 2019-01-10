@@ -33,9 +33,10 @@ public class CorePlugin implements Plugin
 	{
 		// Build event threads
 		_graphicsThread = new GraphicsThread(this);
-		_physicsThread = new PhysicsThread();
+		_physicsThread = new PhysicsThread(this);
 
 		_graphicsThread.build();
+		_physicsThread.build();
 
 		// Build resource loaders
 		ResourceLoader.addFileLoader(new GLSLShaderLoader());
