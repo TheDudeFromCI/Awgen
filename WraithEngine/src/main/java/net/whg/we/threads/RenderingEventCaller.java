@@ -1,9 +1,10 @@
-package whg.core;
+package net.whg.we.threads;
 
 import net.whg.we.event.EventCallerBase;
 import net.whg.we.event.Listener;
 import net.whg.we.main.Plugin;
-import whg.core.RenderingEventCaller.RenderingListener;
+import net.whg.we.threads.RenderingEventCaller.RenderingListener;
+import whg.core.CorePlugin;
 
 /**
  * Represents an event caller for handling rendering events.

@@ -1,9 +1,10 @@
-package whg.core;
+package net.whg.we.threads;
 
 import net.whg.we.event.EventCallerBase;
 import net.whg.we.event.Listener;
 import net.whg.we.main.Plugin;
-import whg.core.PhysicsEventCaller.PhysicsListener;
+import net.whg.we.threads.PhysicsEventCaller.PhysicsListener;
+import whg.core.CorePlugin;
 
 /**
  * Represents an event caller for handling rendering events.

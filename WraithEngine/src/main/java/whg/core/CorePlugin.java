@@ -6,11 +6,12 @@ import net.whg.we.resources.GLSLShaderLoader;
 import net.whg.we.resources.MeshSceneLoader;
 import net.whg.we.resources.ResourceLoader;
 import net.whg.we.resources.TextureLoader;
+import net.whg.we.threads.ThreadManager;
 import net.whg.we.window.QueuedWindow;
 
 /**
- * This is the core plugin loader for WraithEngine. It is in charge of loading
- * and sending events between plugins.
+ * This is the core plugin loader for WraithEngine. It is in charge of handling
+ * the main game loops.
  *
  * @author TheDudeFromCI
  */
@@ -19,8 +20,7 @@ public class CorePlugin implements Plugin
 	public static final String RENDERING_EVENTCALLER = "Core Rendering";
 	public static final String PHYSICS_EVENTCALLER = "Core Physics";
 
-	private GraphicsThread _graphicsThread;
-	private PhysicsThread _physicsThread;
+	private ThreadManager _threadManager;
 
 	@Override
 	public String getPluginName()
@@ -32,11 +32,8 @@ public class CorePlugin implements Plugin
 	public void initPlugin()
 	{
 		// Build event threads
-		_graphicsThread = new GraphicsThread(this);
-		_physicsThread = new PhysicsThread(this);
-
-		_graphicsThread.build();
-		_physicsThread.build();
+		_threadManager = new ThreadManager();
+		_threadManager.buildThreads(this);
 
 		// Build resource loaders
 		ResourceLoader.addFileLoader(new GLSLShaderLoader());
@@ -47,8 +44,12 @@ public class CorePlugin implements Plugin
 	@Override
 	public void enablePlugin()
 	{
-		_graphicsThread.start();
-		_physicsThread.start();
+		_threadManager.startThreads();
+	}
+
+	public void requestClose()
+	{
+		getWindow().requestClose();
 	}
 
 	@Override
@@ -57,13 +58,18 @@ public class CorePlugin implements Plugin
 		return 10000;
 	}
 
+	public ThreadManager getThreadManager()
+	{
+		return _threadManager;
+	}
+
 	public QueuedWindow getWindow()
 	{
-		return _graphicsThread.getWindow();
+		return _threadManager.getGraphicsThread().getWindow();
 	}
 
 	public Graphics getGraphics()
 	{
-		return _graphicsThread.getGraphics();
+		return _threadManager.getGraphicsThread().getGraphics();
 	}
 }

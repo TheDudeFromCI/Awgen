@@ -12,6 +12,7 @@ import net.whg.we.resources.ResourceFile;
 import net.whg.we.scene.Model;
 import net.whg.we.scene.RenderPass;
 import net.whg.we.scene.SceneUtils;
+import net.whg.we.threads.RenderingEventCaller.RenderingListener;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.FirstPersonCamera;
 import net.whg.we.utils.Input;
@@ -19,7 +20,6 @@ import net.whg.we.utils.Log;
 import net.whg.we.utils.Screen;
 import net.whg.we.utils.Time;
 import whg.core.CorePlugin;
-import whg.core.RenderingEventCaller.RenderingListener;
 
 public class TestPlugin implements Plugin, RenderingListener
 {

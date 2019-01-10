@@ -1,4 +1,4 @@
-package whg.core;
+package net.whg.we.threads;
 
 import net.whg.we.event.EventManager;
 import net.whg.we.rendering.Graphics;
@@ -10,8 +10,10 @@ import net.whg.we.utils.Log;
 import net.whg.we.utils.Time;
 import net.whg.we.window.QueuedWindow;
 import net.whg.we.window.WindowBuilder;
+import whg.core.CorePlugin;
+import whg.core.DefaultWindowListener;
 
-class GraphicsThread
+public class GraphicsThread extends ThreadInstance
 {
 	private CorePlugin _core;
 	private QueuedWindow _window;
@@ -52,9 +54,14 @@ class GraphicsThread
 				{
 					try
 					{
+						// Calculate frame data
 						Time.updateTime();
 						FPSLogger.logFramerate();
 
+						// Handle pending message queue
+						handleMessages();
+
+						// Render the scene
 						_renderEvents.onPrepareRender();
 						_renderEvents.onCullScene();
 						_renderEvents.onFinalPrepareRender();
@@ -63,12 +70,16 @@ class GraphicsThread
 						// End frame
 						Input.endFrame();
 						if (_window.endFrame())
+						{
+							_core.getThreadManager().getPhysicsThread().requestClose();
 							break;
+						}
 					}
 					catch (Exception exception)
 					{
 						Log.fatalf("Fatal error thrown in rendering thread!", exception);
 						_window.requestClose();
+						_core.getThreadManager().getPhysicsThread().requestClose();
 						break;
 					}
 				}
@@ -87,15 +98,16 @@ class GraphicsThread
 
 		thread.setName("render");
 		thread.setDaemon(false);
+		initalize(thread);
 		thread.start();
 	}
 
-	Graphics getGraphics()
+	public Graphics getGraphics()
 	{
 		return _graphics;
 	}
 
-	QueuedWindow getWindow()
+	public QueuedWindow getWindow()
 	{
 		return _window;
 	}
