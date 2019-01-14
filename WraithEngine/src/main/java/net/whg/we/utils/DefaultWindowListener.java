@@ -1,8 +1,6 @@
-package whg.core;
+package net.whg.we.utils;
 
 import org.lwjgl.opengl.GL11;
-import net.whg.we.utils.Input;
-import net.whg.we.utils.Screen;
 import net.whg.we.window.KeyState;
 import net.whg.we.window.WindowListener;
 

@@ -1,7 +1,6 @@
 package net.whg.we.utils;
 
-import net.whg.we.main.PluginLoader;
-import whg.core.CorePlugin;
+import net.whg.we.window.QueuedWindow;
 
 /**
  * A utility class for talking to the screen.
@@ -13,6 +12,21 @@ public class Screen
 	private static int _width = 640;
 	private static int _height = 480;
 	private static boolean _mouseLocked;
+	private static QueuedWindow _window;
+
+	/**
+	 * Sets the window to forward update events to, such as
+	 * {@link #setMouseLocked(boolean)}. When this window is assigned, the assigned
+	 * state will be passed to the window.
+	 *
+	 * @param window
+	 */
+	public static void setWindow(QueuedWindow window)
+	{
+		_window = window;
+
+		window.setCursorEnabled(!_mouseLocked);
+	}
 
 	/**
 	 * Changes the internal referenced size of the screen. This should only be
@@ -48,10 +62,10 @@ public class Screen
 	 */
 	public static void setMouseLocked(boolean mouseLocked)
 	{
-		Log.infof("Set cursor locked to %s.", mouseLocked);
+		Log.tracef("Set cursor locked to %s.", mouseLocked);
 
-		CorePlugin core = (CorePlugin) PluginLoader.GetPlugin("Core");
-		core.getWindow().setCursorEnabled(!mouseLocked);
+		if (_window != null)
+			_window.setCursorEnabled(!mouseLocked);
 		_mouseLocked = mouseLocked;
 	}
 
