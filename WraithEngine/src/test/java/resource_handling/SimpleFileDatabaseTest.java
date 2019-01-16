@@ -1,8 +1,6 @@
 package resource_handling;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import org.junit.Assert;
 import org.junit.Test;
 import net.whg.we.main.Plugin;
 import net.whg.we.resources.ResourceFile;
@@ -21,9 +19,9 @@ public class SimpleFileDatabaseTest
 
 		ResourceFile resource = db.getResourceFile(plugin, "monkey_head.fbx");
 
-		assertNotNull(resource);
-		assertEquals(resource.getFileExtension(), "fbx");
-		assertNotNull(resource.getFile());
+		Assert.assertNotNull(resource);
+		Assert.assertEquals(resource.getFileExtension(), "fbx");
+		Assert.assertNotNull(resource.getFile());
 	}
 
 	@Test
@@ -35,7 +33,7 @@ public class SimpleFileDatabaseTest
 
 		ResourceFile resource = db.getResourceFile(null, "resource.obj");
 
-		assertNull(resource);
+		Assert.assertNull(resource);
 	}
 
 	@Test
@@ -47,6 +45,6 @@ public class SimpleFileDatabaseTest
 
 		ResourceFile resource = db.getResourceFile(null, "234098$%^a/asdhkjas!@#$%^&*");
 
-		assertNull(resource);
+		Assert.assertNull(resource);
 	}
 }

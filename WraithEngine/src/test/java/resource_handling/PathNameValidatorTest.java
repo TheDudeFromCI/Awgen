@@ -1,7 +1,6 @@
 package resource_handling;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.Assert;
 import org.junit.Test;
 import net.whg.we.resources.SimplePathNameValidator;
 
@@ -12,21 +11,21 @@ public class PathNameValidatorTest
 	{
 		SimplePathNameValidator val = new SimplePathNameValidator();
 
-		assertTrue(val.isValidPathName("abd.bat"));
-		assertTrue(val.isValidPathName("1230.bat"));
-		assertTrue(val.isValidPathName("abd_123.bat"));
-		assertTrue(val.isValidPathName("abd.bat123"));
-		assertFalse(val.isValidPathName("abdbat."));
-		assertFalse(val.isValidPathName(" abd.bat"));
-		assertFalse(val.isValidPathName("abd.bat_"));
-		assertTrue(val.isValidPathName("123/abd.bat123"));
-		assertFalse(val.isValidPathName("123//abd.bat123"));
-		assertFalse(val.isValidPathName("/123/a/abd.bat123"));
-		assertFalse(val.isValidPathName("123/a/abd.bat123/"));
-		assertFalse(val.isValidPathName(".123/a/abd.bat123"));
-		assertTrue(val.isValidPathName("123 asd/a/abd.bat123"));
-		assertTrue(val.isValidPathName("123 asd/a_1/abasdd.baast123"));
-		assertTrue(val.isValidPathName("123 asd/a_1/abasd"));
-		assertFalse(val.isValidPathName("a%basd"));
+		Assert.assertTrue(val.isValidPathName("abd.bat"));
+		Assert.assertTrue(val.isValidPathName("1230.bat"));
+		Assert.assertTrue(val.isValidPathName("abd_123.bat"));
+		Assert.assertTrue(val.isValidPathName("abd.bat123"));
+		Assert.assertFalse(val.isValidPathName("abdbat."));
+		Assert.assertFalse(val.isValidPathName(" abd.bat"));
+		Assert.assertFalse(val.isValidPathName("abd.bat_"));
+		Assert.assertTrue(val.isValidPathName("123/abd.bat123"));
+		Assert.assertFalse(val.isValidPathName("123//abd.bat123"));
+		Assert.assertFalse(val.isValidPathName("/123/a/abd.bat123"));
+		Assert.assertFalse(val.isValidPathName("123/a/abd.bat123/"));
+		Assert.assertFalse(val.isValidPathName(".123/a/abd.bat123"));
+		Assert.assertTrue(val.isValidPathName("123 asd/a/abd.bat123"));
+		Assert.assertTrue(val.isValidPathName("123 asd/a_1/abasdd.baast123"));
+		Assert.assertTrue(val.isValidPathName("123 asd/a_1/abasd"));
+		Assert.assertFalse(val.isValidPathName("a%basd"));
 	}
 }
