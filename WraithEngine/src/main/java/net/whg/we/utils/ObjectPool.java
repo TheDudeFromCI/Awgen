@@ -8,10 +8,15 @@ public abstract class ObjectPool<T extends Poolable>
 
 	public T get()
 	{
-		if (_pool.isEmpty())
-			return build();
+		T t;
+		synchronized (_pool)
+		{
+			if (_pool.isEmpty())
+				return build();
 
-		T t = _pool.removeFirst();
+			t = _pool.removeFirst();
+		}
+
 		t.init();
 		return t;
 	}
@@ -19,7 +24,11 @@ public abstract class ObjectPool<T extends Poolable>
 	public void put(T t)
 	{
 		t.dispose();
-		_pool.addLast(t);
+
+		synchronized (_pool)
+		{
+			_pool.addLast(t);
+		}
 	}
 
 	protected abstract T build();
