@@ -150,15 +150,25 @@ public class FileUtils
 	}
 
 	/**
-	 * Gets the file type (file extension) of the specified file.
+	 * Gets the file type (file extension) of the specified file. If no file is
+	 * specified, null is returned.
 	 *
 	 * @param file
 	 *            - The file to get the type of.
 	 * @return A string representing the file extension of this file, or null if
-	 *         this file does not have a file extention.
+	 *         this file does not have a file extention, or points to a folder.
 	 */
 	public static String getFileType(File file)
 	{
+		if (file == null)
+		{
+			Log.warn("Cannot get extention of null file!");
+			return null;
+		}
+
+		if (file.isDirectory())
+			return null;
+
 		String fileName = file.getName();
 		int lastDot = fileName.lastIndexOf(".");
 

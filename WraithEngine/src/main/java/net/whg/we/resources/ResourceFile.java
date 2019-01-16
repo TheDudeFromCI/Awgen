@@ -33,8 +33,12 @@ public class ResourceFile
 		_name = name;
 
 		_file = FileUtils.getResource(plugin, name);
-		_assetExtension = FileUtils.getFileType(_file);
-		_propertiesFile = new File(_file.getAbsolutePath() + ".asset");
+
+		if (_file != null)
+		{
+			_assetExtension = FileUtils.getFileType(_file);
+			_propertiesFile = new File(_file.getAbsolutePath() + ".asset");
+		}
 	}
 
 	/**
