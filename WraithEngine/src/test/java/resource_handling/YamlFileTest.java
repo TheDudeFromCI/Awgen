@@ -64,4 +64,15 @@ public class YamlFileTest
 
 		Assert.assertEquals(yaml.getInt("root2.1"), 12);
 	}
+
+	@Test
+	public void parseFakePath()
+	{
+		// Try to parse a fake path.
+
+		YamlFile yaml = new YamlFile();
+		yaml.load(new ResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml"));
+
+		Assert.assertEquals(yaml.getString("root4.4234.123"), null);
+	}
 }

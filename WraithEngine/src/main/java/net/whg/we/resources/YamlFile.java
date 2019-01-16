@@ -116,7 +116,12 @@ public class YamlFile
 		Map<String, Object> m = _map;
 
 		for (int i = 0; i < path.length - 1; i++)
+		{
+			if (!m.containsKey(path[i]))
+				return null;
+
 			m = (Map<String, Object>) m.get(path[i]);
+		}
 
 		return m.get(path[path.length - 1]);
 	}
