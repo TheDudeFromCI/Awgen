@@ -15,7 +15,7 @@ public class GameObject
 
 	public GameObject()
 	{
-
+		GameObjectManager.addGameObject(this);
 	}
 
 	public boolean isDisposed()
@@ -25,6 +25,7 @@ public class GameObject
 
 	void dispose()
 	{
+		GameObjectManager.removeGameObject(this);
 		_raw.dispose();
 		_raw = null;
 	}
