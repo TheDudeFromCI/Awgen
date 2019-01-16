@@ -1,0 +1,7 @@
+root1:
+  some_data:
+    really_nested_data: 2
+root2:
+  string: abc
+  '1': 12
+  true: Boolean
