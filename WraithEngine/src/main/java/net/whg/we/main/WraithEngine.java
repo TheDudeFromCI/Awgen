@@ -1,5 +1,6 @@
 package net.whg.we.main;
 
+import java.io.File;
 import org.joml.Math;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -8,15 +9,17 @@ import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.GraphicsFactory;
 import net.whg.we.rendering.ScreenClearType;
+import net.whg.we.resources.FileDatabase;
 import net.whg.we.resources.GLSLShaderLoader;
 import net.whg.we.resources.MeshSceneLoader;
 import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.resources.ResourceFile;
 import net.whg.we.resources.ResourceLoader;
+import net.whg.we.resources.SimpleFileDatabase;
 import net.whg.we.resources.TextureLoader;
 import net.whg.we.scene.Model;
 import net.whg.we.scene.RenderPass;
-import net.whg.we.scene.SceneUtils;
+import net.whg.we.scene.SceneLoader;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.DefaultWindowListener;
 import net.whg.we.utils.FPSLogger;
@@ -67,9 +70,12 @@ public class WraithEngine
 		Log.debugf("LWJGL Version: %s", Version.getVersion());
 
 		// Load core functions
-		ResourceLoader.addFileLoader(new GLSLShaderLoader());
-		ResourceLoader.addFileLoader(new MeshSceneLoader());
-		ResourceLoader.addFileLoader(new TextureLoader());
+		File baseFolder = new File(System.getProperty("user.dir"));
+		FileDatabase fileDatabase = new SimpleFileDatabase(baseFolder);
+		ResourceLoader resourceLoader = new ResourceLoader(fileDatabase);
+		resourceLoader.addFileLoader(new GLSLShaderLoader());
+		resourceLoader.addFileLoader(new MeshSceneLoader());
+		resourceLoader.addFileLoader(new TextureLoader());
 
 		// Load plugins
 		PluginLoader pluginLoader = new PluginLoader();
@@ -87,7 +93,7 @@ public class WraithEngine
 		Screen.setWindow(window);
 
 		// Start main game loop
-		loadTestScene(graphics, window);
+		loadTestScene(resourceLoader, graphics, window);
 		while (true)
 		{
 			try
@@ -122,7 +128,8 @@ public class WraithEngine
 	private static Camera _camera;
 	private static RenderPass _renderPass = new RenderPass();
 
-	private static void loadTestScene(Graphics graphics, QueuedWindow window)
+	private static void loadTestScene(ResourceLoader resourceLoader, Graphics graphics,
+			QueuedWindow window)
 	{
 		try
 		{
@@ -156,12 +163,14 @@ public class WraithEngine
 			_renderPass = new RenderPass();
 
 			{
-				_monkeyModel = SceneUtils
-						.loadModel(new ResourceFile(dummyPlugin, "monkey_head.fbx"), graphics);
-				Model floor =
-						SceneUtils.loadModel(new ResourceFile(dummyPlugin, "floor.obj"), graphics);
-				Model human = SceneUtils.loadModel(new ResourceFile(dummyPlugin, "BaseHuman.fbx"),
+				SceneLoader loader = new SceneLoader(resourceLoader);
+
+				_monkeyModel = loader.loadModel(new ResourceFile(dummyPlugin, "monkey_head.fbx"),
 						graphics);
+				Model floor =
+						loader.loadModel(new ResourceFile(dummyPlugin, "floor.obj"), graphics);
+				Model human =
+						loader.loadModel(new ResourceFile(dummyPlugin, "BaseHuman.fbx"), graphics);
 
 				_monkeyModel.getLocation()
 						.setRotation(new Quaternionf().rotateX((float) (-Math.PI / 2f)));

@@ -10,17 +10,15 @@ public class UncompiledMaterial
 	private ShaderResource _shader;
 	private TextureResource[] _textures;
 
-	public UncompiledMaterial(String name, ResourceFile shaderResource)
+	public UncompiledMaterial(String name, ShaderResource shader)
 	{
 		_name = name;
-		_shader = (ShaderResource) ResourceLoader.loadResource(shaderResource);
+		_shader = shader;
 	}
 
-	public void setTextures(ResourceFile... textureResources)
+	public void setTextures(TextureResource[] textures)
 	{
-		_textures = new TextureResource[textureResources.length];
-		for (int i = 0; i < _textures.length; i++)
-			_textures[i] = (TextureResource) ResourceLoader.loadResource(textureResources[i]);
+		_textures = textures;
 	}
 
 	public Material compile(Graphics graphics)

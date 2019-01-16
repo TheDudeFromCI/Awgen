@@ -5,8 +5,24 @@ import net.whg.we.utils.Log;
 
 public class ResourceLoader
 {
-	private static ArrayList<FileLoader<?>> _fileLoaders = new ArrayList<>();
-	private static ArrayList<FileLoader<?>> _fileLoaderBuffer = new ArrayList<>();
+	private ArrayList<FileLoader<?>> _fileLoaders = new ArrayList<>();
+	private ArrayList<FileLoader<?>> _fileLoaderBuffer = new ArrayList<>();
+	private FileDatabase _fileDatabase;
+
+	public ResourceLoader(FileDatabase fileDatabase)
+	{
+		_fileDatabase = fileDatabase;
+	}
+
+	/**
+	 * Gets the file database currently being used by this ResourceLoader.
+	 *
+	 * @return The file database.
+	 */
+	public FileDatabase getFileDatabase()
+	{
+		return _fileDatabase;
+	}
 
 	/**
 	 * Loads a file as a resource.<br>
@@ -14,13 +30,13 @@ public class ResourceLoader
 	 * file loader with the highest priority that supports the given file type. If
 	 * this file does not have an extension, null is returned. If no file loader
 	 * supports this file extension, null is returned. If the file fails to load,
-	 * null is returned. This method is thread safe.
+	 * null is returned.
 	 *
 	 * @param file
 	 *            - The file to load.
 	 * @return A loaded resource for the file, or null if the file cannot be loaded.
 	 */
-	public static Resource<?> loadResource(ResourceFile resource)
+	public Resource<?> loadResource(ResourceFile resource)
 	{
 		// Check to see if the resource is already loaded
 		if (ResourceDatabase.hasResource(resource))
@@ -30,52 +46,46 @@ public class ResourceLoader
 
 		FileLoader<?> loader = null;
 
-		synchronized (_fileLoaderBuffer)
+		for (FileLoader<?> l : _fileLoaders)
+			for (String s : l.getTargetFileTypes())
+				if (s.equals(resource.getFileExtension()))
+					_fileLoaderBuffer.add(l);
+
+		if (_fileLoaderBuffer.isEmpty())
 		{
-			synchronized (_fileLoaders)
-			{
-				for (FileLoader<?> l : _fileLoaders)
-					for (String s : l.getTargetFileTypes())
-						if (s.equals(resource.getFileExtension()))
-							_fileLoaderBuffer.add(l);
-			}
+			Log.warnf("Failed to load the resource %s, not a supported file type!",
+					resource.getName());
+			return null;
+		}
 
-			if (_fileLoaderBuffer.isEmpty())
-			{
-				Log.warnf("Failed to load the resource %s, not a supported file type!",
-						resource.getName());
-				return null;
-			}
+		if (Log.getLogLevel() <= Log.TRACE)
+		{
+			Log.trace("  Finding available file loaders...");
+			for (FileLoader<?> l : _fileLoaderBuffer)
+				Log.tracef("   * %s", l.getClass().getName());
+		}
 
-			if (Log.getLogLevel() <= Log.TRACE)
+		if (_fileLoaderBuffer.size() == 1)
+			loader = _fileLoaderBuffer.get(0);
+		else
+		{
+			int pri = Integer.MIN_VALUE;
+			for (int i = 0; i < _fileLoaderBuffer.size(); i++)
 			{
-				Log.trace("  Finding available file loaders...");
-				for (FileLoader<?> l : _fileLoaderBuffer)
-					Log.tracef("   * %s", l.getClass().getName());
-			}
-
-			if (_fileLoaderBuffer.size() == 1)
-				loader = _fileLoaderBuffer.get(0);
-			else
-			{
-				int pri = Integer.MIN_VALUE;
-				for (int i = 0; i < _fileLoaderBuffer.size(); i++)
+				FileLoader<?> fl = _fileLoaderBuffer.get(i);
+				if (fl.getPriority() > pri)
 				{
-					FileLoader<?> fl = _fileLoaderBuffer.get(i);
-					if (fl.getPriority() > pri)
-					{
-						pri = fl.getPriority();
-						loader = fl;
-					}
+					pri = fl.getPriority();
+					loader = fl;
 				}
 			}
-
-			_fileLoaderBuffer.clear();
 		}
+
+		_fileLoaderBuffer.clear();
 
 		Log.debugf("Loading resource %s using the file loader, %s.", resource.getName(),
 				loader.getClass().getName());
-		Resource<?> res = loader.loadFile(resource);
+		Resource<?> res = loader.loadFile(this, resource);
 
 		if (res != null)
 		{
@@ -93,17 +103,14 @@ public class ResourceLoader
 	 * @param fileLoader
 	 *            - The file loader to add.
 	 */
-	public static void addFileLoader(FileLoader<?> fileLoader)
+	public void addFileLoader(FileLoader<?> fileLoader)
 	{
 		Log.debugf("Adding a file loader to the ResourceLoader, %s.",
 				fileLoader.getClass().getName());
 
-		synchronized (_fileLoaders)
-		{
-			if (_fileLoaders.contains(fileLoader))
-				return;
-			_fileLoaders.add(fileLoader);
-		}
+		if (_fileLoaders.contains(fileLoader))
+			return;
+		_fileLoaders.add(fileLoader);
 	}
 
 	/**
@@ -113,14 +120,11 @@ public class ResourceLoader
 	 * @param fileLoader
 	 *            - The file loader to remove.
 	 */
-	public static void removeFileLoader(FileLoader<?> fileLoader)
+	public void removeFileLoader(FileLoader<?> fileLoader)
 	{
 		Log.debugf("Removing a file loader from the ResourceLoader, %s.",
 				fileLoader.getClass().getName());
 
-		synchronized (_fileLoaders)
-		{
-			_fileLoaders.remove(fileLoader);
-		}
+		_fileLoaders.remove(fileLoader);
 	}
 }

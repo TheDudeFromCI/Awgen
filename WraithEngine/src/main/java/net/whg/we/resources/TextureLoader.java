@@ -21,7 +21,7 @@ public class TextureLoader implements FileLoader<Texture>
 	}
 
 	@Override
-	public Resource<Texture> loadFile(ResourceFile resource)
+	public Resource<Texture> loadFile(ResourceLoader resourceLoader, ResourceFile resource)
 	{
 		try
 		{

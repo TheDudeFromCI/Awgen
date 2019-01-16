@@ -25,7 +25,7 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 	}
 
 	@Override
-	public Resource<MeshScene> loadFile(ResourceFile resource)
+	public Resource<MeshScene> loadFile(ResourceLoader resourceLoader, ResourceFile resource)
 	{
 		ArrayList<UncompiledMesh> uncompiledMeshes = AssimpSceneParser.load(resource.getFile());
 
@@ -35,12 +35,13 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 		MeshSceneResource scene = new MeshSceneResource(uncompiledMeshes);
 
 		if (resource.getPropertiesFile() != null)
-			loadDependencies(resource, scene);
+			loadDependencies(resourceLoader, resource, scene);
 
 		return scene;
 	}
 
-	private void loadDependencies(ResourceFile resource, MeshSceneResource scene)
+	private void loadDependencies(ResourceLoader resourceLoader, ResourceFile resource,
+			MeshSceneResource scene)
 	{
 		YamlFile yaml = new YamlFile();
 		yaml.load(resource.getPropertiesFile());
@@ -49,7 +50,8 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 		{
 			String shaderName = yaml.getString("materials", material, "shader");
 			ResourceFile shaderResource = new ResourceFile(resource.getPlugin(), shaderName);
-			UncompiledMaterial mat = new UncompiledMaterial(material, shaderResource);
+			ShaderResource shader = (ShaderResource) resourceLoader.loadResource(shaderResource);
+			UncompiledMaterial mat = new UncompiledMaterial(material, shader);
 
 			Set<String> textureList = yaml.getKeys("materials", material, "textures");
 			ResourceFile[] textureFiles = new ResourceFile[textureList.size()];
@@ -61,7 +63,10 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 				textureFiles[textureIndex++] = new ResourceFile(resource.getPlugin(), textureName);
 			}
 
-			mat.setTextures(textureFiles);
+			TextureResource[] textures = new TextureResource[textureFiles.length];
+			for (int i = 0; i < textures.length; i++)
+				textures[i] = (TextureResource) resourceLoader.loadResource(textureFiles[i]);
+			mat.setTextures(textures);
 			scene.addMaterial(mat);
 		}
 
