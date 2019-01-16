@@ -36,4 +36,13 @@ public interface FileDatabase
 	 *         is not defined, or the path cannot be parsed.
 	 */
 	public ResourceFile getResourceFile(Plugin plugin, String pathName);
+
+	/**
+	 * Gets the class in charge of validating pathnames for this FileDatabase.
+	 * Different implementations my require pathnames to be given in a different
+	 * method.
+	 *
+	 * @return The PathNameValidator being used for this database.
+	 */
+	public PathNameValidator getPathNameValidator();
 }

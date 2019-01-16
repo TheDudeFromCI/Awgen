@@ -13,10 +13,12 @@ public class SimpleFileDatabase implements FileDatabase
 	public static final String RESOURCE_FOLDER_NAME = "res";
 
 	private File _baseFolder;
+	private SimplePathNameValidator _validator;
 
 	public SimpleFileDatabase(File baseFolder)
 	{
 		_baseFolder = baseFolder;
+		_validator = new SimplePathNameValidator();
 	}
 
 	@Override
@@ -54,6 +56,12 @@ public class SimpleFileDatabase implements FileDatabase
 			return null;
 		}
 
+		if (!_validator.isValidPathName(pathName))
+		{
+			Log.warnf("Path name could not be validated! Cannot retrieve resource %s!", pathName);
+			return null;
+		}
+
 		Log.debugf("Attempting to load resource %s/%s", plugin.getPluginName(), pathName);
 
 		pathName = pathName.replace('/', File.separatorChar);
@@ -68,5 +76,11 @@ public class SimpleFileDatabase implements FileDatabase
 	public File getBaseFolder()
 	{
 		return _baseFolder;
+	}
+
+	@Override
+	public PathNameValidator getPathNameValidator()
+	{
+		return _validator;
 	}
 }
