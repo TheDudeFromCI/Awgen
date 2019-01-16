@@ -26,6 +26,7 @@ public class SimpleFileDatabaseTest
 		assertNotNull(resource.getFile());
 	}
 
+	@Test
 	public void getResourceNoPlugin()
 	{
 		// Make sure that nothing is returned is a plugin is not defined.
@@ -37,6 +38,7 @@ public class SimpleFileDatabaseTest
 		assertNull(resource);
 	}
 
+	@Test
 	public void getBrokenPath()
 	{
 		// Make sure that nothing is returned if the path is broken.
