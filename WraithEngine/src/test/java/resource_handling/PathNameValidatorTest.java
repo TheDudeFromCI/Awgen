@@ -8,7 +8,7 @@ import net.whg.we.resources.SimplePathNameValidator;
 public class PathNameValidatorTest
 {
 	@Test
-	public void pathNameTests()
+	public void pathName()
 	{
 		SimplePathNameValidator val = new SimplePathNameValidator();
 

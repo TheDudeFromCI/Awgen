@@ -47,7 +47,7 @@ public class SimpleFileDatabaseTest
 	}
 
 	@Test
-	public void getResourceTest()
+	public void getResource()
 	{
 		// Get a resource file and make sure it links to a file.
 
@@ -61,7 +61,7 @@ public class SimpleFileDatabaseTest
 		assertNotNull(resource.getFile());
 	}
 
-	public void getResourceNoPluginTesT()
+	public void getResourceNoPlugin()
 	{
 		// Make sure that nothing is returned is a plugin is not defined.
 
@@ -72,7 +72,7 @@ public class SimpleFileDatabaseTest
 		assertNull(resource);
 	}
 
-	public void getBrokenPathTest()
+	public void getBrokenPath()
 	{
 		// Make sure that nothing is returned if the path is broken.
 
