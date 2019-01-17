@@ -11,6 +11,7 @@ import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 import net.whg.we.utils.FileUtils;
 import net.whg.we.utils.Log;
+import net.whg.we.resources.FileDatabase;
 
 public class PluginLoader
 {
@@ -38,33 +39,13 @@ public class PluginLoader
 		return null;
 	}
 
-	void loadPluginsFromFile()
+	void loadPluginsFromFile(FileDatabase fileDatabase)
 	{
-		File folder = FileUtils.getPluginFolder();
-
-		for (File file : folder.listFiles())
+		for (File file : fileDatabase.getJarLibraries())
 		{
 			String fileName = file.getName();
-
-			if (file.isDirectory())
-			{
-				Log.warnf("File '%s' is in plugin folder, but is a directory!", fileName);
-				continue;
-			}
-
-			if (!file.canRead())
-			{
-				Log.warnf("File '%s' is in plugin folder, but is not cannot be read!", fileName);
-				continue;
-			}
-
-			if (!fileName.endsWith(".jar"))
-			{
-				Log.warnf("File '%s' is in plugin folder, but is not a jar file", fileName);
-				continue;
-			}
-
 			Log.infof("Attempting to load plugin %s...", fileName);
+
 			Plugin plugin = attemptLoadPlugin(file);
 
 			if (plugin != null)

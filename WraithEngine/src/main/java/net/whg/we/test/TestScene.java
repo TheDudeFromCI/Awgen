@@ -63,12 +63,12 @@ public class TestScene
 			{
 				SceneLoader loader = new SceneLoader(resourceLoader);
 
-				_monkeyModel = loader.loadModel(new ResourceFile(dummyPlugin, "monkey_head.fbx"),
+				_monkeyModel = loader.loadModel(resourceLoader.getFileDatabase().getResourceFile(dummyPlugin, "monkey_head.fbx"),
 						graphics);
 				Model floor =
-						loader.loadModel(new ResourceFile(dummyPlugin, "floor.obj"), graphics);
+						loader.loadModel(resourceLoader.getFileDatabase().getResourceFile(dummyPlugin, "floor.obj"), graphics);
 				Model human =
-						loader.loadModel(new ResourceFile(dummyPlugin, "BaseHuman.fbx"), graphics);
+						loader.loadModel(resourceLoader.getFileDatabase().getResourceFile(dummyPlugin, "BaseHuman.fbx"), graphics);
 
 				_monkeyModel.getLocation()
 						.setRotation(new Quaternionf().rotateX((float) (-Math.PI / 2f)));

@@ -5,6 +5,7 @@ import org.junit.Test;
 import net.whg.we.main.Plugin;
 import util.CommonMock;
 import net.whg.we.resources.ResourceFile;
+import net.whg.we.resources.SimpleFileDatabase;
 
 public class ResourceFileTest
 {
@@ -12,9 +13,10 @@ public class ResourceFileTest
 	public void resourceFileEquals()
 	{
 		Plugin plugin = CommonMock.getTestPlugin();
+		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
 
-		ResourceFile a = new ResourceFile(plugin, "abc");
-		ResourceFile b = new ResourceFile(plugin, "abc");
+		ResourceFile a = db.getResourceFile(plugin, "abc");
+		ResourceFile b = db.getResourceFile(plugin, "abc");
 
 		Assert.assertEquals(a, b);
 	}
@@ -23,9 +25,10 @@ public class ResourceFileTest
 	public void resourceFileNotEqualPath()
 	{
 		Plugin plugin = CommonMock.getTestPlugin();
+		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
 
-		ResourceFile a = new ResourceFile(plugin, "abc");
-		ResourceFile b = new ResourceFile(plugin, "def");
+		ResourceFile a = db.getResourceFile(plugin, "abc");
+		ResourceFile b = db.getResourceFile(plugin, "def");
 
 		Assert.assertNotEquals(a, b);
 	}
@@ -35,9 +38,10 @@ public class ResourceFileTest
 	{
 		Plugin plugin1 = CommonMock.getTestPlugin();
 		Plugin plugin2 = CommonMock.getTestPlugin();
+		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
 
-		ResourceFile a = new ResourceFile(plugin1, "abc");
-		ResourceFile b = new ResourceFile(plugin2, "abc");
+		ResourceFile a = db.getResourceFile(plugin1, "abc");
+		ResourceFile b = db.getResourceFile(plugin2, "abc");
 
 		Assert.assertNotEquals(a, b);
 	}

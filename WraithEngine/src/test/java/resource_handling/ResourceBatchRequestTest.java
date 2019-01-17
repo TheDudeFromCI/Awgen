@@ -5,6 +5,7 @@ import org.junit.Test;
 import net.whg.we.resources.ResourceBatchRequest;
 import net.whg.we.resources.ResourceFile;
 import net.whg.we.resources.Resource;
+import net.whg.we.resources.SimpleFileDatabase;
 import net.whg.we.main.Plugin;
 import util.CommonMock;
 
@@ -15,12 +16,13 @@ public class ResourceBatchRequestTest
 	{
 		ResourceBatchRequest batch = new ResourceBatchRequest();
 		Plugin plugin = CommonMock.getTestPlugin();
+		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
 
 		Assert.assertEquals(batch.getResourceFileCount(), 0);
 
-		batch.addResourceFile(new ResourceFile(plugin, "abc"));
-		batch.addResourceFile(new ResourceFile(plugin, "def"));
-		batch.addResourceFile(new ResourceFile(plugin, "abc"));
+		batch.addResourceFile(db.getResourceFile(plugin, "abc"));
+		batch.addResourceFile(db.getResourceFile(plugin, "def"));
+		batch.addResourceFile(db.getResourceFile(plugin, "abc"));
 
 		Assert.assertEquals(batch.getResourceFileCount(), 2);
 	}
@@ -43,7 +45,8 @@ public class ResourceBatchRequestTest
 			@Override
 			public ResourceFile getResourceFile()
 			{
-				return new ResourceFile(CommonMock.getTestPlugin(), "abc");
+				SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
+				return db.getResourceFile(CommonMock.getTestPlugin(), "abc");
 			}
 
 			@Override
@@ -67,8 +70,9 @@ public class ResourceBatchRequestTest
 	{
 		ResourceBatchRequest batch = new ResourceBatchRequest();
 		final Plugin plugin = CommonMock.getTestPlugin();
+		final SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
 
-		batch.addResourceFile(new ResourceFile(plugin, "abc"));
+		batch.addResourceFile(db.getResourceFile(plugin, "abc"));
 
 		// Here we run twice to make sure repeating the command does not change the outcome.
 		Assert.assertNotNull(batch.nextUnloadedResource());
@@ -85,7 +89,7 @@ public class ResourceBatchRequestTest
 			@Override
 			public ResourceFile getResourceFile()
 			{
-				return new ResourceFile(plugin, "abc");
+				return db.getResourceFile(plugin, "abc");
 			}
 
 			@Override

@@ -20,25 +20,18 @@ public class ResourceFile
 	/**
 	 * Creates a reference to a resource file on the disk.
 	 *
-	 * @param plugin
-	 *            - The plugin that this resource belongs to.
-	 * @param name
-	 *            - The name of this asset relative to the plugins resource folder,
-	 *            as defined by
-	 *            {@link net.whg.we.utils.FileUtils#getResource(Plugin, String)}
+	 * @param plugin - The plugin that this resource belongs to.
+	 * @param name - The name of this asset relative to the plugins resource folder, as defined by
+	 * {@link net.whg.we.utils.FileUtils#getResource(Plugin, String)}
+	 * @param file - The file that the ResourceFile represents.
 	 */
-	public ResourceFile(Plugin plugin, String name)
+	public ResourceFile(Plugin plugin, String name, File file)
 	{
 		_plugin = plugin;
 		_name = name;
-
-		_file = FileUtils.getResource(plugin, name);
-
-		if (_file != null)
-		{
-			_assetExtension = FileUtils.getFileType(_file);
-			_propertiesFile = new File(_file.getAbsolutePath() + ".asset");
-		}
+		_file = file;
+		_assetExtension = FileUtils.getFileExtention(_file.getName());
+		_propertiesFile = new File(_file.getAbsolutePath() + ".asset");
 	}
 
 	/**
@@ -59,6 +52,16 @@ public class ResourceFile
 	public boolean exists()
 	{
 		return _file != null && _file.exists();
+	}
+
+	/**
+	 * Checks if the properties file that this resource refers to exists.
+	 *
+	 * @return True if the properties file exists. False otherwise.
+	 */
+	public boolean hasPropertiesFile()
+	{
+		return _propertiesFile.exists();
 	}
 
 	/**
@@ -85,7 +88,7 @@ public class ResourceFile
 	/**
 	 * Gets the raw file for this resource.
 	 *
-	 * @return The file for this resource, or null if this resource does not exist.
+	 * @return The file for this resource.
 	 */
 	public File getFile()
 	{
@@ -95,7 +98,7 @@ public class ResourceFile
 	/**
 	 * Gets the properties file (.asset) for this resource.
 	 *
-	 * @return The properties file for this resource, or null if it does not exist.
+	 * @return The properties file for this resource. May not exist.
 	 */
 	public File getPropertiesFile()
 	{

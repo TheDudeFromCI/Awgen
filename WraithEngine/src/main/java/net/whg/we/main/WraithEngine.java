@@ -57,7 +57,7 @@ public class WraithEngine
 		resourceLoader.addFileLoader(new TextureLoader());
 
 		PluginLoader pluginLoader = new PluginLoader();
-		pluginLoader.loadPluginsFromFile();
+		pluginLoader.loadPluginsFromFile(fileDatabase);
 		pluginLoader.enableAllPlugins();
 
 		GraphicsPipeline graphicsPipeline = new GraphicsPipeline(resourceLoader);

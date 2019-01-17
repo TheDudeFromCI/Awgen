@@ -40,7 +40,7 @@ public class SimpleFileDatabase implements FileDatabase
 			if (file.isHidden())
 				continue;
 
-			if (FileUtils.getFileType(file).equals(".jar"))
+			if (FileUtils.getFileExtention(file.getName()).equals(".jar"))
 				files.add(file);
 		}
 
@@ -52,25 +52,22 @@ public class SimpleFileDatabase implements FileDatabase
 	{
 		if (plugin == null)
 		{
-			Log.warnf("Plugin not defined! Cannot retrieve resource %s!", pathName);
+			Log.warnf("Plugin not defined! Cannot retrieve ResourceFile %s!", pathName);
 			return null;
 		}
 
 		if (!_validator.isValidPathName(pathName))
 		{
-			Log.warnf("Path name could not be validated! Cannot retrieve resource %s!", pathName);
+			Log.warnf("Path name could not be validated! Cannot retrieve ResourceFile %s!", pathName);
 			return null;
 		}
 
-		Log.debugf("Attempting to load resource %s/%s", plugin.getPluginName(), pathName);
-
 		pathName = pathName.replace('/', File.separatorChar);
 		File resourceFolder = new File(_baseFolder, RESOURCE_FOLDER_NAME);
-		File file = new File(resourceFolder, plugin.getPluginName());
+		File pluginFolder = new File(resourceFolder, plugin.getPluginName());
+		File file = new File(pluginFolder, pathName);
 
-		Log.tracef("  Full Path: %s", file);
-
-		return new ResourceFile(plugin, pathName);
+		return new ResourceFile(plugin, pathName, file);
 	}
 
 	public File getBaseFolder()

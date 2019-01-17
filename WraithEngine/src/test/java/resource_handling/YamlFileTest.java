@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import net.whg.we.resources.ResourceFile;
 import net.whg.we.resources.YamlFile;
+import net.whg.we.resources.SimpleFileDatabase;
 import util.CommonMock;
 
 public class YamlFileTest
@@ -14,7 +15,9 @@ public class YamlFileTest
 		// Makes sure some information could be loaded from a file.
 
 		YamlFile yaml = new YamlFile();
-		yaml.load(new ResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml"));
+		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
+
+		yaml.load(db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml"));
 
 		Assert.assertFalse(yaml.getRoots().isEmpty());
 	}
@@ -25,7 +28,9 @@ public class YamlFileTest
 		// Checks to make sure the correct information was loaded from the file.
 
 		YamlFile yaml = new YamlFile();
-		yaml.load(new ResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml"));
+		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
+
+		yaml.load(db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml"));
 
 		Assert.assertTrue(yaml.getRoots().size() == 2);
 		Assert.assertTrue(yaml.getRoots().containsKey("root1"));
@@ -38,7 +43,9 @@ public class YamlFileTest
 		// Checks to make sure the correct information was loaded from the file.
 
 		YamlFile yaml = new YamlFile();
-		yaml.load(new ResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml"));
+		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
+
+		yaml.load(db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml"));
 
 		Assert.assertEquals(yaml.getInt("root1", "some_data", "really_nested_data"), 2);
 	}
@@ -49,7 +56,9 @@ public class YamlFileTest
 		// Checks to make sure the correct information was loaded from the file.
 
 		YamlFile yaml = new YamlFile();
-		yaml.load(new ResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml"));
+		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
+
+		yaml.load(db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml"));
 
 		Assert.assertEquals(yaml.getInt("root1.some_data.really_nested_data"), 2);
 	}
@@ -60,7 +69,9 @@ public class YamlFileTest
 		// Checks to make sure the correct information was loaded from the file.
 
 		YamlFile yaml = new YamlFile();
-		yaml.load(new ResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml"));
+		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
+
+		yaml.load(db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml"));
 
 		Assert.assertEquals(yaml.getInt("root2.1"), 12);
 	}
@@ -71,7 +82,9 @@ public class YamlFileTest
 		// Try to parse a fake path.
 
 		YamlFile yaml = new YamlFile();
-		yaml.load(new ResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml"));
+		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
+
+		yaml.load(db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml"));
 
 		Assert.assertEquals(yaml.getString("root4.4234.123"), null);
 	}

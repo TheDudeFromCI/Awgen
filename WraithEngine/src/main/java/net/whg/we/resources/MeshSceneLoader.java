@@ -49,7 +49,8 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 		for (String material : yaml.getKeys("materials"))
 		{
 			String shaderName = yaml.getString("materials", material, "shader");
-			ResourceFile shaderResource = new ResourceFile(resource.getPlugin(), shaderName);
+			ResourceFile shaderResource = resourceLoader.getFileDatabase().getResourceFile(
+				resource.getPlugin(), shaderName);
 			ShaderResource shader = (ShaderResource) resourceLoader.loadResource(shaderResource);
 			UncompiledMaterial mat = new UncompiledMaterial(material, shader);
 
@@ -60,7 +61,8 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 			for (String textureId : textureList)
 			{
 				String textureName = yaml.getString("materials", material, "textures", textureId);
-				textureFiles[textureIndex++] = new ResourceFile(resource.getPlugin(), textureName);
+				textureFiles[textureIndex++] = resourceLoader.getFileDatabase().getResourceFile(
+					resource.getPlugin(), textureName);
 			}
 
 			TextureResource[] textures = new TextureResource[textureFiles.length];
