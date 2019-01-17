@@ -34,31 +34,8 @@ public class ResourceBatchRequestTest
 
 		Assert.assertEquals(batch.getResourceCount(), 0);
 
-		Resource<Object> res = new Resource<Object>()
-		{
-			@Override
-			public Object getData()
-			{
-				return null;
-			}
-
-			@Override
-			public ResourceFile getResourceFile()
-			{
-				SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
-				return db.getResourceFile(CommonMock.getTestPlugin(), "abc");
-			}
-
-			@Override
-			public void setResourceFile(ResourceFile file)
-			{
-			}
-
-			@Override
-			public void dispose()
-			{
-			}
-		};
+		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
+		Resource<Object> res = CommonMock.getResource(db.getResourceFile(CommonMock.getTestPlugin(), "abc"));
 
 		batch.addResource(res);
 
@@ -69,39 +46,17 @@ public class ResourceBatchRequestTest
 	public void nextUnloadedResource()
 	{
 		ResourceBatchRequest batch = new ResourceBatchRequest();
-		final Plugin plugin = CommonMock.getTestPlugin();
-		final SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
+		Plugin plugin = CommonMock.getTestPlugin();
+		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
+		ResourceFile resourceFile = db.getResourceFile(plugin, "abc");
 
-		batch.addResourceFile(db.getResourceFile(plugin, "abc"));
+		batch.addResourceFile(resourceFile);
 
 		// Here we run twice to make sure repeating the command does not change the outcome.
 		Assert.assertNotNull(batch.nextUnloadedResource());
 		Assert.assertNotNull(batch.nextUnloadedResource());
 
-		Resource<Object> res = new Resource<Object>()
-		{
-			@Override
-			public Object getData()
-			{
-				return null;
-			}
-
-			@Override
-			public ResourceFile getResourceFile()
-			{
-				return db.getResourceFile(plugin, "abc");
-			}
-
-			@Override
-			public void setResourceFile(ResourceFile file)
-			{
-			}
-
-			@Override
-			public void dispose()
-			{
-			}
-		};
+		Resource<Object> res = CommonMock.getResource(resourceFile);
 
 		batch.addResource(res);
 
