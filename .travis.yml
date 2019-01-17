@@ -1,1 +1,3 @@
 language: java
+env:
+  TRAVIS_BUILD_DIR=TRAVIS_BUILD_DIR/WraithEngine
