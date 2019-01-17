@@ -27,7 +27,7 @@ public interface Resource<T>
 	/**
 	 * Sets the resource file this resource represents. This can be used for
 	 * identification purposes, or future file acessing.
-	 * 
+	 *
 	 * @param resource
 	 *            - The resource file.
 	 */

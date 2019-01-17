@@ -1,6 +1,5 @@
 package net.whg.we.rendering;
 
-import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.resources.ResourceLoader;
 import net.whg.we.test.TestScene;
 import net.whg.we.utils.DefaultWindowListener;
@@ -47,7 +46,7 @@ public class GraphicsPipeline
 
 	private void dispose()
 	{
-		ResourceDatabase.disposeAll();
+		_resourceLoader.disposeResources();
 		_graphics.dispose();
 	}
 

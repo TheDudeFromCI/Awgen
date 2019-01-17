@@ -2,6 +2,8 @@ package util;
 import java.io.File;
 import net.whg.we.main.Plugin;
 import net.whg.we.resources.SimpleFileDatabase;
+import net.whg.we.resources.Resource;
+import net.whg.we.resources.ResourceFile;
 
 public class CommonMock
 {
@@ -36,6 +38,34 @@ public class CommonMock
 			public int getPriority()
 			{
 				return 0;
+			}
+		};
+	}
+
+	public static Resource<Object> getResource(ResourceFile file)
+	{
+		return new Resource<Object>()
+		{
+			@Override
+			public Object getData()
+			{
+				return null;
+			}
+
+			@Override
+			public ResourceFile getResourceFile()
+			{
+				return file;
+			}
+
+			@Override
+			public void setResourceFile(ResourceFile file)
+			{
+			}
+
+			@Override
+			public void dispose()
+			{
 			}
 		};
 	}

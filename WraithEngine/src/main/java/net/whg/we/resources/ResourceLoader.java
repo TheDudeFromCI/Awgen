@@ -2,11 +2,13 @@ package net.whg.we.resources;
 
 import java.util.ArrayList;
 import net.whg.we.utils.Log;
+import java.util.HashMap;
 
 public class ResourceLoader
 {
 	private ArrayList<FileLoader<?>> _fileLoaders = new ArrayList<>();
 	private ArrayList<FileLoader<?>> _fileLoaderBuffer = new ArrayList<>();
+	private static HashMap<ResourceFile, Resource<?>> _resourceReferences = new HashMap<>();
 	private FileDatabase _fileDatabase;
 
 	public ResourceLoader(FileDatabase fileDatabase)
@@ -39,8 +41,8 @@ public class ResourceLoader
 	public Resource<?> loadResource(ResourceFile resource)
 	{
 		// Check to see if the resource is already loaded
-		if (ResourceDatabase.hasResource(resource))
-			return ResourceDatabase.getResource(resource);
+		if (hasResource(resource))
+			return getResource(resource);
 
 		Log.infof("Loading the resource %s.", resource);
 
@@ -90,7 +92,7 @@ public class ResourceLoader
 		if (res != null)
 		{
 			res.setResourceFile(resource);
-			ResourceDatabase.addResource(resource, res);
+			addResource(res);
 		}
 
 		return res;
@@ -126,5 +128,89 @@ public class ResourceLoader
 				fileLoader.getClass().getName());
 
 		_fileLoaders.remove(fileLoader);
+	}
+
+	/**
+	 * Checks if this resource loader already have this resource loaded. If the resourceFile is not
+	 * specified, this method returns false.
+	 *
+	 * @param resourceFile - The resource file that represents the given resource.
+	 *
+	 * @return True if the resource referenced by this resource file exists. False otherwise.
+	 */
+	public boolean hasResource(ResourceFile resourceFile)
+	{
+		if (resourceFile == null)
+			return false;
+
+		return _resourceReferences.containsKey(resourceFile);
+	}
+
+	/**
+	 * Gets the loaded resource that is currently assigned to this ResourceFile.
+	 *
+	 * @param resourceFile - The resource file that represents the given resource.
+	 *
+	 * @return The loaded resource for the given ResourceFile, or null if the resource is not loaded,
+	 * or if a ResourceFile is not specified.
+	 */
+	public Resource<?> getResource(ResourceFile resourceFile)
+	{
+		if (resourceFile == null)
+			return null;
+
+		return _resourceReferences.get(resourceFile);
+	}
+
+	/**
+	 * Adds a loaded resource to this ResourceLoader. Loaded resources will be returned instead of
+	 * attempting to load resources from file when possible.
+	 *
+	 * @param resource - The loaded resource to add to this ResourceLoader. If null, nothing will
+	 * happen.
+	 */
+	public void addResource(Resource<?> resource)
+	{
+		if (resource == null)
+		{
+			Log.warn("Attempted to add a null resource to the ResourceLoader!");
+			return;
+		}
+
+		_resourceReferences.put(resource.getResourceFile(), resource);
+	}
+
+	/**
+	 * Removes a loaded resource from this ResourceLoader. This method will also attempt to dispose
+	 * the given resource, even if the resource is not currently loaded into this ResourceLoader.
+	 *
+	 * @param resource - The loaded resource to remove to this ResourceLoader and dispose. If null,
+	 * nothing will happen.
+	 */
+	public void removeResource(Resource<?> resource)
+	{
+		if (resource == null)
+		{
+			Log.warn("Attempted to remove a null resource from the ResourceLoader!");
+			return;
+		}
+
+		_resourceReferences.remove(resource.getResourceFile());
+		resource.dispose();
+	}
+
+	/**
+	 * Disposes and removes all loaded resources that this ResourceLoader currently owns.
+	 */
+	public void disposeResources()
+	{
+		Log.info("Disposing all resources.");
+		for (ResourceFile resourceFile : _resourceReferences.keySet())
+		{
+			Log.debugf("Disposing resources %s.", resourceFile);
+			_resourceReferences.get(resourceFile).dispose();
+		}
+
+		_resourceReferences.clear();
 	}
 }
