@@ -1,3 +1,6 @@
+![alt text](https://travis-ci.com/Wraithaven/WraithEngine3.svg?branch=master "Build Status")
+
+
 # WraithEngine
 
 WraithEngine is a Java-based game engine, developed by Wraithaven Games , built around the concept of mixing various plugins to make games.
