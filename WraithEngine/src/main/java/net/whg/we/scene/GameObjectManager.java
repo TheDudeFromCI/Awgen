@@ -17,9 +17,8 @@ public class GameObjectManager
 
 	public GameObject createNew()
 	{
-		GameObject go = new GameObject();
+		GameObject go = new GameObject(this);
 		addGameObject(go);
-		go.init();
 		return go;
 	}
 
@@ -37,7 +36,7 @@ public class GameObjectManager
 	{
 		for (GameObject go : _toRemove)
 		{
-			_activeGameObjects.removeGameObject(go);
+			_activeGameObjects.remove(go);
 			go.dispose();
 		}
 

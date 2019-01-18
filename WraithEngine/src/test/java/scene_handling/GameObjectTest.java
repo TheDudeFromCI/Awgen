@@ -11,6 +11,7 @@ public class GameObjectTest
 	@Test
 	public void initBehaviour()
 	{
+
 	}
 
 	@Test

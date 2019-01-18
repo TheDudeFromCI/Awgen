@@ -1,5 +1,8 @@
 package net.whg.we.scene;
 
+import java.util.ArrayList;
+import net.whg.we.utils.Log;
+
 /**
  * This class represents the foundation for all objects that interact with the game directly. This
  * class is thread safe and is designed to directly interact with all core functions correctly. For
@@ -17,7 +20,6 @@ public class GameObject
 	GameObject(GameObjectManager manager)
 	{
 		_manager = manager;
-		_raw = new GameObjectRaw();
 	}
 
 	/**
@@ -27,7 +29,7 @@ public class GameObject
 	 */
 	public boolean isDisposed()
 	{
-		return _raw == null;
+		return _disposed;
 	}
 
 	/**
@@ -58,7 +60,7 @@ public class GameObject
 		if (!_behaviours.contains(behaviour))
 		{
 			_behaviours.add(behaviour);
-			behaviour.init();
+			behaviour.init(this);
 		}
 	}
 
