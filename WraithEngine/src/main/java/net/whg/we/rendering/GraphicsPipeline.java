@@ -11,6 +11,12 @@ import net.whg.we.utils.Time;
 import net.whg.we.window.QueuedWindow;
 import net.whg.we.window.WindowBuilder;
 
+import net.whg.we.test.TestScene;
+import net.whg.we.utils.FPSLogger;
+import net.whg.we.utils.Log;
+import net.whg.we.utils.Time;
+import net.whg.we.window.WindowBuilder;
+
 public class GraphicsPipeline
 {
 	private Graphics _graphics;
@@ -22,8 +28,8 @@ public class GraphicsPipeline
 		_resourceLoader = resourceLoader;
 
 		_graphics = GraphicsFactory.createInstance(GraphicsFactory.OPENGL_ENGINE);
-		_window = new WindowBuilder(WindowBuilder.WINDOW_ENGINE_GLFW).setName("Untitled Project")
-				.setResizable(false).setSize(640, 480).setVSync(false)
+		_window = new WindowBuilder(WindowBuilder.WINDOW_ENGINE_GLFW).setName("WraithEngine")
+				.setResizable(false).setSize(800, 600).setVSync(false)
 				.setListener(new DefaultWindowListener()).setGraphicsEngine(_graphics).build();
 		_graphics.init();
 		Screen.setWindow(_window);
