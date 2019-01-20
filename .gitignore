@@ -25,3 +25,6 @@ hs_err_pid*
 # Dia
 *.dia
 *.dia~
+
+WraithEngine/target/
+WraithEngine/dependency-reduced-pom.xml
