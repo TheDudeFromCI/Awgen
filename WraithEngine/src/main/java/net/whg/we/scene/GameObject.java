@@ -16,6 +16,7 @@ public class GameObject
 	private GameObjectManager _manager;
 	private boolean _disposed;
 	private ArrayList<ObjectBehaviour> _behaviours = new ArrayList<>();
+	private String _name = "Untitled GameObject";
 
 	GameObject(GameObjectManager manager)
 	{
@@ -130,8 +131,43 @@ public class GameObject
 		_behaviours = null;
 	}
 
+	/**
+	 * Gets the GameObjectManager that currently owns this GameObject.
+	 *
+	 * @return The GameObjectManager that currntly owns this GameObject, or null if this object has
+	 * already been disposed.
+	 */
 	public GameObjectManager getManager()
 	{
 		return _manager;
+	}
+
+	/**
+	 * Gets the name of the GameObject. GameObject names can be changed at any time and are not
+	 * unquie. The default name is "Untitled GameObject".
+	 *
+	 * @@return The current name of this GameObject.
+	 */
+	public String getName()
+	{
+		return _name;
+	}
+
+	/**
+	 * Sets the name of the GameObject.
+	 *
+	 * @@param name - The new name of this GameObject.
+	 *
+	 * @see @{@link #getName()}
+	 */
+	public void setName(String name)
+	{
+		_name = name;
+	}
+
+	@Override
+	public String toString()
+	{
+		return String.format("[GameObject: %s]", _name);
 	}
 }
