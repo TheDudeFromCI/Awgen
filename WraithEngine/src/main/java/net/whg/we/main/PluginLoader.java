@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
-import net.whg.we.utils.FileUtils;
 import net.whg.we.utils.Log;
 import net.whg.we.resources.FileDatabase;
 

@@ -1,9 +1,9 @@
 package net.whg.we.scene;
 
-import net.whg.we.utils.Log;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.LinkedList;
+import net.whg.we.main.GameState;
 
 /**
  * This class deals with handling game objects references.
@@ -47,5 +47,10 @@ public class GameObjectManager
 		}
 
 		_toRemove.clear();
+	}
+
+	public GameState getGameState()
+	{
+		return _gameState;
 	}
 }

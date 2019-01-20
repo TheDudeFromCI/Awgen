@@ -18,4 +18,9 @@ public class RenderBehaviour implements ObjectBehaviour
 	{
 
 	}
+
+	public GameObject getOwner()
+	{
+		return _owner;
+	}
 }
