@@ -49,18 +49,33 @@ public class WraithEngine
 		Log.debugf("Working Directory: %s", System.getProperty("user.dir"));
 		Log.debugf("LWJGL Version: %s", Version.getVersion());
 
+		new WraithEngine().run();
+	}
+
+	private FileDatabase _fileDatabase;
+	private ResourceLoader _resourceLoader;
+	private PluginLoader _pluginLoader;
+	private GameState _gameState;
+
+	private WraithEngine()
+	{
 		File baseFolder = new File(System.getProperty("user.dir"));
-		FileDatabase fileDatabase = new SimpleFileDatabase(baseFolder);
-		ResourceLoader resourceLoader = new ResourceLoader(fileDatabase);
-		resourceLoader.addFileLoader(new GLSLShaderLoader());
-		resourceLoader.addFileLoader(new MeshSceneLoader());
-		resourceLoader.addFileLoader(new TextureLoader());
+		_fileDatabase = new SimpleFileDatabase(baseFolder);
 
-		PluginLoader pluginLoader = new PluginLoader();
-		pluginLoader.loadPluginsFromFile(fileDatabase);
-		pluginLoader.enableAllPlugins();
+		_resourceLoader = new ResourceLoader(_fileDatabase);
+		_resourceLoader.addFileLoader(new GLSLShaderLoader());
+		_resourceLoader.addFileLoader(new MeshSceneLoader());
+		_resourceLoader.addFileLoader(new TextureLoader());
 
-		GraphicsPipeline graphicsPipeline = new GraphicsPipeline(resourceLoader);
-		graphicsPipeline.run();
+		_pluginLoader = new PluginLoader();
+		_pluginLoader.loadPluginsFromFile(_fileDatabase);
+		_pluginLoader.enableAllPlugins();
+
+		_gameState = new GameState();
+	}
+
+	private void run()
+	{
+		_gameState.run();
 	}
 }
