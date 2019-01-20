@@ -129,4 +129,9 @@ public class GameObject
 		_manager = null;
 		_behaviours = null;
 	}
+
+	public GameObjectManager getManager()
+	{
+		return _manager;
+	}
 }

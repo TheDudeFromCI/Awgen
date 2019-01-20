@@ -14,6 +14,12 @@ public class GameObjectManager
 {
 	private List<GameObject> _activeGameObjects = new ArrayList<>();
 	private List<GameObject> _toRemove = new LinkedList<>();
+	private GameState _gameState;
+
+	public GameObjectManager (GameState gameState)
+	{
+		_gameState = gameState;
+	}
 
 	public GameObject createNew()
 	{
