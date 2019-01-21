@@ -34,4 +34,14 @@ public class GameObjectTest
 
 		Assert.assertTrue(go.isDisposed());
 	}
+
+	@Test
+	public void defaultName()
+	{
+		GameState gameState = Mockito.mock(GameState.class);
+		GameObjectManager manager = new GameObjectManager(gameState);
+		GameObject go = manager.createNew();
+
+		Assert.assertEquals(go.getName(), "Untitled GameObject");
+	}
 }
