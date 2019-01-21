@@ -3,10 +3,10 @@ package net.whg.we.main;
 import net.whg.we.resources.FileDatabase;
 import net.whg.we.resources.ResourceLoader;
 import net.whg.we.event.EventManager;
-import net.whg.we.rendering.GraphicsPipeline;
 import net.whg.we.resources.GLSLShaderLoader;
 import net.whg.we.resources.MeshSceneLoader;
 import net.whg.we.resources.TextureLoader;
+import net.whg.we.scene.GameLoop;
 
 public class GameState
 {
@@ -14,15 +14,15 @@ public class GameState
 	private ResourceLoader _resourceLoader;
 	private PluginLoader _pluginLoader;
 	private EventManager _eventManager;
-	private GraphicsPipeline _graphicsPipeline;
+	private GameLoop _gameLoop;
 
-	public GameState(FileDatabase fileDatabase)
+	public GameState(FileDatabase fileDatabase, ResourceLoader resourceLoader, GameLoop gameLoop)
 	{
 		_fileDatabase = fileDatabase;
-		_resourceLoader = new ResourceLoader(_fileDatabase);
+		_resourceLoader = resourceLoader;
 		_pluginLoader = new PluginLoader();
 		_eventManager = new EventManager();
-		_graphicsPipeline = new GraphicsPipeline(_resourceLoader);
+		_gameLoop = gameLoop;
 	}
 
 	public void run()
@@ -37,7 +37,7 @@ public class GameState
 		_pluginLoader.enableAllPlugins();
 
 		// Start game loop
-		_graphicsPipeline.run();
+		_gameLoop.run();
 	}
 
 	public FileDatabase getFileDatabase()
@@ -60,8 +60,8 @@ public class GameState
 		return _eventManager;
 	}
 
-	public GraphicsPipeline getGraphicsPipeline()
+	public GameLoop getGameLoop()
 	{
-		return _graphicsPipeline;
+		return _gameLoop;
 	}
 }
