@@ -4,16 +4,22 @@ import net.whg.we.event.EventCaller;
 import net.whg.we.utils.Log;
 import net.whg.we.resources.ResourceLoader;
 import net.whg.we.rendering.GraphicsPipeline;
+import net.whg.we.test.TestScene;
+import net.whg.we.utils.Input;
+import net.whg.we.utils.FPSLogger;
+import net.whg.we.utils.Time;
 
 public class WindowedGameLoop implements GameLoop
 {
 	private boolean _isRunning;
 	private UpdateEventCaller _updateListener = new UpdateEventCaller();
 	private GraphicsPipeline _graphicsPipeline;
+	private ResourceLoader _resourceLoader;
 
 	public WindowedGameLoop(ResourceLoader resourceLoader)
 	{
-		_graphicsPipeline = new GraphicsPipeline(resourceLoader);
+		_resourceLoader = resourceLoader;
+		_graphicsPipeline = new GraphicsPipeline();
 	}
 
 	@Override
@@ -29,7 +35,35 @@ public class WindowedGameLoop implements GameLoop
 
 		try
 		{
-			_graphicsPipeline.run();
+			TestScene testScene = new TestScene();
+			testScene.loadTestScene(_resourceLoader, _graphicsPipeline.getGraphics(),
+				_graphicsPipeline.getWindow());
+
+			while (true)
+			{
+				try
+				{
+					// Calculate frame data
+					Time.updateTime();
+					FPSLogger.logFramerate();
+
+					testScene.updateTestScene(_graphicsPipeline.getGraphics(),
+						_graphicsPipeline.getWindow());
+					testScene.renderTestScene(_graphicsPipeline.getGraphics(),
+						_graphicsPipeline.getWindow());
+
+					// End frame
+					Input.endFrame();
+					if (_graphicsPipeline.getWindow().endFrame())
+						break;
+				}
+				catch (Exception exception)
+				{
+					Log.fatalf("Fatal error thrown in main thread!", exception);
+					_graphicsPipeline.requestClose();
+					break;
+				}
+			}
 		}
 		catch(Exception exception)
 		{
@@ -37,6 +71,8 @@ public class WindowedGameLoop implements GameLoop
 		}
 		finally
 		{
+			_resourceLoader.disposeResources();
+			_graphicsPipeline.dispose();
 			_isRunning = false;
 		}
 	}
