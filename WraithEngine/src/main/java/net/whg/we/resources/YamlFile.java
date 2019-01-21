@@ -2,6 +2,7 @@ package net.whg.we.resources;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.File;
 import java.util.Map;
 import java.util.Set;
 import org.yaml.snakeyaml.Yaml;
@@ -22,21 +23,22 @@ public class YamlFile
 	 * the requested resource file. The file will attempt to be parsed reguardless
 	 * of the file type.
 	 *
-	 * @param resource
-	 *            - The Yaml file to load.
+	 * @param resource - The Yaml file to load.
 	 * @return True if the file was successfully loaded. False otherwise.
 	 */
-	public boolean load(ResourceFile resource)
+	public boolean load(File file)
 	{
+		Log.infof("Loading YAML file %s.", file);
+
 		Yaml yaml = new Yaml();
 		try
 		{
-			_map = yaml.load(new FileReader(resource.getFile()));
+			_map = yaml.load(new FileReader(file));
 			return true;
 		}
 		catch (FileNotFoundException e)
 		{
-			Log.errorf("Failed to load yaml file %s!", e, resource);
+			Log.errorf("Failed to load yaml file %s!", e, file);
 			return false;
 		}
 	}

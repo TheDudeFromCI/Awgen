@@ -7,7 +7,6 @@ import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.ScreenClearType;
-import net.whg.we.resources.ResourceFile;
 import net.whg.we.resources.ResourceLoader;
 import net.whg.we.scene.Model;
 import net.whg.we.scene.RenderPass;
@@ -18,16 +17,25 @@ import net.whg.we.utils.Input;
 import net.whg.we.utils.Log;
 import net.whg.we.utils.Screen;
 import net.whg.we.utils.Time;
-import net.whg.we.window.QueuedWindow;
+import net.whg.we.scene.UpdateListener;
+import net.whg.we.scene.WindowedGameLoop;
+import net.whg.we.resources.FileDatabase;
 
-public class TestScene
+public class TestScene implements UpdateListener
 {
 	private Model _monkeyModel;
 	private FirstPersonCamera _firstPerson;
 	private Camera _camera;
 	private RenderPass _renderPass = new RenderPass();
+	private WindowedGameLoop _gameLoop;
 
-	public void loadTestScene(ResourceLoader resourceLoader, Graphics graphics, QueuedWindow window)
+	public TestScene(WindowedGameLoop gameLoop)
+	{
+		_gameLoop = gameLoop;
+		_gameLoop.getUpdateEvent().addListener(this);
+	}
+
+	public void loadTestScene(ResourceLoader resourceLoader)
 	{
 		try
 		{
@@ -57,18 +65,17 @@ public class TestScene
 				}
 			};
 
+			Graphics graphics = _gameLoop.getGraphicsPipeline().getGraphics();
 			graphics.setClearScreenColor(new Color(0.2f, 0.4f, 0.8f));
 			_renderPass = new RenderPass();
 
 			{
 				SceneLoader loader = new SceneLoader(resourceLoader);
+				FileDatabase fileDatabase = resourceLoader.getFileDatabase();
 
-				_monkeyModel = loader.loadModel(resourceLoader.getFileDatabase().getResourceFile(dummyPlugin, "monkey_head.fbx"),
-						graphics);
-				Model floor =
-						loader.loadModel(resourceLoader.getFileDatabase().getResourceFile(dummyPlugin, "floor.obj"), graphics);
-				Model human =
-						loader.loadModel(resourceLoader.getFileDatabase().getResourceFile(dummyPlugin, "BaseHuman.fbx"), graphics);
+				_monkeyModel = loader.loadModel(fileDatabase.getResourceFile(dummyPlugin, "monkey_head.fbx"), graphics);
+				Model floor = loader.loadModel(fileDatabase.getResourceFile(dummyPlugin, "floor.obj"), graphics);
+				Model human = loader.loadModel(fileDatabase.getResourceFile(dummyPlugin, "BaseHuman.fbx"), graphics);
 
 				_monkeyModel.getLocation()
 						.setRotation(new Quaternionf().rotateX((float) (-Math.PI / 2f)));
@@ -87,11 +94,12 @@ public class TestScene
 		catch (Exception exception)
 		{
 			Log.fatalf("Failed to initialize scene!", exception);
-			window.requestClose();
+			_gameLoop.requestClose();
 		}
 	}
 
-	public void updateTestScene(Graphics graphics, QueuedWindow window)
+	@Override
+	public void onUpdate()
 	{
 		try
 		{
@@ -100,29 +108,25 @@ public class TestScene
 			if (Input.isKeyDown("q"))
 				Screen.setMouseLocked(!Screen.isMouseLocked());
 			if (Input.isKeyDown("escape"))
-				window.requestClose();
+				_gameLoop.requestClose();
 
 			float y = (float) (Math.sin(Time.time()) + 1f);
 			_monkeyModel.getLocation().setPosition(new Vector3f(0f, y, 0f));
-		}
-		catch (Exception exception)
-		{
-			Log.fatalf("Failed to update scene!", exception);
-			window.requestClose();
-		}
-	}
 
-	public void renderTestScene(Graphics graphics, QueuedWindow window)
-	{
-		try
-		{
+			Graphics graphics = _gameLoop.getGraphicsPipeline().getGraphics();
 			graphics.clearScreenPass(ScreenClearType.CLEAR_COLOR_AND_DEPTH);
 			_renderPass.render();
 		}
 		catch (Exception exception)
 		{
-			Log.fatalf("Failed to render scene!", exception);
-			window.requestClose();
+			Log.fatalf("Failed to update scene!", exception);
+			_gameLoop.requestClose();
 		}
+	}
+
+	@Override
+	public int getPriority()
+	{
+		return 0;
 	}
 }

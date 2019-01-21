@@ -6,5 +6,7 @@ public interface GameLoop
 {
 	public void run();
 
+	public void requestClose();
+
 	public EventCaller<UpdateListener> getUpdateEvent();
 }

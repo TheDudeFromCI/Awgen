@@ -33,8 +33,12 @@ public abstract class EventCallerBase<T extends Listener> implements EventCaller
 	@Override
 	public void addListener(T listener)
 	{
-		Log.infof("Adding a listener %s, to the event caller %s from the plugin %s.",
-				listener.getClass().getName(), getName(), getPlugin().getPluginName());
+		if (getPlugin() == null)
+			Log.infof("Adding a listener %s, to the event caller %s.", listener.getClass().getName(),
+				getName());
+		else
+			Log.infof("Adding a listener %s, to the event caller %s from the plugin %s.",
+					listener.getClass().getName(), getName(), getPlugin().getPluginName());
 
 		synchronized (_lock)
 		{

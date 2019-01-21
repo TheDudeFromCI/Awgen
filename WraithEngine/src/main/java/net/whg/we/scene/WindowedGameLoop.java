@@ -35,9 +35,8 @@ public class WindowedGameLoop implements GameLoop
 
 		try
 		{
-			TestScene testScene = new TestScene();
-			testScene.loadTestScene(_resourceLoader, _graphicsPipeline.getGraphics(),
-				_graphicsPipeline.getWindow());
+			TestScene testScene = new TestScene(this);
+			testScene.loadTestScene(_resourceLoader);
 
 			while (true)
 			{
@@ -47,10 +46,7 @@ public class WindowedGameLoop implements GameLoop
 					Time.updateTime();
 					FPSLogger.logFramerate();
 
-					testScene.updateTestScene(_graphicsPipeline.getGraphics(),
-						_graphicsPipeline.getWindow());
-					testScene.renderTestScene(_graphicsPipeline.getGraphics(),
-						_graphicsPipeline.getWindow());
+					_updateListener.onUpdate();
 
 					// End frame
 					Input.endFrame();
@@ -86,5 +82,11 @@ public class WindowedGameLoop implements GameLoop
 	public GraphicsPipeline getGraphicsPipeline()
 	{
 		return _graphicsPipeline;
+	}
+
+	@Override
+	public void requestClose()
+	{
+		_graphicsPipeline.getWindow().requestClose();
 	}
 }

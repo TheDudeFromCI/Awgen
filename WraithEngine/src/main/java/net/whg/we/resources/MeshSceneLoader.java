@@ -44,7 +44,7 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 			MeshSceneResource scene)
 	{
 		YamlFile yaml = new YamlFile();
-		yaml.load(resource);
+		yaml.load(resource.getPropertiesFile());
 
 		for (String material : yaml.getKeys("materials"))
 		{
