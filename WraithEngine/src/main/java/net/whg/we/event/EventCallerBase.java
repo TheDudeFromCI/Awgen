@@ -8,9 +8,9 @@ import net.whg.we.utils.Log;
 /**
  * A default setup for an event caller, which handles most common functions for you. This class
  * handles calling listeners, lists, and error catching. This default setup only requires the
- * {@link #runEvent(Listener, int)} method to be defined for local event callers. For registered
- * event callers, it is recommended to also define the {@link #getName()} and {@link #getPlugin()}
- * methods as well.
+ * {@link #runEvent(Listener, int, Object)} method to be defined for local event callers. For
+ * registered event callers, it is recommended to also define the {@link #getName()} and
+ * {@link #getPlugin()} methods as well.
  *
  * @param <T> - The type of listener this event calls to.
  */
@@ -144,6 +144,16 @@ public abstract class EventCallerBase<T extends Listener> implements EventCaller
 	}
 
 	/**
+	 * A shorthand method for calling <code>callEvent(index, null)</code>.
+	 *
+	 * @see @{@link #callEvent(int, Object)}
+	 */
+	protected void callEvent(int index)
+	{
+		callEvent(index, null);
+	}
+
+	/**
 	 * Calls an event based on an index. This method will simply call
 	 * @{@link #runEvent(Listener, int, Object[])} for each listener currently attached to this
 	 * event caller. This method handles common event caller issues such as error catching,
@@ -151,10 +161,10 @@ public abstract class EventCallerBase<T extends Listener> implements EventCaller
 	 * wrapper method instead of calling listeners directly.
 	 *
 	 * @param index - The index of the evebt, This value is not used, and is mereley the event index
-	 * passed to each call of @{@link #runEvent(Listener, int, Object[])}.
-	 * @param args - The argument list of parameters to pass to the runEvent method.
+	 * passed to each call of @{@link #runEvent(Listener, int, Object)}.
+	 * @param arg - The argument list of parameters to pass to the runEvent method.
 	 */
-	protected void callEvent(int index, Object... args)
+	protected void callEvent(int index, Object arg)
 	{
 		_isInEvent = true;
 
@@ -162,7 +172,7 @@ public abstract class EventCallerBase<T extends Listener> implements EventCaller
 		{
 			try
 			{
-				runEvent(t, index, args);
+				runEvent(t, index, arg);
 			}
 			catch (Exception exception)
 			{
@@ -192,14 +202,14 @@ public abstract class EventCallerBase<T extends Listener> implements EventCaller
 	}
 
 	/**
-	 * This method is called by @{@link #callEvent(int, Object...)} for each listener attached to
+	 * This method is called by @{@link #callEvent(int, Object)} for each listener attached to
 	 * this event caller. This method should be used for the purpose of physically calling events
 	 * on the given listener based on the event index.
 	 *
 	 * @param listener - The listener to call the event method for.
-	 * @param index - The event index, provided by @{@link #callEvent(int, Object...)}, as to
+	 * @param index - The event index, provided by @{@link #callEvent(int, Object)}, as to
 	 * indicate which event should be called.
-	 * @param args - The argument parameters to pass along to the listener.
+	 * @param arg - The argument parameters to pass along to the listener.
 	 */
-	protected abstract void runEvent(T listener, int index, Object[] args);
+	protected abstract void runEvent(T listener, int index, Object arg);
 }

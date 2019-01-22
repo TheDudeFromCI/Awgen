@@ -12,7 +12,7 @@ public class UpdateEventCaller extends EventCallerBase<UpdateListener>
 		callEvent(UPDATE_EVENT);
 	}
 
-	protected void runEvent(UpdateListener listener, int index, Object[] args)
+	protected void runEvent(UpdateListener listener, int index, Object arg)
 	{
 		switch(index)
 		{
