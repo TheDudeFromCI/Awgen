@@ -12,6 +12,7 @@ public class EventCallerBaseTest
 		private static final int ADD_LISTENER_EVENT = 0;
 		private static final int REMOVE_LISTENER_EVENT = 1;
 		private static final int DISPOSE_EVENT = 2;
+		private static final int INPUT_PARAM_EVENT = 3;
 
 		public void addListenerEvent()
 		{
@@ -28,8 +29,13 @@ public class EventCallerBaseTest
 			callEvent(DISPOSE_EVENT);
 		}
 
+		public void inputParamEvent(int param)
+		{
+			callEvent(INPUT_PARAM_EVENT, param);
+		}
+
 		@Override
-		protected void runEvent(TestListener listener, int index, Object[] args)
+		protected void runEvent(TestListener listener, int index, Object arg)
 		{
 			switch(index)
 			{
@@ -44,6 +50,10 @@ public class EventCallerBaseTest
 				case DISPOSE_EVENT:
 					listener.disposeEvent(this);
 					break;
+
+				case INPUT_PARAM_EVENT:
+					listener.inputParamEvent((int)arg);
+					break;
 			}
 		}
 	}
@@ -52,6 +62,7 @@ public class EventCallerBaseTest
 	{
 		private boolean _wasCalled;
 		private int _priority;
+		private int _inputParam;
 
 		public TestListener()
 		{
@@ -90,6 +101,16 @@ public class EventCallerBaseTest
 		public boolean wasCalled()
 		{
 			return _wasCalled;
+		}
+
+		public void inputParamEvent(int param)
+		{
+			_inputParam = param;
+		}
+
+		public int getInputParam()
+		{
+			return _inputParam;
 		}
 	}
 
@@ -179,5 +200,31 @@ public class EventCallerBaseTest
 		Assert.assertEquals(caller.getListener(0), listener0);
 		Assert.assertEquals(caller.getListener(1), listener1);
 		Assert.assertEquals(caller.getListener(2), listener2);
+	}
+
+	@Test
+	public void getListenerIndex()
+	{
+		TestEventCaller caller = new TestEventCaller();
+		TestListener listener = new TestListener();
+
+		Assert.assertEquals(caller.getListenerIndex(listener), -1);
+
+		caller.addListener(listener);
+
+		Assert.assertEquals(caller.getListenerIndex(listener), 0);
+	}
+
+	@Test
+	public void listenerParameter()
+	{
+		TestEventCaller caller = new TestEventCaller();
+		TestListener listener = new TestListener();
+		int param = 234;
+
+		caller.addListener(listener);
+		caller.inputParamEvent(param);
+
+		Assert.assertEquals(listener.getInputParam(), param);
 	}
 }
