@@ -15,6 +15,7 @@ public class EventCallerBaseTest
 		private static final int REMOVE_LISTENER_EVENT = 1;
 		private static final int DISPOSE_EVENT = 2;
 		private static final int INPUT_PARAM_EVENT = 3;
+		private static final int THROW_ERROR_EVENT = 4;
 
 		private Plugin _plugin;
 
@@ -43,6 +44,11 @@ public class EventCallerBaseTest
 			callEvent(INPUT_PARAM_EVENT, param);
 		}
 
+		public void throwErrorEvent()
+		{
+			callEvent(THROW_ERROR_EVENT);
+		}
+
 		@Override
 		protected void runEvent(TestListener listener, int index, Object arg)
 		{
@@ -62,6 +68,10 @@ public class EventCallerBaseTest
 
 				case INPUT_PARAM_EVENT:
 					listener.inputParamEvent((int)arg);
+					break;
+
+				case THROW_ERROR_EVENT:
+					listener.throwErrorEvent();
 					break;
 			}
 		}
@@ -120,12 +130,19 @@ public class EventCallerBaseTest
 
 		public void inputParamEvent(int param)
 		{
+			_wasCalled = true;
 			_inputParam = param;
 		}
 
 		public int getInputParam()
 		{
 			return _inputParam;
+		}
+
+		public void throwErrorEvent()
+		{
+			_wasCalled = true;
+			throw new RuntimeException();
 		}
 	}
 
@@ -280,5 +297,20 @@ public class EventCallerBaseTest
 		caller.inputParamEvent(param);
 
 		Assert.assertEquals(listener.getInputParam(), param);
+	}
+
+	@Test
+	public void listenerThrowsError()
+	{
+		TestEventCaller caller = new TestEventCaller();
+		TestListener listener0 = new TestListener();
+		TestListener listener1 = new TestListener();
+
+		caller.addListener(listener0);
+		caller.addListener(listener1);
+		caller.throwErrorEvent();
+
+		Assert.assertTrue(listener0.wasCalled());
+		Assert.assertTrue(listener1.wasCalled());
 	}
 }
