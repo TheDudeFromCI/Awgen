@@ -2,8 +2,10 @@ package event_handling;
 
 import net.whg.we.event.EventCallerBase;
 import net.whg.we.event.Listener;
+import net.whg.we.main.Plugin;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class EventCallerBaseTest
 {
@@ -13,6 +15,13 @@ public class EventCallerBaseTest
 		private static final int REMOVE_LISTENER_EVENT = 1;
 		private static final int DISPOSE_EVENT = 2;
 		private static final int INPUT_PARAM_EVENT = 3;
+
+		private Plugin _plugin;
+
+		public void setPlugin(Plugin plugin)
+		{
+			_plugin = plugin;
+		}
 
 		public void addListenerEvent()
 		{
@@ -55,6 +64,12 @@ public class EventCallerBaseTest
 					listener.inputParamEvent((int)arg);
 					break;
 			}
+		}
+
+		@Override
+		public Plugin getPlugin()
+		{
+			return _plugin;
 		}
 	}
 
@@ -115,7 +130,7 @@ public class EventCallerBaseTest
 	}
 
 	@Test
-	public void addingAndRemovingListeners()
+	public void addingAndRemovingListenersWithoutPlugin()
 	{
 		TestEventCaller caller = new TestEventCaller();
 		TestListener listener = new TestListener();
@@ -127,6 +142,29 @@ public class EventCallerBaseTest
 		Assert.assertEquals(caller.getListenerCount(), 1);
 
 		caller.removeListener(listener);
+
+		Assert.assertEquals(caller.getListenerCount(), 0);
+	}
+
+	@Test
+	public void addingAndRemovingListenersWithPlugin()
+	{
+		TestEventCaller caller = new TestEventCaller();
+		TestListener listener = new TestListener();
+		Plugin plugin = Mockito.mock(Plugin.class);
+
+		caller.setPlugin(plugin);
+
+		Assert.assertEquals(caller.getListenerCount(), 0);
+
+		caller.addListener(listener);
+		Mockito.verify(plugin, Mockito.atLeastOnce()).getPluginName();
+		Mockito.reset(plugin);
+
+		Assert.assertEquals(caller.getListenerCount(), 1);
+
+		caller.removeListener(listener);
+		Mockito.verify(plugin, Mockito.atLeastOnce()).getPluginName();
 
 		Assert.assertEquals(caller.getListenerCount(), 0);
 	}
@@ -156,13 +194,29 @@ public class EventCallerBaseTest
 	}
 
 	@Test
-	public void disposeEventCaller()
+	public void disposeEventCallerNoPlugin()
 	{
 		TestEventCaller caller = new TestEventCaller();
 		TestListener listener = new TestListener();
 
 		caller.addListener(listener);
 		caller.dispose();
+
+		Assert.assertEquals(caller.getListenerCount(), 0);
+	}
+
+	@Test
+	public void disposeEventCallerWithPlugin()
+	{
+		TestEventCaller caller = new TestEventCaller();
+		TestListener listener = new TestListener();
+		Plugin plugin = Mockito.mock(Plugin.class);
+
+		caller.setPlugin(plugin);
+		caller.addListener(listener);
+		caller.dispose();
+
+		Mockito.verify(plugin, Mockito.atLeastOnce()).getPluginName();
 
 		Assert.assertEquals(caller.getListenerCount(), 0);
 	}
