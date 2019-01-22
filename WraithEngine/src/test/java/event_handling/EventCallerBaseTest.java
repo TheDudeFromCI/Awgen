@@ -16,6 +16,7 @@ public class EventCallerBaseTest
 		private static final int DISPOSE_EVENT = 2;
 		private static final int INPUT_PARAM_EVENT = 3;
 		private static final int THROW_ERROR_EVENT = 4;
+		private static final int ADD_LISTENER_TWICE_EVENT = 5;
 
 		private Plugin _plugin;
 
@@ -49,6 +50,11 @@ public class EventCallerBaseTest
 			callEvent(THROW_ERROR_EVENT);
 		}
 
+		public void addListenerTwiceEvent()
+		{
+			callEvent(ADD_LISTENER_TWICE_EVENT);
+		}
+
 		@Override
 		protected void runEvent(TestListener listener, int index, Object arg)
 		{
@@ -72,6 +78,10 @@ public class EventCallerBaseTest
 
 				case THROW_ERROR_EVENT:
 					listener.throwErrorEvent();
+					break;
+
+				case ADD_LISTENER_TWICE_EVENT:
+					listener.addListenerTwiceEvent();
 					break;
 			}
 		}
@@ -143,6 +153,15 @@ public class EventCallerBaseTest
 		{
 			_wasCalled = true;
 			throw new RuntimeException();
+		}
+
+		public void addListenerTwiceEvent(TestEventCaller caller)
+		{
+			_wasCalled = true;
+
+			TestListener listener = new TestListener();
+			caller.addListener(listener);
+			caller.addListener(listener);
 		}
 	}
 
@@ -312,5 +331,43 @@ public class EventCallerBaseTest
 
 		Assert.assertTrue(listener0.wasCalled());
 		Assert.assertTrue(listener1.wasCalled());
+	}
+
+	@Test
+	public void addingAListenerThatIsAlreadyAdded()
+	{
+		TestEventCaller caller = new TestEventCaller();
+		TestListener listener = new TestListener();
+
+		caller.addListener(listener);
+		caller.addListener(listener);
+
+		Assert.assertEquals(caller.getListenerCount(), 1);
+	}
+
+	@Test
+	public void addingPendingListenerThatIsAlreadyAdded()
+	{
+		TestEventCaller caller = new TestEventCaller();
+		TestListener listener = new TestListener();
+
+		caller.addListener(listener);
+		caller.addListener(listener);
+
+		Assert.assertEquals(caller.getListenerCount(), 2);
+	}
+
+	@Test
+	public void getDefaultPluginReturnsNull()
+	{
+		EventCallerBase<Listener> eventCaller = new EventCallerBase<Listener>()
+		{
+			@Override
+			protected void runEvent(Listener lister, int index, Object arg)
+			{
+			}
+		};
+
+		Assert.assertNull(eventCaller.getPlugin());
 	}
 }
