@@ -81,7 +81,7 @@ public class EventCallerBaseTest
 					break;
 
 				case ADD_LISTENER_TWICE_EVENT:
-					listener.addListenerTwiceEvent();
+					listener.addListenerTwiceEvent(this);
 					break;
 			}
 		}
@@ -352,7 +352,7 @@ public class EventCallerBaseTest
 		TestListener listener = new TestListener();
 
 		caller.addListener(listener);
-		caller.addListener(listener);
+		caller.addListenerTwiceEvent();
 
 		Assert.assertEquals(caller.getListenerCount(), 2);
 	}
