@@ -17,14 +17,13 @@ class AssimpMeshParser
 	static final int VERTEX_SIZE_RIGGED =
 			VERTEX_SIZE + VERT_BONE_INDEX_SIZE + VERT_BONE_WEIGHT_SIZE;
 
-	static UncompiledMesh loadMesh(AIMesh mesh)
+	static VertexData loadMesh(AIMesh mesh)
 	{
 		// Count mesh information
 		int boneCount = mesh.mNumBones();
 		int vertexCount = mesh.mNumVertices();
 		int vertexSize = boneCount == 0 ? VERTEX_SIZE : VERTEX_SIZE_RIGGED;
 		int triCount = mesh.mNumFaces();
-		String meshName = mesh.mName().dataString();
 
 		// Build vertex data array
 		int index = 0;
@@ -87,7 +86,6 @@ class AssimpMeshParser
 			};
 
 		// Compile vertex data
-		VertexData vertexData = new VertexData(vertices, triangles, attributes);
-		return new UncompiledMesh(meshName, vertexData);
+		return new VertexData(vertices, triangles, attributes);
 	}
 }

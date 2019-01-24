@@ -1,7 +1,11 @@
 package net.whg.we.resources.graphics;
 
-import java.util.ArrayList;
+import org.lwjgl.assimp.AIMesh;
+import org.lwjgl.assimp.AIScene;
+import org.lwjgl.assimp.Assimp;
 import net.whg.we.rendering.MeshScene;
+import net.whg.we.rendering.Skeleton;
+import net.whg.we.rendering.VertexData;
 import net.whg.we.resources.FileLoadState;
 import net.whg.we.resources.FileLoader;
 import net.whg.we.resources.ResourceBatchRequest;
@@ -33,15 +37,32 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 	{
 		try
 		{
-			ArrayList<UncompiledMesh> uncompiledMeshes =
-					AssimpSceneParser.load(resourceFile.getFile());
+			// Load the scene file
+			AIScene scene = Assimp.aiImportFile(resourceFile.getFile().toString(),
+					Assimp.aiProcess_Triangulate | Assimp.aiProcess_GenSmoothNormals
+							| Assimp.aiProcess_FlipUVs | Assimp.aiProcess_CalcTangentSpace
+							| Assimp.aiProcess_LimitBoneWeights);
 
-			if (uncompiledMeshes == null)
+			// If scene could not be loaded, return null
+			if (scene == null)
 				return FileLoadState.FAILED_TO_LOAD;
 
-			for (UncompiledMesh m : uncompiledMeshes)
-				request.addResource(new MeshResource(m.getName(), m.getVertexData(),
-						m.getSkeleton(), resourceFile));
+			// Count scene information
+			int meshCount = scene.mNumMeshes();
+
+			// Load scene meshes
+			for (int i = 0; i < meshCount; i++)
+			{
+				AIMesh mesh = AIMesh.create(scene.mMeshes().get(i));
+				String meshName = mesh.mName().dataString();
+				VertexData vertexData = AssimpMeshParser.loadMesh(mesh);
+				Skeleton skeleton = AssimpSkeletonParser.loadSkeleton(scene, mesh, vertexData);
+
+				request.addResource(new MeshResource(meshName, vertexData, skeleton, resourceFile));
+			}
+
+			// Cleanup and return
+			scene.free();
 
 			return FileLoadState.LOADED_SUCCESSFULLY;
 		}

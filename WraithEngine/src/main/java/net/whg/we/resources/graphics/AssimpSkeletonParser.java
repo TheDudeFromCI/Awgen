@@ -10,19 +10,20 @@ import org.lwjgl.assimp.AIScene;
 import org.lwjgl.assimp.AIVertexWeight;
 import net.whg.we.rendering.Bone;
 import net.whg.we.rendering.Skeleton;
+import net.whg.we.rendering.VertexData;
 
 class AssimpSkeletonParser
 {
-	static void loadSkeleton(AIScene scene, AIMesh mesh, UncompiledMesh meshData)
+	static Skeleton loadSkeleton(AIScene scene, AIMesh mesh, VertexData vertexhData)
 	{
 		int boneCount = mesh.mNumBones();
 
 		if (boneCount == 0)
-			return;
+			return null;
 
 		HashMap<Integer, Integer> boneIndexMap = new HashMap<>();
 		Bone[] bones = new Bone[boneCount];
-		float[] vertices = meshData.getVertexData().getDataArray();
+		float[] vertices = vertexhData.getDataArray();
 
 		for (int b = 0; b < boneCount; b++)
 		{
@@ -72,8 +73,7 @@ class AssimpSkeletonParser
 		AIMatrix4x4 inverseRootTransformRaw = scene.mRootNode().mTransformation();
 		Matrix4f inverseRootTransform = assimpMatrix(inverseRootTransformRaw);
 
-		Skeleton skeleton = new Skeleton(inverseRootTransform, bones, rootBone);
-		meshData.setSkeleton(skeleton);
+		return new Skeleton(inverseRootTransform, bones, rootBone);
 	}
 
 	private static Bone findRootBone(Bone[] bones, AINode node)
