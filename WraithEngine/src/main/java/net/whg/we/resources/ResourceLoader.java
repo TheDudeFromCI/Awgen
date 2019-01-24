@@ -1,8 +1,8 @@
 package net.whg.we.resources;
 
 import java.util.ArrayList;
-import net.whg.we.utils.Log;
 import java.util.HashMap;
+import net.whg.we.utils.Log;
 
 public class ResourceLoader
 {
@@ -131,12 +131,13 @@ public class ResourceLoader
 	}
 
 	/**
-	 * Checks if this resource loader already have this resource loaded. If the resourceFile is not
-	 * specified, this method returns false.
+	 * Checks if this resource loader already have this resource loaded. If the
+	 * resourceFile is not specified, this method returns false.
 	 *
-	 * @param resourceFile - The resource file that represents the given resource.
-	 *
-	 * @return True if the resource referenced by this resource file exists. False otherwise.
+	 * @param resourceFile
+	 *            - The resource file that represents the given resource.
+	 * @return True if the resource referenced by this resource file exists. False
+	 *         otherwise.
 	 */
 	public boolean hasResource(ResourceFile resourceFile)
 	{
@@ -149,10 +150,10 @@ public class ResourceLoader
 	/**
 	 * Gets the loaded resource that is currently assigned to this ResourceFile.
 	 *
-	 * @param resourceFile - The resource file that represents the given resource.
-	 *
-	 * @return The loaded resource for the given ResourceFile, or null if the resource is not loaded,
-	 * or if a ResourceFile is not specified.
+	 * @param resourceFile
+	 *            - The resource file that represents the given resource.
+	 * @return The loaded resource for the given ResourceFile, or null if the
+	 *         resource is not loaded, or if a ResourceFile is not specified.
 	 */
 	public Resource<?> getResource(ResourceFile resourceFile)
 	{
@@ -163,11 +164,12 @@ public class ResourceLoader
 	}
 
 	/**
-	 * Adds a loaded resource to this ResourceLoader. Loaded resources will be returned instead of
-	 * attempting to load resources from file when possible.
+	 * Adds a loaded resource to this ResourceLoader. Loaded resources will be
+	 * returned instead of attempting to load resources from file when possible.
 	 *
-	 * @param resource - The loaded resource to add to this ResourceLoader. If null, nothing will
-	 * happen.
+	 * @param resource
+	 *            - The loaded resource to add to this ResourceLoader. If null,
+	 *            nothing will happen.
 	 */
 	public void addResource(Resource<?> resource)
 	{
@@ -181,11 +183,13 @@ public class ResourceLoader
 	}
 
 	/**
-	 * Removes a loaded resource from this ResourceLoader. This method will also attempt to dispose
-	 * the given resource, even if the resource is not currently loaded into this ResourceLoader.
+	 * Removes a loaded resource from this ResourceLoader. This method will also
+	 * attempt to dispose the given resource, even if the resource is not currently
+	 * loaded into this ResourceLoader.
 	 *
-	 * @param resource - The loaded resource to remove to this ResourceLoader and dispose. If null,
-	 * nothing will happen.
+	 * @param resource
+	 *            - The loaded resource to remove to this ResourceLoader and
+	 *            dispose. If null, nothing will happen.
 	 */
 	public void removeResource(Resource<?> resource)
 	{
@@ -200,7 +204,8 @@ public class ResourceLoader
 	}
 
 	/**
-	 * Disposes and removes all loaded resources that this ResourceLoader currently owns.
+	 * Disposes and removes all loaded resources that this ResourceLoader currently
+	 * owns.
 	 */
 	public void disposeResources()
 	{

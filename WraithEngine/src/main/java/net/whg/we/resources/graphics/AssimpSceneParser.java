@@ -1,4 +1,4 @@
-package net.whg.we.resources;
+package net.whg.we.resources.graphics;
 
 import java.io.File;
 import java.util.ArrayList;

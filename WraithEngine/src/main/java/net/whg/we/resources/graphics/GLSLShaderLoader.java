@@ -1,8 +1,12 @@
-package net.whg.we.resources;
+package net.whg.we.resources.graphics;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import net.whg.we.rendering.Shader;
+import net.whg.we.resources.FileLoader;
+import net.whg.we.resources.Resource;
+import net.whg.we.resources.ResourceFile;
+import net.whg.we.resources.ResourceLoader;
 import net.whg.we.utils.Log;
 
 public class GLSLShaderLoader implements FileLoader<Shader>

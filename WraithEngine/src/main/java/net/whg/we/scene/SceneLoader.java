@@ -3,11 +3,11 @@ package net.whg.we.scene;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.Shader;
 import net.whg.we.rendering.Texture;
-import net.whg.we.resources.MeshSceneResource;
 import net.whg.we.resources.ResourceFile;
 import net.whg.we.resources.ResourceLoader;
-import net.whg.we.resources.ShaderResource;
-import net.whg.we.resources.TextureResource;
+import net.whg.we.resources.graphics.MeshSceneResource;
+import net.whg.we.resources.graphics.ShaderResource;
+import net.whg.we.resources.graphics.TextureResource;
 
 public class SceneLoader
 {

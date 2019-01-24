@@ -1,10 +1,12 @@
-package net.whg.we.resources;
+package net.whg.we.resources.graphics;
 
 import java.util.ArrayList;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;
 import net.whg.we.rendering.MeshScene;
+import net.whg.we.resources.Resource;
+import net.whg.we.resources.ResourceFile;
 import net.whg.we.scene.Model;
 import net.whg.we.utils.Log;
 

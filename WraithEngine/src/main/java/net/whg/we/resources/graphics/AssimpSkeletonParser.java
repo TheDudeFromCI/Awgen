@@ -1,4 +1,4 @@
-package net.whg.we.resources;
+package net.whg.we.resources.graphics;
 
 import java.util.HashMap;
 import org.joml.Matrix4f;

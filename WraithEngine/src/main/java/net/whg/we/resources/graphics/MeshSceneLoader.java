@@ -1,8 +1,13 @@
-package net.whg.we.resources;
+package net.whg.we.resources.graphics;
 
 import java.util.ArrayList;
 import java.util.Set;
 import net.whg.we.rendering.MeshScene;
+import net.whg.we.resources.FileLoader;
+import net.whg.we.resources.Resource;
+import net.whg.we.resources.ResourceFile;
+import net.whg.we.resources.ResourceLoader;
+import net.whg.we.resources.YamlFile;
 
 /**
  * Loads a mesh scene file. These can contain either a single mesh, or multiple

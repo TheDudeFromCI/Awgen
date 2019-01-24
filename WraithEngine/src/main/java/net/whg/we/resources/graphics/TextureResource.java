@@ -1,8 +1,10 @@
-package net.whg.we.resources;
+package net.whg.we.resources.graphics;
 
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.Texture;
 import net.whg.we.rendering.TextureProperties;
+import net.whg.we.resources.Resource;
+import net.whg.we.resources.ResourceFile;
 
 public class TextureResource implements Resource<Texture>
 {

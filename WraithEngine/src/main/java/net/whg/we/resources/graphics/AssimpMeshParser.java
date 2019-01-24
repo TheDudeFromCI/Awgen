@@ -1,4 +1,4 @@
-package net.whg.we.resources;
+package net.whg.we.resources.graphics;
 
 import org.lwjgl.assimp.AIFace;
 import org.lwjgl.assimp.AIMesh;

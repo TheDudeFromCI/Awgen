@@ -3,9 +3,9 @@ package net.whg.we.main;
 import net.whg.we.resources.FileDatabase;
 import net.whg.we.resources.ResourceLoader;
 import net.whg.we.event.EventManager;
-import net.whg.we.resources.GLSLShaderLoader;
-import net.whg.we.resources.MeshSceneLoader;
-import net.whg.we.resources.TextureLoader;
+import net.whg.we.resources.graphics.GLSLShaderLoader;
+import net.whg.we.resources.graphics.MeshSceneLoader;
+import net.whg.we.resources.graphics.TextureLoader;
 import net.whg.we.scene.GameLoop;
 
 public class GameState
