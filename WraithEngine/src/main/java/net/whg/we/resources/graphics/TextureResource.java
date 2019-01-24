@@ -12,9 +12,10 @@ public class TextureResource implements Resource<Texture>
 	private TextureProperties _properties;
 	private ResourceFile _resource;
 
-	TextureResource(TextureProperties properties)
+	TextureResource(TextureProperties properties, ResourceFile resource)
 	{
 		_properties = properties;
+		_resource = resource;
 	}
 
 	@Override
@@ -37,12 +38,6 @@ public class TextureResource implements Resource<Texture>
 	public ResourceFile getResourceFile()
 	{
 		return _resource;
-	}
-
-	@Override
-	public void setResourceFile(ResourceFile resource)
-	{
-		_resource = resource;
 	}
 
 	@Override

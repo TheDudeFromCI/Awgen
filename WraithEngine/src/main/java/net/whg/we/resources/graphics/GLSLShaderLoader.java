@@ -3,10 +3,10 @@ package net.whg.we.resources.graphics;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import net.whg.we.rendering.Shader;
+import net.whg.we.resources.FileLoadState;
 import net.whg.we.resources.FileLoader;
-import net.whg.we.resources.Resource;
+import net.whg.we.resources.ResourceBatchRequest;
 import net.whg.we.resources.ResourceFile;
-import net.whg.we.resources.ResourceLoader;
 import net.whg.we.utils.Log;
 
 public class GLSLShaderLoader implements FileLoader<Shader>
@@ -23,16 +23,16 @@ public class GLSLShaderLoader implements FileLoader<Shader>
 	}
 
 	@Override
-	public Resource<Shader> loadFile(ResourceLoader resourceLoader, ResourceFile resource)
+	public FileLoadState loadFile(ResourceBatchRequest request, ResourceFile resourceFile)
 	{
-		try (BufferedReader in = new BufferedReader(new FileReader(resource.getFile())))
+		try (BufferedReader in = new BufferedReader(new FileReader(resourceFile.getFile())))
 		{
 			ShaderProperties properties = new ShaderProperties();
 			StringBuilder vertShader = new StringBuilder();
 			StringBuilder geoShader = new StringBuilder();
 			StringBuilder fragShader = new StringBuilder();
 
-			properties.setName(resource.getName());
+			properties.setName(resourceFile.getName());
 
 			// Mode is the state of the loader.
 			// 0 = Loading Vertex Shader
@@ -46,7 +46,6 @@ public class GLSLShaderLoader implements FileLoader<Shader>
 			{
 				if (line.equals("---"))
 				{
-					// Move to next state
 					mode++;
 
 					if (mode == 3)
@@ -54,29 +53,21 @@ public class GLSLShaderLoader implements FileLoader<Shader>
 								"Unable to parse shader file format! Too many states defined.");
 				}
 				else if (mode == 0)
-				{
-					// Load vertex shader
 					vertShader.append(line).append("\n");
-				}
 				else if (mode == 1)
-				{
-					// Load geometry shader
 					geoShader.append(line).append("\n");
-				}
 				else
-				{
-					// Load fragment shader
 					fragShader.append(line).append("\n");
-				}
 			}
 
-			return new ShaderResource(properties, vertShader.toString(), geoShader.toString(),
-					fragShader.toString());
+			request.addResource(new ShaderResource(properties, vertShader.toString(),
+					geoShader.toString(), fragShader.toString(), resourceFile));
+			return FileLoadState.LOADED_SUCCESSFULLY;
 		}
 		catch (Exception e)
 		{
-			Log.errorf("Failed to load GLSL shader file %s!", e, resource);
-			return null;
+			Log.errorf("Failed to load GLSL shader file %s!", e, resourceFile);
+			return FileLoadState.FAILED_TO_LOAD;
 		}
 	}
 

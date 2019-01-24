@@ -21,12 +21,13 @@ public class ShaderResource implements Resource<Shader>
 	private ResourceFile _resource;
 
 	public ShaderResource(ShaderProperties properties, String vertShader, String geoShader,
-			String fragShader)
+			String fragShader, ResourceFile resource)
 	{
 		_properties = properties;
 		_vertShader = vertShader;
 		_geoShader = geoShader;
 		_fragShader = fragShader;
+		_resource = resource;
 	}
 
 	@Override
@@ -64,12 +65,6 @@ public class ShaderResource implements Resource<Shader>
 	public ResourceFile getResourceFile()
 	{
 		return _resource;
-	}
-
-	@Override
-	public void setResourceFile(ResourceFile resource)
-	{
-		_resource = resource;
 	}
 
 	@Override

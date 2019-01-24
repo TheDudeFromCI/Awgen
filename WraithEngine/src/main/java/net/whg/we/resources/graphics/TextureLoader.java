@@ -4,10 +4,10 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import net.whg.we.rendering.Texture;
 import net.whg.we.rendering.TextureProperties;
+import net.whg.we.resources.FileLoadState;
 import net.whg.we.resources.FileLoader;
-import net.whg.we.resources.Resource;
+import net.whg.we.resources.ResourceBatchRequest;
 import net.whg.we.resources.ResourceFile;
-import net.whg.we.resources.ResourceLoader;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.Log;
 
@@ -25,11 +25,11 @@ public class TextureLoader implements FileLoader<Texture>
 	}
 
 	@Override
-	public Resource<Texture> loadFile(ResourceLoader resourceLoader, ResourceFile resource)
+	public FileLoadState loadFile(ResourceBatchRequest request, ResourceFile resourceFile)
 	{
 		try
 		{
-			BufferedImage image = ImageIO.read(resource.getFile());
+			BufferedImage image = ImageIO.read(resourceFile.getFile());
 
 			TextureProperties properties = new TextureProperties();
 			Color[] pixels = new Color[image.getWidth() * image.getHeight()];
@@ -53,12 +53,13 @@ public class TextureLoader implements FileLoader<Texture>
 			}
 
 			properties.setPixels(pixels, image.getWidth(), image.getHeight());
-			return new TextureResource(properties);
+			request.addResource(new TextureResource(properties, resourceFile));
+			return FileLoadState.LOADED_SUCCESSFULLY;
 		}
 		catch (Exception exception)
 		{
-			Log.errorf("Failed to read image file, %s!", exception, resource);
-			return null;
+			Log.errorf("Failed to read image file, %s!", exception, resourceFile);
+			return FileLoadState.FAILED_TO_LOAD;
 		}
 	}
 

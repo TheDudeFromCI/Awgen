@@ -25,15 +25,6 @@ public interface Resource<T>
 	public ResourceFile getResourceFile();
 
 	/**
-	 * Sets the resource file this resource represents. This can be used for
-	 * identification purposes, or future file acessing.
-	 *
-	 * @param resource
-	 *            - The resource file.
-	 */
-	public void setResourceFile(ResourceFile resource);
-
-	/**
 	 * Disposes this resource.
 	 */
 	public void dispose();

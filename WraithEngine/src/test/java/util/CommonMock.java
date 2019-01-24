@@ -1,9 +1,10 @@
 package util;
+
 import java.io.File;
 import net.whg.we.main.Plugin;
-import net.whg.we.resources.SimpleFileDatabase;
 import net.whg.we.resources.Resource;
 import net.whg.we.resources.ResourceFile;
+import net.whg.we.resources.SimpleFileDatabase;
 
 public class CommonMock
 {
@@ -56,11 +57,6 @@ public class CommonMock
 			public ResourceFile getResourceFile()
 			{
 				return file;
-			}
-
-			@Override
-			public void setResourceFile(ResourceFile file)
-			{
 			}
 
 			@Override

@@ -18,9 +18,10 @@ public class MeshSceneResource implements Resource<MeshScene>
 	private ArrayList<UncompiledModel> _models = new ArrayList<>();
 	private ResourceFile _resource;
 
-	public MeshSceneResource(ArrayList<UncompiledMesh> meshes)
+	public MeshSceneResource(ArrayList<UncompiledMesh> meshes, ResourceFile resource)
 	{
 		_meshes = meshes;
+		_resource = resource;
 	}
 
 	@Override
@@ -101,12 +102,6 @@ public class MeshSceneResource implements Resource<MeshScene>
 	public ResourceFile getResourceFile()
 	{
 		return _resource;
-	}
-
-	@Override
-	public void setResourceFile(ResourceFile resource)
-	{
-		_resource = resource;
 	}
 
 	@Override

@@ -28,7 +28,7 @@ public interface FileLoader<T>
 	 * @return A resource representing the file, or null if the file could not be
 	 *         loaded.
 	 */
-	public Resource<T> loadFile(ResourceLoader resourceLoader, ResourceFile resource);
+	public FileLoadState loadFile(ResourceBatchRequest request, ResourceFile resource);
 
 	/**
 	 * Gets the priority level for this file loader. When loading a file, the file
