@@ -4,20 +4,23 @@ import java.util.ArrayList;
 import net.whg.we.utils.Poolable;
 
 /**
- * Represents a list of resources to be loaded. Files may be added to this batch file during the
- * loading process as needed based on resource dependencies. This object assumes that all loaded
- * Resources are returned back to this batch request after they are loaded.
+ * Represents a list of resources to be loaded. Files may be added to this batch
+ * file during the loading process as needed based on resource dependencies.
+ * This object assumes that all loaded Resources are returned back to this batch
+ * request after they are loaded.
  */
 public class ResourceBatchRequest implements Poolable
 {
 	private ArrayList<ResourceFile> _resourceFiles = new ArrayList<>();
-	private ArrayList<Resource> _resources = new ArrayList<>();
+	private ArrayList<Resource<?>> _resources = new ArrayList<>();
 
 	/**
-	 * Adds a resource file to this batch request to be loaded. If this resource file already exists
-	 * within the batch request, nothing happens. If the resourceFile is null, nothing happens.
+	 * Adds a resource file to this batch request to be loaded. If this resource
+	 * file already exists within the batch request, nothing happens. If the
+	 * resourceFile is null, nothing happens.
 	 *
-	 * @param resourceFile - The ResourceFile to add to this batch request.
+	 * @param resourceFile
+	 *            - The ResourceFile to add to this batch request.
 	 */
 	public void addResourceFile(ResourceFile resourceFile)
 	{
@@ -29,11 +32,13 @@ public class ResourceBatchRequest implements Poolable
 	}
 
 	/**
-	 * Removes a ResourceFile from from this batch request. If this ResourceFile is not in this
-	 * batch request, nothing happens. This method does not remove any resources that were loaded
-	 * from this ResourceFile. If the resourceFile is null, nothing happens.
+	 * Removes a ResourceFile from from this batch request. If this ResourceFile is
+	 * not in this batch request, nothing happens. This method does not remove any
+	 * resources that were loaded from this ResourceFile. If the resourceFile is
+	 * null, nothing happens.
 	 *
-	 * @param resourceFile - The ResourceFile to remove from this batch request.
+	 * @param resourceFile
+	 *            - The ResourceFile to remove from this batch request.
 	 */
 	public void removeResourceFile(ResourceFile resourceFile)
 	{
@@ -44,12 +49,14 @@ public class ResourceBatchRequest implements Poolable
 	}
 
 	/**
-	 * Added a loaded resource to this batch request. This indicates that the resource has been
-	 * loaded as a result of this batch request. If the resource is null, nothing happens.
+	 * Added a loaded resource to this batch request. This indicates that the
+	 * resource has been loaded as a result of this batch request. If the resource
+	 * is null, nothing happens.
 	 *
-	 * @param resource - The loaded resource to add to this batch request.
+	 * @param resource
+	 *            - The loaded resource to add to this batch request.
 	 */
-	public void addResource(Resource resource)
+	public void addResource(Resource<?> resource)
 	{
 		if (resource == null)
 			return;
@@ -93,19 +100,18 @@ public class ResourceBatchRequest implements Poolable
 	 *
 	 * @return The Resource at the specified index.
 	 */
-	public Resource getResource(int index)
+	public Resource<?> getResource(int index)
 	{
 		return _resources.get(index);
 	}
 
 	/**
-	 * Checks if all currently listed ResourceFiles in this batch request have loaded resources
-	 * attached to this batch request. The method checks if @{link #nextUnloadedResource()} returns
-	 * null.
+	 * Checks if all currently listed ResourceFiles in this batch request have
+	 * loaded resources attached to this batch request. The method checks if @{link
+	 * #nextUnloadedResource()} returns null.
 	 *
-	 * @return True is all ResourceFiles in this batch request have an associated Resource listed
-	 * within this batch request. False otherwise.
-	 *
+	 * @return True is all ResourceFiles in this batch request have an associated
+	 *         Resource listed within this batch request. False otherwise.
 	 * @see @{link #nextUnloadedResource()}
 	 */
 	public boolean isFullyLoaded()
@@ -114,18 +120,18 @@ public class ResourceBatchRequest implements Poolable
 	}
 
 	/**
-	 * Returns the first ResourceFile found wthin this batch request that does not have an
-	 * associated Resource file also within this batch request.
+	 * Returns the first ResourceFile found wthin this batch request that does not
+	 * have an associated Resource file also within this batch request.
 	 *
-	 * @return The first unloaded ResourceFile in this batch request, or null if all ResourceFiles
-	 * have been loaded.
+	 * @return The first unloaded ResourceFile in this batch request, or null if all
+	 *         ResourceFiles have been loaded.
 	 */
 	public ResourceFile nextUnloadedResource()
 	{
 		fileChecker:
 		for (ResourceFile resourceFile : _resourceFiles)
 		{
-			for (Resource resource : _resources)
+			for (Resource<?> resource : _resources)
 				if (resource.getResourceFile().equals(resourceFile))
 					continue fileChecker;
 
@@ -136,9 +142,9 @@ public class ResourceBatchRequest implements Poolable
 	}
 
 	/**
-	 * Clears all ResourceFiles and Resources from this batch request. This does not dispose any
-	 * resources, and simply only clears the references this object has to them. This allows This
-	 * class to safely be recycled.
+	 * Clears all ResourceFiles and Resources from this batch request. This does not
+	 * dispose any resources, and simply only clears the references this object has
+	 * to them. This allows This class to safely be recycled.
 	 */
 	public void clear()
 	{

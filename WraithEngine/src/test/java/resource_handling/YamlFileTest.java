@@ -2,9 +2,8 @@ package resource_handling;
 
 import org.junit.Assert;
 import org.junit.Test;
-import net.whg.we.resources.ResourceFile;
-import net.whg.we.resources.YamlFile;
 import net.whg.we.resources.SimpleFileDatabase;
+import net.whg.we.resources.YamlFile;
 import util.CommonMock;
 
 public class YamlFileTest
@@ -17,7 +16,8 @@ public class YamlFileTest
 		YamlFile yaml = new YamlFile();
 		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
 
-		yaml.load(db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
+		yaml.load(
+				db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
 
 		Assert.assertFalse(yaml.getRoots().isEmpty());
 	}
@@ -30,7 +30,8 @@ public class YamlFileTest
 		YamlFile yaml = new YamlFile();
 		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
 
-		yaml.load(db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
+		yaml.load(
+				db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
 
 		Assert.assertTrue(yaml.getRoots().size() == 2);
 		Assert.assertTrue(yaml.getRoots().containsKey("root1"));
@@ -45,7 +46,8 @@ public class YamlFileTest
 		YamlFile yaml = new YamlFile();
 		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
 
-		yaml.load(db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
+		yaml.load(
+				db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
 
 		Assert.assertEquals(yaml.getInt("root1", "some_data", "really_nested_data"), 2);
 	}
@@ -58,7 +60,8 @@ public class YamlFileTest
 		YamlFile yaml = new YamlFile();
 		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
 
-		yaml.load(db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
+		yaml.load(
+				db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
 
 		Assert.assertEquals(yaml.getInt("root1.some_data.really_nested_data"), 2);
 	}
@@ -71,7 +74,8 @@ public class YamlFileTest
 		YamlFile yaml = new YamlFile();
 		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
 
-		yaml.load(db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
+		yaml.load(
+				db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
 
 		Assert.assertEquals(yaml.getInt("root2.1"), 12);
 	}
@@ -84,7 +88,8 @@ public class YamlFileTest
 		YamlFile yaml = new YamlFile();
 		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
 
-		yaml.load(db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
+		yaml.load(
+				db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
 
 		Assert.assertEquals(yaml.getString("root4.4234.123"), null);
 	}

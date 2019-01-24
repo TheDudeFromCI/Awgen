@@ -1,13 +1,7 @@
 package net.whg.we.rendering;
 
-import net.whg.we.resources.ResourceLoader;
-import net.whg.we.test.TestScene;
 import net.whg.we.utils.DefaultWindowListener;
-import net.whg.we.utils.FPSLogger;
-import net.whg.we.utils.Input;
-import net.whg.we.utils.Log;
 import net.whg.we.utils.Screen;
-import net.whg.we.utils.Time;
 import net.whg.we.window.QueuedWindow;
 import net.whg.we.window.WindowBuilder;
 
