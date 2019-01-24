@@ -12,7 +12,24 @@ import util.CommonMock;
 public class ResourceLoaderTest
 {
 	@Test
-	public void loadResource()
+	public void loadSingleResource()
+	{
+		SimpleFileDatabase fileDatabase = CommonMock.getSimpleFileDatabase();
+		ResourceLoader resourceLoader = new ResourceLoader(fileDatabase);
+		Plugin plugin = CommonMock.getTestPlugin();
+
+		ResourceFile dummyResource = fileDatabase.getResourceFile(plugin, "abc");
+
+		Assert.assertFalse(resourceLoader.hasResource(dummyResource));
+
+		Resource<Object> res = CommonMock.getResource(dummyResource);
+		resourceLoader.addResource(res);
+
+		Assert.assertTrue(resourceLoader.hasResource(dummyResource));
+	}
+
+	@Test
+	public void loadMultipleResources()
 	{
 		SimpleFileDatabase fileDatabase = CommonMock.getSimpleFileDatabase();
 		ResourceLoader resourceLoader = new ResourceLoader(fileDatabase);

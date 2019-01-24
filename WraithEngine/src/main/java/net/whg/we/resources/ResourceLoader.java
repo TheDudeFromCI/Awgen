@@ -27,75 +27,91 @@ public class ResourceLoader
 	}
 
 	/**
-	 * Loads a file as a resource.<br>
-	 * This method works by scanning all referenced file loaders and returning the
-	 * file loader with the highest priority that supports the given file type. If
-	 * this file does not have an extension, null is returned. If no file loader
-	 * supports this file extension, null is returned. If the file fails to load,
-	 * null is returned.
+	 * Loads a resource batch request. This method works by scanning all referenced
+	 * file loaders and returning the file loader with the highest priority that
+	 * supports the given file type for each file in the request. If the file does
+	 * not have an extension, does not have a supported file loader, or fails to
+	 * load, it is removed from the request. If addition resource dependencies are
+	 * found while loading resources, they are automatically added to the request
+	 * and loaded as well.
 	 *
-	 * @param file
-	 *            - The file to load.
-	 * @return A loaded resource for the file, or null if the file cannot be loaded.
+	 * @param request
+	 *            - The resource files to load.
 	 */
-	public Resource<?> loadResource(ResourceFile resource)
+	public void loadResources(ResourceBatchRequest request)
 	{
-		// Check to see if the resource is already loaded
-		if (hasResource(resource))
-			return getResource(resource);
-
-		Log.infof("Loading the resource %s.", resource);
-
-		FileLoader<?> loader = null;
-
-		for (FileLoader<?> l : _fileLoaders)
-			for (String s : l.getTargetFileTypes())
-				if (s.equals(resource.getFileExtension()))
-					_fileLoaderBuffer.add(l);
-
-		if (_fileLoaderBuffer.isEmpty())
+		if (Log.getLogLevel() <= Log.DEBUG)
 		{
-			Log.warnf("Failed to load the resource %s, not a supported file type!",
-					resource.getName());
-			return null;
+			Log.debugf("Loading ResourceBatchRequest.(%d Objects)", request.getResourceFileCount());
+			for (int i = 0; i < request.getResourceFileCount(); i++)
+				Log.debugf("  - %s", request.getResourceFile(i));
 		}
 
-		if (Log.getLogLevel() <= Log.TRACE)
+		ResourceFile resourceFile;
+		while ((resourceFile = request.nextUnloadedResource()) != null)
 		{
-			Log.trace("  Finding available file loaders...");
-			for (FileLoader<?> l : _fileLoaderBuffer)
-				Log.tracef("   * %s", l.getClass().getName());
-		}
-
-		if (_fileLoaderBuffer.size() == 1)
-			loader = _fileLoaderBuffer.get(0);
-		else
-		{
-			int pri = Integer.MIN_VALUE;
-			for (int i = 0; i < _fileLoaderBuffer.size(); i++)
+			if (hasResource(resourceFile))
 			{
-				FileLoader<?> fl = _fileLoaderBuffer.get(i);
-				if (fl.getPriority() > pri)
+				Log.debugf("Skipping resource %s, already loaded.", resourceFile);
+				request.addResource(getResource(resourceFile));
+				continue;
+			}
+
+			Log.infof("Loading the resource %s.", resourceFile);
+
+			FileLoader<?> loader = null;
+			for (FileLoader<?> l : _fileLoaders)
+				for (String s : l.getTargetFileTypes())
+					if (s.equals(resourceFile.getFileExtension()))
+						_fileLoaderBuffer.add(l);
+
+			if (_fileLoaderBuffer.isEmpty())
+			{
+				Log.warnf("Failed to load the resource %s, not a supported file type!",
+						resourceFile);
+				request.removeResourceFile(resourceFile);
+				continue;
+			}
+
+			if (Log.getLogLevel() <= Log.TRACE)
+			{
+				Log.trace("  Finding available file loaders...");
+				for (FileLoader<?> l : _fileLoaderBuffer)
+					Log.tracef("   * %s", l.getClass().getName());
+			}
+
+			if (_fileLoaderBuffer.size() == 1)
+				loader = _fileLoaderBuffer.get(0);
+			else
+			{
+				int pri = Integer.MIN_VALUE;
+				for (int i = 0; i < _fileLoaderBuffer.size(); i++)
 				{
-					pri = fl.getPriority();
-					loader = fl;
+					FileLoader<?> fl = _fileLoaderBuffer.get(i);
+					if (fl.getPriority() > pri)
+					{
+						pri = fl.getPriority();
+						loader = fl;
+					}
 				}
 			}
-		}
 
-		_fileLoaderBuffer.clear();
+			_fileLoaderBuffer.clear();
+			Log.tracef("Using highest priority file loader: %s.", loader);
 
-		Log.debugf("Loading resource %s using the file loader, %s.", resource.getName(),
-				loader.getClass().getName());
-		Resource<?> res = loader.loadFile(this, resource);
+			Resource<?> res = loader.loadFile(this, resourceFile);
 
-		if (res != null)
-		{
-			res.setResourceFile(resource);
+			if (res == null)
+			{
+				Log.warnf("Failed to load the resource %s, unable to parse!", resourceFile);
+				request.removeResourceFile(resourceFile);
+				continue;
+			}
+
+			res.setResourceFile(resourceFile);
 			addResource(res);
+			request.addResource(res);
 		}
-
-		return res;
 	}
 
 	/**
