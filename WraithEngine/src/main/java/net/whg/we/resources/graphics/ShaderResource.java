@@ -70,10 +70,21 @@ public class ShaderResource implements Resource<Shader>
 	@Override
 	public void dispose()
 	{
-		if (_shader == null)
-			return;
+		_vertShader = null;
+		_geoShader = null;
+		_fragShader = null;
+		_properties = null;
 
-		_shader.dispose();
-		_shader = null;
+		if (_shader != null)
+		{
+			_shader.dispose();
+			_shader = null;
+		}
+	}
+
+	@Override
+	public String getName()
+	{
+		return _properties.getName();
 	}
 }

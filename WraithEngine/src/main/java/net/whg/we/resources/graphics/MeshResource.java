@@ -53,8 +53,13 @@ public class MeshResource implements Resource<Mesh>
 		else
 			_mesh = new SkinnedMesh(_name, _vertexData, graphics, _skeleton);
 
-		_name = null;
 		_vertexData = null;
 		_skeleton = null;
+	}
+
+	@Override
+	public String getName()
+	{
+		return _name;
 	}
 }

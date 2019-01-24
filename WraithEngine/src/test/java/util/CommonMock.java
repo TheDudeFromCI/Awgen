@@ -63,6 +63,12 @@ public class CommonMock
 			public void dispose()
 			{
 			}
+
+			@Override
+			public String getName()
+			{
+				return null;
+			}
 		};
 	}
 }

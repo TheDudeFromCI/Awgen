@@ -6,7 +6,6 @@ import net.whg.we.rendering.Texture;
 import net.whg.we.resources.ResourceBatchRequest;
 import net.whg.we.resources.ResourceFile;
 import net.whg.we.resources.ResourceLoader;
-import net.whg.we.resources.graphics.MeshSceneResource;
 import net.whg.we.resources.graphics.ShaderResource;
 import net.whg.we.resources.graphics.TextureResource;
 
@@ -47,8 +46,9 @@ public class SceneLoader
 		request.addResourceFile(resource);
 		_resourceLoader.loadResources(request);
 
-		MeshSceneResource scene = (MeshSceneResource) request.getResource(0);
-		scene.compile(graphics);
-		return scene.getData()._models.get(0);
+		// SceneResource scene = (SceneResource) request.getResource(0);
+		// scene.compile(graphics);
+		// return scene.getData()._models.get(0);
+		return null;
 	}
 }

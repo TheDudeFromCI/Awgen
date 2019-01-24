@@ -8,12 +8,14 @@ import net.whg.we.resources.ResourceFile;
 
 public class TextureResource implements Resource<Texture>
 {
+	private String _name;
 	private Texture _texture;
 	private TextureProperties _properties;
 	private ResourceFile _resource;
 
-	TextureResource(TextureProperties properties, ResourceFile resource)
+	TextureResource(TextureProperties properties, ResourceFile resource, String name)
 	{
+		_name = name;
 		_properties = properties;
 		_resource = resource;
 	}
@@ -43,10 +45,18 @@ public class TextureResource implements Resource<Texture>
 	@Override
 	public void dispose()
 	{
-		if (_texture == null)
-			return;
+		_resource = null;
 
-		_texture.dispose();
-		_texture = null;
+		if (_texture != null)
+		{
+			_texture.dispose();
+			_texture = null;
+		}
+	}
+
+	@Override
+	public String getName()
+	{
+		return _name;
 	}
 }

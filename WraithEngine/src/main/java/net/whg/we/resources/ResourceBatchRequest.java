@@ -13,6 +13,7 @@ public class ResourceBatchRequest implements Poolable
 {
 	private ArrayList<ResourceFile> _resourceFiles = new ArrayList<>();
 	private ArrayList<Resource<?>> _resources = new ArrayList<>();
+	private ArrayList<ResourceDependencies> _resourceDependencies = new ArrayList<>();
 
 	/**
 	 * Adds a resource file to this batch request to be loaded. If this resource
@@ -106,6 +107,29 @@ public class ResourceBatchRequest implements Poolable
 	}
 
 	/**
+	 * Gets the ResourceDependencies object for this object, used for loading other
+	 * resource files that are required for this resource to be loaded. If a
+	 * resource dependencies object does not exist, then a new object for this
+	 * resource is created and returned.
+	 *
+	 * @param resourceFile
+	 *            - The resource file to get the dependencies of.
+	 * @return The resource dependencies object attached to this resource file for
+	 *         this resource batch request.
+	 */
+	public ResourceDependencies getResourceDependencies(ResourceFile resourceFile)
+	{
+		for (ResourceDependencies dep : _resourceDependencies)
+			if (dep.getResourceFile().equals(resourceFile))
+				return dep;
+
+		ResourceDependencies dep = new ResourceDependencies();
+		dep.setResourceFile(resourceFile);
+		_resourceDependencies.add(dep);
+		return dep;
+	}
+
+	/**
 	 * Checks if all currently listed ResourceFiles in this batch request have
 	 * loaded resources attached to this batch request. The method checks if @{link
 	 * #nextUnloadedResource()} returns null.
@@ -150,6 +174,7 @@ public class ResourceBatchRequest implements Poolable
 	{
 		_resourceFiles.clear();
 		_resources.clear();
+		_resourceDependencies.clear();
 	}
 
 	@Override
@@ -162,5 +187,23 @@ public class ResourceBatchRequest implements Poolable
 	public void dispose()
 	{
 		clear();
+	}
+
+	/**
+	 * Searches to see if a resource file exists with the given name and resource
+	 * file. Returns the first result found, or null if none is found.
+	 *
+	 * @param resourceFile
+	 *            - The resource file this resource belongs to.
+	 * @param name
+	 *            - The name of this resource.
+	 * @return The first resource found.
+	 */
+	public Resource<?> getResource(ResourceFile resourceFile, String name)
+	{
+		for (Resource<?> resource : _resources)
+			if (resource.getResourceFile().equals(resourceFile) && resource.getName().equals(name))
+				return resource;
+		return null;
 	}
 }

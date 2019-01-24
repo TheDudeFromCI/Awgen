@@ -28,4 +28,12 @@ public interface Resource<T>
 	 * Disposes this resource.
 	 */
 	public void dispose();
+
+	/**
+	 * Gets the name of this resource. This should be unquie within the ResourceFile
+	 * that is is loaded from.
+	 * 
+	 * @return The name of this resource.
+	 */
+	public String getName();
 }

@@ -53,7 +53,8 @@ public class TextureLoader implements FileLoader<Texture>
 			}
 
 			properties.setPixels(pixels, image.getWidth(), image.getHeight());
-			request.addResource(new TextureResource(properties, resourceFile));
+			request.addResource(
+					new TextureResource(properties, resourceFile, resourceFile.getName()));
 			return FileLoadState.LOADED_SUCCESSFULLY;
 		}
 		catch (Exception exception)
