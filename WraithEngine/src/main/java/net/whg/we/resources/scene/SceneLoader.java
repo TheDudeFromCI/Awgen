@@ -32,7 +32,8 @@ public class SceneLoader implements FileLoader<Scene>
 		YamlFile yamlFile = new YamlFile();
 		yamlFile.load(resourceFile.getFile());
 
-		for (String models : yamlFile.getKeys("models"))
+		for (@SuppressWarnings("unused")
+		String models : yamlFile.getKeys("models"))
 		{
 			// TODO
 		}

@@ -2,11 +2,11 @@ package resource_handling;
 
 import org.junit.Assert;
 import org.junit.Test;
+import net.whg.we.main.Plugin;
 import net.whg.we.resources.Resource;
 import net.whg.we.resources.ResourceFile;
 import net.whg.we.resources.ResourceLoader;
 import net.whg.we.resources.SimpleFileDatabase;
-import net.whg.we.main.Plugin;
 import util.CommonMock;
 
 public class ResourceLoaderTest
