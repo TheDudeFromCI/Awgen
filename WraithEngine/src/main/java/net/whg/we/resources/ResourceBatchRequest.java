@@ -191,19 +191,37 @@ public class ResourceBatchRequest implements Poolable
 
 	/**
 	 * Searches to see if a resource file exists with the given name and resource
-	 * file. Returns the first result found, or null if none is found.
+	 * file. Returns the first result found, or null if none is found. If name is
+	 * null, then only the resource file is searched.
 	 *
 	 * @param resourceFile
 	 *            - The resource file this resource belongs to.
 	 * @param name
-	 *            - The name of this resource.
+	 *            - The name of this resource, or null to only check resource files.
 	 * @return The first resource found.
 	 */
 	public Resource<?> getResource(ResourceFile resourceFile, String name)
 	{
 		for (Resource<?> resource : _resources)
-			if (resource.getResourceFile().equals(resourceFile) && resource.getName().equals(name))
-				return resource;
+			if (resource.getResourceFile().equals(resourceFile))
+			{
+				if (name == null)
+					return resource;
+				else if (resource.getName().equals(name))
+					return resource;
+			}
 		return null;
+	}
+
+	/**
+	 * Shorthand for writing<br>
+	 * <br>
+	 * <code>getResource(resourceFile, null);</code>
+	 *
+	 * @see {@link #getResource(ResourceFile, String)}
+	 */
+	public Resource<?> getResource(ResourceFile resourceFile)
+	{
+		return getResource(resourceFile, null);
 	}
 }

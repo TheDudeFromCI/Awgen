@@ -1,14 +1,15 @@
 package net.whg.we.resources.scene;
 
 import java.util.ArrayList;
+import java.util.List;
 import net.whg.we.rendering.Material;
 import net.whg.we.resources.FileDatabase;
 import net.whg.we.resources.FileLoadState;
 import net.whg.we.resources.FileLoader;
 import net.whg.we.resources.ResourceBatchRequest;
 import net.whg.we.resources.ResourceDependencies;
+import net.whg.we.resources.ResourceDependency;
 import net.whg.we.resources.ResourceFile;
-import net.whg.we.resources.SubResourceFile;
 import net.whg.we.resources.YamlFile;
 import net.whg.we.resources.graphics.ShaderResource;
 import net.whg.we.resources.graphics.TextureResource;
@@ -34,25 +35,6 @@ public class MaterialLoader implements FileLoader<Material>
 		return FILE_TYPES;
 	}
 
-	private SubResourceFile getShader(ResourceDependencies dependencies)
-	{
-		for (SubResourceFile sub : dependencies.getDependencies())
-			if (sub.getResourceType() == ShaderResource.class)
-				return sub;
-		return null;
-	}
-
-	private ArrayList<SubResourceFile> getTextures(ResourceDependencies dependencies)
-	{
-		ArrayList<SubResourceFile> subs = new ArrayList<>();
-
-		for (SubResourceFile sub : dependencies.getDependencies())
-			if (sub.getResourceType() == TextureResource.class)
-				subs.add(sub);
-
-		return subs;
-	}
-
 	@Override
 	public FileLoadState loadFile(ResourceBatchRequest request, ResourceFile resourceFile)
 	{
@@ -60,6 +42,7 @@ public class MaterialLoader implements FileLoader<Material>
 		{
 			ResourceDependencies dependencies = request.getResourceDependencies(resourceFile);
 
+			// Check if all dependencies have been queued.
 			if (dependencies.getDependencyCount() == 0)
 			{
 				YamlFile yaml = new YamlFile();
@@ -68,8 +51,7 @@ public class MaterialLoader implements FileLoader<Material>
 				String shaderPath = yaml.getString("shader");
 				ResourceFile shaderResource =
 						_fileDatabase.getResourceFile(resourceFile.getPlugin(), shaderPath);
-				SubResourceFile sub = new SubResourceFile(shaderResource, shaderResource.getName(),
-						ShaderResource.class);
+				ResourceDependency sub = new ResourceDependency(shaderResource, "shader");
 				dependencies.addDependency(sub);
 
 				for (String textureName : yaml.getKeys("textures"))
@@ -77,24 +59,34 @@ public class MaterialLoader implements FileLoader<Material>
 					String texturePath = yaml.getString("textures", textureName);
 					ResourceFile textureResource =
 							_fileDatabase.getResourceFile(resourceFile.getPlugin(), texturePath);
-					sub = new SubResourceFile(textureResource, textureName, TextureResource.class);
+					sub = new ResourceDependency(textureResource, "texture." + textureName);
 					dependencies.addDependency(sub);
 				}
 
 				return FileLoadState.PUSH_TO_BACK;
 			}
 
-			SubResourceFile shaderRes = getShader(dependencies);
-			ShaderResource shader = (ShaderResource) request
-					.getResource(shaderRes.getResourceFile(), shaderRes.getName());
+			// Check if all dependencies have been loaded.
+			if (!dependencies.isFullyLoaded(request))
+				return FileLoadState.PUSH_TO_BACK;
 
-			ArrayList<SubResourceFile> textureRes = getTextures(dependencies);
-			TextureResource[] textures = new TextureResource[textureRes.size()];
-			for (int i = 0; i < textures.length; i++)
+			ShaderResource shader;
 			{
-				SubResourceFile t = textureRes.get(i);
-				textures[i] =
-						(TextureResource) request.getResource(t.getResourceFile(), t.getName());
+				ResourceDependency shaderDependency = dependencies.getDependency("shader");
+				ResourceFile shaderResourceFile = shaderDependency.getResourceFile();
+				shader = (ShaderResource) request.getResource(shaderResourceFile);
+			}
+
+			TextureResource[] textures;
+			{
+				List<ResourceDependency> textureDependencyList = new ArrayList<>();
+				dependencies.searchDependencies(textureDependencyList, "");
+				textures = new TextureResource[textureDependencyList.size()];
+				for (int i = 0; i < textures.length; i++)
+				{
+					ResourceDependency t = textureDependencyList.get(i);
+					textures[i] = (TextureResource) request.getResource(t.getResourceFile());
+				}
 			}
 
 			MaterialResource material =

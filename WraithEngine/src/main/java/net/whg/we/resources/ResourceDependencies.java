@@ -1,11 +1,12 @@
 package net.whg.we.resources;
 
 import java.util.ArrayList;
+import java.util.List;
 import net.whg.we.utils.Poolable;
 
 public class ResourceDependencies implements Poolable
 {
-	private ArrayList<SubResourceFile> _dependencies = new ArrayList<>();
+	private ArrayList<ResourceDependency> _dependencies = new ArrayList<>();
 	private ResourceFile _resourceFile;
 
 	public void setResourceFile(ResourceFile resourceFile)
@@ -18,9 +19,20 @@ public class ResourceDependencies implements Poolable
 		return _resourceFile;
 	}
 
-	public ArrayList<SubResourceFile> getDependencies()
+	public ArrayList<ResourceDependency> getDependencies()
 	{
 		return _dependencies;
+	}
+
+	public boolean isFullyLoaded(ResourceBatchRequest request)
+	{
+		for (ResourceDependency dep : _dependencies)
+		{
+			if (request.getResource(dep.getResourceFile()) == null)
+				return false;
+		}
+
+		return true;
 	}
 
 	public int getDependencyCount()
@@ -28,7 +40,7 @@ public class ResourceDependencies implements Poolable
 		return _dependencies.size();
 	}
 
-	public void addDependency(SubResourceFile subResourceFile)
+	public void addDependency(ResourceDependency subResourceFile)
 	{
 		_dependencies.add(subResourceFile);
 	}
@@ -48,5 +60,20 @@ public class ResourceDependencies implements Poolable
 	{
 		_resourceFile = null;
 		_dependencies.clear();
+	}
+
+	public ResourceDependency getDependency(String identifier)
+	{
+		for (ResourceDependency dep : _dependencies)
+			if (dep.getIdentifier().equals(identifier))
+				return dep;
+		return null;
+	}
+
+	public void searchDependencies(List<ResourceDependency> list, String regex)
+	{
+		for (ResourceDependency dep : _dependencies)
+			if (dep.getIdentifier().matches(regex))
+				list.add(dep);
 	}
 }
