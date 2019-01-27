@@ -3,9 +3,9 @@ package resource_handling;
 import org.junit.Assert;
 import org.junit.Test;
 import net.whg.we.main.Plugin;
-import util.CommonMock;
 import net.whg.we.resources.ResourceFile;
 import net.whg.we.resources.SimpleFileDatabase;
+import util.CommonMock;
 
 public class ResourceFileTest
 {

@@ -5,7 +5,7 @@ import org.junit.Test;
 public class ResourceDatabaseTest
 {
 	@Test
-	public void initResourceDatabase()
+	public void initResourceManager()
 	{
 
 	}
