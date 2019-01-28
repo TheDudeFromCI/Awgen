@@ -6,7 +6,7 @@ import org.mockito.Mockito;
 import net.whg.we.resources.Resource;
 import net.whg.we.resources.ResourceDatabase;
 
-public class ResourceDatabaseTests
+public class ResourceDatabaseTest
 {
 	@SuppressWarnings("unchecked")
 	@Test

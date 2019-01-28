@@ -1,5 +1,6 @@
 package resource_handling.unit;
 
+import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -10,7 +11,7 @@ import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.resources.ResourceFile;
 import net.whg.we.resources.ResourceLoader;
 
-public class ResourceLoaderTests
+public class ResourceLoaderTest
 {
 	@SuppressWarnings("unchecked")
 	@Test
@@ -66,10 +67,16 @@ public class ResourceLoaderTests
 		ResourceDatabase database = new ResourceDatabase();
 		FileLoader<Object> fileLoader = Mockito.mock(FileLoader.class);
 		Plugin plugin = Mockito.mock(Plugin.class);
-		ResourceFile resourceFile = new ResourceFile(plugin, "file.txt", null, null);
+		File file = new File(".");
+		ResourceFile resourceFile = new ResourceFile(plugin, "file.txt", null, file);
 		Resource<Object> resource = Mockito.mock(Resource.class);
 
 		resourceLoader.addFileLoader(fileLoader);
+
+		Mockito.doReturn(new String[]
+		{
+				"txt"
+		}).when(fileLoader).getTargetFileTypes();
 		Mockito.doReturn(resource).when(fileLoader).loadFile(resourceLoader, database,
 				resourceFile);
 
@@ -84,13 +91,16 @@ public class ResourceLoaderTests
 		ResourceDatabase database = new ResourceDatabase();
 		FileLoader<Object> fileLoader = Mockito.mock(FileLoader.class);
 		Plugin plugin = Mockito.mock(Plugin.class);
-		ResourceFile resourceFile = new ResourceFile(plugin, "file.txt", null, null);
+		File file = new File(".");
+		ResourceFile resourceFile = new ResourceFile(plugin, "file.txt", null, file);
 		Resource<Object> resource = Mockito.mock(Resource.class);
+		Mockito.doReturn(resourceFile).when(resource).getResourceFile();
 		database.addResource(resource);
 
 		resourceLoader.addFileLoader(fileLoader);
 
 		Assert.assertEquals(resource, resourceLoader.loadResource(resourceFile, database));
-		Mockito.verify(fileLoader, Mockito.calls(0));
+		Mockito.verify(fileLoader, Mockito.never()).loadFile(resourceLoader, database,
+				resourceFile);
 	}
 }
