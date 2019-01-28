@@ -45,5 +45,6 @@ public class PathNameValidatorTest
 		Assert.assertFalse(val.isValidPathName("a 0bd/nas.123:name:"));
 		Assert.assertTrue(val.isValidPathName("a 0bd/nas.123:name/234"));
 		Assert.assertFalse(val.isValidPathName("a 0bd/nas.123:name:name2"));
+		Assert.assertFalse(val.isValidPathName("a 0bd/nas.123/:name:name2"));
 	}
 }
