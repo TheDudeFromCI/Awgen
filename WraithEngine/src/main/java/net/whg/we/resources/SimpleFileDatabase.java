@@ -58,7 +58,8 @@ public class SimpleFileDatabase implements FileDatabase
 
 		if (!_validator.isValidPathName(pathName))
 		{
-			Log.warnf("Path name could not be validated! Cannot retrieve ResourceFile %s!", pathName);
+			Log.warnf("Path name could not be validated! Cannot retrieve ResourceFile %s!",
+					pathName);
 			return null;
 		}
 
@@ -67,7 +68,7 @@ public class SimpleFileDatabase implements FileDatabase
 		File pluginFolder = new File(resourceFolder, plugin.getPluginName());
 		File file = new File(pluginFolder, pathName);
 
-		return new ResourceFile(plugin, pathName, file);
+		return new ResourceFile(plugin, pathName, null, file);
 	}
 
 	public File getBaseFolder()
