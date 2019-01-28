@@ -62,7 +62,7 @@ public class ResourceFile
 	 */
 	public boolean exists()
 	{
-		return _file != null && _file.exists();
+		return _file.exists();
 	}
 
 	/**

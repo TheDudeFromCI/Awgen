@@ -71,6 +71,17 @@ public class ResourceFileTest
 	}
 
 	@Test
+	public void notEqual_DifferentObject()
+	{
+		Plugin plugin = Mockito.mock(Plugin.class);
+		File file = new File(".");
+
+		ResourceFile a = new ResourceFile(plugin, "file.txt", null, file);
+
+		Assert.assertNotEquals(a, new Object());
+	}
+
+	@Test
 	public void getPlugin()
 	{
 		Plugin plugin = Mockito.mock(Plugin.class);
@@ -139,5 +150,70 @@ public class ResourceFileTest
 
 		File properties = new File(file.getAbsolutePath() + ".asset");
 		Assert.assertEquals(res.getPropertiesFile(), properties);
+	}
+
+	@Test
+	public void asString()
+	{
+		Plugin plugin = Mockito.mock(Plugin.class);
+		Mockito.doReturn("TestPlugin").when(plugin).getPluginName();
+
+		File file = new File("awesome.txt");
+		ResourceFile res = new ResourceFile(plugin, "path/to/file.txt", null, file);
+
+		Assert.assertEquals("[Resource: TestPlugin/path/to/file.txt:file.txt]", res.toString());
+	}
+
+	@Test
+	public void hashing()
+	{
+		Plugin plugin = Mockito.mock(Plugin.class);
+		File file = new File(".");
+		ResourceFile res = new ResourceFile(plugin, "path/to/file.txt", null, file);
+
+		Assert.assertEquals(res.hashCode(), "path/to/file.txt".hashCode());
+	}
+
+	@Test
+	public void fileExists_FileNotReal()
+	{
+		Plugin plugin = Mockito.mock(Plugin.class);
+		File file = new File("res/TestPlugin/Unit Tests/not_real.txt");
+		ResourceFile res = new ResourceFile(plugin, "file.txt", null, file);
+
+		Assert.assertFalse(res.exists());
+	}
+
+	@Test
+	public void fileExists_DoesExist()
+	{
+		Plugin plugin = Mockito.mock(Plugin.class);
+
+		File file = new File("res/TestPlugin/Unit Tests/simple.yml");
+		ResourceFile res = new ResourceFile(plugin, "file.txt", null, file);
+
+		Assert.assertTrue(res.exists());
+	}
+
+	@Test
+	public void propertiesFileExists()
+	{
+		Plugin plugin = Mockito.mock(Plugin.class);
+
+		File file = new File("res/TestPlugin/Unit Tests/simple.yml");
+		ResourceFile res = new ResourceFile(plugin, "file.txt", null, file);
+
+		Assert.assertTrue(res.hasPropertiesFile());
+	}
+
+	@Test
+	public void propertiesFile_NotExists()
+	{
+		Plugin plugin = Mockito.mock(Plugin.class);
+
+		File file = new File("res/TestPlugin/Unit Tests/not_real.txt");
+		ResourceFile res = new ResourceFile(plugin, "file.txt", null, file);
+
+		Assert.assertFalse(res.hasPropertiesFile());
 	}
 }
