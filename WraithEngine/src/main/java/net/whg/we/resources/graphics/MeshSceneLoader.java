@@ -3,13 +3,14 @@ package net.whg.we.resources.graphics;
 import org.lwjgl.assimp.AIMesh;
 import org.lwjgl.assimp.AIScene;
 import org.lwjgl.assimp.Assimp;
-import net.whg.we.rendering.MeshScene;
+import net.whg.we.rendering.Mesh;
 import net.whg.we.rendering.Skeleton;
 import net.whg.we.rendering.VertexData;
-import net.whg.we.resources.FileLoadState;
 import net.whg.we.resources.FileLoader;
-import net.whg.we.resources.ResourceBatchRequest;
+import net.whg.we.resources.Resource;
+import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.resources.ResourceFile;
+import net.whg.we.resources.ResourceLoader;
 import net.whg.we.utils.Log;
 
 /**
@@ -18,7 +19,7 @@ import net.whg.we.utils.Log;
  *
  * @author TheDudeFromCI
  */
-public class MeshSceneLoader implements FileLoader<MeshScene>
+public class MeshSceneLoader implements FileLoader<Mesh>
 {
 	private static final String[] FILE_TYPES =
 	{
@@ -33,7 +34,8 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 	}
 
 	@Override
-	public FileLoadState loadFile(ResourceBatchRequest request, ResourceFile resourceFile)
+	public Resource<Mesh> loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
+			ResourceFile resourceFile)
 	{
 		try
 		{
@@ -45,10 +47,12 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 
 			// If scene could not be loaded, return null
 			if (scene == null)
-				return FileLoadState.FAILED_TO_LOAD;
+				return null;
 
 			// Count scene information
 			int meshCount = scene.mNumMeshes();
+
+			MeshResource mainMesh = null;
 
 			// Load scene meshes
 			for (int i = 0; i < meshCount; i++)
@@ -58,18 +62,22 @@ public class MeshSceneLoader implements FileLoader<MeshScene>
 				VertexData vertexData = AssimpMeshParser.loadMesh(mesh);
 				Skeleton skeleton = AssimpSkeletonParser.loadSkeleton(scene, mesh, vertexData);
 
-				request.addResource(new MeshResource(meshName, vertexData, skeleton, resourceFile));
+				MeshResource resource =
+						new MeshResource(meshName, vertexData, skeleton, resourceFile);
+				database.addResource(resource);
+
+				if (resource.getName().equals(resourceFile.getName()) || meshCount == 1)
+					mainMesh = resource;
 			}
 
-			// Cleanup and return
 			scene.free();
 
-			return FileLoadState.LOADED_SUCCESSFULLY;
+			return mainMesh;
 		}
 		catch (Exception exception)
 		{
 			Log.errorf("Failed to load mesh resource %s!", exception, resourceFile);
-			return FileLoadState.FAILED_TO_LOAD;
+			return null;
 		}
 	}
 

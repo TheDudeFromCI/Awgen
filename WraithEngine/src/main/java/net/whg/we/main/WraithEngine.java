@@ -5,9 +5,9 @@ import org.lwjgl.Version;
 import net.whg.we.resources.FileDatabase;
 import net.whg.we.resources.ResourceLoader;
 import net.whg.we.resources.SimpleFileDatabase;
-import net.whg.we.utils.Log;
 import net.whg.we.scene.GameLoop;
 import net.whg.we.scene.WindowedGameLoop;
+import net.whg.we.utils.Log;
 
 /**
  * The program entry class. This class is used for the purpose of initializing
@@ -51,7 +51,7 @@ public class WraithEngine
 		File baseFolder = new File(System.getProperty("user.dir"));
 		FileDatabase fileDatabase = new SimpleFileDatabase(baseFolder);
 
-		ResourceLoader resourceLoader = new ResourceLoader(fileDatabase);
+		ResourceLoader resourceLoader = new ResourceLoader();
 
 		// Setup GameLoop
 		GameLoop gameLoop = new WindowedGameLoop(resourceLoader);

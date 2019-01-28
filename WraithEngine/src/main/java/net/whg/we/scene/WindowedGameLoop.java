@@ -1,12 +1,12 @@
 package net.whg.we.scene;
 
 import net.whg.we.event.EventCaller;
-import net.whg.we.utils.Log;
-import net.whg.we.resources.ResourceLoader;
 import net.whg.we.rendering.GraphicsPipeline;
+import net.whg.we.resources.ResourceLoader;
 import net.whg.we.test.TestScene;
-import net.whg.we.utils.Input;
 import net.whg.we.utils.FPSLogger;
+import net.whg.we.utils.Input;
+import net.whg.we.utils.Log;
 import net.whg.we.utils.Time;
 
 public class WindowedGameLoop implements GameLoop
@@ -61,13 +61,13 @@ public class WindowedGameLoop implements GameLoop
 				}
 			}
 		}
-		catch(Exception exception)
+		catch (Exception exception)
 		{
 			Log.fatalf("Uncaught exception in game loop!", exception);
 		}
 		finally
 		{
-			_resourceLoader.disposeResources();
+			// _resourceLoader.disposeResources();
 			_graphicsPipeline.dispose();
 			_isRunning = false;
 		}

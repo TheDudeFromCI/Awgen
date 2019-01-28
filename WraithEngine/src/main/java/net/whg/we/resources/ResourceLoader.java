@@ -1,136 +1,53 @@
 package net.whg.we.resources;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import net.whg.we.utils.Log;
 
 public class ResourceLoader
 {
 	private ArrayList<FileLoader<?>> _fileLoaders = new ArrayList<>();
-	private ArrayList<FileLoader<?>> _fileLoaderBuffer = new ArrayList<>();
-	private static HashMap<ResourceFile, Resource<?>> _resourceReferences = new HashMap<>();
-	private FileDatabase _fileDatabase;
-
-	public ResourceLoader(FileDatabase fileDatabase)
-	{
-		_fileDatabase = fileDatabase;
-	}
 
 	/**
-	 * Gets the file database currently being used by this ResourceLoader.
+	 * Loads a resource from a file. If the resource already exists in the database,
+	 * that instance of the resource is returned instead. The resource is added to
+	 * the database after it is loaded. This method will also cause any resources
+	 * that this resource depends on to also be loaded.
 	 *
-	 * @return The file database.
+	 * @param resourceFile
+	 *            - The resource file to load.
+	 * @param database
+	 *            - The database to load the resource from.
+	 * @return
 	 */
-	public FileDatabase getFileDatabase()
+	public Resource<?> loadResource(ResourceFile resourceFile, ResourceDatabase database)
 	{
-		return _fileDatabase;
-	}
+		Resource<?> resource = database.getResource(resourceFile);
+		if (resource != null)
+			return resource;
 
-	/**
-	 * Loads a resource batch request. This method works by scanning all referenced
-	 * file loaders and returning the file loader with the highest priority that
-	 * supports the given file type for each file in the request. If the file does
-	 * not have an extension, does not have a supported file loader, or fails to
-	 * load, it is removed from the request. If addition resource dependencies are
-	 * found while loading resources, they are automatically added to the request
-	 * and loaded as well.
-	 *
-	 * @param request
-	 *            - The resource files to load.
-	 */
-	public void loadResources(ResourceBatchRequest request)
-	{
-		if (Log.getLogLevel() <= Log.DEBUG)
+		Log.infof("Loading the resource %s.", resourceFile);
+
+		FileLoader<?> loader = null;
+		int priority = Integer.MIN_VALUE;
+
+		file_loader:
+		for (FileLoader<?> l : _fileLoaders)
 		{
-			Log.debugf("Loading ResourceBatchRequest.(%d Objects)", request.getResourceFileCount());
-			for (int i = 0; i < request.getResourceFileCount(); i++)
-				Log.debugf("  - %s", request.getResourceFile(i));
+			if (l.getPriority() <= priority)
+				continue;
+			for (String s : l.getTargetFileTypes())
+				if (s.equals(resourceFile.getFileExtension()))
+				{
+					loader = l;
+					continue file_loader;
+				}
 		}
 
-		ResourceFile resourceFile;
-		while ((resourceFile = request.nextUnloadedResource()) != null)
-		{
-			try
-			{
-				if (hasResource(resourceFile))
-				{
-					Log.debugf("Skipping resource %s, already loaded.", resourceFile);
-					request.addResource(getResource(resourceFile));
-					continue;
-				}
+		if (loader == null)
+			throw new IllegalStateException(
+					String.format("Not a supported file type! (%s)", resourceFile));
 
-				Log.infof("Loading the resource %s.", resourceFile);
-
-				FileLoader<?> loader = null;
-				for (FileLoader<?> l : _fileLoaders)
-					for (String s : l.getTargetFileTypes())
-						if (s.equals(resourceFile.getFileExtension()))
-							_fileLoaderBuffer.add(l);
-
-				if (_fileLoaderBuffer.isEmpty())
-				{
-					Log.warnf("Failed to load the resource %s, not a supported file type!",
-							resourceFile);
-					request.removeResourceFile(resourceFile);
-					continue;
-				}
-
-				if (Log.getLogLevel() <= Log.TRACE)
-				{
-					Log.trace("  Finding available file loaders...");
-					for (FileLoader<?> l : _fileLoaderBuffer)
-						Log.tracef("   * %s", l.getClass().getName());
-				}
-
-				if (_fileLoaderBuffer.size() == 1)
-					loader = _fileLoaderBuffer.get(0);
-				else
-				{
-					int pri = Integer.MIN_VALUE;
-					for (int i = 0; i < _fileLoaderBuffer.size(); i++)
-					{
-						FileLoader<?> fl = _fileLoaderBuffer.get(i);
-						if (fl.getPriority() > pri)
-						{
-							pri = fl.getPriority();
-							loader = fl;
-						}
-					}
-				}
-
-				_fileLoaderBuffer.clear();
-				Log.tracef("Using highest priority file loader: %s.", loader);
-
-				FileLoadState fileLoadState = loader.loadFile(request, resourceFile);
-				switch (fileLoadState)
-				{
-					case LOADED_SUCCESSFULLY:
-						Log.tracef("Successfully loaded resource %s.", resourceFile);
-						break;
-
-					case FAILED_TO_LOAD:
-						Log.warnf("Failed to load the resource %s, unable to parse!", resourceFile);
-						request.removeResourceFile(resourceFile);
-						break;
-
-					case PUSH_TO_BACK:
-						request.removeResourceFile(resourceFile);
-						request.addResourceFile(resourceFile);
-						break;
-
-					default:
-						Log.warn("Unknown File Load State!");
-						break;
-				}
-			}
-			catch (Exception exception)
-			{
-				Log.errorf("Uncaught error loading resource file %s!", exception, resourceFile);
-			}
-		}
-
-		for (int i = 0; i < request.getResourceCount(); i++)
-			addResource(request.getResource(i));
+		return loader.loadFile(this, database, resourceFile);
 	}
 
 	/**
@@ -166,91 +83,27 @@ public class ResourceLoader
 	}
 
 	/**
-	 * Checks if this resource loader already have this resource loaded. If the
-	 * resourceFile is not specified, this method returns false.
+	 * Gets the number of file loaders currently attched to this resource loader.
 	 *
-	 * @param resourceFile
-	 *            - The resource file that represents the given resource.
-	 * @return True if the resource referenced by this resource file exists. False
-	 *         otherwise.
+	 * @return The number of file loaders currently attached to this resource
+	 *         loader.
 	 */
-	public boolean hasResource(ResourceFile resourceFile)
+	public int getFileLoaderCount()
 	{
-		if (resourceFile == null)
-			return false;
-
-		return _resourceReferences.containsKey(resourceFile);
+		return _fileLoaders.size();
 	}
 
 	/**
-	 * Gets the loaded resource that is currently assigned to this ResourceFile.
+	 * Gets the file loader at the specified index. A file loader's index can change
+	 * anytime a new file loader is added or removed. This method is indented to be
+	 * used for iteration purposes only.
 	 *
-	 * @param resourceFile
-	 *            - The resource file that represents the given resource.
-	 * @return The loaded resource for the given ResourceFile, or null if the
-	 *         resource is not loaded, or if a ResourceFile is not specified.
+	 * @param index
+	 *            - The index of the file loader.
+	 * @return The file loader at the specified index.
 	 */
-	public Resource<?> getResource(ResourceFile resourceFile)
+	public FileLoader<?> getFileLoader(int index)
 	{
-		if (resourceFile == null)
-			return null;
-
-		return _resourceReferences.get(resourceFile);
-	}
-
-	/**
-	 * Adds a loaded resource to this ResourceLoader. Loaded resources will be
-	 * returned instead of attempting to load resources from file when possible.
-	 *
-	 * @param resource
-	 *            - The loaded resource to add to this ResourceLoader. If null,
-	 *            nothing will happen.
-	 */
-	public void addResource(Resource<?> resource)
-	{
-		if (resource == null)
-		{
-			Log.warn("Attempted to add a null resource to the ResourceLoader!");
-			return;
-		}
-
-		_resourceReferences.put(resource.getResourceFile(), resource);
-	}
-
-	/**
-	 * Removes a loaded resource from this ResourceLoader. This method will also
-	 * attempt to dispose the given resource, even if the resource is not currently
-	 * loaded into this ResourceLoader.
-	 *
-	 * @param resource
-	 *            - The loaded resource to remove to this ResourceLoader and
-	 *            dispose. If null, nothing will happen.
-	 */
-	public void removeResource(Resource<?> resource)
-	{
-		if (resource == null)
-		{
-			Log.warn("Attempted to remove a null resource from the ResourceLoader!");
-			return;
-		}
-
-		_resourceReferences.remove(resource.getResourceFile());
-		resource.dispose();
-	}
-
-	/**
-	 * Disposes and removes all loaded resources that this ResourceLoader currently
-	 * owns.
-	 */
-	public void disposeResources()
-	{
-		Log.info("Disposing all resources.");
-		for (ResourceFile resourceFile : _resourceReferences.keySet())
-		{
-			Log.debugf("Disposing resources %s.", resourceFile);
-			_resourceReferences.get(resourceFile).dispose();
-		}
-
-		_resourceReferences.clear();
+		return _fileLoaders.get(index);
 	}
 }

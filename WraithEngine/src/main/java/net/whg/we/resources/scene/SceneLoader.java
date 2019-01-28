@@ -1,12 +1,11 @@
 package net.whg.we.resources.scene;
 
-import net.whg.we.resources.FileLoadState;
 import net.whg.we.resources.FileLoader;
-import net.whg.we.resources.ResourceBatchRequest;
+import net.whg.we.resources.Resource;
+import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.resources.ResourceFile;
-import net.whg.we.resources.YamlFile;
+import net.whg.we.resources.ResourceLoader;
 import net.whg.we.scene.Scene;
-import net.whg.we.utils.Log;
 
 public class SceneLoader implements FileLoader<Scene>
 {
@@ -28,29 +27,9 @@ public class SceneLoader implements FileLoader<Scene>
 	}
 
 	@Override
-	public FileLoadState loadFile(ResourceBatchRequest request, ResourceFile resourceFile)
+	public Resource<Scene> loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
+			ResourceFile resourceFile)
 	{
-		try
-		{
-			boolean allDependenciesLoaded = false;
-
-			YamlFile yamlFile = new YamlFile();
-			yamlFile.load(resourceFile.getFile());
-
-			for (@SuppressWarnings("unused")
-			String models : yamlFile.getKeys("models"))
-			{
-				// TODO
-			}
-
-			if (allDependenciesLoaded)
-				return FileLoadState.LOADED_SUCCESSFULLY;
-			return FileLoadState.PUSH_TO_BACK;
-		}
-		catch (Exception exception)
-		{
-			Log.errorf("Failed to load resource %s!", exception, resourceFile);
-			return FileLoadState.FAILED_TO_LOAD;
-		}
+		return null;
 	}
 }

@@ -1,25 +1,21 @@
 package net.whg.we.test;
 
 import org.joml.Math;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.ScreenClearType;
 import net.whg.we.resources.ResourceLoader;
 import net.whg.we.scene.Model;
 import net.whg.we.scene.RenderPass;
-import net.whg.we.scene.SceneLoader;
+import net.whg.we.scene.UpdateListener;
+import net.whg.we.scene.WindowedGameLoop;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.FirstPersonCamera;
 import net.whg.we.utils.Input;
 import net.whg.we.utils.Log;
 import net.whg.we.utils.Screen;
 import net.whg.we.utils.Time;
-import net.whg.we.scene.UpdateListener;
-import net.whg.we.scene.WindowedGameLoop;
-import net.whg.we.resources.FileDatabase;
 
 public class TestScene implements UpdateListener
 {
@@ -39,52 +35,29 @@ public class TestScene implements UpdateListener
 	{
 		try
 		{
-			Plugin dummyPlugin = new Plugin()
-			{
-
-				@Override
-				public void initPlugin()
-				{
-				}
-
-				@Override
-				public int getPriority()
-				{
-					return 0;
-				}
-
-				@Override
-				public String getPluginName()
-				{
-					return "TestPlugin";
-				}
-
-				@Override
-				public void enablePlugin()
-				{
-				}
-			};
-
 			Graphics graphics = _gameLoop.getGraphicsPipeline().getGraphics();
 			graphics.setClearScreenColor(new Color(0.2f, 0.4f, 0.8f));
 			_renderPass = new RenderPass();
 
 			{
-				SceneLoader loader = new SceneLoader(resourceLoader);
-				FileDatabase fileDatabase = resourceLoader.getFileDatabase();
+				// SceneLoader loader = new SceneLoader(resourceLoader);
+				// FileDatabase fileDatabase = resourceLoader.getFileDatabase();
 
-				_monkeyModel = loader.loadModel(fileDatabase.getResourceFile(dummyPlugin, "monkey_head.fbx"), graphics);
-				Model floor = loader.loadModel(fileDatabase.getResourceFile(dummyPlugin, "floor.obj"), graphics);
-				Model human = loader.loadModel(fileDatabase.getResourceFile(dummyPlugin, "BaseHuman.fbx"), graphics);
-
-				_monkeyModel.getLocation()
-						.setRotation(new Quaternionf().rotateX((float) (-Math.PI / 2f)));
-				_monkeyModel.getLocation().setScale(new Vector3f(0.25f, 0.25f, 0.25f));
-				human.getLocation().setPosition(new Vector3f(0f, 0f, -5f));
-
-				_renderPass.addModel(_monkeyModel);
-				_renderPass.addModel(floor);
-				_renderPass.addModel(human);
+				// _monkeyModel = loader.loadModel(fileDatabase.getResourceFile(dummyPlugin,
+				// "monkey_head.fbx"), graphics);
+				// Model floor = loader.loadModel(fileDatabase.getResourceFile(dummyPlugin,
+				// "floor.obj"), graphics);
+				// Model human = loader.loadModel(fileDatabase.getResourceFile(dummyPlugin,
+				// "BaseHuman.fbx"), graphics);
+				//
+				// _monkeyModel.getLocation()
+				// .setRotation(new Quaternionf().rotateX((float) (-Math.PI / 2f)));
+				// _monkeyModel.getLocation().setScale(new Vector3f(0.25f, 0.25f, 0.25f));
+				// human.getLocation().setPosition(new Vector3f(0f, 0f, -5f));
+				//
+				// _renderPass.addModel(_monkeyModel);
+				// _renderPass.addModel(floor);
+				// _renderPass.addModel(human);
 			}
 
 			_camera = new Camera();

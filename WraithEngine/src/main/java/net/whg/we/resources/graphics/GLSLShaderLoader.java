@@ -3,10 +3,11 @@ package net.whg.we.resources.graphics;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import net.whg.we.rendering.Shader;
-import net.whg.we.resources.FileLoadState;
 import net.whg.we.resources.FileLoader;
-import net.whg.we.resources.ResourceBatchRequest;
+import net.whg.we.resources.Resource;
+import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.resources.ResourceFile;
+import net.whg.we.resources.ResourceLoader;
 import net.whg.we.utils.Log;
 
 public class GLSLShaderLoader implements FileLoader<Shader>
@@ -23,7 +24,8 @@ public class GLSLShaderLoader implements FileLoader<Shader>
 	}
 
 	@Override
-	public FileLoadState loadFile(ResourceBatchRequest request, ResourceFile resourceFile)
+	public Resource<Shader> loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
+			ResourceFile resourceFile)
 	{
 		try (BufferedReader in = new BufferedReader(new FileReader(resourceFile.getFile())))
 		{
@@ -60,14 +62,16 @@ public class GLSLShaderLoader implements FileLoader<Shader>
 					fragShader.append(line).append("\n");
 			}
 
-			request.addResource(new ShaderResource(properties, vertShader.toString(),
-					geoShader.toString(), fragShader.toString(), resourceFile));
-			return FileLoadState.LOADED_SUCCESSFULLY;
+			ShaderResource shader = new ShaderResource(properties, vertShader.toString(),
+					geoShader.toString(), fragShader.toString(), resourceFile);
+			database.addResource(shader);
+
+			return shader;
 		}
 		catch (Exception e)
 		{
-			Log.errorf("Failed to load GLSL shader file %s!", e, resourceFile);
-			return FileLoadState.FAILED_TO_LOAD;
+			Log.errorf("Failed to load GLSL shader %s!", e, resourceFile);
+			return null;
 		}
 	}
 

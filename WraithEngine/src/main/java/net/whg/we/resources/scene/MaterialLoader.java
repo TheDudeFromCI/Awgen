@@ -1,15 +1,13 @@
 package net.whg.we.resources.scene;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 import net.whg.we.rendering.Material;
 import net.whg.we.resources.FileDatabase;
-import net.whg.we.resources.FileLoadState;
 import net.whg.we.resources.FileLoader;
-import net.whg.we.resources.ResourceBatchRequest;
-import net.whg.we.resources.ResourceDependencies;
-import net.whg.we.resources.ResourceDependency;
+import net.whg.we.resources.Resource;
+import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.resources.ResourceFile;
+import net.whg.we.resources.ResourceLoader;
 import net.whg.we.resources.YamlFile;
 import net.whg.we.resources.graphics.ShaderResource;
 import net.whg.we.resources.graphics.TextureResource;
@@ -36,70 +34,44 @@ public class MaterialLoader implements FileLoader<Material>
 	}
 
 	@Override
-	public FileLoadState loadFile(ResourceBatchRequest request, ResourceFile resourceFile)
+	public Resource<Material> loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
+			ResourceFile resourceFile)
 	{
 		try
 		{
-			ResourceDependencies dependencies = request.getResourceDependencies(resourceFile);
+			YamlFile yaml = new YamlFile();
+			yaml.load(resourceFile.getFile());
 
-			// Check if all dependencies have been queued.
-			if (dependencies.getDependencyCount() == 0)
-			{
-				YamlFile yaml = new YamlFile();
-				yaml.load(resourceFile.getFile());
-
-				String shaderPath = yaml.getString("shader");
-				ResourceFile shaderResource =
-						_fileDatabase.getResourceFile(resourceFile.getPlugin(), shaderPath);
-				ResourceDependency sub = new ResourceDependency(shaderResource, "shader");
-				dependencies.addDependency(sub);
-
-				for (String textureName : yaml.getKeys("textures"))
-				{
-					String texturePath = yaml.getString("textures", textureName);
-					ResourceFile textureResource =
-							_fileDatabase.getResourceFile(resourceFile.getPlugin(), texturePath);
-					sub = new ResourceDependency(textureResource, "texture." + textureName);
-					dependencies.addDependency(sub);
-				}
-
-				return FileLoadState.PUSH_TO_BACK;
-			}
-
-			// Check if all dependencies have been loaded.
-			if (!dependencies.isFullyLoaded(request))
-				return FileLoadState.PUSH_TO_BACK;
-
-			ShaderResource shader;
-			{
-				ResourceDependency shaderDependency = dependencies.getDependency("shader");
-				ResourceFile shaderResourceFile = shaderDependency.getResourceFile();
-				shader = (ShaderResource) request.getResource(shaderResourceFile);
-			}
+			ShaderResource shader = (ShaderResource) resourceLoader.loadResource(_fileDatabase
+					.getResourceFile(resourceFile.getPlugin(), yaml.getString("shader")), database);
 
 			TextureResource[] textures;
 			{
-				List<ResourceDependency> textureDependencyList = new ArrayList<>();
-				dependencies.searchDependencies(textureDependencyList, "");
-				textures = new TextureResource[textureDependencyList.size()];
-				for (int i = 0; i < textures.length; i++)
+				Set<String> textureNames = yaml.getKeys("textures");
+				textures = new TextureResource[textureNames.size()];
+
+				int i = 0;
+				for (String textureName : textureNames)
 				{
-					ResourceDependency t = textureDependencyList.get(i);
-					textures[i] = (TextureResource) request.getResource(t.getResourceFile());
+					textures[i++] =
+							(TextureResource) resourceLoader
+									.loadResource(
+											_fileDatabase.getResourceFile(resourceFile.getPlugin(),
+													yaml.getString("textures", textureName)),
+											database);
 				}
 			}
 
 			MaterialResource material =
 					new MaterialResource(resourceFile.getName(), shader, textures);
+			database.addResource(material);
 
-			request.addResource(material);
-
-			return FileLoadState.LOADED_SUCCESSFULLY;
+			return material;
 		}
 		catch (Exception exception)
 		{
 			Log.errorf("Failed to load material %s!", exception, resourceFile);
-			return FileLoadState.FAILED_TO_LOAD;
+			return null;
 		}
 	}
 
