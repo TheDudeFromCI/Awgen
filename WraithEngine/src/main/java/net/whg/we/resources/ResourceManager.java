@@ -1,6 +1,7 @@
 package net.whg.we.resources;
 
 import net.whg.we.main.Plugin;
+import net.whg.we.rendering.Graphics;
 
 /**
  * This class handles all high level API for resource management.
@@ -111,5 +112,16 @@ public class ResourceManager
 	public void disposeAllResources()
 	{
 		_resourceDatabase.dispose();
+	}
+
+	/**
+	 * Compiles all currently loaded resources if they are not already compiled.
+	 * 
+	 * @param graphics
+	 *            - The graphics manager to compile resources with.
+	 */
+	public void compileAllResources(Graphics graphics)
+	{
+		_resourceDatabase.compileAllResources(graphics);
 	}
 }

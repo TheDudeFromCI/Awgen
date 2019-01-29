@@ -7,6 +7,8 @@ package net.whg.we.resources;
  * dynmanically, such as config files.
  *
  * @author TheDudeFromCI
+ * @param <T>
+ *            The object this resource represents.
  */
 public interface ReloadableResource<T> extends Resource<T>
 {

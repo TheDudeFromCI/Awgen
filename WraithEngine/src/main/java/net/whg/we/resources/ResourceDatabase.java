@@ -1,6 +1,8 @@
 package net.whg.we.resources;
 
 import java.util.ArrayList;
+import net.whg.we.rendering.Graphics;
+import net.whg.we.utils.GenericRunnable;
 
 /**
  * Represents a collection of loaded resources.
@@ -77,7 +79,7 @@ public class ResourceDatabase
 
 	/**
 	 * Gets the number of loaded resources currently in this database.
-	 * 
+	 *
 	 * @return The number of loaded resources in this database.
 	 */
 	public int getResourceCount()
@@ -90,7 +92,7 @@ public class ResourceDatabase
 	 * change any time a resource is added to or removed from this list. This method
 	 * is intended for iteration purposes only. This value should be between 0 and
 	 * {@link #getResourceCount()}, inclusive.
-	 * 
+	 *
 	 * @param index
 	 *            - The index of the resource to get.
 	 * @return The resource at the provided index.
@@ -98,5 +100,36 @@ public class ResourceDatabase
 	public Resource<?> getResourceAt(int index)
 	{
 		return _resources.get(index);
+	}
+
+	/**
+	 * Runs an active for each resource in the database.
+	 *
+	 * @param action
+	 *            - The action to preform on the resource.
+	 */
+	public void forEach(GenericRunnable<Resource<?>> action)
+	{
+		for (Resource<?> res : _resources)
+			action.run(res);
+	}
+
+	/**
+	 * Attempts to compile all resources if they are not already compiled.
+	 * 
+	 * @param graphics
+	 *            - The graphics manager to compile the resources with.
+	 */
+	public void compileAllResources(Graphics graphics)
+	{
+		for (Resource<?> res : _resources)
+		{
+			if (res instanceof CompilableResource<?>)
+			{
+				CompilableResource<?> c = (CompilableResource<?>) res;
+				if (!c.isCompiled())
+					c.compile(graphics);
+			}
+		}
 	}
 }

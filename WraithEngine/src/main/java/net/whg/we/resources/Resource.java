@@ -5,6 +5,8 @@ package net.whg.we.resources;
  * a wrapper for the data, and may or may not represent the data itself.
  *
  * @author TheDudeFromCI
+ * @param <T>
+ *            The object this resource represents.
  */
 public interface Resource<T>
 {
@@ -32,7 +34,7 @@ public interface Resource<T>
 	/**
 	 * Gets the name of this resource. This should be unquie within the ResourceFile
 	 * that is is loaded from.
-	 * 
+	 *
 	 * @return The name of this resource.
 	 */
 	public String getName();

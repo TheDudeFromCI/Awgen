@@ -2,7 +2,7 @@ package net.whg.we.resources.graphics;
 
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.Shader;
-import net.whg.we.resources.Resource;
+import net.whg.we.resources.CompilableResource;
 import net.whg.we.resources.ResourceFile;
 import net.whg.we.utils.Log;
 
@@ -11,7 +11,7 @@ import net.whg.we.utils.Log;
  *
  * @author TheDudeFromCI
  */
-public class ShaderResource implements Resource<Shader>
+public class ShaderResource implements CompilableResource<Shader>
 {
 	private ShaderProperties _properties;
 	private String _vertShader;
@@ -39,23 +39,21 @@ public class ShaderResource implements Resource<Shader>
 		return _shader;
 	}
 
+	@Override
 	public boolean isCompiled()
 	{
 		return _shader != null;
 	}
 
-	public void compileShader(Graphics graphics)
+	@Override
+	public void compile(Graphics graphics)
 	{
 		if (_shader != null)
-		{
-			Log.warnf("Cannot compile shader! Shader %s already compiled.", _shader.getName());
 			return;
-		}
 
 		_shader = new Shader(_properties.getName(),
 				graphics.prepareShader(_vertShader, _geoShader, _fragShader));
 
-		// Free memory
 		_vertShader = null;
 		_geoShader = null;
 		_fragShader = null;

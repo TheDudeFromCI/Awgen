@@ -5,10 +5,10 @@ import net.whg.we.rendering.Mesh;
 import net.whg.we.rendering.Skeleton;
 import net.whg.we.rendering.SkinnedMesh;
 import net.whg.we.rendering.VertexData;
-import net.whg.we.resources.Resource;
+import net.whg.we.resources.CompilableResource;
 import net.whg.we.resources.ResourceFile;
 
-public class MeshResource implements Resource<Mesh>
+public class MeshResource implements CompilableResource<Mesh>
 {
 	private Mesh _mesh;
 	private String _name;
@@ -46,8 +46,12 @@ public class MeshResource implements Resource<Mesh>
 		_mesh.dispose();
 	}
 
+	@Override
 	public void compile(Graphics graphics)
 	{
+		if (_mesh != null)
+			return;
+
 		if (_skeleton == null)
 			_mesh = new Mesh(_name, _vertexData, graphics);
 		else
@@ -61,5 +65,11 @@ public class MeshResource implements Resource<Mesh>
 	public String getName()
 	{
 		return _name;
+	}
+
+	@Override
+	public boolean isCompiled()
+	{
+		return _mesh != null;
 	}
 }
