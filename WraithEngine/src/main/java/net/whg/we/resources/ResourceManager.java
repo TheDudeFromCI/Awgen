@@ -70,7 +70,7 @@ public class ResourceManager
 	 *            - The resource file to load.
 	 * @return The loaded resource, or null if the resource could not be loaded.
 	 */
-	public Resource<?> loadResource(ResourceFile resourceFile)
+	public Resource loadResource(ResourceFile resourceFile)
 	{
 		return _resourceLoader.loadResource(resourceFile, _resourceDatabase);
 	}
@@ -101,7 +101,7 @@ public class ResourceManager
 	 * @return The resource at the given pathname, owned by the give plugin, or null
 	 *         if the resource could not be loaded.
 	 */
-	public Resource<?> loadResource(Plugin plugin, String pathname)
+	public Resource loadResource(Plugin plugin, String pathname)
 	{
 		return loadResource(getResourceFile(plugin, pathname));
 	}
@@ -116,7 +116,7 @@ public class ResourceManager
 
 	/**
 	 * Compiles all currently loaded resources if they are not already compiled.
-	 * 
+	 *
 	 * @param graphics
 	 *            - The graphics manager to compile resources with.
 	 */

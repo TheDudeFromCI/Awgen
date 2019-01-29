@@ -1,23 +1,25 @@
 package resource_handling;
 
+import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
+import net.whg.we.main.Plugin;
 import net.whg.we.resources.SimpleFileDatabase;
 import net.whg.we.resources.YamlFile;
-import util.CommonMock;
 
 public class YamlFileTest
 {
 	@Test
 	public void loadFile()
 	{
-		// Makes sure some information could be loaded from a file.
-
+		File workingDir = new File(System.getProperty("user.dir"));
+		SimpleFileDatabase db = new SimpleFileDatabase(workingDir);
+		Plugin plugin = Mockito.mock(Plugin.class);
+		Mockito.when(plugin.getPluginName()).thenReturn("TestPlugin");
 		YamlFile yaml = new YamlFile();
-		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
 
-		yaml.load(
-				db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
+		yaml.load(db.getResourceFile(plugin, "Unit Tests/simple.yml").getFile());
 
 		Assert.assertFalse(yaml.getRoots().isEmpty());
 	}
@@ -25,13 +27,13 @@ public class YamlFileTest
 	@Test
 	public void parseRoots()
 	{
-		// Checks to make sure the correct information was loaded from the file.
-
+		File workingDir = new File(System.getProperty("user.dir"));
+		SimpleFileDatabase db = new SimpleFileDatabase(workingDir);
+		Plugin plugin = Mockito.mock(Plugin.class);
+		Mockito.when(plugin.getPluginName()).thenReturn("TestPlugin");
 		YamlFile yaml = new YamlFile();
-		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
 
-		yaml.load(
-				db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
+		yaml.load(db.getResourceFile(plugin, "Unit Tests/simple.yml").getFile());
 
 		Assert.assertTrue(yaml.getRoots().size() == 2);
 		Assert.assertTrue(yaml.getRoots().containsKey("root1"));
@@ -41,13 +43,13 @@ public class YamlFileTest
 	@Test
 	public void parseNestedAsNumber()
 	{
-		// Checks to make sure the correct information was loaded from the file.
-
+		File workingDir = new File(System.getProperty("user.dir"));
+		SimpleFileDatabase db = new SimpleFileDatabase(workingDir);
+		Plugin plugin = Mockito.mock(Plugin.class);
+		Mockito.when(plugin.getPluginName()).thenReturn("TestPlugin");
 		YamlFile yaml = new YamlFile();
-		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
 
-		yaml.load(
-				db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
+		yaml.load(db.getResourceFile(plugin, "Unit Tests/simple.yml").getFile());
 
 		Assert.assertEquals(yaml.getInt("root1", "some_data", "really_nested_data"), 2);
 	}
@@ -55,13 +57,13 @@ public class YamlFileTest
 	@Test
 	public void parseDotPath()
 	{
-		// Checks to make sure the correct information was loaded from the file.
-
+		File workingDir = new File(System.getProperty("user.dir"));
+		SimpleFileDatabase db = new SimpleFileDatabase(workingDir);
+		Plugin plugin = Mockito.mock(Plugin.class);
+		Mockito.when(plugin.getPluginName()).thenReturn("TestPlugin");
 		YamlFile yaml = new YamlFile();
-		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
 
-		yaml.load(
-				db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
+		yaml.load(db.getResourceFile(plugin, "Unit Tests/simple.yml").getFile());
 
 		Assert.assertEquals(yaml.getInt("root1.some_data.really_nested_data"), 2);
 	}
@@ -69,13 +71,13 @@ public class YamlFileTest
 	@Test
 	public void parseIntPathName()
 	{
-		// Checks to make sure the correct information was loaded from the file.
-
+		File workingDir = new File(System.getProperty("user.dir"));
+		SimpleFileDatabase db = new SimpleFileDatabase(workingDir);
+		Plugin plugin = Mockito.mock(Plugin.class);
+		Mockito.when(plugin.getPluginName()).thenReturn("TestPlugin");
 		YamlFile yaml = new YamlFile();
-		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
 
-		yaml.load(
-				db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
+		yaml.load(db.getResourceFile(plugin, "Unit Tests/simple.yml").getFile());
 
 		Assert.assertEquals(yaml.getInt("root2.1"), 12);
 	}
@@ -83,13 +85,13 @@ public class YamlFileTest
 	@Test
 	public void parseFakePath()
 	{
-		// Try to parse a fake path.
-
+		File workingDir = new File(System.getProperty("user.dir"));
+		SimpleFileDatabase db = new SimpleFileDatabase(workingDir);
+		Plugin plugin = Mockito.mock(Plugin.class);
+		Mockito.when(plugin.getPluginName()).thenReturn("TestPlugin");
 		YamlFile yaml = new YamlFile();
-		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
 
-		yaml.load(
-				db.getResourceFile(CommonMock.getTestPlugin(), "Unit Tests/simple.yml").getFile());
+		yaml.load(db.getResourceFile(plugin, "Unit Tests/simple.yml").getFile());
 
 		Assert.assertEquals(yaml.getString("root4.4234.123"), null);
 	}

@@ -10,7 +10,7 @@ package net.whg.we.resources;
  * @param <T>
  *            The object this resource represents.
  */
-public interface ReloadableResource<T> extends Resource<T>
+public interface ReloadableResource extends Resource
 {
 	/**
 	 * Check if the resource needs to be reloaded. This should only be called from

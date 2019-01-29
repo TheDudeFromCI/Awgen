@@ -5,7 +5,7 @@ import net.whg.we.utils.Log;
 
 public class ResourceLoader
 {
-	private ArrayList<FileLoader<?>> _fileLoaders = new ArrayList<>();
+	private ArrayList<FileLoader> _fileLoaders = new ArrayList<>();
 
 	/**
 	 * Loads a resource from a file. If the resource already exists in the database,
@@ -19,19 +19,19 @@ public class ResourceLoader
 	 *            - The database to load the resource from.
 	 * @return
 	 */
-	public Resource<?> loadResource(ResourceFile resourceFile, ResourceDatabase database)
+	public Resource loadResource(ResourceFile resourceFile, ResourceDatabase database)
 	{
-		Resource<?> resource = database.getResource(resourceFile);
+		Resource resource = database.getResource(resourceFile);
 		if (resource != null)
 			return resource;
 
 		Log.infof("Loading the resource %s.", resourceFile);
 
-		FileLoader<?> loader = null;
+		FileLoader loader = null;
 		int priority = Integer.MIN_VALUE;
 
 		file_loader:
-		for (FileLoader<?> l : _fileLoaders)
+		for (FileLoader l : _fileLoaders)
 		{
 			if (l.getPriority() <= priority)
 				continue;
@@ -57,7 +57,7 @@ public class ResourceLoader
 	 * @param fileLoader
 	 *            - The file loader to add.
 	 */
-	public void addFileLoader(FileLoader<?> fileLoader)
+	public void addFileLoader(FileLoader fileLoader)
 	{
 		Log.debugf("Adding a file loader to the ResourceLoader, %s.",
 				fileLoader.getClass().getName());
@@ -74,7 +74,7 @@ public class ResourceLoader
 	 * @param fileLoader
 	 *            - The file loader to remove.
 	 */
-	public void removeFileLoader(FileLoader<?> fileLoader)
+	public void removeFileLoader(FileLoader fileLoader)
 	{
 		Log.debugf("Removing a file loader from the ResourceLoader, %s.",
 				fileLoader.getClass().getName());
@@ -102,7 +102,7 @@ public class ResourceLoader
 	 *            - The index of the file loader.
 	 * @return The file loader at the specified index.
 	 */
-	public FileLoader<?> getFileLoader(int index)
+	public FileLoader getFileLoader(int index)
 	{
 		return _fileLoaders.get(index);
 	}

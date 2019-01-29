@@ -6,7 +6,7 @@ import net.whg.we.rendering.TextureProperties;
 import net.whg.we.resources.CompilableResource;
 import net.whg.we.resources.ResourceFile;
 
-public class TextureResource implements CompilableResource<Texture>
+public class TextureResource implements CompilableResource
 {
 	private String _name;
 	private Texture _texture;

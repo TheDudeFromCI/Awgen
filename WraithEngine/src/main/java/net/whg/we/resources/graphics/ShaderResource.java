@@ -11,7 +11,7 @@ import net.whg.we.utils.Log;
  *
  * @author TheDudeFromCI
  */
-public class ShaderResource implements CompilableResource<Shader>
+public class ShaderResource implements CompilableResource
 {
 	private ShaderProperties _properties;
 	private String _vertShader;

@@ -5,10 +5,8 @@ package net.whg.we.resources;
  * a wrapper for the data, and may or may not represent the data itself.
  *
  * @author TheDudeFromCI
- * @param <T>
- *            The object this resource represents.
  */
-public interface Resource<T>
+public interface Resource
 {
 	/**
 	 * Gets the raw data this resource represents. This should only be called from
@@ -16,7 +14,7 @@ public interface Resource<T>
 	 *
 	 * @return The data for this resource.
 	 */
-	public T getData();
+	public Object getData();
 
 	/**
 	 * Gets the resource file this resource represents. This can be used for

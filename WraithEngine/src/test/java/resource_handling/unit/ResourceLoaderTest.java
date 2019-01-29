@@ -13,12 +13,11 @@ import net.whg.we.resources.ResourceLoader;
 
 public class ResourceLoaderTest
 {
-	@SuppressWarnings("unchecked")
 	@Test
 	public void addFileLoader()
 	{
 		ResourceLoader resourceLoader = new ResourceLoader();
-		FileLoader<Object> fileLoader = Mockito.mock(FileLoader.class);
+		FileLoader fileLoader = Mockito.mock(FileLoader.class);
 
 		Assert.assertEquals(resourceLoader.getFileLoaderCount(), 0);
 
@@ -28,12 +27,11 @@ public class ResourceLoaderTest
 		Assert.assertEquals(resourceLoader.getFileLoaderCount(), 1);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void removeFileLoader()
 	{
 		ResourceLoader resourceLoader = new ResourceLoader();
-		FileLoader<Object> fileLoader = Mockito.mock(FileLoader.class);
+		FileLoader fileLoader = Mockito.mock(FileLoader.class);
 		resourceLoader.addFileLoader(fileLoader);
 
 		resourceLoader.removeFileLoader(fileLoader);
@@ -41,14 +39,13 @@ public class ResourceLoaderTest
 		Assert.assertEquals(resourceLoader.getFileLoaderCount(), 0);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void getFileLoader()
 	{
 		ResourceLoader resourceLoader = new ResourceLoader();
-		FileLoader<Object> fileLoader0 = Mockito.mock(FileLoader.class);
-		FileLoader<Object> fileLoader1 = Mockito.mock(FileLoader.class);
-		FileLoader<Object> fileLoader2 = Mockito.mock(FileLoader.class);
+		FileLoader fileLoader0 = Mockito.mock(FileLoader.class);
+		FileLoader fileLoader1 = Mockito.mock(FileLoader.class);
+		FileLoader fileLoader2 = Mockito.mock(FileLoader.class);
 
 		resourceLoader.addFileLoader(fileLoader0);
 		resourceLoader.addFileLoader(fileLoader1);
@@ -59,17 +56,16 @@ public class ResourceLoaderTest
 		Assert.assertEquals(resourceLoader.getFileLoader(2), fileLoader2);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void loadFile_NotInDatabase()
 	{
 		ResourceLoader resourceLoader = new ResourceLoader();
 		ResourceDatabase database = new ResourceDatabase();
-		FileLoader<Object> fileLoader = Mockito.mock(FileLoader.class);
+		FileLoader fileLoader = Mockito.mock(FileLoader.class);
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File(".");
 		ResourceFile resourceFile = new ResourceFile(plugin, "file.txt", null, file);
-		Resource<Object> resource = Mockito.mock(Resource.class);
+		Resource resource = Mockito.mock(Resource.class);
 
 		resourceLoader.addFileLoader(fileLoader);
 
@@ -83,17 +79,16 @@ public class ResourceLoaderTest
 		Assert.assertEquals(resource, resourceLoader.loadResource(resourceFile, database));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void loadFile_InDatabase()
 	{
 		ResourceLoader resourceLoader = new ResourceLoader();
 		ResourceDatabase database = new ResourceDatabase();
-		FileLoader<Object> fileLoader = Mockito.mock(FileLoader.class);
+		FileLoader fileLoader = Mockito.mock(FileLoader.class);
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File(".");
 		ResourceFile resourceFile = new ResourceFile(plugin, "file.txt", null, file);
-		Resource<Object> resource = Mockito.mock(Resource.class);
+		Resource resource = Mockito.mock(Resource.class);
 		Mockito.doReturn(resourceFile).when(resource).getResourceFile();
 		database.addResource(resource);
 

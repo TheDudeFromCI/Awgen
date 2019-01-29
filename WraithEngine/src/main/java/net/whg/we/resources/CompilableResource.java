@@ -10,7 +10,7 @@ import net.whg.we.rendering.Graphics;
  * @param <T>
  *            The object this resource represents.
  */
-public interface CompilableResource<T> extends Resource<T>
+public interface CompilableResource extends Resource
 {
 	/**
 	 * Checks if the resource has been compiled or not.
@@ -22,7 +22,7 @@ public interface CompilableResource<T> extends Resource<T>
 	/**
 	 * Compiles this resource with the current graphics manager. If this resource is
 	 * already compiled, nothing happens.
-	 * 
+	 *
 	 * @param graphics
 	 *            - The graphics manager.
 	 */

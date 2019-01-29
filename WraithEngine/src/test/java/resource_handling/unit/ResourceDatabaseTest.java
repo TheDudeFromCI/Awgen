@@ -8,12 +8,11 @@ import net.whg.we.resources.ResourceDatabase;
 
 public class ResourceDatabaseTest
 {
-	@SuppressWarnings("unchecked")
 	@Test
 	public void addResource()
 	{
 		ResourceDatabase database = new ResourceDatabase();
-		Resource<Object> resource = Mockito.mock(Resource.class);
+		Resource resource = Mockito.mock(Resource.class);
 
 		Assert.assertEquals(database.getResourceCount(), 0);
 
@@ -23,12 +22,11 @@ public class ResourceDatabaseTest
 		Assert.assertEquals(database.getResourceCount(), 1);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void removeResource()
 	{
 		ResourceDatabase database = new ResourceDatabase();
-		Resource<Object> resource = Mockito.mock(Resource.class);
+		Resource resource = Mockito.mock(Resource.class);
 		database.addResource(resource);
 
 		Assert.assertEquals(database.getResourceCount(), 1);
@@ -38,12 +36,11 @@ public class ResourceDatabaseTest
 		Assert.assertEquals(database.getResourceCount(), 0);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void resourceIsDisposed()
 	{
 		ResourceDatabase database = new ResourceDatabase();
-		Resource<Object> resource = Mockito.mock(Resource.class);
+		Resource resource = Mockito.mock(Resource.class);
 
 		database.addResource(resource);
 		database.removeResource(resource);
@@ -51,13 +48,12 @@ public class ResourceDatabaseTest
 		Mockito.verify(resource).dispose();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void allResourcesDisposed()
 	{
 		ResourceDatabase database = new ResourceDatabase();
-		Resource<Object> resource1 = Mockito.mock(Resource.class);
-		Resource<Object> resource2 = Mockito.mock(Resource.class);
+		Resource resource1 = Mockito.mock(Resource.class);
+		Resource resource2 = Mockito.mock(Resource.class);
 
 		database.addResource(resource1);
 		database.addResource(resource2);
@@ -71,14 +67,13 @@ public class ResourceDatabaseTest
 		Mockito.verify(resource2).dispose();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void getResourceByIndex()
 	{
 		ResourceDatabase database = new ResourceDatabase();
-		Resource<Object> resource0 = Mockito.mock(Resource.class);
-		Resource<Object> resource1 = Mockito.mock(Resource.class);
-		Resource<Object> resource2 = Mockito.mock(Resource.class);
+		Resource resource0 = Mockito.mock(Resource.class);
+		Resource resource1 = Mockito.mock(Resource.class);
+		Resource resource2 = Mockito.mock(Resource.class);
 
 		database.addResource(resource0);
 		database.addResource(resource1);

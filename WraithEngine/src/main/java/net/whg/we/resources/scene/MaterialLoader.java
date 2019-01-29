@@ -1,10 +1,8 @@
 package net.whg.we.resources.scene;
 
 import java.util.Set;
-import net.whg.we.rendering.Material;
 import net.whg.we.resources.FileDatabase;
 import net.whg.we.resources.FileLoader;
-import net.whg.we.resources.Resource;
 import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.resources.ResourceFile;
 import net.whg.we.resources.ResourceLoader;
@@ -13,7 +11,7 @@ import net.whg.we.resources.graphics.ShaderResource;
 import net.whg.we.resources.graphics.TextureResource;
 import net.whg.we.utils.Log;
 
-public class MaterialLoader implements FileLoader<Material>
+public class MaterialLoader implements FileLoader
 {
 	private static final String[] FILE_TYPES =
 	{
@@ -34,7 +32,7 @@ public class MaterialLoader implements FileLoader<Material>
 	}
 
 	@Override
-	public Resource<Material> loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
+	public MaterialResource loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
 			ResourceFile resourceFile)
 	{
 		try

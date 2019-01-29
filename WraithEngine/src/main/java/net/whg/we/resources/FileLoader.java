@@ -1,6 +1,6 @@
 package net.whg.we.resources;
 
-public interface FileLoader<T>
+public interface FileLoader
 {
 	/**
 	 * Gets a string array of file types that are supported by the this file loader.
@@ -28,7 +28,7 @@ public interface FileLoader<T>
 	 * @param resourceFile
 	 *            - The resource to load.
 	 */
-	public Resource<T> loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
+	public Resource loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
 			ResourceFile resourceFile);
 
 	/**

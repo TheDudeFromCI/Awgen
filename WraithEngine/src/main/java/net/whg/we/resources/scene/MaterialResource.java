@@ -8,7 +8,7 @@ import net.whg.we.resources.ResourceFile;
 import net.whg.we.resources.graphics.ShaderResource;
 import net.whg.we.resources.graphics.TextureResource;
 
-public class MaterialResource implements CompilableResource<Material>
+public class MaterialResource implements CompilableResource
 {
 	private Material _material;
 	private String _name;

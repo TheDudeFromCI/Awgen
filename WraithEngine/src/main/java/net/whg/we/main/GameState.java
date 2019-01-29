@@ -3,7 +3,7 @@ package net.whg.we.main;
 import net.whg.we.event.EventManager;
 import net.whg.we.resources.ResourceManager;
 import net.whg.we.resources.graphics.GLSLShaderLoader;
-import net.whg.we.resources.graphics.MeshSceneLoader;
+import net.whg.we.resources.graphics.MeshLoader;
 import net.whg.we.resources.graphics.TextureLoader;
 import net.whg.we.scene.GameLoop;
 
@@ -26,7 +26,7 @@ public class GameState
 	{
 		// Load file loaders
 		_resourceManager.getResourceLoader().addFileLoader(new GLSLShaderLoader());
-		_resourceManager.getResourceLoader().addFileLoader(new MeshSceneLoader());
+		_resourceManager.getResourceLoader().addFileLoader(new MeshLoader());
 		_resourceManager.getResourceLoader().addFileLoader(new TextureLoader());
 
 		// Load plugins

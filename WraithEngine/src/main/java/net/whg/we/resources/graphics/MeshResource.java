@@ -8,7 +8,7 @@ import net.whg.we.rendering.VertexData;
 import net.whg.we.resources.CompilableResource;
 import net.whg.we.resources.ResourceFile;
 
-public class MeshResource implements CompilableResource<Mesh>
+public class MeshResource implements CompilableResource
 {
 	private Mesh _mesh;
 	private String _name;

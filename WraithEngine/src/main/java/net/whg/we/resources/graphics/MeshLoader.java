@@ -3,11 +3,9 @@ package net.whg.we.resources.graphics;
 import org.lwjgl.assimp.AIMesh;
 import org.lwjgl.assimp.AIScene;
 import org.lwjgl.assimp.Assimp;
-import net.whg.we.rendering.Mesh;
 import net.whg.we.rendering.Skeleton;
 import net.whg.we.rendering.VertexData;
 import net.whg.we.resources.FileLoader;
-import net.whg.we.resources.Resource;
 import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.resources.ResourceFile;
 import net.whg.we.resources.ResourceLoader;
@@ -19,7 +17,7 @@ import net.whg.we.utils.Log;
  *
  * @author TheDudeFromCI
  */
-public class MeshSceneLoader implements FileLoader<Mesh>
+public class MeshLoader implements FileLoader
 {
 	private static final String[] FILE_TYPES =
 	{
@@ -34,7 +32,7 @@ public class MeshSceneLoader implements FileLoader<Mesh>
 	}
 
 	@Override
-	public Resource<Mesh> loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
+	public MeshResource loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
 			ResourceFile resourceFile)
 	{
 		try

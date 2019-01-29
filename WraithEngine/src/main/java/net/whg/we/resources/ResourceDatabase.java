@@ -11,7 +11,7 @@ import net.whg.we.utils.GenericRunnable;
  */
 public class ResourceDatabase
 {
-	private ArrayList<Resource<?>> _resources = new ArrayList<>();
+	private ArrayList<Resource> _resources = new ArrayList<>();
 
 	/**
 	 * Adds a loaded resource to this database. If this resource is already in the
@@ -20,7 +20,7 @@ public class ResourceDatabase
 	 * @param resource
 	 *            - The resource to add.
 	 */
-	public void addResource(Resource<?> resource)
+	public void addResource(Resource resource)
 	{
 		if (resource == null)
 			return;
@@ -37,7 +37,7 @@ public class ResourceDatabase
 	 * @param resource
 	 *            - The resource to dispose and remove.
 	 */
-	public void removeResource(Resource<?> resource)
+	public void removeResource(Resource resource)
 	{
 		if (resource == null)
 			return;
@@ -52,7 +52,7 @@ public class ResourceDatabase
 	 */
 	public void dispose()
 	{
-		for (Resource<?> res : _resources)
+		for (Resource res : _resources)
 			res.dispose();
 		_resources.clear();
 	}
@@ -66,12 +66,12 @@ public class ResourceDatabase
 	 * @return The first resource which returns a resource file equal to the given
 	 *         resource file parameter. If no resource is found, null is returned.
 	 */
-	public Resource<?> getResource(ResourceFile resourceFile)
+	public Resource getResource(ResourceFile resourceFile)
 	{
 		if (resourceFile == null)
 			return null;
 
-		for (Resource<?> res : _resources)
+		for (Resource res : _resources)
 			if (res.getResourceFile().equals(resourceFile))
 				return res;
 		return null;
@@ -97,7 +97,7 @@ public class ResourceDatabase
 	 *            - The index of the resource to get.
 	 * @return The resource at the provided index.
 	 */
-	public Resource<?> getResourceAt(int index)
+	public Resource getResourceAt(int index)
 	{
 		return _resources.get(index);
 	}
@@ -108,25 +108,25 @@ public class ResourceDatabase
 	 * @param action
 	 *            - The action to preform on the resource.
 	 */
-	public void forEach(GenericRunnable<Resource<?>> action)
+	public void forEach(GenericRunnable<Resource> action)
 	{
-		for (Resource<?> res : _resources)
+		for (Resource res : _resources)
 			action.run(res);
 	}
 
 	/**
 	 * Attempts to compile all resources if they are not already compiled.
-	 * 
+	 *
 	 * @param graphics
 	 *            - The graphics manager to compile the resources with.
 	 */
 	public void compileAllResources(Graphics graphics)
 	{
-		for (Resource<?> res : _resources)
+		for (Resource res : _resources)
 		{
-			if (res instanceof CompilableResource<?>)
+			if (res instanceof CompilableResource)
 			{
-				CompilableResource<?> c = (CompilableResource<?>) res;
+				CompilableResource c = (CompilableResource) res;
 				if (!c.isCompiled())
 					c.compile(graphics);
 			}

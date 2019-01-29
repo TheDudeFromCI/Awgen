@@ -2,15 +2,13 @@ package net.whg.we.resources.graphics;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import net.whg.we.rendering.Shader;
 import net.whg.we.resources.FileLoader;
-import net.whg.we.resources.Resource;
 import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.resources.ResourceFile;
 import net.whg.we.resources.ResourceLoader;
 import net.whg.we.utils.Log;
 
-public class GLSLShaderLoader implements FileLoader<Shader>
+public class GLSLShaderLoader implements FileLoader
 {
 	private static final String[] FILE_TYPES =
 	{
@@ -24,7 +22,7 @@ public class GLSLShaderLoader implements FileLoader<Shader>
 	}
 
 	@Override
-	public Resource<Shader> loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
+	public ShaderResource loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
 			ResourceFile resourceFile)
 	{
 		try (BufferedReader in = new BufferedReader(new FileReader(resourceFile.getFile())))

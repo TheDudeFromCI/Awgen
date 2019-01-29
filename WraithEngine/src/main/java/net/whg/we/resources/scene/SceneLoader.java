@@ -5,9 +5,8 @@ import net.whg.we.resources.Resource;
 import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.resources.ResourceFile;
 import net.whg.we.resources.ResourceLoader;
-import net.whg.we.scene.Scene;
 
-public class SceneLoader implements FileLoader<Scene>
+public class SceneLoader implements FileLoader
 {
 	private static final String[] FILE_TYPES =
 	{
@@ -27,7 +26,7 @@ public class SceneLoader implements FileLoader<Scene>
 	}
 
 	@Override
-	public Resource<Scene> loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
+	public Resource loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
 			ResourceFile resourceFile)
 	{
 		return null;
