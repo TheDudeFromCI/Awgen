@@ -14,15 +14,15 @@ public class MeshResource implements CompilableResource
 	private String _name;
 	private VertexData _vertexData;
 	private Skeleton _skeleton;
-	private ResourceFile _resource;
+	private ResourceFile _resourceFile;
 
-	public MeshResource(String name, VertexData vertexData, Skeleton skeleton,
-			ResourceFile resource)
+	public MeshResource(ResourceFile resourceFile, String name, VertexData vertexData,
+			Skeleton skeleton)
 	{
+		_resourceFile = resourceFile;
 		_name = name;
 		_vertexData = vertexData;
 		_skeleton = skeleton;
-		_resource = resource;
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class MeshResource implements CompilableResource
 	@Override
 	public ResourceFile getResourceFile()
 	{
-		return _resource;
+		return _resourceFile;
 	}
 
 	@Override
@@ -71,5 +71,11 @@ public class MeshResource implements CompilableResource
 	public boolean isCompiled()
 	{
 		return _mesh != null;
+	}
+
+	@Override
+	public String toString()
+	{
+		return String.format("[MeshResource: %s at %s]", _name, _resourceFile);
 	}
 }

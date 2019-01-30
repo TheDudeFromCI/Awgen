@@ -63,12 +63,11 @@ public class SimpleFileDatabase implements FileDatabase
 			return null;
 		}
 
-		pathName = pathName.replace('/', File.separatorChar);
 		File resourceFolder = new File(_baseFolder, RESOURCE_FOLDER_NAME);
 		File pluginFolder = new File(resourceFolder, plugin.getPluginName());
-		File file = new File(pluginFolder, pathName);
+		File file = new File(pluginFolder, FileUtils.pathnameToFile(pathName));
 
-		return new ResourceFile(plugin, pathName, null, file);
+		return new ResourceFile(plugin, pathName, file);
 	}
 
 	public File getBaseFolder()

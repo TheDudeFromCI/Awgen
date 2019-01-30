@@ -5,6 +5,8 @@ import net.whg.we.resources.ResourceManager;
 import net.whg.we.resources.graphics.GLSLShaderLoader;
 import net.whg.we.resources.graphics.MeshLoader;
 import net.whg.we.resources.graphics.TextureLoader;
+import net.whg.we.resources.scene.MaterialLoader;
+import net.whg.we.resources.scene.ModelLoader;
 import net.whg.we.scene.GameLoop;
 
 public class GameState
@@ -28,6 +30,10 @@ public class GameState
 		_resourceManager.getResourceLoader().addFileLoader(new GLSLShaderLoader());
 		_resourceManager.getResourceLoader().addFileLoader(new MeshLoader());
 		_resourceManager.getResourceLoader().addFileLoader(new TextureLoader());
+		_resourceManager.getResourceLoader()
+				.addFileLoader(new MaterialLoader(_resourceManager.getFileDatabase()));
+		_resourceManager.getResourceLoader()
+				.addFileLoader(new ModelLoader(_resourceManager.getFileDatabase()));
 
 		// Load plugins
 		_pluginLoader.loadPluginsFromFile(_resourceManager.getFileDatabase());

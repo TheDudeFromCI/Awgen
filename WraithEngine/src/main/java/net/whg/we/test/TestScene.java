@@ -2,10 +2,12 @@ package net.whg.we.test;
 
 import org.joml.Math;
 import org.joml.Vector3f;
+import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.ScreenClearType;
-import net.whg.we.resources.ResourceLoader;
+import net.whg.we.resources.ResourceManager;
+import net.whg.we.resources.scene.ModelResource;
 import net.whg.we.scene.Model;
 import net.whg.we.scene.RenderPass;
 import net.whg.we.scene.UpdateListener;
@@ -31,7 +33,7 @@ public class TestScene implements UpdateListener
 		_gameLoop.getUpdateEvent().addListener(this);
 	}
 
-	public void loadTestScene(ResourceLoader resourceLoader)
+	public void loadTestScene(ResourceManager resourceManager)
 	{
 		try
 		{
@@ -58,6 +60,38 @@ public class TestScene implements UpdateListener
 				// _renderPass.addModel(_monkeyModel);
 				// _renderPass.addModel(floor);
 				// _renderPass.addModel(human);
+
+				Plugin plugin = new Plugin()
+				{
+
+					@Override
+					public String getPluginName()
+					{
+						return "TestPlugin";
+					}
+
+					@Override
+					public void initPlugin()
+					{
+					}
+
+					@Override
+					public void enablePlugin()
+					{
+					}
+
+					@Override
+					public int getPriority()
+					{
+						return 0;
+					}
+
+				};
+
+				ModelResource modelResource =
+						(ModelResource) resourceManager.loadResource(plugin, "models/human.model");
+				modelResource.compile(_gameLoop.getGraphicsPipeline().getGraphics());
+				_renderPass.addModel(modelResource.getData());
 			}
 
 			_camera = new Camera();
@@ -83,8 +117,11 @@ public class TestScene implements UpdateListener
 			if (Input.isKeyDown("escape"))
 				_gameLoop.requestClose();
 
-			float y = (float) (Math.sin(Time.time()) + 1f);
-			_monkeyModel.getLocation().setPosition(new Vector3f(0f, y, 0f));
+			if (_monkeyModel != null)
+			{
+				float y = (float) (Math.sin(Time.time()) + 1f);
+				_monkeyModel.getLocation().setPosition(new Vector3f(0f, y, 0f));
+			}
 
 			Graphics graphics = _gameLoop.getGraphicsPipeline().getGraphics();
 			graphics.clearScreenPass(ScreenClearType.CLEAR_COLOR_AND_DEPTH);

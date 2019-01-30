@@ -18,16 +18,16 @@ public class ShaderResource implements CompilableResource
 	private String _geoShader;
 	private String _fragShader;
 	private Shader _shader;
-	private ResourceFile _resource;
+	private ResourceFile _resourceFile;
 
-	public ShaderResource(ShaderProperties properties, String vertShader, String geoShader,
-			String fragShader, ResourceFile resource)
+	public ShaderResource(ResourceFile resourceFile, ShaderProperties properties, String vertShader,
+			String geoShader, String fragShader)
 	{
+		_resourceFile = resourceFile;
 		_properties = properties;
 		_vertShader = vertShader;
 		_geoShader = geoShader;
 		_fragShader = fragShader;
-		_resource = resource;
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class ShaderResource implements CompilableResource
 	@Override
 	public ResourceFile getResourceFile()
 	{
-		return _resource;
+		return _resourceFile;
 	}
 
 	@Override
@@ -84,5 +84,11 @@ public class ShaderResource implements CompilableResource
 	public String getName()
 	{
 		return _properties.getName();
+	}
+
+	@Override
+	public String toString()
+	{
+		return String.format("[ShaderResource: %s at %s]", _properties.getName(), _resourceFile);
 	}
 }

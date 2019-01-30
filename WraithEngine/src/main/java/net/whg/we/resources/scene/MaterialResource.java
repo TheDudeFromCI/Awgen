@@ -14,11 +14,12 @@ public class MaterialResource implements CompilableResource
 	private String _name;
 	private ShaderResource _shader;
 	private TextureResource[] _textures;
-	private ResourceFile _resource;
-	private boolean _compiled;
+	private ResourceFile _resourceFile;
 
-	public MaterialResource(String name, ShaderResource shader, TextureResource[] textures)
+	public MaterialResource(ResourceFile resourceFile, String name, ShaderResource shader,
+			TextureResource[] textures)
 	{
+		_resourceFile = resourceFile;
 		_name = name;
 		_shader = shader;
 		_textures = textures;
@@ -33,7 +34,7 @@ public class MaterialResource implements CompilableResource
 	@Override
 	public ResourceFile getResourceFile()
 	{
-		return _resource;
+		return _resourceFile;
 	}
 
 	@Override
@@ -47,7 +48,7 @@ public class MaterialResource implements CompilableResource
 	@Override
 	public void compile(Graphics graphics)
 	{
-		if (_compiled)
+		if (_material != null)
 			return;
 
 		if (!_shader.isCompiled())
@@ -65,8 +66,6 @@ public class MaterialResource implements CompilableResource
 		_material = new Material(_shader.getData(), _name);
 		_material.setTextures(textures);
 
-		_compiled = true;
-
 		_shader = null;
 		_textures = null;
 	}
@@ -80,6 +79,12 @@ public class MaterialResource implements CompilableResource
 	@Override
 	public boolean isCompiled()
 	{
-		return _compiled;
+		return _material != null;
+	}
+
+	@Override
+	public String toString()
+	{
+		return String.format("[MaterialResource: %s at %s]", _name, _resourceFile);
 	}
 }

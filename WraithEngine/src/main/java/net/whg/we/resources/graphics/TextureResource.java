@@ -11,13 +11,13 @@ public class TextureResource implements CompilableResource
 	private String _name;
 	private Texture _texture;
 	private TextureProperties _properties;
-	private ResourceFile _resource;
+	private ResourceFile _resourceFile;
 
-	TextureResource(TextureProperties properties, ResourceFile resource, String name)
+	TextureResource(ResourceFile resourceFile, String name, TextureProperties properties)
 	{
+		_resourceFile = resourceFile;
 		_name = name;
 		_properties = properties;
-		_resource = resource;
 	}
 
 	@Override
@@ -39,18 +39,20 @@ public class TextureResource implements CompilableResource
 			return;
 
 		_texture = new Texture(graphics.prepareTexture(_properties), _properties);
+
+		_properties = null;
 	}
 
 	@Override
 	public ResourceFile getResourceFile()
 	{
-		return _resource;
+		return _resourceFile;
 	}
 
 	@Override
 	public void dispose()
 	{
-		_resource = null;
+		_properties = null;
 
 		if (_texture != null)
 		{
@@ -63,5 +65,11 @@ public class TextureResource implements CompilableResource
 	public String getName()
 	{
 		return _name;
+	}
+
+	@Override
+	public String toString()
+	{
+		return String.format("[TextureResource: %s at %s]", _name, _resourceFile);
 	}
 }

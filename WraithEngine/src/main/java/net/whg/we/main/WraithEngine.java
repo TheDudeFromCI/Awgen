@@ -50,7 +50,7 @@ public class WraithEngine
 		Log.debugf("LWJGL Version: %s", Version.getVersion());
 
 		ResourceManager resourceManager = buildResourceManager();
-		GameLoop gameLoop = new WindowedGameLoop(resourceManager.getResourceLoader());
+		GameLoop gameLoop = new WindowedGameLoop(resourceManager);
 		new GameState(resourceManager, gameLoop).run();
 	}
 

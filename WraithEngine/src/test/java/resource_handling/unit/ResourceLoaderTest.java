@@ -64,7 +64,7 @@ public class ResourceLoaderTest
 		FileLoader fileLoader = Mockito.mock(FileLoader.class);
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File(".");
-		ResourceFile resourceFile = new ResourceFile(plugin, "file.txt", null, file);
+		ResourceFile resourceFile = new ResourceFile(plugin, "file.txt", file);
 		Resource resource = Mockito.mock(Resource.class);
 
 		resourceLoader.addFileLoader(fileLoader);
@@ -87,7 +87,7 @@ public class ResourceLoaderTest
 		FileLoader fileLoader = Mockito.mock(FileLoader.class);
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File(".");
-		ResourceFile resourceFile = new ResourceFile(plugin, "file.txt", null, file);
+		ResourceFile resourceFile = new ResourceFile(plugin, "file.txt", file);
 		Resource resource = Mockito.mock(Resource.class);
 		Mockito.doReturn(resourceFile).when(resource).getResourceFile();
 		database.addResource(resource);

@@ -15,8 +15,8 @@ public class ResourceFileTest
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File(".");
 
-		ResourceFile a = new ResourceFile(plugin, "path/to/file.txt", "name", file);
-		ResourceFile b = new ResourceFile(plugin, "path/to/file.txt", "name", file);
+		ResourceFile a = new ResourceFile(plugin, "path/to/file.txt:name", file);
+		ResourceFile b = new ResourceFile(plugin, "path/to/file.txt:name", file);
 
 		Assert.assertEquals(a, b);
 	}
@@ -27,10 +27,23 @@ public class ResourceFileTest
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File(".");
 
-		ResourceFile a = new ResourceFile(plugin, "path/to/file.txt", "name1", file);
-		ResourceFile b = new ResourceFile(plugin, "path/to/file.txt", "name2", file);
+		ResourceFile a = new ResourceFile(plugin, "path/to/file.txt:name1", file);
+		ResourceFile b = new ResourceFile(plugin, "path/to/file.txt:name2", file);
 
 		Assert.assertNotEquals(a, b);
+
+	}
+
+	@Test
+	public void equals_SamePath_NoName()
+	{
+		Plugin plugin = Mockito.mock(Plugin.class);
+		File file = new File(".");
+
+		ResourceFile a = new ResourceFile(plugin, "path/to/file.txt", file);
+		ResourceFile b = new ResourceFile(plugin, "path/to/file.txt", file);
+
+		Assert.assertEquals(a, b);
 	}
 
 	@Test
@@ -39,8 +52,8 @@ public class ResourceFileTest
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File(".");
 
-		ResourceFile a = new ResourceFile(plugin, "path/to/file1.txt", "name", file);
-		ResourceFile b = new ResourceFile(plugin, "path/to/file2.txt", "name", file);
+		ResourceFile a = new ResourceFile(plugin, "path/to/file1.txt:name", file);
+		ResourceFile b = new ResourceFile(plugin, "path/to/file2.txt:name", file);
 
 		Assert.assertNotEquals(a, b);
 	}
@@ -51,8 +64,8 @@ public class ResourceFileTest
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File(".");
 
-		ResourceFile a = new ResourceFile(plugin, "path/to/file1.txt", "name1", file);
-		ResourceFile b = new ResourceFile(plugin, "path/to/file2.txt", "name2", file);
+		ResourceFile a = new ResourceFile(plugin, "path/to/file1.txt:name1", file);
+		ResourceFile b = new ResourceFile(plugin, "path/to/file2.txt:name2", file);
 
 		Assert.assertNotEquals(a, b);
 	}
@@ -64,8 +77,8 @@ public class ResourceFileTest
 		Plugin plugin2 = Mockito.mock(Plugin.class);
 		File file = new File(".");
 
-		ResourceFile a = new ResourceFile(plugin1, "path/to/file.txt", "name", file);
-		ResourceFile b = new ResourceFile(plugin2, "path/to/file.txt", "name", file);
+		ResourceFile a = new ResourceFile(plugin1, "path/to/file.txt:name", file);
+		ResourceFile b = new ResourceFile(plugin2, "path/to/file.txt:name", file);
 
 		Assert.assertNotEquals(a, b);
 	}
@@ -76,7 +89,7 @@ public class ResourceFileTest
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File(".");
 
-		ResourceFile a = new ResourceFile(plugin, "file.txt", null, file);
+		ResourceFile a = new ResourceFile(plugin, "file.txt", file);
 
 		Assert.assertNotEquals(a, new Object());
 	}
@@ -86,19 +99,29 @@ public class ResourceFileTest
 	{
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File(".");
-		ResourceFile res = new ResourceFile(plugin, "file.txt", "name", file);
+		ResourceFile res = new ResourceFile(plugin, "file.txt", file);
 
 		Assert.assertEquals(res.getPlugin(), plugin);
 	}
 
 	@Test
-	public void getPathname()
+	public void getSimpleathname()
 	{
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File(".");
-		ResourceFile res = new ResourceFile(plugin, "file.txt", "name", file);
+		ResourceFile res = new ResourceFile(plugin, "file.txt:name", file);
 
-		Assert.assertEquals(res.getPathName(), "file.txt");
+		Assert.assertEquals(res.getSimplePathname(), "file.txt");
+	}
+
+	@Test
+	public void getFullPathname()
+	{
+		Plugin plugin = Mockito.mock(Plugin.class);
+		File file = new File(".");
+		ResourceFile res = new ResourceFile(plugin, "file.txt:name", file);
+
+		Assert.assertEquals(res.getFullPathname(), "file.txt:name");
 	}
 
 	@Test
@@ -106,9 +129,9 @@ public class ResourceFileTest
 	{
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File(".");
-		ResourceFile res = new ResourceFile(plugin, "file.txt", "name", file);
+		ResourceFile res = new ResourceFile(plugin, "file.txt:name", file);
 
-		Assert.assertEquals(res.getName(), "name");
+		Assert.assertEquals("name", res.getName());
 	}
 
 	@Test
@@ -116,9 +139,19 @@ public class ResourceFileTest
 	{
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File(".");
-		ResourceFile res = new ResourceFile(plugin, "path/to/file.txt", null, file);
+		ResourceFile res = new ResourceFile(plugin, "path/to/file.txt", file);
 
-		Assert.assertEquals(res.getName(), "file.txt");
+		Assert.assertEquals("file.txt", res.getName());
+	}
+
+	@Test
+	public void getResourceName()
+	{
+		Plugin plugin = Mockito.mock(Plugin.class);
+		File file = new File(".");
+		ResourceFile res = new ResourceFile(plugin, "path/to/file.txt:res", file);
+
+		Assert.assertEquals(res.getName(), "res");
 	}
 
 	@Test
@@ -126,7 +159,17 @@ public class ResourceFileTest
 	{
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File(".");
-		ResourceFile res = new ResourceFile(plugin, "path/to/file.txt", null, file);
+		ResourceFile res = new ResourceFile(plugin, "path/to/file.txt", file);
+
+		Assert.assertEquals(res.getFileExtension(), "txt");
+	}
+
+	@Test
+	public void getFileExtention_WithResource()
+	{
+		Plugin plugin = Mockito.mock(Plugin.class);
+		File file = new File(".");
+		ResourceFile res = new ResourceFile(plugin, "path/to/file.txt:res", file);
 
 		Assert.assertEquals(res.getFileExtension(), "txt");
 	}
@@ -136,7 +179,7 @@ public class ResourceFileTest
 	{
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File(".");
-		ResourceFile res = new ResourceFile(plugin, "path/to/file.txt", null, file);
+		ResourceFile res = new ResourceFile(plugin, "path/to/file.txt", file);
 
 		Assert.assertEquals(res.getFile(), file);
 	}
@@ -146,7 +189,7 @@ public class ResourceFileTest
 	{
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File("awesome.txt");
-		ResourceFile res = new ResourceFile(plugin, "path/to/file.txt", null, file);
+		ResourceFile res = new ResourceFile(plugin, "path/to/file.txt", file);
 
 		File properties = new File(file.getAbsolutePath() + ".asset");
 		Assert.assertEquals(res.getPropertiesFile(), properties);
@@ -159,7 +202,7 @@ public class ResourceFileTest
 		Mockito.doReturn("TestPlugin").when(plugin).getPluginName();
 
 		File file = new File("awesome.txt");
-		ResourceFile res = new ResourceFile(plugin, "path/to/file.txt", null, file);
+		ResourceFile res = new ResourceFile(plugin, "path/to/file.txt", file);
 
 		Assert.assertEquals("[Resource: TestPlugin/path/to/file.txt:file.txt]", res.toString());
 	}
@@ -169,7 +212,7 @@ public class ResourceFileTest
 	{
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File(".");
-		ResourceFile res = new ResourceFile(plugin, "path/to/file.txt", null, file);
+		ResourceFile res = new ResourceFile(plugin, "path/to/file.txt", file);
 
 		Assert.assertEquals(res.hashCode(), "path/to/file.txt".hashCode());
 	}
@@ -179,7 +222,7 @@ public class ResourceFileTest
 	{
 		Plugin plugin = Mockito.mock(Plugin.class);
 		File file = new File("res/TestPlugin/Unit Tests/not_real.txt");
-		ResourceFile res = new ResourceFile(plugin, "file.txt", null, file);
+		ResourceFile res = new ResourceFile(plugin, "file.txt", file);
 
 		Assert.assertFalse(res.exists());
 	}
@@ -190,7 +233,7 @@ public class ResourceFileTest
 		Plugin plugin = Mockito.mock(Plugin.class);
 
 		File file = new File("res/TestPlugin/Unit Tests/simple.yml");
-		ResourceFile res = new ResourceFile(plugin, "file.txt", null, file);
+		ResourceFile res = new ResourceFile(plugin, "file.txt", file);
 
 		Assert.assertTrue(res.exists());
 	}
@@ -201,7 +244,7 @@ public class ResourceFileTest
 		Plugin plugin = Mockito.mock(Plugin.class);
 
 		File file = new File("res/TestPlugin/Unit Tests/simple.yml");
-		ResourceFile res = new ResourceFile(plugin, "file.txt", null, file);
+		ResourceFile res = new ResourceFile(plugin, "file.txt", file);
 
 		Assert.assertTrue(res.hasPropertiesFile());
 	}
@@ -212,7 +255,7 @@ public class ResourceFileTest
 		Plugin plugin = Mockito.mock(Plugin.class);
 
 		File file = new File("res/TestPlugin/Unit Tests/not_real.txt");
-		ResourceFile res = new ResourceFile(plugin, "file.txt", null, file);
+		ResourceFile res = new ResourceFile(plugin, "file.txt", file);
 
 		Assert.assertFalse(res.hasPropertiesFile());
 	}

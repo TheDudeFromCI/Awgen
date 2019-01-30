@@ -1,1 +1,2 @@
-shader: normal_shader.glsl
+name: normal shader
+shader: shaders/normal_shader.glsl

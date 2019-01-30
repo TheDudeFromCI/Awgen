@@ -40,6 +40,8 @@ public class MaterialLoader implements FileLoader
 			YamlFile yaml = new YamlFile();
 			yaml.load(resourceFile.getFile());
 
+			String name = yaml.getString("name");
+
 			ShaderResource shader = (ShaderResource) resourceLoader.loadResource(_fileDatabase
 					.getResourceFile(resourceFile.getPlugin(), yaml.getString("shader")), database);
 
@@ -60,10 +62,10 @@ public class MaterialLoader implements FileLoader
 				}
 			}
 
-			MaterialResource material =
-					new MaterialResource(resourceFile.getName(), shader, textures);
+			MaterialResource material = new MaterialResource(resourceFile, name, shader, textures);
 			database.addResource(material);
 
+			Log.debugf("Successfully loaded material resource, %s.", material);
 			return material;
 		}
 		catch (Exception exception)

@@ -61,8 +61,10 @@ public class MeshLoader implements FileLoader
 				Skeleton skeleton = AssimpSkeletonParser.loadSkeleton(scene, mesh, vertexData);
 
 				MeshResource resource =
-						new MeshResource(meshName, vertexData, skeleton, resourceFile);
+						new MeshResource(resourceFile, meshName, vertexData, skeleton);
 				database.addResource(resource);
+
+				Log.debugf("Successfully loaded mesh resource, %s.", resource);
 
 				if (resource.getName().equals(resourceFile.getName()) || meshCount == 1)
 					mainMesh = resource;
@@ -70,6 +72,7 @@ public class MeshLoader implements FileLoader
 
 			scene.free();
 
+			Log.debugf("Successfully returned main mesh resource, %s.", mainMesh);
 			return mainMesh;
 		}
 		catch (Exception exception)

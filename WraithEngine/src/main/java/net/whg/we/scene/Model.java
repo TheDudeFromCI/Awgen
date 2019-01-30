@@ -7,14 +7,17 @@ import net.whg.we.utils.Location;
 
 public class Model implements LocationHolder
 {
+	private String _name;
 	private SubMesh[] _submeshes;
 	private Location _location;
 
-	public Model(Mesh[] meshes, Material[] materials)
+	public Model(String name, Mesh[] meshes, Material[] materials)
 	{
 		if (meshes.length != materials.length)
 			throw new IllegalArgumentException(
 					"Mesh array and Material array must be the same length!");
+
+		_name = name;
 
 		_submeshes = new SubMesh[meshes.length];
 		_location = new Location();
@@ -37,5 +40,10 @@ public class Model implements LocationHolder
 	public SubMesh getSubMesh(int index)
 	{
 		return _submeshes[index];
+	}
+
+	public String getName()
+	{
+		return _name;
 	}
 }

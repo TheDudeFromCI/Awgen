@@ -32,17 +32,14 @@ public class ResourceFile
 	 * @param file
 	 *            - The file that the ResourceFile represents.
 	 */
-	public ResourceFile(Plugin plugin, String pathname, String name, File file)
+	public ResourceFile(Plugin plugin, String pathname, File file)
 	{
 		_plugin = plugin;
-		_name = name;
-		_pathname = pathname;
 		_file = file;
+		_pathname = FileUtils.getPathnameWithoutResource(pathname);
+		_name = FileUtils.getPathnameOnlyResource(pathname);
 		_assetExtension = FileUtils.getFileExtention(pathname);
-		_propertiesFile = new File(_file.getAbsolutePath() + ".asset");
-
-		if (_name == null)
-			_name = FileUtils.getSimpleFileName(_pathname);
+		_propertiesFile = new File(file.getAbsolutePath() + ".asset");
 	}
 
 	/**
@@ -91,9 +88,21 @@ public class ResourceFile
 	 *
 	 * @return The name of this resource file and it's relative path.
 	 */
-	public String getPathName()
+	public String getSimplePathname()
 	{
 		return _pathname;
+	}
+
+	/**
+	 * Gets the file name and relative path of this resource, as well as the
+	 * resource it points to.
+	 *
+	 * @return The name of this resource file and it's relative path, including the
+	 *         resource name.
+	 */
+	public String getFullPathname()
+	{
+		return _pathname + ":" + _name;
 	}
 
 	/**
@@ -140,8 +149,7 @@ public class ResourceFile
 
 		ResourceFile a = (ResourceFile) other;
 
-		return _plugin == a._plugin && getPathName().equals(a.getPathName())
-				&& getName().equals(a.getName());
+		return _plugin == a._plugin && _pathname.equals(a._pathname) && _name.equals(a._name);
 	}
 
 	@Override

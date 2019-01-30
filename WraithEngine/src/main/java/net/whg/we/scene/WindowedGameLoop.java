@@ -2,7 +2,7 @@ package net.whg.we.scene;
 
 import net.whg.we.event.EventCaller;
 import net.whg.we.rendering.GraphicsPipeline;
-import net.whg.we.resources.ResourceLoader;
+import net.whg.we.resources.ResourceManager;
 import net.whg.we.test.TestScene;
 import net.whg.we.utils.FPSLogger;
 import net.whg.we.utils.Input;
@@ -14,11 +14,11 @@ public class WindowedGameLoop implements GameLoop
 	private boolean _isRunning;
 	private UpdateEventCaller _updateListener = new UpdateEventCaller();
 	private GraphicsPipeline _graphicsPipeline;
-	private ResourceLoader _resourceLoader;
+	private ResourceManager _resourceManager;
 
-	public WindowedGameLoop(ResourceLoader resourceLoader)
+	public WindowedGameLoop(ResourceManager resourceManager)
 	{
-		_resourceLoader = resourceLoader;
+		_resourceManager = resourceManager;
 		_graphicsPipeline = new GraphicsPipeline();
 	}
 
@@ -36,7 +36,7 @@ public class WindowedGameLoop implements GameLoop
 		try
 		{
 			TestScene testScene = new TestScene(this);
-			testScene.loadTestScene(_resourceLoader);
+			testScene.loadTestScene(_resourceManager);
 
 			while (true)
 			{

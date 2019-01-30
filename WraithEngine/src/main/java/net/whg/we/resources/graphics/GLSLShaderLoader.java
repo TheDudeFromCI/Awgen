@@ -60,10 +60,11 @@ public class GLSLShaderLoader implements FileLoader
 					fragShader.append(line).append("\n");
 			}
 
-			ShaderResource shader = new ShaderResource(properties, vertShader.toString(),
-					geoShader.toString(), fragShader.toString(), resourceFile);
+			ShaderResource shader = new ShaderResource(resourceFile, properties,
+					vertShader.toString(), geoShader.toString(), fragShader.toString());
 			database.addResource(shader);
 
+			Log.debugf("Successfully loaded shader resource, %s.", shader);
 			return shader;
 		}
 		catch (Exception e)

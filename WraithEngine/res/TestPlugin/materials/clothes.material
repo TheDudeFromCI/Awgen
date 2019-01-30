@@ -1,3 +1,4 @@
-shader: vertex_lit.glsl
+name: clothes
+shader: shaders/vertex_lit.glsl
 textures:
   diffuse: textures/male_casualsuit06_diffuse.png
