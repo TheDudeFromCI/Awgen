@@ -31,6 +31,16 @@ public class ModelResource implements CompilableResource
 		return _model;
 	}
 
+	public MeshResource getMeshResource(int index)
+	{
+		return _meshResources[index];
+	}
+
+	public MaterialResource getMaterialResource(int index)
+	{
+		return _materialResources[index];
+	}
+
 	@Override
 	public ResourceFile getResourceFile()
 	{
@@ -87,9 +97,6 @@ public class ModelResource implements CompilableResource
 		}
 
 		_model = new Model(_name, meshes, materials);
-
-		_meshResources = null;
-		_materialResources = null;
 	}
 
 	@Override

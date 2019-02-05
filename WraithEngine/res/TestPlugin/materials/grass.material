@@ -1,0 +1,4 @@
+name: clothes
+shader: shaders/vertex_lit.glsl
+textures:
+  diffuse: textures/grass/MixedAutumnGrass_basecolor.png

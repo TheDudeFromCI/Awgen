@@ -4,6 +4,7 @@ import org.lwjgl.assimp.AIFace;
 import org.lwjgl.assimp.AIMesh;
 import org.lwjgl.assimp.AIVector3D;
 import net.whg.we.rendering.VertexData;
+import net.whg.we.utils.Log;
 
 class AssimpMeshParser
 {
@@ -24,6 +25,16 @@ class AssimpMeshParser
 		int vertexCount = mesh.mNumVertices();
 		int vertexSize = boneCount == 0 ? VERTEX_SIZE : VERTEX_SIZE_RIGGED;
 		int triCount = mesh.mNumFaces();
+
+		Log.indent();
+		Log.trace("Mesh Data:");
+		Log.indent();
+		Log.tracef("Vertices: %s", vertexCount);
+		Log.tracef("Triangles: %s", triCount);
+		Log.tracef("Vertex Size: %s", vertexSize);
+		Log.tracef("Bones: %s", boneCount);
+		Log.unindent();
+		Log.unindent();
 
 		// Build vertex data array
 		int index = 0;

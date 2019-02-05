@@ -40,10 +40,14 @@ public class MeshResource implements CompilableResource
 	@Override
 	public void dispose()
 	{
-		if (_mesh == null)
-			return;
+		if (_mesh != null)
+		{
+			_mesh.dispose();
+			_mesh = null;
+		}
 
-		_mesh.dispose();
+		_vertexData = null;
+		_skeleton = null;
 	}
 
 	@Override
@@ -56,9 +60,6 @@ public class MeshResource implements CompilableResource
 			_mesh = new Mesh(_name, _vertexData, graphics);
 		else
 			_mesh = new SkinnedMesh(_name, _vertexData, graphics, _skeleton);
-
-		_vertexData = null;
-		_skeleton = null;
 	}
 
 	@Override
@@ -77,5 +78,15 @@ public class MeshResource implements CompilableResource
 	public String toString()
 	{
 		return String.format("[MeshResource: %s at %s]", _name, _resourceFile);
+	}
+
+	public VertexData getVertexData()
+	{
+		return _vertexData;
+	}
+
+	public Skeleton getSkeleton()
+	{
+		return _skeleton;
 	}
 }

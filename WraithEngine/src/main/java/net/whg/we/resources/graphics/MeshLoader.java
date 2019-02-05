@@ -41,7 +41,9 @@ public class MeshLoader implements FileLoader
 			AIScene scene = Assimp.aiImportFile(resourceFile.getFile().toString(),
 					Assimp.aiProcess_Triangulate | Assimp.aiProcess_GenSmoothNormals
 							| Assimp.aiProcess_FlipUVs | Assimp.aiProcess_CalcTangentSpace
-							| Assimp.aiProcess_LimitBoneWeights);
+							| Assimp.aiProcess_LimitBoneWeights | Assimp.aiProcess_SplitLargeMeshes
+							| Assimp.aiProcess_OptimizeMeshes
+							| Assimp.aiProcess_JoinIdenticalVertices);
 
 			// If scene could not be loaded, return null
 			if (scene == null)

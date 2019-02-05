@@ -1,11 +1,12 @@
 package net.whg.we.test;
 
-import org.joml.Math;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.ScreenClearType;
+import net.whg.we.rendering.VertexData;
 import net.whg.we.resources.ResourceManager;
 import net.whg.we.resources.scene.ModelResource;
 import net.whg.we.scene.Model;
@@ -17,11 +18,9 @@ import net.whg.we.utils.FirstPersonCamera;
 import net.whg.we.utils.Input;
 import net.whg.we.utils.Log;
 import net.whg.we.utils.Screen;
-import net.whg.we.utils.Time;
 
 public class TestScene implements UpdateListener
 {
-	private Model _monkeyModel;
 	private FirstPersonCamera _firstPerson;
 	private Camera _camera;
 	private RenderPass _renderPass = new RenderPass();
@@ -42,25 +41,6 @@ public class TestScene implements UpdateListener
 			_renderPass = new RenderPass();
 
 			{
-				// SceneLoader loader = new SceneLoader(resourceLoader);
-				// FileDatabase fileDatabase = resourceLoader.getFileDatabase();
-
-				// _monkeyModel = loader.loadModel(fileDatabase.getResourceFile(dummyPlugin,
-				// "monkey_head.fbx"), graphics);
-				// Model floor = loader.loadModel(fileDatabase.getResourceFile(dummyPlugin,
-				// "floor.obj"), graphics);
-				// Model human = loader.loadModel(fileDatabase.getResourceFile(dummyPlugin,
-				// "BaseHuman.fbx"), graphics);
-				//
-				// _monkeyModel.getLocation()
-				// .setRotation(new Quaternionf().rotateX((float) (-Math.PI / 2f)));
-				// _monkeyModel.getLocation().setScale(new Vector3f(0.25f, 0.25f, 0.25f));
-				// human.getLocation().setPosition(new Vector3f(0f, 0f, -5f));
-				//
-				// _renderPass.addModel(_monkeyModel);
-				// _renderPass.addModel(floor);
-				// _renderPass.addModel(human);
-
 				Plugin plugin = new Plugin()
 				{
 
@@ -88,10 +68,22 @@ public class TestScene implements UpdateListener
 
 				};
 
-				ModelResource modelResource =
-						(ModelResource) resourceManager.loadResource(plugin, "models/human.model");
-				modelResource.compile(_gameLoop.getGraphicsPipeline().getGraphics());
-				_renderPass.addModel(modelResource.getData());
+				ModelResource terrain = (ModelResource) resourceManager.loadResource(plugin,
+						"models/terrain.model");
+
+				VertexData vd = terrain.getMeshResource(0).getVertexData();
+				for (int i = 6; i < vd.getDataArray().length; i += vd.getVertexSize())
+					vd.getDataArray()[i] *= 1000f;
+				for (int i = 7; i < vd.getDataArray().length; i += vd.getVertexSize())
+					vd.getDataArray()[i] *= 1000f;
+
+				terrain.compile(_gameLoop.getGraphicsPipeline().getGraphics());
+
+				Model m = terrain.getData();
+				m.getLocation().setScale(new Vector3f(1000f, 1000f, 1000f));
+				m.getLocation()
+						.setRotation(new Quaternionf().rotateX((float) Math.toRadians(-90f)));
+				_renderPass.addModel(m);
 			}
 
 			_camera = new Camera();
@@ -110,18 +102,13 @@ public class TestScene implements UpdateListener
 	{
 		try
 		{
+			_firstPerson.setMoveSpeed(Input.isKeyHeld("control") ? 70f : 7f);
 			_firstPerson.update();
 
 			if (Input.isKeyDown("q"))
 				Screen.setMouseLocked(!Screen.isMouseLocked());
 			if (Input.isKeyDown("escape"))
 				_gameLoop.requestClose();
-
-			if (_monkeyModel != null)
-			{
-				float y = (float) (Math.sin(Time.time()) + 1f);
-				_monkeyModel.getLocation().setPosition(new Vector3f(0f, y, 0f));
-			}
 
 			Graphics graphics = _gameLoop.getGraphicsPipeline().getGraphics();
 			graphics.clearScreenPass(ScreenClearType.CLEAR_COLOR_AND_DEPTH);

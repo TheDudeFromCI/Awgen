@@ -1,0 +1,5 @@
+name: Terrain
+submeshes:
+  '0':
+    mesh: 'meshes/mountains_mesh.fbx'
+    material: 'materials/grass.material'
