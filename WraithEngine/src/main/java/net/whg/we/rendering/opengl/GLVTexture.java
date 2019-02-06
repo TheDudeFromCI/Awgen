@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 import net.whg.we.rendering.TextureProperties;
+import net.whg.we.rendering.TextureSampleMode;
 import net.whg.we.rendering.VTexture;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.Log;
@@ -51,15 +52,47 @@ public class GLVTexture implements VTexture
 		if (properties.hasMipmapping())
 		{
 			GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER,
-					GL11.GL_NEAREST_MIPMAP_NEAREST);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+
+			if (properties.getSampleMode() == TextureSampleMode.NEAREST)
+			{
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER,
+						GL11.GL_NEAREST_MIPMAP_NEAREST);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER,
+						GL11.GL_NEAREST);
+			}
+			else if (properties.getSampleMode() == TextureSampleMode.BILINEAR)
+			{
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER,
+						GL11.GL_LINEAR_MIPMAP_NEAREST);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER,
+						GL11.GL_LINEAR);
+			}
+			else
+			{
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER,
+						GL11.GL_LINEAR_MIPMAP_LINEAR);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER,
+						GL11.GL_LINEAR);
+			}
 		}
 		else
 		{
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL14.GL_GENERATE_MIPMAP, GL11.GL_FALSE);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+
+			if (properties.getSampleMode() == TextureSampleMode.NEAREST)
+			{
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER,
+						GL11.GL_NEAREST);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER,
+						GL11.GL_NEAREST);
+			}
+			else
+			{
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER,
+						GL11.GL_LINEAR);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER,
+						GL11.GL_LINEAR);
+			}
 		}
 
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);

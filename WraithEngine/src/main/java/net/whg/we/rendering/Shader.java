@@ -57,6 +57,14 @@ public class Shader
 		_shader = null;
 	}
 
+	public boolean hasUniform(String name)
+	{
+		if (_disposed)
+			throw new IllegalStateException("Shader already disposed!");
+
+		return getUniformLocation(name) != -1;
+	}
+
 	public void setUniformMat4(String name, FloatBuffer mat)
 	{
 		if (_disposed)

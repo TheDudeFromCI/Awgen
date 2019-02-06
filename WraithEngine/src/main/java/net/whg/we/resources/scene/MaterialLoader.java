@@ -45,14 +45,17 @@ public class MaterialLoader implements FileLoader
 			ShaderResource shader = (ShaderResource) resourceLoader.loadResource(_fileDatabase
 					.getResourceFile(resourceFile.getPlugin(), yaml.getString("shader")), database);
 
+			String[] textureParamNames;
 			TextureResource[] textures;
 			{
 				Set<String> textureNames = yaml.getKeys("textures");
 				textures = new TextureResource[textureNames.size()];
+				textureParamNames = new String[textures.length];
 
 				int i = 0;
 				for (String textureName : textureNames)
 				{
+					textureParamNames[i] = textureName;
 					textures[i++] =
 							(TextureResource) resourceLoader
 									.loadResource(
@@ -62,7 +65,8 @@ public class MaterialLoader implements FileLoader
 				}
 			}
 
-			MaterialResource material = new MaterialResource(resourceFile, name, shader, textures);
+			MaterialResource material =
+					new MaterialResource(resourceFile, name, shader, textureParamNames, textures);
 			database.addResource(material);
 
 			Log.debugf("Successfully loaded material resource, %s.", material);

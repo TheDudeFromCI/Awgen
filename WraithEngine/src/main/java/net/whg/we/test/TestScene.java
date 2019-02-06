@@ -72,7 +72,7 @@ public class TestScene implements UpdateListener
 				terrain.compile(_gameLoop.getGraphicsPipeline().getGraphics());
 
 				Model m = terrain.getData();
-				m.getLocation().setScale(new Vector3f(1000f, 1000f, 1000f));
+				m.getLocation().setScale(new Vector3f(100f, 100f, 100f));
 				m.getLocation()
 						.setRotation(new Quaternionf().rotateX((float) Math.toRadians(-90f)));
 				_renderPass.addModel(m);

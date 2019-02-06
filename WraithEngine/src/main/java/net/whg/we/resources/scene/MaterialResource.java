@@ -13,15 +13,17 @@ public class MaterialResource implements CompilableResource
 	private Material _material;
 	private String _name;
 	private ShaderResource _shader;
+	private String[] _textureParamNames;
 	private TextureResource[] _textures;
 	private ResourceFile _resourceFile;
 
 	public MaterialResource(ResourceFile resourceFile, String name, ShaderResource shader,
-			TextureResource[] textures)
+			String[] textureParamNames, TextureResource[] textures)
 	{
 		_resourceFile = resourceFile;
 		_name = name;
 		_shader = shader;
+		_textureParamNames = textureParamNames;
 		_textures = textures;
 	}
 
@@ -64,7 +66,7 @@ public class MaterialResource implements CompilableResource
 			textures[i] = _textures[i].getData();
 
 		_material = new Material(_shader.getData(), _name);
-		_material.setTextures(textures);
+		_material.setTextures(_textureParamNames, textures);
 
 		_shader = null;
 		_textures = null;

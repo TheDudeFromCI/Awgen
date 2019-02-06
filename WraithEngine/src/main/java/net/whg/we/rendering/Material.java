@@ -9,6 +9,7 @@ public class Material
 {
 	// FIELDS
 	private Shader _shader;
+	private String[] _textureParamNames;
 	private Texture[] _textures;
 	private String _name;
 
@@ -19,6 +20,7 @@ public class Material
 	private Matrix4f _modelMatrix = new Matrix4f();
 	private Matrix4f _mvpMatrix = new Matrix4f();
 	private float _sorterId;
+	private boolean _needsUpdateTexturePointers;
 
 	public Material(Shader shader, String name)
 	{
@@ -28,9 +30,11 @@ public class Material
 		_sorterId = (float) Math.random();
 	}
 
-	public void setTextures(Texture[] textures)
+	public void setTextures(String[] textureParamNames, Texture[] textures)
 	{
+		_textureParamNames = textureParamNames;
 		_textures = textures;
+		_needsUpdateTexturePointers = true;
 	}
 
 	public float getSorterId()
@@ -61,16 +65,26 @@ public class Material
 		{
 			for (int i = 0; i < _textures.length; i++)
 				_textures[i].bind(i);
+
+			if (_needsUpdateTexturePointers)
+			{
+				for (int i = 0; i < _textures.length; i++)
+					_shader.setUniformInt(_textureParamNames[i], i);
+			}
 		}
 	}
 
 	public void setMVPUniform(Camera camera, Location entityLocation)
 	{
-		_shader.bind();
-
 		camera.getProjectionMatrix(_projectionMatrix);
 		camera.getViewMatrix(_viewMatrix);
 		entityLocation.getMatrix(_modelMatrix);
+
+		if (_shader.hasUniform("_mMat"))
+		{
+			_modelMatrix.get(_matrixFloatBuffer);
+			_shader.setUniformMat4("_mMat", _matrixFloatBuffer);
+		}
 
 		_mvpMatrix.set(_projectionMatrix);
 		_mvpMatrix.mul(_viewMatrix);

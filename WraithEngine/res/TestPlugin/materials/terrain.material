@@ -1,0 +1,7 @@
+name: terrain
+shader: shaders/terrain.glsl
+textures:
+  _splat: textures/terrain/splat.png
+  _diffuse1: textures/grass/MixedAutumnGrass_basecolor.png
+  _diffuse2: textures/cliff/CrackyRockCliffs_basecolor.png
+  _diffuse3: textures/grass2/TundraStonesInGrass_basecolor.png
