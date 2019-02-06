@@ -80,7 +80,7 @@ public class ShaderAttributes
 					"Index " + index + " out of bounds! (Size: " + _count + ")");
 
 		_vertexSize -= _attribSizes[index];
-		for (int i = index + 1; i < _count; i++)
+		for (int i = index; i < _count; i++)
 		{
 			_attribNames[i] = _attribNames[i + 1];
 			_attribSizes[i] = _attribSizes[i + 1];
@@ -96,7 +96,12 @@ public class ShaderAttributes
 
 	public int getSizeOf(String attrib)
 	{
-		return _attribSizes[indexOf(attrib)];
+		int index = indexOf(attrib);
+
+		if (index == -1)
+			return -1;
+
+		return _attribSizes[index];
 	}
 
 	public int indexOf(String attrib)
@@ -114,6 +119,9 @@ public class ShaderAttributes
 
 	public int getPositionInVertex(int attributeIndex)
 	{
+		if (attributeIndex == -1)
+			return -1;
+
 		int t = 0;
 		for (int i = 0; i < attributeIndex; i++)
 			t += _attribSizes[i];

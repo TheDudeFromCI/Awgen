@@ -114,7 +114,7 @@ public class ShaderAttributesTest
 		attrib.addAttribute("uv1", 2);
 		attrib.addAttribute("uv2", 2);
 
-		attrib.removeAttribute(2);
+		attrib.removeAttribute(1);
 
 		Assert.assertEquals(3, attrib.getCount());
 		Assert.assertEquals(0, attrib.indexOf("pos"));
