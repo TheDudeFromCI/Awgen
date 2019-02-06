@@ -38,15 +38,25 @@ public class WindowedGameLoop implements GameLoop
 			TestScene testScene = new TestScene(this);
 			testScene.loadTestScene(_resourceManager);
 
+			long startTime = System.currentTimeMillis();
+			long usedPhysicsFrames = 0;
+
 			while (true)
 			{
 				try
 				{
+					long currentTime = System.currentTimeMillis();
+					double passed = (currentTime - startTime) / 1000.0;
+					double physicsFrames = passed * Time.getPhysicsFramerate();
+
+					while (usedPhysicsFrames++ < physicsFrames)
+						_updateListener.onUpdate();
+
 					// Calculate frame data
 					Time.updateTime();
 					FPSLogger.logFramerate();
 
-					_updateListener.onUpdate();
+					_updateListener.onUpdateFrame();
 
 					// End frame
 					Input.endFrame();
