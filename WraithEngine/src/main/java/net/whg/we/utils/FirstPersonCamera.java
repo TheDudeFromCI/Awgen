@@ -97,36 +97,30 @@ public class FirstPersonCamera
 		if (!Screen.isMouseLocked())
 			return;
 
-		Vector3f velocity = new Vector3f();
+		float move = Time.deltaTime() * _moveSpeed;
+		Vector3f pos = _camera.getLocation().getPosition();
+		Vector3f backward = _camera.getLocation().getInverseMatrix().positiveZ(new Vector3f());
+		Vector3f right = _camera.getLocation().getInverseMatrix().positiveX(new Vector3f());
+		Vector3f up = new Vector3f(0f, move, 0f);
+
+		backward.y = 0f;
+		right.y = 0f;
+		backward.normalize().mul(move);
+		right.normalize().mul(move);
 
 		if (Input.isKeyHeld("w"))
-			velocity.z -= 1f;
+			pos.sub(backward);
 		if (Input.isKeyHeld("s"))
-			velocity.z += 1f;
+			pos.add(backward);
 		if (Input.isKeyHeld("a"))
-			velocity.x -= 1f;
+			pos.sub(right);
 		if (Input.isKeyHeld("d"))
-			velocity.x += 1f;
-
-		if (velocity.lengthSquared() != 0f)
-		{
-			velocity.normalize();
-			velocity.mulDirection(_camera.getLocation().getMatrix());
-		}
-
-		velocity.y = 0f;
+			pos.add(right);
 		if (Input.isKeyHeld("space"))
-			velocity.y += 1f;
+			pos.add(up);
 		if (Input.isKeyHeld("shift"))
-			velocity.y -= 1f;
+			pos.sub(up);
 
-		if (velocity.lengthSquared() == 0f)
-			return;
-
-		velocity.mul(Time.deltaTime()).mul(_moveSpeed);
-
-		Vector3f pos = _camera.getLocation().getPosition();
-		pos.add(velocity);
 		_camera.getLocation().setPosition(pos);
 	}
 
@@ -157,7 +151,7 @@ public class FirstPersonCamera
 
 	public void update()
 	{
-		updateCameraPosition();
 		updateCameraRotation();
+		updateCameraPosition();
 	}
 }
