@@ -1,0 +1,15 @@
+name: Human
+submeshes:
+  '0':
+    mesh: 'meshes/BaseHuman.fbx:basehuman'
+    material: 'materials/skin.material'
+  '1':
+    mesh: 'meshes/BaseHuman.fbx:high-poly'
+    material: 'materials/eyes.material'
+  '2':
+    mesh: 'meshes/BaseHuman.fbx:male_casualsuit06'
+    material: 'materials/clothes.material'
+  '3':
+    mesh: 'meshes/BaseHuman.fbx:short01'
+    material: 'materials/hair.material'
+    

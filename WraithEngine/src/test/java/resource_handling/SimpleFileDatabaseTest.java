@@ -1,37 +1,37 @@
 package resource_handling;
 
+import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 import net.whg.we.main.Plugin;
 import net.whg.we.resources.ResourceFile;
 import net.whg.we.resources.SimpleFileDatabase;
-import util.CommonMock;
 
 public class SimpleFileDatabaseTest
 {
 	@Test
 	public void getResource()
 	{
-		// Get a resource file and make sure it links to a file.
+		File workingDir = new File(System.getProperty("user.dir"));
+		SimpleFileDatabase db = new SimpleFileDatabase(workingDir);
+		Plugin plugin = Mockito.mock(Plugin.class);
+		Mockito.when(plugin.getPluginName()).thenReturn("TestPlugin");
 
-		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
-		Plugin plugin = CommonMock.getTestPlugin();
-
-		ResourceFile resource = db.getResourceFile(plugin, "monkey_head.fbx");
+		ResourceFile resource = db.getResourceFile(plugin, "Unit Tests/simply.yml");
 
 		Assert.assertNotNull(resource);
-		Assert.assertEquals(resource.getFileExtension(), "fbx");
+		Assert.assertEquals(resource.getFileExtension(), "yml");
 		Assert.assertNotNull(resource.getFile());
 	}
 
 	@Test
 	public void getResourceNoPlugin()
 	{
-		// Make sure that nothing is returned is a plugin is not defined.
+		File workingDir = new File(System.getProperty("user.dir"));
+		SimpleFileDatabase db = new SimpleFileDatabase(workingDir);
 
-		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
-
-		ResourceFile resource = db.getResourceFile(null, "resource.obj");
+		ResourceFile resource = db.getResourceFile(null, "Unit Tests/simply.yml");
 
 		Assert.assertNull(resource);
 	}
@@ -39,9 +39,8 @@ public class SimpleFileDatabaseTest
 	@Test
 	public void getBrokenPath()
 	{
-		// Make sure that nothing is returned if the path is broken.
-
-		SimpleFileDatabase db = CommonMock.getSimpleFileDatabase();
+		File workingDir = new File(System.getProperty("user.dir"));
+		SimpleFileDatabase db = new SimpleFileDatabase(workingDir);
 
 		ResourceFile resource = db.getResourceFile(null, "234098$%^a/asdhkjas!@#$%^&*");
 

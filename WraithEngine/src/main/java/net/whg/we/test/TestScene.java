@@ -1,33 +1,30 @@
 package net.whg.we.test;
 
-import org.joml.Math;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.ScreenClearType;
-import net.whg.we.resources.ResourceLoader;
+import net.whg.we.resources.ResourceManager;
+import net.whg.we.resources.scene.ModelResource;
 import net.whg.we.scene.Model;
-import net.whg.we.scene.RenderPass;
-import net.whg.we.scene.SceneLoader;
+import net.whg.we.scene.Scene;
+import net.whg.we.scene.UpdateListener;
+import net.whg.we.scene.WindowedGameLoop;
+import net.whg.we.scene.behaviours.RenderBehaviour;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.FirstPersonCamera;
 import net.whg.we.utils.Input;
 import net.whg.we.utils.Log;
 import net.whg.we.utils.Screen;
-import net.whg.we.utils.Time;
-import net.whg.we.scene.UpdateListener;
-import net.whg.we.scene.WindowedGameLoop;
-import net.whg.we.resources.FileDatabase;
 
 public class TestScene implements UpdateListener
 {
-	private Model _monkeyModel;
 	private FirstPersonCamera _firstPerson;
 	private Camera _camera;
-	private RenderPass _renderPass = new RenderPass();
 	private WindowedGameLoop _gameLoop;
+	private Scene _scene;
 
 	public TestScene(WindowedGameLoop gameLoop)
 	{
@@ -35,60 +32,56 @@ public class TestScene implements UpdateListener
 		_gameLoop.getUpdateEvent().addListener(this);
 	}
 
-	public void loadTestScene(ResourceLoader resourceLoader)
+	public void loadTestScene(ResourceManager resourceManager)
 	{
 		try
 		{
-			Plugin dummyPlugin = new Plugin()
-			{
-
-				@Override
-				public void initPlugin()
-				{
-				}
-
-				@Override
-				public int getPriority()
-				{
-					return 0;
-				}
-
-				@Override
-				public String getPluginName()
-				{
-					return "TestPlugin";
-				}
-
-				@Override
-				public void enablePlugin()
-				{
-				}
-			};
-
 			Graphics graphics = _gameLoop.getGraphicsPipeline().getGraphics();
 			graphics.setClearScreenColor(new Color(0.2f, 0.4f, 0.8f));
-			_renderPass = new RenderPass();
+			_scene = new Scene();
 
 			{
-				SceneLoader loader = new SceneLoader(resourceLoader);
-				FileDatabase fileDatabase = resourceLoader.getFileDatabase();
+				Plugin plugin = new Plugin()
+				{
 
-				_monkeyModel = loader.loadModel(fileDatabase.getResourceFile(dummyPlugin, "monkey_head.fbx"), graphics);
-				Model floor = loader.loadModel(fileDatabase.getResourceFile(dummyPlugin, "floor.obj"), graphics);
-				Model human = loader.loadModel(fileDatabase.getResourceFile(dummyPlugin, "BaseHuman.fbx"), graphics);
+					@Override
+					public String getPluginName()
+					{
+						return "TestPlugin";
+					}
 
-				_monkeyModel.getLocation()
-						.setRotation(new Quaternionf().rotateX((float) (-Math.PI / 2f)));
-				_monkeyModel.getLocation().setScale(new Vector3f(0.25f, 0.25f, 0.25f));
-				human.getLocation().setPosition(new Vector3f(0f, 0f, -5f));
+					@Override
+					public void initPlugin()
+					{
+					}
 
-				_renderPass.addModel(_monkeyModel);
-				_renderPass.addModel(floor);
-				_renderPass.addModel(human);
+					@Override
+					public void enablePlugin()
+					{
+					}
+
+					@Override
+					public int getPriority()
+					{
+						return 0;
+					}
+
+				};
+
+				ModelResource terrain = (ModelResource) resourceManager.loadResource(plugin,
+						"models/terrain.model");
+				terrain.compile(_gameLoop.getGraphicsPipeline().getGraphics());
+
+				Model model = terrain.getData();
+				model.getLocation().setScale(new Vector3f(100f, 100f, 100f));
+				model.getLocation()
+						.setRotation(new Quaternionf().rotateX((float) Math.toRadians(-90f)));
+
+				_scene.getGameObjectManager().createNew().addBehaviour(new RenderBehaviour(model));
 			}
 
 			_camera = new Camera();
-			_renderPass.setCamera(_camera);
+			_scene.getRenderPass().setCamera(_camera);
 			_firstPerson = new FirstPersonCamera(_camera);
 		}
 		catch (Exception exception)
@@ -103,6 +96,23 @@ public class TestScene implements UpdateListener
 	{
 		try
 		{
+			_scene.getLogicPass().updatePass();
+		}
+		catch (Exception exception)
+		{
+			Log.fatalf("Failed to update scene!", exception);
+			_gameLoop.requestClose();
+		}
+	}
+
+	@Override
+	public void onUpdateFrame()
+	{
+		try
+		{
+			_scene.getLogicPass().updateFramePass();
+
+			_firstPerson.setMoveSpeed(Input.isKeyHeld("control") ? 70f : 7f);
 			_firstPerson.update();
 
 			if (Input.isKeyDown("q"))
@@ -110,12 +120,9 @@ public class TestScene implements UpdateListener
 			if (Input.isKeyDown("escape"))
 				_gameLoop.requestClose();
 
-			float y = (float) (Math.sin(Time.time()) + 1f);
-			_monkeyModel.getLocation().setPosition(new Vector3f(0f, y, 0f));
-
 			Graphics graphics = _gameLoop.getGraphicsPipeline().getGraphics();
 			graphics.clearScreenPass(ScreenClearType.CLEAR_COLOR_AND_DEPTH);
-			_renderPass.render();
+			_scene.getRenderPass().render();
 		}
 		catch (Exception exception)
 		{

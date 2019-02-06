@@ -1,8 +1,6 @@
 package net.whg.we.rendering;
 
-import net.whg.we.resources.DisposableResource;
-
-public class Mesh implements DisposableResource
+public class Mesh
 {
 	private String _meshName;
 	private VMesh _vMesh;
@@ -18,13 +16,11 @@ public class Mesh implements DisposableResource
 		_vMesh.render();
 	}
 
-	@Override
 	public void dispose()
 	{
 		_vMesh.dispose();
 	}
 
-	@Override
 	public boolean isDisposed()
 	{
 		return _vMesh.isDisposed();

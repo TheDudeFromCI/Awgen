@@ -6,7 +6,7 @@ package net.whg.we.resources;
  *
  * @author TheDudeFromCI
  */
-public interface Resource<T>
+public interface Resource
 {
 	/**
 	 * Gets the raw data this resource represents. This should only be called from
@@ -14,7 +14,7 @@ public interface Resource<T>
 	 *
 	 * @return The data for this resource.
 	 */
-	public T getData();
+	public Object getData();
 
 	/**
 	 * Gets the resource file this resource represents. This can be used for
@@ -25,16 +25,15 @@ public interface Resource<T>
 	public ResourceFile getResourceFile();
 
 	/**
-	 * Sets the resource file this resource represents. This can be used for
-	 * identification purposes, or future file acessing.
-	 *
-	 * @param resource
-	 *            - The resource file.
-	 */
-	public void setResourceFile(ResourceFile resource);
-
-	/**
 	 * Disposes this resource.
 	 */
 	public void dispose();
+
+	/**
+	 * Gets the name of this resource. This should be unquie within the ResourceFile
+	 * that is is loaded from.
+	 *
+	 * @return The name of this resource.
+	 */
+	public String getName();
 }

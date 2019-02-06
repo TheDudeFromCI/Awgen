@@ -1,12 +1,12 @@
 package net.whg.we.scene;
 
 import net.whg.we.event.EventCaller;
-import net.whg.we.utils.Log;
-import net.whg.we.resources.ResourceLoader;
 import net.whg.we.rendering.GraphicsPipeline;
+import net.whg.we.resources.ResourceManager;
 import net.whg.we.test.TestScene;
-import net.whg.we.utils.Input;
 import net.whg.we.utils.FPSLogger;
+import net.whg.we.utils.Input;
+import net.whg.we.utils.Log;
 import net.whg.we.utils.Time;
 
 public class WindowedGameLoop implements GameLoop
@@ -14,11 +14,11 @@ public class WindowedGameLoop implements GameLoop
 	private boolean _isRunning;
 	private UpdateEventCaller _updateListener = new UpdateEventCaller();
 	private GraphicsPipeline _graphicsPipeline;
-	private ResourceLoader _resourceLoader;
+	private ResourceManager _resourceManager;
 
-	public WindowedGameLoop(ResourceLoader resourceLoader)
+	public WindowedGameLoop(ResourceManager resourceManager)
 	{
-		_resourceLoader = resourceLoader;
+		_resourceManager = resourceManager;
 		_graphicsPipeline = new GraphicsPipeline();
 	}
 
@@ -36,17 +36,27 @@ public class WindowedGameLoop implements GameLoop
 		try
 		{
 			TestScene testScene = new TestScene(this);
-			testScene.loadTestScene(_resourceLoader);
+			testScene.loadTestScene(_resourceManager);
+
+			long startTime = System.currentTimeMillis();
+			long usedPhysicsFrames = 0;
 
 			while (true)
 			{
 				try
 				{
+					long currentTime = System.currentTimeMillis();
+					double passed = (currentTime - startTime) / 1000.0;
+					double physicsFrames = passed * Time.getPhysicsFramerate();
+
+					while (usedPhysicsFrames++ < physicsFrames)
+						_updateListener.onUpdate();
+
 					// Calculate frame data
 					Time.updateTime();
 					FPSLogger.logFramerate();
 
-					_updateListener.onUpdate();
+					_updateListener.onUpdateFrame();
 
 					// End frame
 					Input.endFrame();
@@ -61,13 +71,13 @@ public class WindowedGameLoop implements GameLoop
 				}
 			}
 		}
-		catch(Exception exception)
+		catch (Exception exception)
 		{
 			Log.fatalf("Uncaught exception in game loop!", exception);
 		}
 		finally
 		{
-			_resourceLoader.disposeResources();
+			// _resourceLoader.disposeResources();
 			_graphicsPipeline.dispose();
 			_isRunning = false;
 		}

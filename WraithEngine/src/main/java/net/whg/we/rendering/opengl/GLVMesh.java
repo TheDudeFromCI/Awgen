@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import net.whg.we.rendering.ShaderAttributes;
 import net.whg.we.rendering.VMesh;
 import net.whg.we.rendering.VertexData;
 import net.whg.we.utils.Log;
@@ -44,12 +45,13 @@ public class GLVMesh implements VMesh
 		int stride = vertexData.getVertexByteSize();
 		int offset = 0;
 
-		int[] attributes = vertexData.getAttributeSizes();
-		for (int i = 0; i < attributes.length; i++)
+		ShaderAttributes attributes = vertexData.getAttributeSizes();
+		for (int i = 0; i < attributes.getCount(); i++)
 		{
-			GL20.glVertexAttribPointer(i, attributes[i], GL11.GL_FLOAT, false, stride, offset);
+			GL20.glVertexAttribPointer(i, attributes.getAttributeSize(i), GL11.GL_FLOAT, false,
+					stride, offset);
 			GL20.glEnableVertexAttribArray(i);
-			offset += attributes[i] * 4;
+			offset += attributes.getAttributeSize(i) * 4;
 		}
 
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);

@@ -1,6 +1,6 @@
 package net.whg.we.resources;
 
-public interface FileLoader<T>
+public interface FileLoader
 {
 	/**
 	 * Gets a string array of file types that are supported by the this file loader.
@@ -17,18 +17,19 @@ public interface FileLoader<T>
 	public String[] getTargetFileTypes();
 
 	/**
-	 * Loads a specfic file as a resource. This method may be called from any
-	 * thread.
+	 * Loads a specfic file as a resource. The resource is added to the database
+	 * after it is loaded. All resources in the give file are loaded to the
+	 * database, but only the file with the given name is returned.
 	 *
-	 * @param file
-	 *            - The file to load.
-	 * @param properties
-	 *            - The properties file attached to this file, or null if no
-	 *            properties file was found.
-	 * @return A resource representing the file, or null if the file could not be
-	 *         loaded.
+	 * @param resourceLoader
+	 *            - The resource loader currently in charge of loading this file.
+	 * @param database
+	 *            - The resource database currently being used.
+	 * @param resourceFile
+	 *            - The resource to load.
 	 */
-	public Resource<T> loadFile(ResourceLoader resourceLoader, ResourceFile resource);
+	public Resource loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
+			ResourceFile resourceFile);
 
 	/**
 	 * Gets the priority level for this file loader. When loading a file, the file

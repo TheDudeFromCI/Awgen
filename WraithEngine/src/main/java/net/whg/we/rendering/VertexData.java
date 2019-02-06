@@ -4,18 +4,13 @@ public class VertexData
 {
 	private float[] _data;
 	private short[] _triangles;
-	private int[] _attributes;
-	private int _vertexSize;
+	private ShaderAttributes _attributes;
 
-	public VertexData(float[] data, short[] triangles, int[] attributes)
+	public VertexData(float[] data, short[] triangles, ShaderAttributes attributes)
 	{
 		_data = data;
 		_triangles = triangles;
 		_attributes = attributes;
-
-		_vertexSize = 0;
-		for (int i : _attributes)
-			_vertexSize += i;
 	}
 
 	public float[] getDataArray()
@@ -25,12 +20,12 @@ public class VertexData
 
 	public int getVertexSize()
 	{
-		return _vertexSize;
+		return _attributes.getVertexSize();
 	}
 
 	public int getVertexByteSize()
 	{
-		return _vertexSize * 4;
+		return _attributes.getVertexByteSize();
 	}
 
 	public short[] getTriangles()
@@ -45,10 +40,10 @@ public class VertexData
 
 	public int getVertexCount()
 	{
-		return _data.length / _vertexSize;
+		return _data.length / getVertexSize();
 	}
 
-	public int[] getAttributeSizes()
+	public ShaderAttributes getAttributeSizes()
 	{
 		return _attributes;
 	}

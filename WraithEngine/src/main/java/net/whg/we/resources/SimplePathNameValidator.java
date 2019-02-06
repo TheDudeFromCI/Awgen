@@ -1,7 +1,5 @@
 package net.whg.we.resources;
 
-import net.whg.we.utils.Log;
-
 /**
  * Considers a pathname to follow the specification of simple folder names
  * seperated by a forward slash. Each file or folder is expected to follow the
@@ -9,7 +7,19 @@ import net.whg.we.utils.Log;
  * be empty, or end with a space or underscore. If the pathname points to a
  * file, the file is expected to contain a single period to indicate the file
  * extention. The file name cannot start or end with a period. Pathnames also
- * should not start or end with a forward slash.
+ * should not start or end with a forward slash.<br>
+ * <br>
+ * If a file with an extention is specified, then a colon can be used at the end
+ * to indicate a resource within that file. If this is not specified, the file
+ * name itself is used instead. For a resource name, any character can be used
+ * with the exception of colons.<br>
+ * <br>
+ * <code>
+ * Examples:<br>
+ * * file.png<br>
+ * * path/to/file.txt<br>
+ * * my/file.fbx:mesh_27<br>
+ * </code>
  *
  * @author TheDudeFromCI
  */
@@ -18,67 +28,67 @@ public class SimplePathNameValidator implements PathNameValidator
 	@Override
 	public boolean isValidPathName(String pathName)
 	{
-		Log.tracef("Testing path name '%s' for validity via SimplePathNameValidator.", pathName);
-
 		String allowedLetters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 		char lastLetter = '\n';
+		boolean nameMode = false;
+		boolean hasFileExtention = false;
 
 		for (int i = 0; i < pathName.length(); i++)
 		{
 			char c = pathName.charAt(i);
 
-			if (allowedLetters.indexOf(c) != -1)
+			if (nameMode)
 			{
+				if (c == ':')
+					return false;
+
 				lastLetter = c;
 				continue;
 			}
-
-			if (c == '/')
+			else
 			{
-				if (allowedLetters.indexOf(lastLetter) == -1)
+				if (allowedLetters.indexOf(c) != -1)
 				{
-					Log.tracef("  Failed to validate pathname. Incorrectly placed '/'");
-					return false;
+					lastLetter = c;
+					continue;
 				}
 
-				lastLetter = c;
-				continue;
-			}
-
-			if (c == '_' || c == ' ')
-			{
-				if (allowedLetters.indexOf(lastLetter) == -1)
+				if (c == '/' || c == '_' || c == ' ' || c == '.')
 				{
-					Log.tracef("  Failed to validate pathname. Incorrectly placed '_' or ' '");
-					return false;
+					if (allowedLetters.indexOf(lastLetter) == -1)
+						return false;
+
+					if (c == '.')
+					{
+						if (hasFileExtention)
+							return false;
+
+						hasFileExtention = true;
+					}
+					lastLetter = c;
+					continue;
 				}
 
-				lastLetter = c;
-				continue;
-			}
-
-			if (c == '.')
-			{
-				if (allowedLetters.indexOf(lastLetter) == -1)
+				if (c == ':')
 				{
-					Log.tracef("  Failed to validate pathname. Incorrectly placed '.'");
-					return false;
-				}
+					if (allowedLetters.indexOf(lastLetter) == -1)
+						return false;
 
-				lastLetter = c;
-				continue;
+					if (!hasFileExtention)
+						return false;
+
+					nameMode = true;
+					lastLetter = c;
+					continue;
+				}
 			}
 
-			Log.tracef("  Failed to validate pathname. Unknown character.");
 			return false;
 		}
 
-		if (allowedLetters.indexOf(lastLetter) == -1)
-		{
-			Log.tracef("  Failed to validate pathname. Pathname ends with incorrect character.");
+		if (!nameMode && allowedLetters.indexOf(lastLetter) == -1)
 			return false;
-		}
 
 		return true;
 	}

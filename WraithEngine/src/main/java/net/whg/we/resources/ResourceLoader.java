@@ -2,100 +2,52 @@ package net.whg.we.resources;
 
 import java.util.ArrayList;
 import net.whg.we.utils.Log;
-import java.util.HashMap;
 
 public class ResourceLoader
 {
-	private ArrayList<FileLoader<?>> _fileLoaders = new ArrayList<>();
-	private ArrayList<FileLoader<?>> _fileLoaderBuffer = new ArrayList<>();
-	private static HashMap<ResourceFile, Resource<?>> _resourceReferences = new HashMap<>();
-	private FileDatabase _fileDatabase;
-
-	public ResourceLoader(FileDatabase fileDatabase)
-	{
-		_fileDatabase = fileDatabase;
-	}
+	private ArrayList<FileLoader> _fileLoaders = new ArrayList<>();
 
 	/**
-	 * Gets the file database currently being used by this ResourceLoader.
+	 * Loads a resource from a file. If the resource already exists in the database,
+	 * that instance of the resource is returned instead. The resource is added to
+	 * the database after it is loaded. This method will also cause any resources
+	 * that this resource depends on to also be loaded.
 	 *
-	 * @return The file database.
+	 * @param resourceFile
+	 *            - The resource file to load.
+	 * @param database
+	 *            - The database to load the resource from.
+	 * @return
 	 */
-	public FileDatabase getFileDatabase()
+	public Resource loadResource(ResourceFile resourceFile, ResourceDatabase database)
 	{
-		return _fileDatabase;
-	}
+		Resource resource = database.getResource(resourceFile);
+		if (resource != null)
+			return resource;
 
-	/**
-	 * Loads a file as a resource.<br>
-	 * This method works by scanning all referenced file loaders and returning the
-	 * file loader with the highest priority that supports the given file type. If
-	 * this file does not have an extension, null is returned. If no file loader
-	 * supports this file extension, null is returned. If the file fails to load,
-	 * null is returned.
-	 *
-	 * @param file
-	 *            - The file to load.
-	 * @return A loaded resource for the file, or null if the file cannot be loaded.
-	 */
-	public Resource<?> loadResource(ResourceFile resource)
-	{
-		// Check to see if the resource is already loaded
-		if (hasResource(resource))
-			return getResource(resource);
+		Log.infof("Loading the resource %s.", resourceFile);
 
-		Log.infof("Loading the resource %s.", resource);
+		FileLoader loader = null;
+		int priority = Integer.MIN_VALUE;
 
-		FileLoader<?> loader = null;
-
-		for (FileLoader<?> l : _fileLoaders)
+		file_loader:
+		for (FileLoader l : _fileLoaders)
+		{
+			if (l.getPriority() <= priority)
+				continue;
 			for (String s : l.getTargetFileTypes())
-				if (s.equals(resource.getFileExtension()))
-					_fileLoaderBuffer.add(l);
-
-		if (_fileLoaderBuffer.isEmpty())
-		{
-			Log.warnf("Failed to load the resource %s, not a supported file type!",
-					resource.getName());
-			return null;
-		}
-
-		if (Log.getLogLevel() <= Log.TRACE)
-		{
-			Log.trace("  Finding available file loaders...");
-			for (FileLoader<?> l : _fileLoaderBuffer)
-				Log.tracef("   * %s", l.getClass().getName());
-		}
-
-		if (_fileLoaderBuffer.size() == 1)
-			loader = _fileLoaderBuffer.get(0);
-		else
-		{
-			int pri = Integer.MIN_VALUE;
-			for (int i = 0; i < _fileLoaderBuffer.size(); i++)
-			{
-				FileLoader<?> fl = _fileLoaderBuffer.get(i);
-				if (fl.getPriority() > pri)
+				if (s.equals(resourceFile.getFileExtension()))
 				{
-					pri = fl.getPriority();
-					loader = fl;
+					loader = l;
+					continue file_loader;
 				}
-			}
 		}
 
-		_fileLoaderBuffer.clear();
+		if (loader == null)
+			throw new IllegalStateException(
+					String.format("Not a supported file type! (%s)", resourceFile));
 
-		Log.debugf("Loading resource %s using the file loader, %s.", resource.getName(),
-				loader.getClass().getName());
-		Resource<?> res = loader.loadFile(this, resource);
-
-		if (res != null)
-		{
-			res.setResourceFile(resource);
-			addResource(res);
-		}
-
-		return res;
+		return loader.loadFile(this, database, resourceFile);
 	}
 
 	/**
@@ -105,7 +57,7 @@ public class ResourceLoader
 	 * @param fileLoader
 	 *            - The file loader to add.
 	 */
-	public void addFileLoader(FileLoader<?> fileLoader)
+	public void addFileLoader(FileLoader fileLoader)
 	{
 		Log.debugf("Adding a file loader to the ResourceLoader, %s.",
 				fileLoader.getClass().getName());
@@ -122,7 +74,7 @@ public class ResourceLoader
 	 * @param fileLoader
 	 *            - The file loader to remove.
 	 */
-	public void removeFileLoader(FileLoader<?> fileLoader)
+	public void removeFileLoader(FileLoader fileLoader)
 	{
 		Log.debugf("Removing a file loader from the ResourceLoader, %s.",
 				fileLoader.getClass().getName());
@@ -131,86 +83,27 @@ public class ResourceLoader
 	}
 
 	/**
-	 * Checks if this resource loader already have this resource loaded. If the resourceFile is not
-	 * specified, this method returns false.
+	 * Gets the number of file loaders currently attched to this resource loader.
 	 *
-	 * @param resourceFile - The resource file that represents the given resource.
-	 *
-	 * @return True if the resource referenced by this resource file exists. False otherwise.
+	 * @return The number of file loaders currently attached to this resource
+	 *         loader.
 	 */
-	public boolean hasResource(ResourceFile resourceFile)
+	public int getFileLoaderCount()
 	{
-		if (resourceFile == null)
-			return false;
-
-		return _resourceReferences.containsKey(resourceFile);
+		return _fileLoaders.size();
 	}
 
 	/**
-	 * Gets the loaded resource that is currently assigned to this ResourceFile.
+	 * Gets the file loader at the specified index. A file loader's index can change
+	 * anytime a new file loader is added or removed. This method is indented to be
+	 * used for iteration purposes only.
 	 *
-	 * @param resourceFile - The resource file that represents the given resource.
-	 *
-	 * @return The loaded resource for the given ResourceFile, or null if the resource is not loaded,
-	 * or if a ResourceFile is not specified.
+	 * @param index
+	 *            - The index of the file loader.
+	 * @return The file loader at the specified index.
 	 */
-	public Resource<?> getResource(ResourceFile resourceFile)
+	public FileLoader getFileLoader(int index)
 	{
-		if (resourceFile == null)
-			return null;
-
-		return _resourceReferences.get(resourceFile);
-	}
-
-	/**
-	 * Adds a loaded resource to this ResourceLoader. Loaded resources will be returned instead of
-	 * attempting to load resources from file when possible.
-	 *
-	 * @param resource - The loaded resource to add to this ResourceLoader. If null, nothing will
-	 * happen.
-	 */
-	public void addResource(Resource<?> resource)
-	{
-		if (resource == null)
-		{
-			Log.warn("Attempted to add a null resource to the ResourceLoader!");
-			return;
-		}
-
-		_resourceReferences.put(resource.getResourceFile(), resource);
-	}
-
-	/**
-	 * Removes a loaded resource from this ResourceLoader. This method will also attempt to dispose
-	 * the given resource, even if the resource is not currently loaded into this ResourceLoader.
-	 *
-	 * @param resource - The loaded resource to remove to this ResourceLoader and dispose. If null,
-	 * nothing will happen.
-	 */
-	public void removeResource(Resource<?> resource)
-	{
-		if (resource == null)
-		{
-			Log.warn("Attempted to remove a null resource from the ResourceLoader!");
-			return;
-		}
-
-		_resourceReferences.remove(resource.getResourceFile());
-		resource.dispose();
-	}
-
-	/**
-	 * Disposes and removes all loaded resources that this ResourceLoader currently owns.
-	 */
-	public void disposeResources()
-	{
-		Log.info("Disposing all resources.");
-		for (ResourceFile resourceFile : _resourceReferences.keySet())
-		{
-			Log.debugf("Disposing resources %s.", resourceFile);
-			_resourceReferences.get(resourceFile).dispose();
-		}
-
-		_resourceReferences.clear();
+		return _fileLoaders.get(index);
 	}
 }

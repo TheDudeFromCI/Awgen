@@ -13,6 +13,7 @@ public class ResourceFile
 {
 	private Plugin _plugin;
 	private String _name;
+	private String _pathname;
 	private String _assetExtension;
 	private File _file;
 	private File _propertiesFile;
@@ -20,18 +21,25 @@ public class ResourceFile
 	/**
 	 * Creates a reference to a resource file on the disk.
 	 *
-	 * @param plugin - The plugin that this resource belongs to.
-	 * @param name - The name of this asset relative to the plugins resource folder, as defined by
-	 * {@link net.whg.we.utils.FileUtils#getResource(Plugin, String)}
-	 * @param file - The file that the ResourceFile represents.
+	 * @param plugin
+	 *            - The plugin that this resource belongs to.
+	 * @param pathname
+	 *            - The pathname of this asset relative to the plugins resource
+	 *            folder.
+	 * @param name
+	 *            - The name of this resource within the file. If null, the filename
+	 *            is used instead.
+	 * @param file
+	 *            - The file that the ResourceFile represents.
 	 */
-	public ResourceFile(Plugin plugin, String name, File file)
+	public ResourceFile(Plugin plugin, String pathname, File file)
 	{
 		_plugin = plugin;
-		_name = name;
 		_file = file;
-		_assetExtension = FileUtils.getFileExtention(_file.getName());
-		_propertiesFile = new File(_file.getAbsolutePath() + ".asset");
+		_pathname = FileUtils.getPathnameWithoutResource(pathname);
+		_name = FileUtils.getPathnameOnlyResource(pathname);
+		_assetExtension = FileUtils.getFileExtention(pathname);
+		_propertiesFile = new File(file.getAbsolutePath() + ".asset");
 	}
 
 	/**
@@ -51,7 +59,7 @@ public class ResourceFile
 	 */
 	public boolean exists()
 	{
-		return _file != null && _file.exists();
+		return _file.exists();
 	}
 
 	/**
@@ -65,14 +73,36 @@ public class ResourceFile
 	}
 
 	/**
-	 * Gets the name and relative path of this resource.
+	 * Gets the name of this resource. If not specified, the name of the file is
+	 * used instead.
 	 *
-	 * @return The name of this resource file and path as defined by
-	 *         {@link net.whg.we.utils.FileUtils#getResource(Plugin, String)}
+	 * @return The name of this resource.
 	 */
 	public String getName()
 	{
 		return _name;
+	}
+
+	/**
+	 * Gets the file name and relative path of this resource.
+	 *
+	 * @return The name of this resource file and it's relative path.
+	 */
+	public String getSimplePathname()
+	{
+		return _pathname;
+	}
+
+	/**
+	 * Gets the file name and relative path of this resource, as well as the
+	 * resource it points to.
+	 *
+	 * @return The name of this resource file and it's relative path, including the
+	 *         resource name.
+	 */
+	public String getFullPathname()
+	{
+		return _pathname + ":" + _name;
 	}
 
 	/**
@@ -108,7 +138,7 @@ public class ResourceFile
 	@Override
 	public String toString()
 	{
-		return "[Resource: " + _plugin.getPluginName() + "/" + _name + "]";
+		return "[Resource: " + _plugin.getPluginName() + "/" + _pathname + ":" + _name + "]";
 	}
 
 	@Override
@@ -119,12 +149,12 @@ public class ResourceFile
 
 		ResourceFile a = (ResourceFile) other;
 
-		return _plugin == a._plugin && _name.equals(a._name);
+		return _plugin == a._plugin && _pathname.equals(a._pathname) && _name.equals(a._name);
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return _name.hashCode();
+		return _pathname.hashCode();
 	}
 }

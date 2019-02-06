@@ -13,6 +13,7 @@ public class FirstPersonCamera
 	private Vector3f _baseRotation;
 	private Vector3f _extraRotation;
 	private float _mouseSensitivity = 10f;
+	private float _moveSpeed = 7f;
 
 	private Vector3f _rotationBuffer = new Vector3f();
 	private Quaternionf _rotationStorageBuffer = new Quaternionf();
@@ -22,6 +23,16 @@ public class FirstPersonCamera
 		_camera = camera;
 		_baseRotation = new Vector3f();
 		_extraRotation = new Vector3f();
+	}
+
+	public void setMoveSpeed(float moveSpeed)
+	{
+		_moveSpeed = moveSpeed;
+	}
+
+	public float getMoveSpeed()
+	{
+		return _moveSpeed;
 	}
 
 	public void setMouseSensitivity(float mouseSensitivity)
@@ -87,7 +98,6 @@ public class FirstPersonCamera
 			return;
 
 		Vector3f velocity = new Vector3f();
-		float movementSpeed = 7f;
 
 		if (Input.isKeyHeld("w"))
 			velocity.z -= 1f;
@@ -113,7 +123,7 @@ public class FirstPersonCamera
 		if (velocity.lengthSquared() == 0f)
 			return;
 
-		velocity.mul(Time.deltaTime()).mul(movementSpeed);
+		velocity.mul(Time.deltaTime()).mul(_moveSpeed);
 
 		Vector3f pos = _camera.getLocation().getPosition();
 		pos.add(velocity);

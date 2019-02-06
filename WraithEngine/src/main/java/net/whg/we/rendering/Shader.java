@@ -2,9 +2,8 @@ package net.whg.we.rendering;
 
 import java.nio.FloatBuffer;
 import java.util.HashMap;
-import net.whg.we.resources.DisposableResource;
 
-public class Shader implements DisposableResource
+public class Shader
 {
 	private VShader _shader;
 	private HashMap<String, Integer> _uniforms = new HashMap<>();
@@ -48,7 +47,6 @@ public class Shader implements DisposableResource
 		return _shader.getShaderId();
 	}
 
-	@Override
 	public void dispose()
 	{
 		if (_disposed)
@@ -57,6 +55,14 @@ public class Shader implements DisposableResource
 		_disposed = true;
 		_shader.dispose();
 		_shader = null;
+	}
+
+	public boolean hasUniform(String name)
+	{
+		if (_disposed)
+			throw new IllegalStateException("Shader already disposed!");
+
+		return getUniformLocation(name) != -1;
 	}
 
 	public void setUniformMat4(String name, FloatBuffer mat)
@@ -86,7 +92,6 @@ public class Shader implements DisposableResource
 		_shader.setUniformInt(location, value);
 	}
 
-	@Override
 	public boolean isDisposed()
 	{
 		return _disposed;

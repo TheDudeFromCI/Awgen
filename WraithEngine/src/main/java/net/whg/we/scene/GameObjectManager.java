@@ -3,7 +3,6 @@ package net.whg.we.scene;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import net.whg.we.main.GameState;
 import net.whg.we.utils.Log;
 
 /**
@@ -15,11 +14,11 @@ public class GameObjectManager
 {
 	private List<GameObject> _activeGameObjects = new ArrayList<>();
 	private List<GameObject> _toRemove = new LinkedList<>();
-	private GameState _gameState;
+	private Scene _scene;
 
-	public GameObjectManager (GameState gameState)
+	public GameObjectManager(Scene scene)
 	{
-		_gameState = gameState;
+		_scene = scene;
 	}
 
 	/**
@@ -44,9 +43,9 @@ public class GameObjectManager
 	}
 
 	/**
-	 * Once called, this all objects currently marked for disposal will be removed from active game
-	 * objects an disposed. This is intneded to be called at the end of a frame to allow to all
-	 * game objects to finish their current tasks.
+	 * Once called, this all objects currently marked for disposal will be removed
+	 * from active game objects an disposed. This is intneded to be called at the
+	 * end of a frame to allow to all game objects to finish their current tasks.
 	 */
 	public void endFrame()
 	{
@@ -61,11 +60,8 @@ public class GameObjectManager
 		_toRemove.clear();
 	}
 
-	/**
-	 * Gets the current GameState for this object.
-	 */
-	public GameState getGameState()
+	public Scene getScene()
 	{
-		return _gameState;
+		return _scene;
 	}
 }

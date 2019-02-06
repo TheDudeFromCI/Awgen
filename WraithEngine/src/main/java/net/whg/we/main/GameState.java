@@ -1,25 +1,24 @@
 package net.whg.we.main;
 
-import net.whg.we.resources.FileDatabase;
-import net.whg.we.resources.ResourceLoader;
 import net.whg.we.event.EventManager;
-import net.whg.we.resources.GLSLShaderLoader;
-import net.whg.we.resources.MeshSceneLoader;
-import net.whg.we.resources.TextureLoader;
+import net.whg.we.resources.ResourceManager;
+import net.whg.we.resources.graphics.GLSLShaderLoader;
+import net.whg.we.resources.graphics.MeshLoader;
+import net.whg.we.resources.graphics.TextureLoader;
+import net.whg.we.resources.scene.MaterialLoader;
+import net.whg.we.resources.scene.ModelLoader;
 import net.whg.we.scene.GameLoop;
 
 public class GameState
 {
-	private FileDatabase _fileDatabase;
-	private ResourceLoader _resourceLoader;
+	private ResourceManager _resourceManager;
 	private PluginLoader _pluginLoader;
 	private EventManager _eventManager;
 	private GameLoop _gameLoop;
 
-	public GameState(FileDatabase fileDatabase, ResourceLoader resourceLoader, GameLoop gameLoop)
+	public GameState(ResourceManager resourceManager, GameLoop gameLoop)
 	{
-		_fileDatabase = fileDatabase;
-		_resourceLoader = resourceLoader;
+		_resourceManager = resourceManager;
 		_pluginLoader = new PluginLoader();
 		_eventManager = new EventManager();
 		_gameLoop = gameLoop;
@@ -28,26 +27,25 @@ public class GameState
 	public void run()
 	{
 		// Load file loaders
-		_resourceLoader.addFileLoader(new GLSLShaderLoader());
-		_resourceLoader.addFileLoader(new MeshSceneLoader());
-		_resourceLoader.addFileLoader(new TextureLoader());
+		_resourceManager.getResourceLoader().addFileLoader(new GLSLShaderLoader());
+		_resourceManager.getResourceLoader().addFileLoader(new MeshLoader());
+		_resourceManager.getResourceLoader().addFileLoader(new TextureLoader());
+		_resourceManager.getResourceLoader()
+				.addFileLoader(new MaterialLoader(_resourceManager.getFileDatabase()));
+		_resourceManager.getResourceLoader()
+				.addFileLoader(new ModelLoader(_resourceManager.getFileDatabase()));
 
 		// Load plugins
-		_pluginLoader.loadPluginsFromFile(_fileDatabase);
+		_pluginLoader.loadPluginsFromFile(_resourceManager.getFileDatabase());
 		_pluginLoader.enableAllPlugins();
 
 		// Start game loop
 		_gameLoop.run();
 	}
 
-	public FileDatabase getFileDatabase()
+	public ResourceManager getResourceManager()
 	{
-		return _fileDatabase;
-	}
-
-	public ResourceLoader getResourceLoader()
-	{
-		return _resourceLoader;
+		return _resourceManager;
 	}
 
 	public PluginLoader getPluginLoader()

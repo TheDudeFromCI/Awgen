@@ -3,11 +3,13 @@ package net.whg.we.main;
 import java.io.File;
 import org.lwjgl.Version;
 import net.whg.we.resources.FileDatabase;
+import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.resources.ResourceLoader;
+import net.whg.we.resources.ResourceManager;
 import net.whg.we.resources.SimpleFileDatabase;
-import net.whg.we.utils.Log;
 import net.whg.we.scene.GameLoop;
 import net.whg.we.scene.WindowedGameLoop;
+import net.whg.we.utils.Log;
 
 /**
  * The program entry class. This class is used for the purpose of initializing
@@ -47,16 +49,17 @@ public class WraithEngine
 		Log.debugf("Working Directory: %s", System.getProperty("user.dir"));
 		Log.debugf("LWJGL Version: %s", Version.getVersion());
 
-		// Setup database
+		ResourceManager resourceManager = buildResourceManager();
+		GameLoop gameLoop = new WindowedGameLoop(resourceManager);
+		new GameState(resourceManager, gameLoop).run();
+	}
+
+	private static ResourceManager buildResourceManager()
+	{
 		File baseFolder = new File(System.getProperty("user.dir"));
 		FileDatabase fileDatabase = new SimpleFileDatabase(baseFolder);
-
-		ResourceLoader resourceLoader = new ResourceLoader(fileDatabase);
-
-		// Setup GameLoop
-		GameLoop gameLoop = new WindowedGameLoop(resourceLoader);
-
-		// Build game state
-		new GameState(fileDatabase, resourceLoader, gameLoop).run();
+		ResourceDatabase resourceDatabase = new ResourceDatabase();
+		ResourceLoader resourceLoader = new ResourceLoader();
+		return new ResourceManager(resourceDatabase, resourceLoader, fileDatabase);
 	}
 }
