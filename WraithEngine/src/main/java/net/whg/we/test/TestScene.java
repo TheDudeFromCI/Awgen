@@ -71,11 +71,11 @@ public class TestScene implements UpdateListener
 						"models/terrain.model");
 				terrain.compile(_gameLoop.getGraphicsPipeline().getGraphics());
 
-				Model m = terrain.getData();
-				m.getLocation().setScale(new Vector3f(100f, 100f, 100f));
-				m.getLocation()
+				Model model = terrain.getData();
+				model.getLocation().setScale(new Vector3f(100f, 100f, 100f));
+				model.getLocation()
 						.setRotation(new Quaternionf().rotateX((float) Math.toRadians(-90f)));
-				_renderPass.addModel(m);
+				_renderPass.addModel(model);
 			}
 
 			_camera = new Camera();

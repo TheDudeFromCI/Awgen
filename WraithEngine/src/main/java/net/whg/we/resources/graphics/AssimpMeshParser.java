@@ -19,6 +19,8 @@ class AssimpMeshParser
 		ShaderAttributes attributes = new ShaderAttributes();
 		attributes.addAttribute("pos", 3);
 		attributes.addAttribute("normal", 3);
+		attributes.addAttribute("tangent", 3);
+		attributes.addAttribute("bitangent", 3);
 
 		if (mesh.mTextureCoords(0) != null)
 		{
@@ -73,6 +75,16 @@ class AssimpMeshParser
 			vertices[index++] = normal.x();
 			vertices[index++] = normal.y();
 			vertices[index++] = normal.z();
+
+			AIVector3D tangent = mesh.mTangents().get(v);
+			vertices[index++] = tangent.x();
+			vertices[index++] = tangent.y();
+			vertices[index++] = tangent.z();
+
+			AIVector3D bitangent = mesh.mBitangents().get(v);
+			vertices[index++] = bitangent.x();
+			vertices[index++] = bitangent.y();
+			vertices[index++] = bitangent.z();
 
 			int texIndex = 0;
 			while (mesh.mTextureCoords(texIndex) != null)
