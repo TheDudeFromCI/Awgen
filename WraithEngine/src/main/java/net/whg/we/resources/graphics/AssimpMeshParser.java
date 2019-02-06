@@ -3,42 +3,63 @@ package net.whg.we.resources.graphics;
 import org.lwjgl.assimp.AIFace;
 import org.lwjgl.assimp.AIMesh;
 import org.lwjgl.assimp.AIVector3D;
+import net.whg.we.rendering.ShaderAttributes;
 import net.whg.we.rendering.VertexData;
 import net.whg.we.utils.Log;
 
 class AssimpMeshParser
 {
-	static final int VERT_POS_SIZE = 3;
-	static final int VERT_NORMAL_SIZE = 3;
-	static final int VERT_TEXTURE_SIZE = 2;
-	static final int VERT_BONE_INDEX_SIZE = 4;
-	static final int VERT_BONE_WEIGHT_SIZE = 4;
-
-	static final int VERTEX_SIZE = VERT_POS_SIZE + VERT_NORMAL_SIZE + VERT_TEXTURE_SIZE;
-	static final int VERTEX_SIZE_RIGGED =
-			VERTEX_SIZE + VERT_BONE_INDEX_SIZE + VERT_BONE_WEIGHT_SIZE;
-
 	static VertexData loadMesh(AIMesh mesh)
 	{
 		// Count mesh information
 		int boneCount = mesh.mNumBones();
 		int vertexCount = mesh.mNumVertices();
-		int vertexSize = boneCount == 0 ? VERTEX_SIZE : VERTEX_SIZE_RIGGED;
 		int triCount = mesh.mNumFaces();
 
-		Log.indent();
-		Log.trace("Mesh Data:");
-		Log.indent();
-		Log.tracef("Vertices: %s", vertexCount);
-		Log.tracef("Triangles: %s", triCount);
-		Log.tracef("Vertex Size: %s", vertexSize);
-		Log.tracef("Bones: %s", boneCount);
-		Log.unindent();
-		Log.unindent();
+		ShaderAttributes attributes = new ShaderAttributes();
+		attributes.addAttribute("pos", 3);
+		attributes.addAttribute("normal", 3);
+
+		if (mesh.mTextureCoords(0) != null)
+		{
+			attributes.addAttribute("uv", 2);
+
+			int i = 1;
+			while (mesh.mTextureCoords(i) != null)
+			{
+				attributes.addAttribute("uv" + (i + 1), 2);
+				i++;
+			}
+		}
+
+		if (boneCount > 0)
+		{
+			attributes.addAttribute("bone1", 4);
+			attributes.addAttribute("bone2", 4);
+		}
+
+		if (Log.getLogLevel() <= Log.TRACE)
+		{
+			Log.indent();
+			Log.trace("Mesh Data:");
+			Log.indent();
+			Log.tracef("Vertices: %s", vertexCount);
+			Log.tracef("Triangles: %s", triCount);
+			Log.tracef("Vertex Size: %s", attributes.getVertexSize());
+			Log.tracef("Bones: %s", boneCount);
+			Log.trace("Shader Attributes:");
+			Log.indent();
+			for (int i = 0; i < attributes.getCount(); i++)
+				Log.tracef("%s: Size = %s", attributes.getAttributeName(i),
+						attributes.getAttributeSize(i));
+			Log.unindent();
+			Log.unindent();
+			Log.unindent();
+		}
 
 		// Build vertex data array
 		int index = 0;
-		float[] vertices = new float[vertexCount * vertexSize];
+		float[] vertices = new float[vertexCount * attributes.getVertexSize()];
 		for (int v = 0; v < vertexCount; v++)
 		{
 			// Get position data
@@ -53,21 +74,18 @@ class AssimpMeshParser
 			vertices[index++] = normal.y();
 			vertices[index++] = normal.z();
 
-			if (mesh.mTextureCoords(0) == null)
+			int texIndex = 0;
+			while (mesh.mTextureCoords(texIndex) != null)
 			{
-				vertices[index++] = 0f;
-				vertices[index++] = 0f;
-			}
-			else
-			{
-				AIVector3D uv = mesh.mTextureCoords(0).get(v);
+				AIVector3D uv = mesh.mTextureCoords(texIndex).get(v);
 				vertices[index++] = uv.x();
 				vertices[index++] = uv.y();
+				texIndex++;
 			}
 
 			// Add bone weight buffer, if needed
 			if (boneCount > 0)
-				index += VERT_BONE_INDEX_SIZE + VERT_BONE_WEIGHT_SIZE;
+				index += 8;
 		}
 
 		// Build triangle data array
@@ -82,21 +100,6 @@ class AssimpMeshParser
 			triangles[index++] = (short) face.mIndices().get(2);
 		}
 
-		// Assign attributes tag
-		int[] attributes;
-		if (boneCount > 0)
-			attributes = new int[]
-			{
-					VERT_POS_SIZE, VERT_NORMAL_SIZE, VERT_TEXTURE_SIZE, VERT_BONE_INDEX_SIZE,
-					VERT_BONE_WEIGHT_SIZE
-			};
-		else
-			attributes = new int[]
-			{
-					VERT_POS_SIZE, VERT_NORMAL_SIZE, VERT_TEXTURE_SIZE
-			};
-
-		// Compile vertex data
 		return new VertexData(vertices, triangles, attributes);
 	}
 }

@@ -14,7 +14,7 @@ import net.whg.we.rendering.VertexData;
 
 class AssimpSkeletonParser
 {
-	static Skeleton loadSkeleton(AIScene scene, AIMesh mesh, VertexData vertexhData)
+	static Skeleton loadSkeleton(AIScene scene, AIMesh mesh, VertexData vertexData)
 	{
 		int boneCount = mesh.mNumBones();
 
@@ -23,7 +23,8 @@ class AssimpSkeletonParser
 
 		HashMap<Integer, Integer> boneIndexMap = new HashMap<>();
 		Bone[] bones = new Bone[boneCount];
-		float[] vertices = vertexhData.getDataArray();
+		float[] vertices = vertexData.getDataArray();
+		int boneVertexPos = vertexData.getAttributeSizes().getPositionInVertex("bone1");
 
 		for (int b = 0; b < boneCount; b++)
 		{
@@ -39,30 +40,30 @@ class AssimpSkeletonParser
 			{
 				AIVertexWeight weight = bone.mWeights().get(w);
 				int vertexIndex = weight.mVertexId();
-				int fIndex = vertexIndex * AssimpMeshParser.VERTEX_SIZE_RIGGED;
+				int fIndex = vertexIndex * vertexData.getVertexSize();
 
 				if (!boneIndexMap.containsKey(vertexIndex))
 				{
-					vertices[fIndex + AssimpMeshParser.VERTEX_SIZE + 0] = b;
-					vertices[fIndex + AssimpMeshParser.VERTEX_SIZE + 2] = weight.mWeight();
+					vertices[fIndex + boneVertexPos + 0] = b;
+					vertices[fIndex + boneVertexPos + 2] = weight.mWeight();
 					boneIndexMap.put(vertexIndex, 1);
 				}
 				else if (boneIndexMap.get(vertexIndex) == 1)
 				{
-					vertices[fIndex + AssimpMeshParser.VERTEX_SIZE + 1] = b;
-					vertices[fIndex + AssimpMeshParser.VERTEX_SIZE + 3] = weight.mWeight();
+					vertices[fIndex + boneVertexPos + 1] = b;
+					vertices[fIndex + boneVertexPos + 3] = weight.mWeight();
 					boneIndexMap.put(vertexIndex, 2);
 				}
 				else if (boneIndexMap.get(vertexIndex) == 2)
 				{
-					vertices[fIndex + AssimpMeshParser.VERTEX_SIZE + 4] = b;
-					vertices[fIndex + AssimpMeshParser.VERTEX_SIZE + 6] = weight.mWeight();
+					vertices[fIndex + boneVertexPos + 4] = b;
+					vertices[fIndex + boneVertexPos + 6] = weight.mWeight();
 					boneIndexMap.put(vertexIndex, 3);
 				}
 				else if (boneIndexMap.get(vertexIndex) == 3)
 				{
-					vertices[fIndex + AssimpMeshParser.VERTEX_SIZE + 5] = b;
-					vertices[fIndex + AssimpMeshParser.VERTEX_SIZE + 7] = weight.mWeight();
+					vertices[fIndex + boneVertexPos + 5] = b;
+					vertices[fIndex + boneVertexPos + 7] = weight.mWeight();
 					boneIndexMap.put(vertexIndex, 4);
 				}
 			}

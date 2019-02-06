@@ -6,7 +6,6 @@ import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.ScreenClearType;
-import net.whg.we.rendering.VertexData;
 import net.whg.we.resources.ResourceManager;
 import net.whg.we.resources.scene.ModelResource;
 import net.whg.we.scene.Model;
@@ -70,13 +69,6 @@ public class TestScene implements UpdateListener
 
 				ModelResource terrain = (ModelResource) resourceManager.loadResource(plugin,
 						"models/terrain.model");
-
-				VertexData vd = terrain.getMeshResource(0).getVertexData();
-				for (int i = 6; i < vd.getDataArray().length; i += vd.getVertexSize())
-					vd.getDataArray()[i] *= 1000f;
-				for (int i = 7; i < vd.getDataArray().length; i += vd.getVertexSize())
-					vd.getDataArray()[i] *= 1000f;
-
 				terrain.compile(_gameLoop.getGraphicsPipeline().getGraphics());
 
 				Model m = terrain.getData();
