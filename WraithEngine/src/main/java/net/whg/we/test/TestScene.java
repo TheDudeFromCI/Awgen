@@ -8,10 +8,13 @@ import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.ScreenClearType;
 import net.whg.we.resources.ResourceManager;
 import net.whg.we.resources.scene.ModelResource;
+import net.whg.we.scene.Collision;
+import net.whg.we.scene.GameObject;
 import net.whg.we.scene.Model;
 import net.whg.we.scene.Scene;
 import net.whg.we.scene.UpdateListener;
 import net.whg.we.scene.WindowedGameLoop;
+import net.whg.we.scene.behaviours.MeshColliderBehaviour;
 import net.whg.we.scene.behaviours.RenderBehaviour;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.FirstPersonCamera;
@@ -77,7 +80,10 @@ public class TestScene implements UpdateListener
 				model.getLocation()
 						.setRotation(new Quaternionf().rotateX((float) Math.toRadians(-90f)));
 
-				_scene.getGameObjectManager().createNew().addBehaviour(new RenderBehaviour(model));
+				GameObject go = _scene.getGameObjectManager().createNew();
+				go.addBehaviour(new RenderBehaviour(model));
+				go.addBehaviour(new MeshColliderBehaviour(
+						terrain.getMeshResource(0).getVertexData(), model.getLocation()));
 			}
 
 			_camera = new Camera();
@@ -114,6 +120,11 @@ public class TestScene implements UpdateListener
 
 			_firstPerson.setMoveSpeed(Input.isKeyHeld("control") ? 70f : 7f);
 			_firstPerson.update();
+
+			Collision col = _scene.getPhysicsWorld().raycast(
+					_firstPerson.getLocation().getPosition(), new Vector3f(0f, -1f, 0f), 10f);
+			if (col != null)
+				_firstPerson.getLocation().setPosition(col.getPosition().add(0f, 1.8f, 0f));
 
 			if (Input.isKeyDown("q"))
 				Screen.setMouseLocked(!Screen.isMouseLocked());

@@ -62,9 +62,9 @@ public class MeshCollider implements Collider
 		short[] tris = _vertexData.getTriangles();
 		for (int i = 0; i < tris.length; i += 3)
 		{
-			Vector3f v0 = _posBuffer[tris[i + 0]];
-			Vector3f v1 = _posBuffer[tris[i + 1]];
-			Vector3f v2 = _posBuffer[tris[i + 2]];
+			Vector3f v0 = _posBuffer[tris[i + 0] & 0xFFFF];
+			Vector3f v1 = _posBuffer[tris[i + 1] & 0xFFFF];
+			Vector3f v2 = _posBuffer[tris[i + 2] & 0xFFFF];
 
 			Vector3f edge1 = v1.sub(v0, buffer[0]);
 			Vector3f edge2 = v2.sub(v0, buffer[1]);
