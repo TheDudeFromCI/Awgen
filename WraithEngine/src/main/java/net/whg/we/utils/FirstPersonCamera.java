@@ -12,7 +12,7 @@ public class FirstPersonCamera
 	private Camera _camera;
 	private Vector3f _baseRotation;
 	private Vector3f _extraRotation;
-	private float _mouseSensitivity = 10f;
+	private float _mouseSensitivity = 3f;
 	private float _moveSpeed = 7f;
 
 	private Vector3f _rotationBuffer = new Vector3f();
