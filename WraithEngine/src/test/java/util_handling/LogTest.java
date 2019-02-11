@@ -69,6 +69,43 @@ public class LogTest
 	}
 
 	@Test
+	public void logProperty_message_format()
+	{
+		LogProperty property = new LogProperty();
+
+		property.setMessage("Test Message, %s: %d", "Value", 3);
+
+		Assert.assertEquals(property.getMessage(), "Test Message, Value: 3");
+	}
+
+	@Test
+	public void logProperty_clear_property()
+	{
+		LogProperty property = new LogProperty();
+
+		property.setProperty("Color", "Red");
+		property.clearProperty("Color");
+
+		Assert.assertNull(property.getProperty("Color"));
+	}
+
+	@Test
+	public void logProperty_clearMainProperties()
+	{
+		LogProperty property = new LogProperty();
+
+		property.clearProperty(LogProperty.MESSAGE_PROPERTY);
+		property.clearProperty(LogProperty.SEVERITY_PROPERTY);
+		property.clearProperty(LogProperty.THREAD_PROPERTY);
+		property.clearProperty(LogProperty.TIME_PROPERTY);
+
+		Assert.assertNotNull(property.getProperty(LogProperty.MESSAGE_PROPERTY));
+		Assert.assertNotNull(property.getProperty(LogProperty.SEVERITY_PROPERTY));
+		Assert.assertNotNull(property.getProperty(LogProperty.THREAD_PROPERTY));
+		Assert.assertNotNull(property.getProperty(LogProperty.TIME_PROPERTY));
+	}
+
+	@Test
 	public void logProperty_severity()
 	{
 		LogProperty property = new LogProperty();

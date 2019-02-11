@@ -6,8 +6,8 @@ import java.util.Map;
 import net.whg.we.utils.Poolable;
 
 /**
- * This class represents a single log statement that is sent to the logger, along with all Other
- * log information that should be attached to it.
+ * This class represents a single log statement that is sent to the logger,
+ * along with all Other log information that should be attached to it.
  */
 public class LogProperty implements Poolable
 {
@@ -16,7 +16,7 @@ public class LogProperty implements Poolable
 	public static final String MESSAGE_PROPERTY = "Message";
 	public static final String SEVERITY_PROPERTY = "Severity";
 
-	private Map<String,String> _properties = new HashMap<>();
+	private Map<String, String> _properties = new HashMap<>();
 	private StringBuilder sb = new StringBuilder();
 
 	public LogProperty()
@@ -56,8 +56,8 @@ public class LogProperty implements Poolable
 
 	public void setTimeStamp(LocalTime time)
 	{
-		setProperty(TIME_PROPERTY, String.format("%02d:%02d:%02d", time.getHour(),
-			time.getMinute(), time.getSecond()));
+		setProperty(TIME_PROPERTY, String.format("%02d:%02d:%02d", time.getHour(), time.getMinute(),
+				time.getSecond()));
 	}
 
 	public String getTimeStamp()
@@ -135,6 +135,15 @@ public class LogProperty implements Poolable
 	public void clearProperty(String property)
 	{
 		_properties.remove(property);
+
+		if (property.equals(MESSAGE_PROPERTY))
+			setMessage("");
+		if (property.equals(SEVERITY_PROPERTY))
+			setSeverity(Log.INFO);
+		if (property.equals(TIME_PROPERTY))
+			setTimeStamp(LocalTime.now());
+		if (property.equals(THREAD_PROPERTY))
+			setThreadName(Thread.currentThread().getName());
 	}
 
 	@Override
