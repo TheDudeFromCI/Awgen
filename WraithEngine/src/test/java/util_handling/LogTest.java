@@ -101,11 +101,13 @@ public class LogTest
 		property.clearProperty(LogProperty.SEVERITY_PROPERTY);
 		property.clearProperty(LogProperty.THREAD_PROPERTY);
 		property.clearProperty(LogProperty.TIME_PROPERTY);
+		property.clearProperty(LogProperty.INDENT_PROPERTY);
 
 		Assert.assertNotNull(property.getProperty(LogProperty.MESSAGE_PROPERTY));
 		Assert.assertNotNull(property.getProperty(LogProperty.SEVERITY_PROPERTY));
 		Assert.assertNotNull(property.getProperty(LogProperty.THREAD_PROPERTY));
 		Assert.assertNotNull(property.getProperty(LogProperty.TIME_PROPERTY));
+		Assert.assertNotNull(property.getProperty(LogProperty.INDENT_PROPERTY));
 	}
 
 	@Test
@@ -148,6 +150,13 @@ public class LogTest
 		Assert.assertNotNull(property.getThreadName());
 		Assert.assertNotNull(property.getMessage());
 		Assert.assertNotNull(property.getSeverity());
+		Assert.assertNotNull(property.getIndent());
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void logProperty_setNegativeIndent()
+	{
+		new LogProperty().setIndent(-1);
 	}
 
 	@Test
