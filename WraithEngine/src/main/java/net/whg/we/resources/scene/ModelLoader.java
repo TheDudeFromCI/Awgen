@@ -8,7 +8,7 @@ import net.whg.we.resources.ResourceFile;
 import net.whg.we.resources.ResourceLoader;
 import net.whg.we.resources.YamlFile;
 import net.whg.we.resources.graphics.MeshResource;
-import net.whg.we.utils.Log;
+import net.whg.we.utils.logging.Log;
 
 public class ModelLoader implements FileLoader
 {

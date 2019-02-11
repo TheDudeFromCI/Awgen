@@ -9,7 +9,7 @@ import net.whg.we.resources.ResourceManager;
 import net.whg.we.resources.SimpleFileDatabase;
 import net.whg.we.scene.GameLoop;
 import net.whg.we.scene.WindowedGameLoop;
-import net.whg.we.utils.Log;
+import net.whg.we.utils.logging.Log;
 
 /**
  * The program entry class. This class is used for the purpose of initializing

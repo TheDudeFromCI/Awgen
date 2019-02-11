@@ -12,7 +12,7 @@ import net.whg.we.rendering.VShader;
 import net.whg.we.rendering.VTexture;
 import net.whg.we.rendering.VertexData;
 import net.whg.we.utils.Color;
-import net.whg.we.utils.Log;
+import net.whg.we.utils.logging.Log;
 
 public class OpenGLGraphics implements Graphics
 {

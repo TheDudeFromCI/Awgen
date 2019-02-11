@@ -1,5 +1,7 @@
 package net.whg.we.utils;
 
+import net.whg.we.utils.logging.Log;
+
 /**
  * A quick and simple utility class that calculates the current rendering
  * framerate based on the information returned from the Time utility class.

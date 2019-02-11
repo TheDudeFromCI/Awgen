@@ -3,7 +3,7 @@ package net.whg.we.scene;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import net.whg.we.utils.Log;
+import net.whg.we.utils.logging.Log;
 
 /**
  * This class deals with handling game objects references.

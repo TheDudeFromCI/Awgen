@@ -19,8 +19,8 @@ import net.whg.we.scene.behaviours.RenderBehaviour;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.FirstPersonCamera;
 import net.whg.we.utils.Input;
-import net.whg.we.utils.Log;
 import net.whg.we.utils.Screen;
+import net.whg.we.utils.logging.Log;
 
 public class TestScene implements UpdateListener
 {

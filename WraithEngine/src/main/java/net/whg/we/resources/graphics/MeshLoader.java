@@ -9,7 +9,7 @@ import net.whg.we.resources.FileLoader;
 import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.resources.ResourceFile;
 import net.whg.we.resources.ResourceLoader;
-import net.whg.we.utils.Log;
+import net.whg.we.utils.logging.Log;
 
 /**
  * Loads a mesh scene file. These can contain either a single mesh, or multiple

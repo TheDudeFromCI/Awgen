@@ -1,5 +1,6 @@
 package net.whg.we.utils;
 
+import net.whg.we.utils.logging.Log;
 import net.whg.we.window.QueuedWindow;
 
 /**

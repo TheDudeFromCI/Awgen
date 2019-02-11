@@ -9,7 +9,7 @@ import net.whg.we.resources.ResourceLoader;
 import net.whg.we.resources.YamlFile;
 import net.whg.we.resources.graphics.ShaderResource;
 import net.whg.we.resources.graphics.TextureResource;
-import net.whg.we.utils.Log;
+import net.whg.we.utils.logging.Log;
 
 public class MaterialLoader implements FileLoader
 {

@@ -1,10 +1,10 @@
 package util_handling;
 
 import java.time.LocalTime;
-import net.whg.we.utils.Log;
-import net.whg.we.utils.logging.LogProperty;
 import org.junit.Assert;
 import org.junit.Test;
+import net.whg.we.utils.logging.Log;
+import net.whg.we.utils.logging.LogProperty;
 
 public class LogTest
 {
@@ -92,7 +92,7 @@ public class LogTest
 		Assert.assertEquals(property.getSeverity(), "Fatal");
 	}
 
-	@Test (expected = IllegalArgumentException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void logProperty_wrongSeverity()
 	{
 		LogProperty property = new LogProperty();
@@ -134,6 +134,41 @@ public class LogTest
 		property.setSeverity(Log.WARN);
 		property.setProperty("abc", "def");
 
-		Assert.assertEquals(property.toMapString(), "{abc=def, Message=Test Message, Time=10:08:06, Severity=Warn, Thread=main}");
+		Assert.assertEquals(property.toMapString(),
+				"{abc=def, Message=Test Message, Time=10:08:06, Severity=Warn, Thread=main}");
+	}
+
+	@Test
+	public void log_setLogLevel()
+	{
+		Log.dispose();
+		Log.setLogLevel(Log.DEBUG);
+
+		Assert.assertEquals(Log.DEBUG, Log.getLogLevel());
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void log_setNegativeLogLevel()
+	{
+		Log.dispose();
+		Log.setLogLevel(-1);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void log_setLargeLogLevel()
+	{
+		Log.dispose();
+		Log.setLogLevel(Log.FATAL + 1);
+	}
+
+	@Test
+	public void log_levels_are_continous()
+	{
+		Assert.assertEquals(0, Log.TRACE);
+		Assert.assertEquals(1, Log.DEBUG);
+		Assert.assertEquals(2, Log.INFO);
+		Assert.assertEquals(3, Log.WARN);
+		Assert.assertEquals(4, Log.ERROR);
+		Assert.assertEquals(5, Log.FATAL);
 	}
 }

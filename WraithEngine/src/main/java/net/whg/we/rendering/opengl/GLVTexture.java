@@ -10,7 +10,7 @@ import net.whg.we.rendering.TextureProperties;
 import net.whg.we.rendering.TextureSampleMode;
 import net.whg.we.rendering.VTexture;
 import net.whg.we.utils.Color;
-import net.whg.we.utils.Log;
+import net.whg.we.utils.logging.Log;
 
 public class GLVTexture implements VTexture
 {

@@ -4,7 +4,7 @@ import java.nio.FloatBuffer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import net.whg.we.rendering.VShader;
-import net.whg.we.utils.Log;
+import net.whg.we.utils.logging.Log;
 
 public class GLVShader implements VShader
 {

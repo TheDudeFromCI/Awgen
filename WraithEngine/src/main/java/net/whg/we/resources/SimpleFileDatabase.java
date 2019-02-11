@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.whg.we.main.Plugin;
 import net.whg.we.utils.FileUtils;
-import net.whg.we.utils.Log;
+import net.whg.we.utils.logging.Log;
 
 public class SimpleFileDatabase implements FileDatabase
 {

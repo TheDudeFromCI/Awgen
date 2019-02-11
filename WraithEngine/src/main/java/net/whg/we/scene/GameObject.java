@@ -1,7 +1,7 @@
 package net.whg.we.scene;
 
 import java.util.ArrayList;
-import net.whg.we.utils.Log;
+import net.whg.we.utils.logging.Log;
 
 /**
  * This class represents the foundation for all objects that interact with the game directly. This

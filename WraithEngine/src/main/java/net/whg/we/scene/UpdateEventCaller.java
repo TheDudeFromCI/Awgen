@@ -1,7 +1,7 @@
 package net.whg.we.scene;
 
 import net.whg.we.event.EventCallerBase;
-import net.whg.we.utils.Log;
+import net.whg.we.utils.logging.Log;
 
 public class UpdateEventCaller extends EventCallerBase<UpdateListener>
 {

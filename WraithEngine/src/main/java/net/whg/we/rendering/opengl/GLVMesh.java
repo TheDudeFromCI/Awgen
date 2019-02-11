@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL30;
 import net.whg.we.rendering.ShaderAttributes;
 import net.whg.we.rendering.VMesh;
 import net.whg.we.rendering.VertexData;
-import net.whg.we.utils.Log;
+import net.whg.we.utils.logging.Log;
 
 public class GLVMesh implements VMesh
 {

@@ -3,7 +3,7 @@ package net.whg.we.event;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import net.whg.we.main.Plugin;
-import net.whg.we.utils.Log;
+import net.whg.we.utils.logging.Log;
 
 /**
  * A default setup for an event caller, which handles most common functions for you. This class

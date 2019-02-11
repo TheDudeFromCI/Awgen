@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.Material;
-import net.whg.we.utils.Log;
+import net.whg.we.utils.logging.Log;
 
 public class RenderPass
 {

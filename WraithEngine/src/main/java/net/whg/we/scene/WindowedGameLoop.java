@@ -6,8 +6,8 @@ import net.whg.we.resources.ResourceManager;
 import net.whg.we.test.TestScene;
 import net.whg.we.utils.FPSLogger;
 import net.whg.we.utils.Input;
-import net.whg.we.utils.Log;
 import net.whg.we.utils.Time;
+import net.whg.we.utils.logging.Log;
 
 public class WindowedGameLoop implements GameLoop
 {

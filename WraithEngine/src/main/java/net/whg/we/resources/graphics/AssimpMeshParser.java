@@ -5,7 +5,7 @@ import org.lwjgl.assimp.AIMesh;
 import org.lwjgl.assimp.AIVector3D;
 import net.whg.we.rendering.ShaderAttributes;
 import net.whg.we.rendering.VertexData;
-import net.whg.we.utils.Log;
+import net.whg.we.utils.logging.Log;
 
 class AssimpMeshParser
 {

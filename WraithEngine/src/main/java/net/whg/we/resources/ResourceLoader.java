@@ -1,7 +1,7 @@
 package net.whg.we.resources;
 
 import java.util.ArrayList;
-import net.whg.we.utils.Log;
+import net.whg.we.utils.logging.Log;
 
 public class ResourceLoader
 {

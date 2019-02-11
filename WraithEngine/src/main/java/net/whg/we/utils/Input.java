@@ -2,6 +2,7 @@ package net.whg.we.utils;
 
 import java.util.HashMap;
 import org.lwjgl.glfw.GLFW;
+import net.whg.we.utils.logging.Log;
 
 /**
  * Represents the current input states for mouse and keyboard.

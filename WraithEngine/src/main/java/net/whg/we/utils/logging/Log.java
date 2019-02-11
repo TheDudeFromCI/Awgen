@@ -1,4 +1,4 @@
-package net.whg.we.utils;
+package net.whg.we.utils.logging;
 
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -56,17 +56,17 @@ public class Log
 	 */
 	public static final int SPACES_PER_INDENT = 2;
 
-	private static HashMap<String, Integer> _indent = new HashMap<>();
-	private static int _logLevel = INFO;
-	private static ObjectPool<PoolableStringBuilder> _stringBuilders =
-			new ObjectPool<PoolableStringBuilder>()
-			{
-				@Override
-				protected PoolableStringBuilder build()
-				{
-					return new PoolableStringBuilder();
-				}
-			};
+	private static Log _instance;
+
+	private HashMap<String, Integer> _indent = new HashMap<>();
+	private int _logLevel = INFO;
+
+	private static Log getInstance()
+	{
+		if (_instance == null)
+			_instance = new Log();
+		return _instance;
+	}
 
 	/**
 	 * Gets the current indent value for the log. Indent levels are specific to a
@@ -77,7 +77,7 @@ public class Log
 	public static int getIndentLevel()
 	{
 		String thread = Thread.currentThread().getName();
-		return _indent.get(thread);
+		return getInstance()._indent.get(thread);
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class Log
 			indent = 0;
 
 		String thread = Thread.currentThread().getName();
-		_indent.put(thread, indent);
+		getInstance()._indent.put(thread, indent);
 	}
 
 	/**
@@ -105,8 +105,8 @@ public class Log
 	{
 		String thread = Thread.currentThread().getName();
 
-		int indent = _indent.getOrDefault(thread, 0) + 1;
-		_indent.put(thread, indent);
+		int indent = getInstance()._indent.getOrDefault(thread, 0) + 1;
+		getInstance()._indent.put(thread, indent);
 	}
 
 	/**
@@ -118,12 +118,12 @@ public class Log
 	{
 		String thread = Thread.currentThread().getName();
 
-		int indent = _indent.getOrDefault(thread, 0) - 1;
+		int indent = getInstance()._indent.getOrDefault(thread, 0) - 1;
 
 		if (indent < 0)
 			indent = 0;
 
-		_indent.put(thread, indent);
+		getInstance()._indent.put(thread, indent);
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class Log
 	public static void resetIndent()
 	{
 		String thread = Thread.currentThread().getName();
-		_indent.put(thread, 0);
+		getInstance()._indent.put(thread, 0);
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class Log
 	 */
 	public static int getLogLevel()
 	{
-		return _logLevel;
+		return getInstance()._logLevel;
 	}
 
 	/**
@@ -165,10 +165,10 @@ public class Log
 	 */
 	public static void setLogLevel(int logLevel)
 	{
-		if (_logLevel < TRACE || _logLevel > FATAL)
+		if (logLevel < TRACE || logLevel > FATAL)
 			throw new IllegalArgumentException("Argument is not a valid log level!");
 
-		_logLevel = logLevel;
+		getInstance()._logLevel = logLevel;
 	}
 
 	/**
@@ -179,7 +179,7 @@ public class Log
 	 */
 	public static void trace(String message)
 	{
-		if (_logLevel > TRACE)
+		if (getInstance()._logLevel > TRACE)
 			return;
 
 		format("TRACE", message);
@@ -195,7 +195,7 @@ public class Log
 	 */
 	public static void tracef(String message, Object... args)
 	{
-		if (_logLevel > TRACE)
+		if (getInstance()._logLevel > TRACE)
 			return;
 
 		format("TRACE", String.format(message, args));
@@ -209,7 +209,7 @@ public class Log
 	 */
 	public static void debug(String message)
 	{
-		if (_logLevel > DEBUG)
+		if (getInstance()._logLevel > DEBUG)
 			return;
 
 		format("DEBUG", message);
@@ -225,7 +225,7 @@ public class Log
 	 */
 	public static void debugf(String message, Object... args)
 	{
-		if (_logLevel > DEBUG)
+		if (getInstance()._logLevel > DEBUG)
 			return;
 
 		format("DEBUG", String.format(message, args));
@@ -239,7 +239,7 @@ public class Log
 	 */
 	public static void info(String message)
 	{
-		if (_logLevel > INFO)
+		if (getInstance()._logLevel > INFO)
 			return;
 
 		format("INFO", message);
@@ -255,7 +255,7 @@ public class Log
 	 */
 	public static void infof(String message, Object... args)
 	{
-		if (_logLevel > INFO)
+		if (getInstance()._logLevel > INFO)
 			return;
 
 		format("INFO", String.format(message, args));
@@ -269,7 +269,7 @@ public class Log
 	 */
 	public static void warn(String message)
 	{
-		if (_logLevel > WARN)
+		if (getInstance()._logLevel > WARN)
 			return;
 
 		format("WARN", message);
@@ -285,7 +285,7 @@ public class Log
 	 */
 	public static void warnf(String message, Object... args)
 	{
-		if (_logLevel > WARN)
+		if (getInstance()._logLevel > WARN)
 			return;
 
 		format("WARN", String.format(message, args));
@@ -299,7 +299,7 @@ public class Log
 	 */
 	public static void error(String message)
 	{
-		if (_logLevel > ERROR)
+		if (getInstance()._logLevel > ERROR)
 			return;
 
 		format("ERROR", "--------------");
@@ -317,7 +317,7 @@ public class Log
 	 */
 	public static void errorf(String message, Object... args)
 	{
-		if (_logLevel > ERROR)
+		if (getInstance()._logLevel > ERROR)
 			return;
 
 		format("ERROR", "--------------");
@@ -338,7 +338,7 @@ public class Log
 	 */
 	public static void errorf(String message, Throwable exception, Object... args)
 	{
-		if (_logLevel > ERROR)
+		if (getInstance()._logLevel > ERROR)
 			return;
 
 		format("ERROR", "--------------");
@@ -415,7 +415,7 @@ public class Log
 		String format;
 
 		String thread = Thread.currentThread().getName();
-		int indent = _indent.getOrDefault(thread, 0);
+		int indent = getInstance()._indent.getOrDefault(thread, 0);
 
 		if (indent > 0)
 		{
@@ -441,7 +441,7 @@ public class Log
 		}
 
 		// If multiple lines, push as we solve them.
-		PoolableStringBuilder sb = _stringBuilders.get();
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < message.length(); i++)
 		{
 			char c = message.charAt(i);
@@ -449,7 +449,7 @@ public class Log
 			{
 				push(String.format(format, time.getHour(), time.getMinute(), time.getSecond(), type,
 						thread, sb.toString()));
-				sb.clear();
+				sb.setLength(0);
 			}
 			else
 				sb.append(c);
@@ -458,6 +458,10 @@ public class Log
 		// Push the last line and cleanup.
 		push(String.format(format, time.getHour(), time.getMinute(), time.getSecond(), type, thread,
 				sb.toString()));
-		_stringBuilders.put(sb);
+	}
+
+	public static void dispose()
+	{
+		_instance = null;
 	}
 }

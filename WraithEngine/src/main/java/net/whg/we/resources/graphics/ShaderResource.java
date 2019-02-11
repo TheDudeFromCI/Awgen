@@ -4,7 +4,7 @@ import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.Shader;
 import net.whg.we.resources.CompilableResource;
 import net.whg.we.resources.ResourceFile;
-import net.whg.we.utils.Log;
+import net.whg.we.utils.logging.Log;
 
 /**
  * A wrapper for a loaded shader resource.

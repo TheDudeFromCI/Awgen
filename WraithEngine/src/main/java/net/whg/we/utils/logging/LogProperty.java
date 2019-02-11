@@ -4,7 +4,6 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 import net.whg.we.utils.Poolable;
-import net.whg.we.utils.Log;
 
 /**
  * This class represents a single log statement that is sent to the logger, along with all Other
