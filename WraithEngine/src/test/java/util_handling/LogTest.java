@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 import net.whg.we.utils.logging.Log;
+import net.whg.we.utils.logging.LogOutput;
 import net.whg.we.utils.logging.LogPrintWriterOut;
 import net.whg.we.utils.logging.LogProperty;
 
@@ -246,8 +247,18 @@ public class LogTest
 		property.setSeverity(Log.WARN);
 		property.setProperty("abc", "def");
 
-		Assert.assertEquals(property.toMapString(),
-				"{Indent=0, abc=def, Message=Test Message, Time=10:08:06, Severity=Warn, Thread=main}");
+		Assert.assertEquals(
+				"{Indent=0, abc=def, Message=Test Message, Time=10:08:06, Severity=Warn, Thread=main}",
+				property.toMapString());
+	}
+
+	@Test
+	public void logProperty_clone()
+	{
+		LogProperty original = new LogProperty().setMessage("abc");
+		LogProperty clone = new LogProperty(original);
+
+		Assert.assertEquals("abc", clone.getMessage());
 	}
 
 	@Test
@@ -287,11 +298,82 @@ public class LogTest
 	@Test
 	public void log_setOutput_PrintWriter()
 	{
+		Log.dispose();
 		PrintWriter pw = Mockito.mock(PrintWriter.class);
 		Log.setOutput(new LogPrintWriterOut(pw));
 
 		Log.info("Hello");
 
 		Mockito.verify(pw).println(Mockito.anyString());
+	}
+
+	@Test
+	public void log_ignoreLowLogLevel()
+	{
+		Log.dispose();
+		Log.setLogLevel(Log.INFO);
+
+		PrintWriter pw = Mockito.mock(PrintWriter.class);
+		Log.setOutput(new LogPrintWriterOut(pw));
+
+		Log.trace("Hello");
+
+		Mockito.verify(pw, Mockito.never()).println(Mockito.anyString());
+	}
+
+	@Test
+	public void log_defaultLogLevel()
+	{
+		Log.dispose();
+		Assert.assertEquals(Log.INFO, Log.getLogLevel());
+	}
+
+	@Test
+	public void log_defaultOut()
+	{
+		Log.dispose();
+
+		LogPrintWriterOut out = (LogPrintWriterOut) Log.getOutput();
+		Assert.assertNotNull(out.getPrintWriter());
+	}
+
+	@Test
+	public void log_logProperty()
+	{
+		Log.dispose();
+
+		LogOutput out = Mockito.mock(LogOutput.class);
+		Log.setOutput(out);
+
+		LogProperty prop = Log.get();
+		Log.log(prop);
+
+		Mockito.verify(out).println(prop);
+	}
+
+	private class HoldLastProperty implements LogOutput
+	{
+		LogProperty _last;
+
+		@Override
+		public void println(LogProperty property)
+		{
+			_last = new LogProperty(property);
+		}
+	}
+
+	@Test
+	public void log_logFatal()
+	{
+		Log.dispose();
+
+		HoldLastProperty out = new HoldLastProperty();
+		Log.setOutput(out);
+
+		Log.fatalf("An error has occured on line %d!", new RuntimeException(), 42);
+
+		Assert.assertEquals("Fatal", out._last.getSeverity());
+		Assert.assertEquals("An error has occured on line 42!", out._last.getMessage());
+		Assert.assertNotNull(out._last.getProperty("Exception"));
 	}
 }

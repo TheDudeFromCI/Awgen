@@ -12,8 +12,13 @@ public class LogPrintWriterOut implements LogOutput
 	}
 
 	@Override
-	public void println(String line)
+	public void println(LogProperty property)
 	{
-		_out.println(line);
+		_out.println(property.toString());
+	}
+
+	public PrintWriter getPrintWriter()
+	{
+		return _out;
 	}
 }

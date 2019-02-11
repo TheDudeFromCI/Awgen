@@ -25,6 +25,12 @@ public class LogProperty implements Poolable
 		init();
 	}
 
+	public LogProperty(LogProperty other)
+	{
+		for (String key : other._properties.keySet())
+			_properties.put(key, other._properties.get(key));
+	}
+
 	@Override
 	public void init()
 	{
@@ -46,9 +52,10 @@ public class LogProperty implements Poolable
 		return _properties.size();
 	}
 
-	public void setProperty(String property, String value)
+	public LogProperty setProperty(String property, String value)
 	{
 		_properties.put(property, value);
+		return this;
 	}
 
 	public String getProperty(String property)
@@ -56,10 +63,11 @@ public class LogProperty implements Poolable
 		return _properties.get(property);
 	}
 
-	public void setTimeStamp(LocalTime time)
+	public LogProperty setTimeStamp(LocalTime time)
 	{
 		setProperty(TIME_PROPERTY, String.format("%02d:%02d:%02d", time.getHour(), time.getMinute(),
 				time.getSecond()));
+		return this;
 	}
 
 	public String getTimeStamp()
@@ -67,9 +75,10 @@ public class LogProperty implements Poolable
 		return getProperty(TIME_PROPERTY);
 	}
 
-	public void setThreadName(String thread)
+	public LogProperty setThreadName(String thread)
 	{
 		setProperty(THREAD_PROPERTY, thread);
+		return this;
 	}
 
 	public String getThreadName()
@@ -77,14 +86,16 @@ public class LogProperty implements Poolable
 		return getProperty(THREAD_PROPERTY);
 	}
 
-	public void setMessage(String message)
+	public LogProperty setMessage(String message)
 	{
 		setProperty(MESSAGE_PROPERTY, message);
+		return this;
 	}
 
-	public void setMessage(String message, Object... args)
+	public LogProperty setMessage(String message, Object... args)
 	{
 		setMessage(String.format(message, args));
+		return this;
 	}
 
 	public String getMessage()
@@ -92,7 +103,7 @@ public class LogProperty implements Poolable
 		return getProperty(MESSAGE_PROPERTY);
 	}
 
-	public void setSeverity(int severity)
+	public LogProperty setSeverity(int severity)
 	{
 		String s;
 
@@ -127,6 +138,7 @@ public class LogProperty implements Poolable
 		}
 
 		setProperty(SEVERITY_PROPERTY, s);
+		return this;
 	}
 
 	public String getSeverity()
@@ -134,12 +146,13 @@ public class LogProperty implements Poolable
 		return getProperty(SEVERITY_PROPERTY);
 	}
 
-	public void setIndent(int indent)
+	public LogProperty setIndent(int indent)
 	{
 		if (indent < 0)
 			throw new IllegalArgumentException("Inindent cannot be negative!");
 
 		setProperty(INDENT_PROPERTY, Integer.toString(indent));
+		return this;
 	}
 
 	public int getIndent()
@@ -147,7 +160,7 @@ public class LogProperty implements Poolable
 		return Integer.parseInt(getProperty(INDENT_PROPERTY));
 	}
 
-	public void clearProperty(String property)
+	public LogProperty clearProperty(String property)
 	{
 		_properties.remove(property);
 
@@ -161,6 +174,8 @@ public class LogProperty implements Poolable
 			setThreadName(Thread.currentThread().getName());
 		if (property.equals(INDENT_PROPERTY))
 			setIndent(0);
+
+		return this;
 	}
 
 	@Override

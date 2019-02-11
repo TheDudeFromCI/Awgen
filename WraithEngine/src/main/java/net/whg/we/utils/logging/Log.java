@@ -1,8 +1,8 @@
 package net.whg.we.utils.logging;
 
 import java.io.PrintWriter;
-import java.time.LocalTime;
 import java.util.HashMap;
+import net.whg.we.utils.ObjectPool;
 
 /**
  * Logs events to file and to console. Events are ignored if below the intended
@@ -62,6 +62,14 @@ public class Log
 	private HashMap<String, Integer> _indent = new HashMap<>();
 	private int _logLevel = INFO;
 	private LogOutput _out;
+	private ObjectPool<LogProperty> _logPropertyPool = new ObjectPool<LogProperty>()
+	{
+		@Override
+		protected LogProperty build()
+		{
+			return new LogProperty();
+		}
+	};
 
 	private static Log getInstance()
 	{
@@ -76,6 +84,11 @@ public class Log
 		getInstance()._out = out;
 	}
 
+	public static LogOutput getOutput()
+	{
+		return getInstance()._out;
+	}
+
 	/**
 	 * Gets the current indent value for the log. Indent levels are specific to a
 	 * thread, and are stored by the name of the thread.
@@ -85,7 +98,7 @@ public class Log
 	public static int getIndentLevel()
 	{
 		String thread = Thread.currentThread().getName();
-		return getInstance()._indent.get(thread);
+		return getInstance()._indent.getOrDefault(thread, 0);
 	}
 
 	/**
@@ -179,6 +192,11 @@ public class Log
 		getInstance()._logLevel = logLevel;
 	}
 
+	public static LogProperty get()
+	{
+		return getInstance()._logPropertyPool.get();
+	}
+
 	/**
 	 * Logs a message with the priority level of trace.
 	 *
@@ -190,7 +208,7 @@ public class Log
 		if (getInstance()._logLevel > TRACE)
 			return;
 
-		format("TRACE", message);
+		format(get().setSeverity(TRACE).setMessage(message));
 	}
 
 	/**
@@ -206,7 +224,7 @@ public class Log
 		if (getInstance()._logLevel > TRACE)
 			return;
 
-		format("TRACE", String.format(message, args));
+		format(get().setSeverity(TRACE).setMessage(message, args));
 	}
 
 	/**
@@ -220,7 +238,7 @@ public class Log
 		if (getInstance()._logLevel > DEBUG)
 			return;
 
-		format("DEBUG", message);
+		format(get().setSeverity(DEBUG).setMessage(message));
 	}
 
 	/**
@@ -236,7 +254,7 @@ public class Log
 		if (getInstance()._logLevel > DEBUG)
 			return;
 
-		format("DEBUG", String.format(message, args));
+		format(get().setSeverity(DEBUG).setMessage(message, args));
 	}
 
 	/**
@@ -250,7 +268,7 @@ public class Log
 		if (getInstance()._logLevel > INFO)
 			return;
 
-		format("INFO", message);
+		format(get().setSeverity(INFO).setMessage(message));
 	}
 
 	/**
@@ -266,7 +284,7 @@ public class Log
 		if (getInstance()._logLevel > INFO)
 			return;
 
-		format("INFO", String.format(message, args));
+		format(get().setSeverity(INFO).setMessage(message, args));
 	}
 
 	/**
@@ -280,7 +298,7 @@ public class Log
 		if (getInstance()._logLevel > WARN)
 			return;
 
-		format("WARN", message);
+		format(get().setSeverity(WARN).setMessage(message));
 	}
 
 	/**
@@ -296,7 +314,7 @@ public class Log
 		if (getInstance()._logLevel > WARN)
 			return;
 
-		format("WARN", String.format(message, args));
+		format(get().setSeverity(WARN).setMessage(message, args));
 	}
 
 	/**
@@ -310,9 +328,7 @@ public class Log
 		if (getInstance()._logLevel > ERROR)
 			return;
 
-		format("ERROR", "--------------");
-		format("ERROR", message);
-		format("ERROR", "--------------");
+		format(get().setSeverity(ERROR).setMessage(message));
 	}
 
 	/**
@@ -328,9 +344,7 @@ public class Log
 		if (getInstance()._logLevel > ERROR)
 			return;
 
-		format("ERROR", "--------------");
-		format("ERROR", String.format(message, args));
-		format("ERROR", "--------------");
+		format(get().setSeverity(ERROR).setMessage(String.format(message, args)));
 	}
 
 	/**
@@ -349,13 +363,14 @@ public class Log
 		if (getInstance()._logLevel > ERROR)
 			return;
 
-		format("ERROR", "--------------");
-		format("ERROR", String.format(message, args));
-		format("ERROR", "Exception Thrown: " + exception.toString());
-
+		StringBuilder sb = new StringBuilder();
+		sb.append("Exception Thrown: ").append(exception.toString()).append('\n');
 		for (StackTraceElement st : exception.getStackTrace())
-			format("ERROR", "  at " + st.toString());
-		format("ERROR", "--------------");
+			sb.append("  at ").append(st.toString()).append('\n');
+
+		format(get().setSeverity(ERROR)
+				.setMessage(String.format(message, args), exception.toString())
+				.setProperty("Exception", sb.toString()));
 	}
 
 	/**
@@ -366,9 +381,7 @@ public class Log
 	 */
 	public static void fatal(String message)
 	{
-		format("FATAL", "==============");
-		format("FATAL", message);
-		format("FATAL", "==============");
+		format(get().setSeverity(FATAL).setMessage(message));
 	}
 
 	/**
@@ -381,9 +394,7 @@ public class Log
 	 */
 	public static void fatalf(String message, Object... args)
 	{
-		format("FATAL", "==============");
-		format("FATAL", String.format(message, args));
-		format("FATAL", "==============");
+		format(get().setSeverity(FATAL).setMessage(String.format(message, args)));
 	}
 
 	/**
@@ -399,73 +410,31 @@ public class Log
 	 */
 	public static void fatalf(String message, Throwable exception, Object... args)
 	{
-		format("FATAL", "==============");
-		format("FATAL", String.format(message, args));
-		format("FATAL", "Exception Thrown: " + exception.toString());
-
-		for (StackTraceElement st : exception.getStackTrace())
-			format("FATAL", "  at " + st.toString());
-		format("FATAL", "==============");
-	}
-
-	private synchronized static void push(String message)
-	{
-		getInstance()._out.println(message);
-	}
-
-	// String.Format can be slow and can allocate more memory. Consider switching to
-	// using only string builders from the pool.
-	private static void format(String type, String message)
-	{
-		// Gather required information
-		LocalTime time = LocalTime.now();
-
-		String format;
-
-		String thread = Thread.currentThread().getName();
-		int indent = getInstance()._indent.getOrDefault(thread, 0);
-
-		if (indent > 0)
-		{
-			int spaces = indent * SPACES_PER_INDENT + message.length();
-			format = "[%02d:%02d:%02d][%-5s][%s] %" + spaces + "s"; // This statement seems like an
-																	// extra memory allocation
-		}
-		else
-			format = "[%02d:%02d:%02d][%-5s][%s] %s";
-
-		// Count number of lines
-		int lines = 1;
-		for (int i = 0; i < message.length(); i++)
-			if (message.charAt(i) == '\n')
-				lines++;
-
-		// If only a single line, push instantly
-		if (lines == 1)
-		{
-			push(String.format(format, time.getHour(), time.getMinute(), time.getSecond(), type,
-					thread, message));
-			return;
-		}
-
-		// If multiple lines, push as we solve them.
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < message.length(); i++)
-		{
-			char c = message.charAt(i);
-			if (c == '\n')
-			{
-				push(String.format(format, time.getHour(), time.getMinute(), time.getSecond(), type,
-						thread, sb.toString()));
-				sb.setLength(0);
-			}
-			else
-				sb.append(c);
-		}
+		sb.append("Exception Thrown: ").append(exception.toString()).append('\n');
+		for (StackTraceElement st : exception.getStackTrace())
+			sb.append("  at ").append(st.toString()).append('\n');
 
-		// Push the last line and cleanup.
-		push(String.format(format, time.getHour(), time.getMinute(), time.getSecond(), type, thread,
-				sb.toString()));
+		format(get().setSeverity(FATAL).setMessage(String.format(message, args))
+				.setProperty("Exception", sb.toString()));
+	}
+
+	public static void log(LogProperty property)
+	{
+		format(property);
+	}
+
+	private synchronized static void push(LogProperty property)
+	{
+		getInstance()._out.println(property);
+	}
+
+	private static void format(LogProperty property)
+	{
+		property.setIndent(getIndentLevel());
+
+		push(property);
+		getInstance()._logPropertyPool.put(property);
 	}
 
 	public static void dispose()
