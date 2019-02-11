@@ -1,5 +1,6 @@
 package net.whg.we.utils.logging;
 
+import java.io.PrintWriter;
 import java.time.LocalTime;
 import java.util.HashMap;
 
@@ -60,12 +61,19 @@ public class Log
 
 	private HashMap<String, Integer> _indent = new HashMap<>();
 	private int _logLevel = INFO;
+	private LogOutput _out;
 
 	private static Log getInstance()
 	{
 		if (_instance == null)
-			_instance = new Log();
+			_instance = new Log(new LogPrintWriterOut(new PrintWriter(System.out)));
+
 		return _instance;
+	}
+
+	public static void setOutput(LogOutput out)
+	{
+		getInstance()._out = out;
 	}
 
 	/**
@@ -402,7 +410,7 @@ public class Log
 
 	private synchronized static void push(String message)
 	{
-		System.out.println(message);
+		getInstance()._out.println(message);
 	}
 
 	// String.Format can be slow and can allocate more memory. Consider switching to
@@ -463,5 +471,10 @@ public class Log
 	public static void dispose()
 	{
 		_instance = null;
+	}
+
+	public Log(LogOutput out)
+	{
+		_out = out;
 	}
 }

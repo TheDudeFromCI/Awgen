@@ -15,6 +15,7 @@ public class LogProperty implements Poolable
 	public static final String THREAD_PROPERTY = "Thread";
 	public static final String MESSAGE_PROPERTY = "Message";
 	public static final String SEVERITY_PROPERTY = "Severity";
+	public static final String INDENT_PROPERTY = "Indent";
 
 	private Map<String, String> _properties = new HashMap<>();
 	private StringBuilder sb = new StringBuilder();
@@ -31,6 +32,7 @@ public class LogProperty implements Poolable
 		setThreadName(Thread.currentThread().getName());
 		setMessage("");
 		setSeverity(Log.INFO);
+		setIndent(0);
 	}
 
 	@Override
@@ -132,6 +134,19 @@ public class LogProperty implements Poolable
 		return getProperty(SEVERITY_PROPERTY);
 	}
 
+	public void setIndent(int indent)
+	{
+		if (indent < 0)
+			throw new IllegalArgumentException("Inindent cannot be negative!");
+
+		setProperty(INDENT_PROPERTY, Integer.toString(indent));
+	}
+
+	public int getIndent()
+	{
+		return Integer.parseInt(getProperty(INDENT_PROPERTY));
+	}
+
 	public void clearProperty(String property)
 	{
 		_properties.remove(property);
@@ -144,6 +159,8 @@ public class LogProperty implements Poolable
 			setTimeStamp(LocalTime.now());
 		if (property.equals(THREAD_PROPERTY))
 			setThreadName(Thread.currentThread().getName());
+		if (property.equals(INDENT_PROPERTY))
+			setIndent(0);
 	}
 
 	@Override
@@ -151,10 +168,33 @@ public class LogProperty implements Poolable
 	{
 		sb.setLength(0);
 
-		sb.append('[').append(getTimeStamp()).append(']');
-		sb.append('[').append(getSeverity()).append(']');
-		sb.append('[').append(getThreadName()).append(']');
-		sb.append(' ').append(getMessage());
+		String message = getMessage();
+		int characterIndex = 0;
+
+		lineLoop:
+		do
+		{
+			sb.append('[').append(getTimeStamp()).append(']');
+			sb.append('[').append(getSeverity()).append(']');
+			sb.append('[').append(getThreadName()).append(']');
+
+			int indent = getIndent() * Log.SPACES_PER_INDENT + 1;
+			sb.ensureCapacity(sb.length() + indent);
+			for (int i = 0; i < indent; i++)
+				sb.append(' ');
+
+			while (characterIndex < message.length())
+			{
+				char c = message.charAt(characterIndex++);
+				sb.append(c);
+
+				if (c == '\n')
+					continue lineLoop;
+			}
+
+			break;
+		}
+		while (true);
 
 		return sb.toString();
 	}

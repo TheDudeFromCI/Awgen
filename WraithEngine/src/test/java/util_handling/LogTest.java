@@ -1,9 +1,12 @@
 package util_handling;
 
+import java.io.PrintWriter;
 import java.time.LocalTime;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 import net.whg.we.utils.logging.Log;
+import net.whg.we.utils.logging.LogPrintWriterOut;
 import net.whg.we.utils.logging.LogProperty;
 
 public class LogTest
@@ -157,7 +160,70 @@ public class LogTest
 		property.setMessage("Test Message");
 		property.setSeverity(Log.WARN);
 
-		Assert.assertEquals(property.toString(), "[10:08:06][Warn][main] Test Message");
+		Assert.assertEquals("[10:08:06][Warn][main] Test Message", property.toString());
+	}
+
+	@Test
+	public void logProperty_toString_Lines()
+	{
+		LogProperty property = new LogProperty();
+
+		property.setTimeStamp(LocalTime.of(10, 8, 6));
+		property.setThreadName("main");
+		property.setMessage("Test Message\nLine2");
+		property.setSeverity(Log.WARN);
+
+		Assert.assertEquals("[10:08:06][Warn][main] Test Message\n[10:08:06][Warn][main] Line2",
+				property.toString());
+	}
+
+	@Test
+	public void logProperty_toString_Indent()
+	{
+		LogProperty property = new LogProperty();
+
+		property.setTimeStamp(LocalTime.of(10, 8, 6));
+		property.setThreadName("main");
+		property.setMessage("Test Message");
+		property.setSeverity(Log.WARN);
+		property.setIndent(1);
+
+		Assert.assertEquals(2, Log.SPACES_PER_INDENT);
+
+		Assert.assertEquals("[10:08:06][Warn][main]   Test Message", property.toString());
+	}
+
+	@Test
+	public void logProperty_toString_BigIndent()
+	{
+		LogProperty property = new LogProperty();
+
+		property.setTimeStamp(LocalTime.of(10, 8, 6));
+		property.setThreadName("main");
+		property.setMessage("Test Message");
+		property.setSeverity(Log.WARN);
+		property.setIndent(5);
+
+		Assert.assertEquals(2, Log.SPACES_PER_INDENT);
+
+		Assert.assertEquals("[10:08:06][Warn][main]           Test Message", property.toString());
+	}
+
+	@Test
+	public void logProperty_toString_Indent_Lines()
+	{
+		LogProperty property = new LogProperty();
+
+		property.setTimeStamp(LocalTime.of(10, 8, 6));
+		property.setThreadName("main");
+		property.setMessage("Test Message\nLine2");
+		property.setSeverity(Log.WARN);
+		property.setIndent(1);
+
+		Assert.assertEquals(2, Log.SPACES_PER_INDENT);
+
+		Assert.assertEquals("[10:08:06][Warn][main]   Test Message\n[10:08:06][Warn][main]   Line2",
+				property.toString());
 	}
 
 	@Test
@@ -172,7 +238,7 @@ public class LogTest
 		property.setProperty("abc", "def");
 
 		Assert.assertEquals(property.toMapString(),
-				"{abc=def, Message=Test Message, Time=10:08:06, Severity=Warn, Thread=main}");
+				"{Indent=0, abc=def, Message=Test Message, Time=10:08:06, Severity=Warn, Thread=main}");
 	}
 
 	@Test
@@ -207,5 +273,16 @@ public class LogTest
 		Assert.assertEquals(3, Log.WARN);
 		Assert.assertEquals(4, Log.ERROR);
 		Assert.assertEquals(5, Log.FATAL);
+	}
+
+	@Test
+	public void log_setOutput_PrintWriter()
+	{
+		PrintWriter pw = Mockito.mock(PrintWriter.class);
+		Log.setOutput(new LogPrintWriterOut(pw));
+
+		Log.info("Hello");
+
+		Mockito.verify(pw).println(Mockito.anyString());
 	}
 }
