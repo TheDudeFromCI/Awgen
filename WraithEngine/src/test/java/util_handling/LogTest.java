@@ -375,5 +375,144 @@ public class LogTest
 		Assert.assertEquals("Fatal", out._last.getSeverity());
 		Assert.assertEquals("An error has occured on line 42!", out._last.getMessage());
 		Assert.assertNotNull(out._last.getProperty("Exception"));
+
+		Log.fatalf("An error has occured on line %d!", 128);
+
+		Assert.assertEquals("Fatal", out._last.getSeverity());
+		Assert.assertEquals("An error has occured on line 128!", out._last.getMessage());
+		Assert.assertNull(out._last.getProperty("Exception"));
+	}
+
+	@Test
+	public void log_normal()
+	{
+		Log.dispose();
+		Log.setLogLevel(Log.TRACE);
+
+		HoldLastProperty out = new HoldLastProperty();
+		Log.setOutput(out);
+
+		Log.trace("Trace");
+		Assert.assertEquals("Trace", out._last.getMessage());
+
+		Log.debug("Debug");
+		Assert.assertEquals("Debug", out._last.getMessage());
+
+		Log.info("Info");
+		Assert.assertEquals("Info", out._last.getMessage());
+
+		Log.warn("Warn");
+		Assert.assertEquals("Warn", out._last.getMessage());
+
+		Log.error("Error");
+		Assert.assertEquals("Error", out._last.getMessage());
+
+		Log.fatal("Fatal");
+		Assert.assertEquals("Fatal", out._last.getMessage());
+	}
+
+	@Test
+	public void log_normal_args()
+	{
+		Log.dispose();
+		Log.setLogLevel(Log.TRACE);
+
+		HoldLastProperty out = new HoldLastProperty();
+		Log.setOutput(out);
+
+		Log.tracef("Trace %s", "Args");
+		Assert.assertEquals("Trace Args", out._last.getMessage());
+
+		Log.debugf("Debug %s", "Args");
+		Assert.assertEquals("Debug Args", out._last.getMessage());
+
+		Log.infof("Info %s", "Args");
+		Assert.assertEquals("Info Args", out._last.getMessage());
+
+		Log.warnf("Warn %s", "Args");
+		Assert.assertEquals("Warn Args", out._last.getMessage());
+
+		Log.errorf("Error %s", "Args");
+		Assert.assertEquals("Error Args", out._last.getMessage());
+
+		Log.fatalf("Fatal %s", "Args");
+		Assert.assertEquals("Fatal Args", out._last.getMessage());
+	}
+
+	@Test
+	public void log_ignoreLogLevel()
+	{
+		Log.dispose();
+		Log.setLogLevel(Log.FATAL);
+
+		LogOutput out = Mockito.mock(LogOutput.class);
+		Log.setOutput(out);
+
+		Log.trace("Trace");
+		Log.tracef("Tracef");
+		Log.debug("Debug");
+		Log.debugf("Debugf");
+		Log.info("Info");
+		Log.infof("Infof");
+		Log.warn("Warn");
+		Log.warnf("Warnf");
+		Log.error("Error");
+		Log.errorf("Errorf");
+		Log.errorf("ErrorfException", new RuntimeException());
+
+		Mockito.verify(out, Mockito.never()).println(Mockito.any());
+	}
+
+	@Test
+	public void log_indention()
+	{
+		Log.dispose();
+
+		HoldLastProperty out = new HoldLastProperty();
+		Log.setOutput(out);
+
+		Log.info("Message1");
+		Assert.assertEquals(0, out._last.getIndent());
+
+		Log.indent();
+		Log.info("Message2");
+		Assert.assertEquals(1, out._last.getIndent());
+		Log.unindent();
+		Log.info("Message3");
+		Assert.assertEquals(0, out._last.getIndent());
+	}
+
+	@Test
+	public void log_indentManually()
+	{
+		Log.dispose();
+
+		HoldLastProperty out = new HoldLastProperty();
+		Log.setOutput(out);
+
+		Log.setIndentLevel(10);
+		Log.info("Message1");
+		Assert.assertEquals(10, out._last.getIndent());
+
+		Assert.assertEquals(10, Log.getIndentLevel());
+
+		Log.resetIndent();
+		Assert.assertEquals(0, Log.getIndentLevel());
+
+		Log.setIndentLevel(-1);
+		Assert.assertEquals(0, Log.getIndentLevel());
+	}
+
+	@Test
+	public void log_unindentTooMuch()
+	{
+		Log.dispose();
+
+		HoldLastProperty out = new HoldLastProperty();
+		Log.setOutput(out);
+
+		Log.unindent();
+		Log.info("Message1");
+		Assert.assertEquals(0, out._last.getIndent());
 	}
 }
