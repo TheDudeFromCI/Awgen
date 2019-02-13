@@ -4,7 +4,13 @@ import net.whg.we.event.Listener;
 
 public interface UpdateListener extends Listener
 {
-	public void onUpdate();
+	void init();
 
-	public void onUpdateFrame();
+	void update();
+
+	void updateFrame();
+
+	void render();
+
+	void dispose();
 }

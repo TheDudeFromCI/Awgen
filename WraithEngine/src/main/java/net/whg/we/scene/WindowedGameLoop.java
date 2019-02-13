@@ -35,11 +35,12 @@ public class WindowedGameLoop implements GameLoop
 
 		try
 		{
-			TestScene testScene = new TestScene(this);
-			testScene.loadTestScene(_resourceManager);
+			new TestScene(this);
 
 			long startTime = System.currentTimeMillis();
 			long usedPhysicsFrames = 0;
+
+			_updateListener.init();
 
 			while (true)
 			{
@@ -57,6 +58,7 @@ public class WindowedGameLoop implements GameLoop
 					FPSLogger.logFramerate();
 
 					_updateListener.onUpdateFrame();
+					_updateListener.render();
 
 					// End frame
 					Input.endFrame();
@@ -70,6 +72,8 @@ public class WindowedGameLoop implements GameLoop
 					break;
 				}
 			}
+
+			_updateListener.dispose();
 		}
 		catch (Exception exception)
 		{
@@ -77,7 +81,7 @@ public class WindowedGameLoop implements GameLoop
 		}
 		finally
 		{
-			// _resourceLoader.disposeResources();
+			_resourceManager.disposeAllResources();
 			_graphicsPipeline.dispose();
 			_isRunning = false;
 		}
@@ -98,5 +102,10 @@ public class WindowedGameLoop implements GameLoop
 	public void requestClose()
 	{
 		_graphicsPipeline.getWindow().requestClose();
+	}
+
+	public ResourceManager getResourceManager()
+	{
+		return _resourceManager;
 	}
 }
