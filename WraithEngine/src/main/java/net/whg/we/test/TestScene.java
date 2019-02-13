@@ -7,10 +7,9 @@ import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;
 import net.whg.we.rendering.ScreenClearType;
+import net.whg.we.resources.ResourceFetcher;
 import net.whg.we.resources.ResourceManager;
 import net.whg.we.resources.graphics.MeshResource;
-import net.whg.we.resources.scene.FontResource;
-import net.whg.we.resources.scene.MaterialResource;
 import net.whg.we.scene.Collision;
 import net.whg.we.scene.Scene;
 import net.whg.we.scene.UpdateListener;
@@ -23,6 +22,7 @@ import net.whg.we.utils.FirstPersonCamera;
 import net.whg.we.utils.Input;
 import net.whg.we.utils.Screen;
 import net.whg.we.utils.logging.Log;
+import net.whg.we.utils.logging.TextBuilder;
 
 public class TestScene implements UpdateListener
 {
@@ -73,6 +73,8 @@ public class TestScene implements UpdateListener
 
 				};
 
+				ResourceFetcher fetch = new ResourceFetcher(resourceManager, graphics);
+
 				// ModelResource terrain = (ModelResource) resourceManager.loadResource(plugin,
 				// "models/terrain.model");
 				// terrain.compile(_gameLoop.getGraphicsPipeline().getGraphics());
@@ -92,35 +94,23 @@ public class TestScene implements UpdateListener
 							_gameLoop.getGraphicsPipeline().getGraphics());
 					resourceManager.getResourceDatabase()
 							.addResource(new MeshResource(null, null, uiMesh));
-					MaterialResource matRes = (MaterialResource) resourceManager
-							.loadResource(plugin, "ui/white_ui.material");
-					matRes.compile(_gameLoop.getGraphicsPipeline().getGraphics());
-					Material mat = matRes.getData();
-					UIImage chicken = new UIImage(uiMesh, mat);
-					chicken.getPosition().set(400f, 50f);
-					chicken.getSize().set(800f, 100f);
-					_scene.getUIStack().addComponent(chicken);
+
+					Material mat = fetch.getMaterial(plugin, "ui/white_ui.material");
+
+					UIImage whiteBox = new UIImage(uiMesh, mat);
+					whiteBox.getPosition().set(400f, 50f);
+					whiteBox.getSize().set(800f, 100f);
+					_scene.getUIStack().addComponent(whiteBox);
 				}
 
 				{
-					FontResource fontRes = (FontResource) resourceManager.loadResource(plugin,
-							"ui/fonts/ubuntu.fnt");
-					Font font = fontRes.getData();
+					Material mat = fetch.getMaterial(plugin, "ui/fonts/ubuntu.material");
+					Font font = fetch.getFont(plugin, "ui/fonts/ubuntu.fnt");
+					TextBuilder textBuilder = new TextBuilder(mat, font, graphics,
+							resourceManager.getResourceDatabase());
 
-					MaterialResource matRes = (MaterialResource) resourceManager
-							.loadResource(plugin, "ui/fonts/ubuntu.material");
-					matRes.compile(_gameLoop.getGraphicsPipeline().getGraphics());
-					Material mat = matRes.getData();
-
-					Mesh fontMesh = new Mesh("Font Mesh",
-							UIUtils.textVertexData(font, "This is text. Open\n And more."),
-							graphics);
-					resourceManager.getResourceDatabase()
-							.addResource(new MeshResource(null, null, fontMesh));
-
-					UIImage textImage = new UIImage(fontMesh, mat);
+					UIImage textImage = textBuilder.buildTextImage("This is some text.", 50f);
 					textImage.getPosition().set(0f, 50f);
-					textImage.getSize().set(50f, 50f);
 					_scene.getUIStack().addComponent(textImage);
 				}
 			}
