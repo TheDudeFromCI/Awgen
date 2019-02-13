@@ -2,7 +2,6 @@ package net.whg.we.rendering;
 
 import java.nio.FloatBuffer;
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import net.whg.we.utils.Location;
 import net.whg.we.utils.Screen;
@@ -95,17 +94,13 @@ public class Material
 		_shader.setUniformMat4("_mvpMat", _matrixFloatBuffer);
 	}
 
-	public void setMVPUniform(Vector2f pos, Vector2f size)
+	public void setOrthoMVP(Matrix4f model)
 	{
 		_projectionMatrix.identity();
 		_projectionMatrix.ortho(0f, Screen.width(), 0f, Screen.height(), -1f, 1f);
 
-		_modelMatrix.identity();
-		_modelMatrix.translate(pos.x, pos.y, 0f);
-		_modelMatrix.scale(size.x, size.y, 1f);
-
 		_mvpMatrix.set(_projectionMatrix);
-		_mvpMatrix.mul(_modelMatrix);
+		_mvpMatrix.mul(model);
 		_mvpMatrix.get(_matrixFloatBuffer);
 		_shader.setUniformMat4("_mvpMat", _matrixFloatBuffer);
 	}

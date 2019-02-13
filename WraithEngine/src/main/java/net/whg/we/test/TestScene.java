@@ -98,8 +98,8 @@ public class TestScene implements UpdateListener
 					Material mat = fetch.getMaterial(plugin, "ui/white_ui.material");
 
 					UIImage whiteBox = new UIImage(uiMesh, mat);
-					whiteBox.getPosition().set(400f, 50f);
-					whiteBox.getSize().set(800f, 100f);
+					whiteBox.getTransform().setPosition(400f, 50f);
+					whiteBox.getTransform().setSize(800f, 100f);
 					_scene.getUIStack().addComponent(whiteBox);
 				}
 
@@ -110,7 +110,7 @@ public class TestScene implements UpdateListener
 							resourceManager.getResourceDatabase());
 
 					UIImage textImage = textBuilder.buildTextImage("This is some text.", 50f);
-					textImage.getPosition().set(0f, 50f);
+					textImage.getTransform().setPosition(0f, 50f);
 					_scene.getUIStack().addComponent(textImage);
 				}
 			}

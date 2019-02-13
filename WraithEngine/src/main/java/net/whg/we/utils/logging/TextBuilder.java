@@ -40,8 +40,7 @@ public class TextBuilder
 		_database.addResource(new MeshResource(null, null, fontMesh));
 
 		UIImage textImage = new UIImage(fontMesh, _material);
-		textImage.getPosition().set(0f, 50f);
-		textImage.getSize().set(size, size);
+		textImage.getTransform().setSize(size, size);
 
 		return textImage;
 	}

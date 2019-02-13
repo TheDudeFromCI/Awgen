@@ -1,12 +1,8 @@
 package net.whg.we.ui;
 
-import org.joml.Vector2f;
-
 public interface UIComponent
 {
-	Vector2f getPosition();
-
-	Vector2f getSize();
+	Transform2D getTransform();
 
 	void init();
 

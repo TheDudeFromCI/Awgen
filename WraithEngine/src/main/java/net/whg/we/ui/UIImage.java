@@ -1,16 +1,14 @@
 package net.whg.we.ui;
 
-import org.joml.Vector2f;
 import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;
 
 public class UIImage implements UIComponent
 {
-	private Vector2f _pos = new Vector2f();
-	private Vector2f _size = new Vector2f();
 	private boolean _disposed;
 	private Mesh _mesh;
 	private Material _material;
+	private Transform2D _transform = new Transform2D();
 
 	public UIImage(Mesh mesh, Material material)
 	{
@@ -19,15 +17,9 @@ public class UIImage implements UIComponent
 	}
 
 	@Override
-	public Vector2f getPosition()
+	public Transform2D getTransform()
 	{
-		return _pos;
-	}
-
-	@Override
-	public Vector2f getSize()
-	{
-		return _size;
+		return _transform;
 	}
 
 	@Override
@@ -49,7 +41,7 @@ public class UIImage implements UIComponent
 	public void render()
 	{
 		_material.bind();
-		_material.setMVPUniform(_pos, _size);
+		_material.setOrthoMVP(_transform.getFullMatrix());
 		_mesh.render();
 	}
 
