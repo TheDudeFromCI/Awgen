@@ -1,17 +1,21 @@
 package net.whg.we.scene;
 
+import net.whg.we.ui.UIStack;
+
 public class Scene
 {
 	private GameObjectManager _gameObjectManager;
-	private RenderPass _renderPass;
 	private LogicPass _logicPass;
+	private RenderPass _renderPass;
+	private UIStack _uiStack;
 	private PhysicsWorld _physics;
 
 	public Scene()
 	{
 		_gameObjectManager = new GameObjectManager(this);
-		_renderPass = new RenderPass();
 		_logicPass = new LogicPass();
+		_renderPass = new RenderPass();
+		_uiStack = new UIStack();
 		_physics = new PhysicsWorld();
 	}
 
@@ -20,9 +24,9 @@ public class Scene
 		return _gameObjectManager;
 	}
 
-	public RenderPass getRenderPass()
+	public PhysicsWorld getPhysicsWorld()
 	{
-		return _renderPass;
+		return _physics;
 	}
 
 	public LogicPass getLogicPass()
@@ -30,8 +34,31 @@ public class Scene
 		return _logicPass;
 	}
 
-	public PhysicsWorld getPhysicsWorld()
+	public RenderPass getRenderPass()
 	{
-		return _physics;
+		return _renderPass;
+	}
+
+	public UIStack getUIStack()
+	{
+		return _uiStack;
+	}
+
+	public void update()
+	{
+		_logicPass.updatePass();
+		_uiStack.update();
+	}
+
+	public void updateFrame()
+	{
+		_logicPass.updateFramePass();
+		_uiStack.updateFrame();
+	}
+
+	public void render()
+	{
+		_renderPass.render();
+		_uiStack.render();
 	}
 }

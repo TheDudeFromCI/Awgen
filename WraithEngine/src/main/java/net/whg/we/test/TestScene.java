@@ -20,7 +20,6 @@ import net.whg.we.scene.WindowedGameLoop;
 import net.whg.we.scene.behaviours.MeshColliderBehaviour;
 import net.whg.we.scene.behaviours.RenderBehaviour;
 import net.whg.we.ui.UIImage;
-import net.whg.we.ui.UIStack;
 import net.whg.we.ui.UIUtils;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.FirstPersonCamera;
@@ -34,7 +33,6 @@ public class TestScene implements UpdateListener
 	private Camera _camera;
 	private WindowedGameLoop _gameLoop;
 	private Scene _scene;
-	private UIStack _ui;
 
 	public TestScene(WindowedGameLoop gameLoop)
 	{
@@ -49,7 +47,6 @@ public class TestScene implements UpdateListener
 			Graphics graphics = _gameLoop.getGraphicsPipeline().getGraphics();
 			graphics.setClearScreenColor(new Color(0.2f, 0.4f, 0.8f));
 			_scene = new Scene();
-			_ui = new UIStack();
 
 			{
 				Plugin plugin = new Plugin()
@@ -99,7 +96,7 @@ public class TestScene implements UpdateListener
 						"ui/ui_image.material");
 				matRes.compile(_gameLoop.getGraphicsPipeline().getGraphics());
 				Material mat = matRes.getData();
-				_ui.addComponent(new UIImage(uiMesh, mat));
+				_scene.getUIStack().addComponent(new UIImage(uiMesh, mat));
 			}
 
 			_camera = new Camera();
@@ -118,7 +115,7 @@ public class TestScene implements UpdateListener
 	{
 		try
 		{
-			_scene.getLogicPass().updatePass();
+			_scene.update();
 		}
 		catch (Exception exception)
 		{
@@ -132,7 +129,7 @@ public class TestScene implements UpdateListener
 	{
 		try
 		{
-			_scene.getLogicPass().updateFramePass();
+			_scene.updateFrame();
 
 			_firstPerson.setMoveSpeed(Input.isKeyHeld("control") ? 70f : 7f);
 			_firstPerson.update();
@@ -149,8 +146,7 @@ public class TestScene implements UpdateListener
 
 			Graphics graphics = _gameLoop.getGraphicsPipeline().getGraphics();
 			graphics.clearScreenPass(ScreenClearType.CLEAR_COLOR_AND_DEPTH);
-			_scene.getRenderPass().render();
-			_ui.render();
+			_scene.render();
 		}
 		catch (Exception exception)
 		{
