@@ -1,0 +1,4 @@
+name: Ubuntu
+shader: ui/fonts/font.glsl
+textures:
+  _font: ui/fonts/ubuntu.png

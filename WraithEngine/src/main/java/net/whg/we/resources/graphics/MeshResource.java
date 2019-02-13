@@ -25,6 +25,13 @@ public class MeshResource implements CompilableResource
 		_skeleton = skeleton;
 	}
 
+	public MeshResource(ResourceFile resourceFile, String name, Mesh mesh)
+	{
+		_resourceFile = resourceFile;
+		_name = name;
+		_mesh = mesh;
+	}
+
 	@Override
 	public Mesh getData()
 	{

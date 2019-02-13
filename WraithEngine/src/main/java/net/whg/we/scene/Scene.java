@@ -1,5 +1,6 @@
 package net.whg.we.scene;
 
+import org.lwjgl.opengl.GL11;
 import net.whg.we.ui.UIStack;
 
 public class Scene
@@ -58,7 +59,10 @@ public class Scene
 
 	public void render()
 	{
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		_renderPass.render();
+
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		_uiStack.render();
 	}
 }

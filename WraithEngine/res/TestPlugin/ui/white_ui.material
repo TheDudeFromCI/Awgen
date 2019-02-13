@@ -1,0 +1,4 @@
+name: White UI
+shader: shaders/ui.glsl
+textures:
+  _texture: ui/white.png

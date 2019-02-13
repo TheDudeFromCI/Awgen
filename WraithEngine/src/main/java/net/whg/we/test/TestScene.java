@@ -1,6 +1,5 @@
 package net.whg.we.test;
 
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Camera;
@@ -9,18 +8,16 @@ import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;
 import net.whg.we.rendering.ScreenClearType;
 import net.whg.we.resources.ResourceManager;
+import net.whg.we.resources.graphics.MeshResource;
+import net.whg.we.resources.scene.FontResource;
 import net.whg.we.resources.scene.MaterialResource;
-import net.whg.we.resources.scene.ModelResource;
 import net.whg.we.scene.Collision;
-import net.whg.we.scene.GameObject;
-import net.whg.we.scene.Model;
 import net.whg.we.scene.Scene;
 import net.whg.we.scene.UpdateListener;
 import net.whg.we.scene.WindowedGameLoop;
-import net.whg.we.scene.behaviours.MeshColliderBehaviour;
-import net.whg.we.scene.behaviours.RenderBehaviour;
 import net.whg.we.ui.UIImage;
 import net.whg.we.ui.UIUtils;
+import net.whg.we.ui.font.Font;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.FirstPersonCamera;
 import net.whg.we.utils.Input;
@@ -76,27 +73,56 @@ public class TestScene implements UpdateListener
 
 				};
 
-				ModelResource terrain = (ModelResource) resourceManager.loadResource(plugin,
-						"models/terrain.model");
-				terrain.compile(_gameLoop.getGraphicsPipeline().getGraphics());
+				// ModelResource terrain = (ModelResource) resourceManager.loadResource(plugin,
+				// "models/terrain.model");
+				// terrain.compile(_gameLoop.getGraphicsPipeline().getGraphics());
+				//
+				// Model model = terrain.getData();
+				// model.getLocation().setScale(new Vector3f(100f, 100f, 100f));
+				// model.getLocation()
+				// .setRotation(new Quaternionf().rotateX((float) Math.toRadians(-90f)));
+				//
+				// GameObject go = _scene.getGameObjectManager().createNew();
+				// go.addBehaviour(new RenderBehaviour(model));
+				// go.addBehaviour(new MeshColliderBehaviour(
+				// terrain.getMeshResource(0).getVertexData(), model.getLocation()));
 
-				Model model = terrain.getData();
-				model.getLocation().setScale(new Vector3f(100f, 100f, 100f));
-				model.getLocation()
-						.setRotation(new Quaternionf().rotateX((float) Math.toRadians(-90f)));
+				{
+					Mesh uiMesh = new Mesh("Image Mesh", UIUtils.defaultImageVertexData(),
+							_gameLoop.getGraphicsPipeline().getGraphics());
+					resourceManager.getResourceDatabase()
+							.addResource(new MeshResource(null, null, uiMesh));
+					MaterialResource matRes = (MaterialResource) resourceManager
+							.loadResource(plugin, "ui/white_ui.material");
+					matRes.compile(_gameLoop.getGraphicsPipeline().getGraphics());
+					Material mat = matRes.getData();
+					UIImage chicken = new UIImage(uiMesh, mat);
+					chicken.getPosition().set(400f, 50f);
+					chicken.getSize().set(800f, 100f);
+					_scene.getUIStack().addComponent(chicken);
+				}
 
-				GameObject go = _scene.getGameObjectManager().createNew();
-				go.addBehaviour(new RenderBehaviour(model));
-				go.addBehaviour(new MeshColliderBehaviour(
-						terrain.getMeshResource(0).getVertexData(), model.getLocation()));
+				{
+					FontResource fontRes = (FontResource) resourceManager.loadResource(plugin,
+							"ui/fonts/ubuntu.fnt");
+					Font font = fontRes.getData();
 
-				Mesh uiMesh = new Mesh("Image Mesh", UIUtils.defaultImageVertexData(),
-						_gameLoop.getGraphicsPipeline().getGraphics());
-				MaterialResource matRes = (MaterialResource) resourceManager.loadResource(plugin,
-						"ui/ui_image.material");
-				matRes.compile(_gameLoop.getGraphicsPipeline().getGraphics());
-				Material mat = matRes.getData();
-				_scene.getUIStack().addComponent(new UIImage(uiMesh, mat));
+					MaterialResource matRes = (MaterialResource) resourceManager
+							.loadResource(plugin, "ui/fonts/ubuntu.material");
+					matRes.compile(_gameLoop.getGraphicsPipeline().getGraphics());
+					Material mat = matRes.getData();
+
+					Mesh fontMesh = new Mesh("Font Mesh",
+							UIUtils.textVertexData(font, "This is text. Open\n And more."),
+							graphics);
+					resourceManager.getResourceDatabase()
+							.addResource(new MeshResource(null, null, fontMesh));
+
+					UIImage textImage = new UIImage(fontMesh, mat);
+					textImage.getPosition().set(0f, 50f);
+					textImage.getSize().set(50f, 50f);
+					_scene.getUIStack().addComponent(textImage);
+				}
 			}
 
 			_camera = new Camera();

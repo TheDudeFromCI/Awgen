@@ -72,7 +72,7 @@ public class ResourceDatabase
 			return null;
 
 		for (Resource res : _resources)
-			if (res.getResourceFile().equals(resourceFile))
+			if (res.getResourceFile() != null && res.getResourceFile().equals(resourceFile))
 				return res;
 		return null;
 	}

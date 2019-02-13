@@ -16,9 +16,6 @@ public class UIImage implements UIComponent
 	{
 		_mesh = mesh;
 		_material = material;
-
-		_pos.set(400f, 300f);
-		_size.set(400f, 300f);
 	}
 
 	@Override

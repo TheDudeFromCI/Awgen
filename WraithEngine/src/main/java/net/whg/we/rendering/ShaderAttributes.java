@@ -48,7 +48,7 @@ public class ShaderAttributes
 	{
 		if (size <= 0)
 			throw new IllegalArgumentException("Attribute sizes must be a positive integer!");
-		if (size >= 4)
+		if (size > 4)
 			throw new IllegalArgumentException("Attribute sizes must 4 or lower!");
 
 		if (_count + 1 >= _attribNames.length)
