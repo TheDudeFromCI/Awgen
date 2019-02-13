@@ -5,8 +5,11 @@ import org.joml.Vector3f;
 import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.Graphics;
+import net.whg.we.rendering.Material;
+import net.whg.we.rendering.Mesh;
 import net.whg.we.rendering.ScreenClearType;
 import net.whg.we.resources.ResourceManager;
+import net.whg.we.resources.scene.MaterialResource;
 import net.whg.we.resources.scene.ModelResource;
 import net.whg.we.scene.Collision;
 import net.whg.we.scene.GameObject;
@@ -16,6 +19,9 @@ import net.whg.we.scene.UpdateListener;
 import net.whg.we.scene.WindowedGameLoop;
 import net.whg.we.scene.behaviours.MeshColliderBehaviour;
 import net.whg.we.scene.behaviours.RenderBehaviour;
+import net.whg.we.ui.UIImage;
+import net.whg.we.ui.UIStack;
+import net.whg.we.ui.UIUtils;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.FirstPersonCamera;
 import net.whg.we.utils.Input;
@@ -28,6 +34,7 @@ public class TestScene implements UpdateListener
 	private Camera _camera;
 	private WindowedGameLoop _gameLoop;
 	private Scene _scene;
+	private UIStack _ui;
 
 	public TestScene(WindowedGameLoop gameLoop)
 	{
@@ -42,6 +49,7 @@ public class TestScene implements UpdateListener
 			Graphics graphics = _gameLoop.getGraphicsPipeline().getGraphics();
 			graphics.setClearScreenColor(new Color(0.2f, 0.4f, 0.8f));
 			_scene = new Scene();
+			_ui = new UIStack();
 
 			{
 				Plugin plugin = new Plugin()
@@ -84,6 +92,14 @@ public class TestScene implements UpdateListener
 				go.addBehaviour(new RenderBehaviour(model));
 				go.addBehaviour(new MeshColliderBehaviour(
 						terrain.getMeshResource(0).getVertexData(), model.getLocation()));
+
+				Mesh uiMesh = new Mesh("Image Mesh", UIUtils.defaultImageVertexData(),
+						_gameLoop.getGraphicsPipeline().getGraphics());
+				MaterialResource matRes = (MaterialResource) resourceManager.loadResource(plugin,
+						"ui/ui_image.material");
+				matRes.compile(_gameLoop.getGraphicsPipeline().getGraphics());
+				Material mat = matRes.getData();
+				_ui.addComponent(new UIImage(uiMesh, mat));
 			}
 
 			_camera = new Camera();
@@ -134,6 +150,7 @@ public class TestScene implements UpdateListener
 			Graphics graphics = _gameLoop.getGraphicsPipeline().getGraphics();
 			graphics.clearScreenPass(ScreenClearType.CLEAR_COLOR_AND_DEPTH);
 			_scene.getRenderPass().render();
+			_ui.render();
 		}
 		catch (Exception exception)
 		{
