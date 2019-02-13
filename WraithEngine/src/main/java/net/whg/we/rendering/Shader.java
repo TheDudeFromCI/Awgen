@@ -2,6 +2,8 @@ package net.whg.we.rendering;
 
 import java.nio.FloatBuffer;
 import java.util.HashMap;
+import org.joml.Vector4f;
+import net.whg.we.utils.Color;
 
 public class Shader
 {
@@ -90,6 +92,24 @@ public class Shader
 
 		int location = getUniformLocation(name);
 		_shader.setUniformInt(location, value);
+	}
+
+	public void setUniformVec4(String name, Vector4f value)
+	{
+		if (_disposed)
+			throw new IllegalStateException("Shader already disposed!");
+
+		int location = getUniformLocation(name);
+		_shader.setUniformVec4(location, value.x, value.y, value.z, value.w);
+	}
+
+	public void setUniformVec4(String name, Color value)
+	{
+		if (_disposed)
+			throw new IllegalStateException("Shader already disposed!");
+
+		int location = getUniformLocation(name);
+		_shader.setUniformVec4(location, value.r, value.g, value.b, value.a);
 	}
 
 	public boolean isDisposed()

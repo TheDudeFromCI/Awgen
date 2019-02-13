@@ -2,7 +2,11 @@ package net.whg.we.scene;
 
 public interface ComponentLogic
 {
-	public void update();
+	void init();
 
-	public void updateFrame();
+	void update();
+
+	void updateFrame();
+
+	void dispose();
 }

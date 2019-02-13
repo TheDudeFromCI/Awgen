@@ -36,7 +36,7 @@ public class TextBuilder
 
 	public UIImage buildTextImage(String text, float size)
 	{
-		Mesh fontMesh = new Mesh("Mesh", UIUtils.textVertexData(_font, text), _graphics);
+		Mesh fontMesh = new Mesh("Text: " + text, UIUtils.textVertexData(_font, text), _graphics);
 		_database.addResource(new MeshResource(null, null, fontMesh));
 
 		UIImage textImage = new UIImage(fontMesh, _material);

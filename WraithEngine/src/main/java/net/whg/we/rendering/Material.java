@@ -3,6 +3,7 @@ package net.whg.we.rendering;
 import java.nio.FloatBuffer;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
+import net.whg.we.utils.Color;
 import net.whg.we.utils.Location;
 import net.whg.we.utils.Screen;
 
@@ -13,6 +14,7 @@ public class Material
 	private String[] _textureParamNames;
 	private Texture[] _textures;
 	private String _name;
+	private Color _color;
 
 	// BUFFERS
 	private FloatBuffer _matrixFloatBuffer;
@@ -41,6 +43,16 @@ public class Material
 	public float getSorterId()
 	{
 		return _sorterId + _shader.getShaderId();
+	}
+
+	public Color getColor()
+	{
+		return _color;
+	}
+
+	public void setColor(Color color)
+	{
+		_color = color;
 	}
 
 	public Texture[] getTextures()
@@ -73,6 +85,9 @@ public class Material
 					_shader.setUniformInt(_textureParamNames[i], i);
 			}
 		}
+
+		if (_color != null)
+			_shader.setUniformVec4("_color", _color);
 	}
 
 	public void setMVPUniform(Camera camera, Location entityLocation)

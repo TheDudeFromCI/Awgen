@@ -5,18 +5,15 @@ import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.Material;
-import net.whg.we.rendering.Mesh;
 import net.whg.we.rendering.ScreenClearType;
 import net.whg.we.resources.ResourceFetcher;
 import net.whg.we.resources.ResourceManager;
-import net.whg.we.resources.graphics.MeshResource;
 import net.whg.we.scene.Collision;
 import net.whg.we.scene.Scene;
 import net.whg.we.scene.UpdateListener;
 import net.whg.we.scene.WindowedGameLoop;
-import net.whg.we.ui.UIImage;
-import net.whg.we.ui.UIUtils;
 import net.whg.we.ui.font.Font;
+import net.whg.we.ui.terminal.Terminal;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.FirstPersonCamera;
 import net.whg.we.utils.Input;
@@ -37,7 +34,14 @@ public class TestScene implements UpdateListener
 		_gameLoop.getUpdateEvent().addListener(this);
 	}
 
-	public void loadTestScene(ResourceManager resourceManager)
+	@Override
+	public int getPriority()
+	{
+		return 0;
+	}
+
+	@Override
+	public void init()
 	{
 		try
 		{
@@ -73,6 +77,7 @@ public class TestScene implements UpdateListener
 
 				};
 
+				ResourceManager resourceManager = _gameLoop.getResourceManager();
 				ResourceFetcher fetch = new ResourceFetcher(resourceManager, graphics);
 
 				// ModelResource terrain = (ModelResource) resourceManager.loadResource(plugin,
@@ -90,28 +95,12 @@ public class TestScene implements UpdateListener
 				// terrain.getMeshResource(0).getVertexData(), model.getLocation()));
 
 				{
-					Mesh uiMesh = new Mesh("Image Mesh", UIUtils.defaultImageVertexData(),
-							_gameLoop.getGraphicsPipeline().getGraphics());
-					resourceManager.getResourceDatabase()
-							.addResource(new MeshResource(null, null, uiMesh));
-
-					Material mat = fetch.getMaterial(plugin, "ui/white_ui.material");
-
-					UIImage whiteBox = new UIImage(uiMesh, mat);
-					whiteBox.getTransform().setPosition(400f, 50f);
-					whiteBox.getTransform().setSize(800f, 100f);
-					_scene.getUIStack().addComponent(whiteBox);
-				}
-
-				{
-					Material mat = fetch.getMaterial(plugin, "ui/fonts/ubuntu.material");
 					Font font = fetch.getFont(plugin, "ui/fonts/ubuntu.fnt");
+					Material mat = fetch.getMaterial(plugin, "ui/fonts/ubuntu.material");
 					TextBuilder textBuilder = new TextBuilder(mat, font, graphics,
 							resourceManager.getResourceDatabase());
-
-					UIImage textImage = textBuilder.buildTextImage("This is some text.", 50f);
-					textImage.getTransform().setPosition(0f, 50f);
-					_scene.getUIStack().addComponent(textImage);
+					Terminal terminal = new Terminal(textBuilder, fetch);
+					_scene.getUIStack().addComponent(terminal);
 				}
 			}
 
@@ -127,7 +116,7 @@ public class TestScene implements UpdateListener
 	}
 
 	@Override
-	public void onUpdate()
+	public void update()
 	{
 		try
 		{
@@ -141,7 +130,7 @@ public class TestScene implements UpdateListener
 	}
 
 	@Override
-	public void onUpdateFrame()
+	public void updateFrame()
 	{
 		try
 		{
@@ -159,10 +148,6 @@ public class TestScene implements UpdateListener
 				Screen.setMouseLocked(!Screen.isMouseLocked());
 			if (Input.isKeyDown("escape"))
 				_gameLoop.requestClose();
-
-			Graphics graphics = _gameLoop.getGraphicsPipeline().getGraphics();
-			graphics.clearScreenPass(ScreenClearType.CLEAR_COLOR_AND_DEPTH);
-			_scene.render();
 		}
 		catch (Exception exception)
 		{
@@ -172,8 +157,32 @@ public class TestScene implements UpdateListener
 	}
 
 	@Override
-	public int getPriority()
+	public void render()
 	{
-		return 0;
+		try
+		{
+			Graphics graphics = _gameLoop.getGraphicsPipeline().getGraphics();
+			graphics.clearScreenPass(ScreenClearType.CLEAR_COLOR_AND_DEPTH);
+			_scene.render();
+		}
+		catch (Exception exception)
+		{
+			Log.fatalf("Failed to render scene!", exception);
+			_gameLoop.requestClose();
+		}
+	}
+
+	@Override
+	public void dispose()
+	{
+		try
+		{
+			_scene.dispose();
+		}
+		catch (Exception exception)
+		{
+			Log.fatalf("Failed to dispose scene!", exception);
+			_gameLoop.requestClose();
+		}
 	}
 }

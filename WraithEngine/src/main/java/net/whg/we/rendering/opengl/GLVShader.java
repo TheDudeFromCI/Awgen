@@ -157,4 +157,19 @@ public class GLVShader implements VShader
 
 		_opengl.checkForErrors(Log.TRACE, "Set Shader Uniform Int");
 	}
+
+	@Override
+	public void setUniformVec4(int location, float x, float y, float z, float w)
+	{
+		if (isBound())
+			GL20.glUniform4f(location, x, y, z, w);
+		else
+		{
+			GL20.glUseProgram(_shaderId);
+			GL20.glUniform4f(location, x, y, z, w);
+			GL20.glUseProgram(_opengl.getBoundShaderId());
+		}
+
+		_opengl.checkForErrors(Log.TRACE, "Set Shader Uniform Int");
+	}
 }

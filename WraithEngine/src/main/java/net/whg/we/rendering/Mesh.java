@@ -1,5 +1,7 @@
 package net.whg.we.rendering;
 
+import net.whg.we.utils.logging.Log;
+
 public class Mesh
 {
 	private String _meshName;
@@ -19,6 +21,7 @@ public class Mesh
 	public void dispose()
 	{
 		_vMesh.dispose();
+		Log.tracef("Disposed mesh '%s'.", _meshName);
 	}
 
 	public boolean isDisposed()

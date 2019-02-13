@@ -19,4 +19,6 @@ public interface VShader
 	public void setUniformMat4Array(int location, FloatBuffer value);
 
 	public void setUniformInt(int location, int value);
+
+	public void setUniformVec4(int location, float x, float y, float z, float w);
 }

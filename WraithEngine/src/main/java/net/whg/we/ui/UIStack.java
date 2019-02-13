@@ -27,6 +27,8 @@ public class UIStack
 			_components.addInstant(component);
 		else
 			_components.add(component);
+
+		component.init();
 	}
 
 	public void removeComponent(UIComponent component)

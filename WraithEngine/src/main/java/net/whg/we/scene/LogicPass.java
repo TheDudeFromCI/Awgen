@@ -1,47 +1,80 @@
 package net.whg.we.scene;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import net.whg.we.utils.ComponentList;
 
 public class LogicPass
 {
-	private List<ComponentLogic> _logicalComponents = new ArrayList<>();
-	private List<ComponentLogic> _toRemove = new LinkedList<>();
+	private ComponentList<ComponentLogic> _components = new ComponentList<>();
+	private boolean _running;
 
 	public void addComponent(ComponentLogic logic)
 	{
-		if (_logicalComponents.contains(logic))
+		if (logic == null)
 			return;
 
-		_logicalComponents.add(logic);
+		if (_running)
+			_components.add(logic);
+		else
+			_components.addInstant(logic);
+
+		logic.init();
 	}
 
 	public void removeComponent(ComponentLogic logic)
 	{
-		if (_toRemove.contains(logic))
+		if (logic == null)
 			return;
 
-		_toRemove.add(logic);
+		if (_running)
+			_components.remove(logic);
+		else
+			_components.removeInstant(logic);
+
+		logic.init();
 	}
 
-	public void endFrame()
+	public void update()
 	{
-		for (ComponentLogic logic : _toRemove)
-			_logicalComponents.remove(logic);
-
-		_toRemove.clear();
+		try
+		{
+			_running = true;
+			for (ComponentLogic logic : _components)
+				logic.update();
+			_components.endFrame();
+		}
+		finally
+		{
+			_running = false;
+		}
 	}
 
-	public void updatePass()
+	public void updateFrame()
 	{
-		for (ComponentLogic logic : _logicalComponents)
-			logic.update();
+		try
+		{
+			_running = true;
+			for (ComponentLogic logic : _components)
+				logic.updateFrame();
+			_components.endFrame();
+		}
+		finally
+		{
+			_running = false;
+		}
 	}
 
-	public void updateFramePass()
+	public void dispose()
 	{
-		for (ComponentLogic logic : _logicalComponents)
-			logic.updateFrame();
+		try
+		{
+			_running = true;
+			for (ComponentLogic logic : _components)
+				logic.dispose();
+			_components.clearPending();
+		}
+		finally
+		{
+			_running = false;
+		}
 	}
 }

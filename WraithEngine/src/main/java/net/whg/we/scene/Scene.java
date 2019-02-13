@@ -47,13 +47,13 @@ public class Scene
 
 	public void update()
 	{
-		_logicPass.updatePass();
+		_logicPass.update();
 		_uiStack.update();
 	}
 
 	public void updateFrame()
 	{
-		_logicPass.updateFramePass();
+		_logicPass.updateFrame();
 		_uiStack.updateFrame();
 	}
 
@@ -64,5 +64,11 @@ public class Scene
 
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		_uiStack.render();
+	}
+
+	public void dispose()
+	{
+		_logicPass.dispose();
+		_uiStack.dispose();
 	}
 }
