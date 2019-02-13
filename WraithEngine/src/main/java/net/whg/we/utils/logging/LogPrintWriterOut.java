@@ -15,6 +15,12 @@ public class LogPrintWriterOut implements LogOutput
 	public void println(LogProperty property)
 	{
 		_out.println(property.toString());
+
+		String exception = property.getProperty("Exception");
+		if (exception != null)
+			_out.println(exception);
+
+		_out.flush();
 	}
 
 	public PrintWriter getPrintWriter()
