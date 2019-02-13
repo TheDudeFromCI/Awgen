@@ -103,4 +103,44 @@ public class GLVMesh implements VMesh
 	{
 		return _disposed;
 	}
+
+	@Override
+	public void rebuild(VertexData vertexData)
+	{
+		FloatBuffer vertexBuffer = BufferUtils.createFloatBuffer(vertexData.getDataArray().length);
+		vertexBuffer.put(vertexData.getDataArray());
+		vertexBuffer.flip();
+
+		ShortBuffer indexBuffer = BufferUtils.createShortBuffer(vertexData.getTriangles().length);
+		indexBuffer.put(vertexData.getTriangles());
+		indexBuffer.flip();
+
+		_indexCount = vertexData.getTriangles().length;
+
+		GL30.glBindVertexArray(_vaoId);
+
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, _vboId);
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertexBuffer, GL15.GL_STATIC_DRAW);
+
+		int stride = vertexData.getVertexByteSize();
+		int offset = 0;
+
+		ShaderAttributes attributes = vertexData.getAttributeSizes();
+		for (int i = 0; i < attributes.getCount(); i++)
+		{
+			GL20.glVertexAttribPointer(i, attributes.getAttributeSize(i), GL11.GL_FLOAT, false,
+					stride, offset);
+			GL20.glEnableVertexAttribArray(i);
+			offset += attributes.getAttributeSize(i) * 4;
+		}
+
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+
+		_indexId = GL15.glGenBuffers();
+		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, _indexId);
+		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indexBuffer, GL15.GL_STATIC_DRAW);
+		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		GL30.glBindVertexArray(0);
+	}
 }

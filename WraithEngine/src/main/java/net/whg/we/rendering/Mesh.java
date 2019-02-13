@@ -33,4 +33,9 @@ public class Mesh
 	{
 		return _meshName;
 	}
+
+	public void rebuild(VertexData vertexData)
+	{
+		_vMesh.rebuild(vertexData);
+	}
 }

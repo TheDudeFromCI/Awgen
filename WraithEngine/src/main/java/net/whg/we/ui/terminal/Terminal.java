@@ -8,18 +8,17 @@ import net.whg.we.resources.ResourceFetcher;
 import net.whg.we.ui.SimpleContainer;
 import net.whg.we.ui.UIImage;
 import net.whg.we.ui.UIUtils;
+import net.whg.we.ui.font.Font;
+import net.whg.we.ui.font.UIString;
 import net.whg.we.utils.Color;
-import net.whg.we.utils.logging.TextBuilder;
 
 public class Terminal extends SimpleContainer
 {
-	private TextBuilder _textBuilder;
 	private ResourceFetcher _fetcher;
 	private Mesh _imageMesh;
 
-	public Terminal(TextBuilder textBuilder, ResourceFetcher fetcher)
+	public Terminal(ResourceFetcher fetcher)
 	{
-		_textBuilder = textBuilder;
 		_fetcher = fetcher;
 		_imageMesh = new Mesh("UI Quad", UIUtils.defaultImageVertexData(), fetcher.getGraphics());
 	}
@@ -61,11 +60,19 @@ public class Terminal extends SimpleContainer
 		background.getTransform().setPosition(400f, 450f);
 		addComponent(background);
 
-		UIImage text = _textBuilder.buildTextImage("Line 1\nLine 2", 12f);
+		Font font = _fetcher.getFont(plugin, "ui/fonts/ubuntu.fnt");
+		Material textMat = _fetcher.getMaterial(plugin, "ui/fonts/ubuntu.material");
+		UIString text = new UIString(font, "Line 1\nLine 2", _fetcher.getGraphics(), textMat);
 		text.getTransform().setPosition(0f, 600f - 12f);
 		addComponent(text);
 
 		super.init();
+	}
+
+	@Override
+	public void updateFrame()
+	{
+		super.updateFrame();
 	}
 
 	@Override

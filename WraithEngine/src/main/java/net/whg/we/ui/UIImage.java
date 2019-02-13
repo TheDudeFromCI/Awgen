@@ -40,6 +40,9 @@ public class UIImage implements UIComponent
 	@Override
 	public void render()
 	{
+		if (_mesh == null || _material == null)
+			return;
+
 		_material.bind();
 		_material.setOrthoMVP(_transform.getFullMatrix());
 		_mesh.render();

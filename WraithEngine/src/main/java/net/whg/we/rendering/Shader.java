@@ -4,6 +4,7 @@ import java.nio.FloatBuffer;
 import java.util.HashMap;
 import org.joml.Vector4f;
 import net.whg.we.utils.Color;
+import net.whg.we.utils.logging.Log;
 
 public class Shader
 {
@@ -57,6 +58,8 @@ public class Shader
 		_disposed = true;
 		_shader.dispose();
 		_shader = null;
+
+		Log.tracef("Disposed shader '%s'.", _name);
 	}
 
 	public boolean hasUniform(String name)

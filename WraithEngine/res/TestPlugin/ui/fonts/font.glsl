@@ -22,10 +22,10 @@ in vec2 uv;
 
 out vec4 color;
 
-const float smoothing = 1.0/32.0;
 void main()
 {
-	float distance = texture(_font, uv).a;
-	float alpha = smoothstep(0.5 - 0, 0.5 + smoothing, distance);
-	color = vec4(1.0, 0.0, 0.0, alpha);
+	float alpha = texture(_font, uv).a;
+	alpha = smoothstep(0.2, 0.7, alpha);
+
+	color = vec4(1.0, 1.0, 1.0, alpha);
 }

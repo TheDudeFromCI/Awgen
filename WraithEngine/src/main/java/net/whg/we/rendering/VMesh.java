@@ -6,5 +6,7 @@ public interface VMesh
 
 	public void dispose();
 
+	public void rebuild(VertexData vertexData);
+
 	public boolean isDisposed();
 }

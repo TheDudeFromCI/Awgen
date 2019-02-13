@@ -5,7 +5,7 @@ import net.whg.we.utils.Color;
 public class TextureProperties
 {
 	private String _name;
-	private boolean _mipmapping = true;
+	private boolean _mipmapping = false;
 	private boolean _colorData = true;
 	private TextureSampleMode _sampleMode = TextureSampleMode.BILINEAR;
 	private GraphicsStreamingMode _streamMode = GraphicsStreamingMode.STATIC;

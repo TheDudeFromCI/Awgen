@@ -1,10 +1,8 @@
 package net.whg.we.test;
 
 import org.joml.Vector3f;
-import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.Graphics;
-import net.whg.we.rendering.Material;
 import net.whg.we.rendering.ScreenClearType;
 import net.whg.we.resources.ResourceFetcher;
 import net.whg.we.resources.ResourceManager;
@@ -12,14 +10,12 @@ import net.whg.we.scene.Collision;
 import net.whg.we.scene.Scene;
 import net.whg.we.scene.UpdateListener;
 import net.whg.we.scene.WindowedGameLoop;
-import net.whg.we.ui.font.Font;
 import net.whg.we.ui.terminal.Terminal;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.FirstPersonCamera;
 import net.whg.we.utils.Input;
 import net.whg.we.utils.Screen;
 import net.whg.we.utils.logging.Log;
-import net.whg.we.utils.logging.TextBuilder;
 
 public class TestScene implements UpdateListener
 {
@@ -50,35 +46,35 @@ public class TestScene implements UpdateListener
 			_scene = new Scene();
 
 			{
-				Plugin plugin = new Plugin()
-				{
-
-					@Override
-					public String getPluginName()
-					{
-						return "TestPlugin";
-					}
-
-					@Override
-					public void initPlugin()
-					{
-					}
-
-					@Override
-					public void enablePlugin()
-					{
-					}
-
-					@Override
-					public int getPriority()
-					{
-						return 0;
-					}
-
-				};
-
 				ResourceManager resourceManager = _gameLoop.getResourceManager();
 				ResourceFetcher fetch = new ResourceFetcher(resourceManager, graphics);
+
+				// Plugin plugin = new Plugin()
+				// {
+				//
+				// @Override
+				// public String getPluginName()
+				// {
+				// return "TestPlugin";
+				// }
+				//
+				// @Override
+				// public void initPlugin()
+				// {
+				// }
+				//
+				// @Override
+				// public void enablePlugin()
+				// {
+				// }
+				//
+				// @Override
+				// public int getPriority()
+				// {
+				// return 0;
+				// }
+				//
+				// };
 
 				// ModelResource terrain = (ModelResource) resourceManager.loadResource(plugin,
 				// "models/terrain.model");
@@ -94,14 +90,7 @@ public class TestScene implements UpdateListener
 				// go.addBehaviour(new MeshColliderBehaviour(
 				// terrain.getMeshResource(0).getVertexData(), model.getLocation()));
 
-				{
-					Font font = fetch.getFont(plugin, "ui/fonts/ubuntu.fnt");
-					Material mat = fetch.getMaterial(plugin, "ui/fonts/ubuntu.material");
-					TextBuilder textBuilder = new TextBuilder(mat, font, graphics,
-							resourceManager.getResourceDatabase());
-					Terminal terminal = new Terminal(textBuilder, fetch);
-					_scene.getUIStack().addComponent(terminal);
-				}
+				_scene.getUIStack().addComponent(new Terminal(fetch));
 			}
 
 			_camera = new Camera();
