@@ -1,6 +1,7 @@
 package net.whg.we.utils;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import org.lwjgl.glfw.GLFW;
 import net.whg.we.utils.logging.Log;
 
@@ -11,31 +12,23 @@ import net.whg.we.utils.logging.Log;
  */
 public class Input
 {
-	/**
-	 * The bit operator for the Shift key modifier.
-	 */
-	public static final int SHIFT_MODIFIER = 1;
-
-	/**
-	 * The bit operator for the Control key modifier.
-	 */
-	public static final int CONTROL_MODIFIER = 2;
-
-	/**
-	 * The bit operator for the Alt key modifier.
-	 */
-	public static final int ALT_MODIFIER = 4;
-
-	/**
-	 * The bit operator for the Super key modifier.
-	 */
-	public static final int SUPER_MODIFIER = 8;
+	public static final int NO_KEY = -1;
+	public static final int BACKSPACE_KEY = 0;
 
 	private static boolean[] _keys = new boolean[350];
 	private static boolean[] _keysLastFrame = new boolean[350];
 	private static HashMap<String, Integer> _keyMap;
 	private static float _mouseX, _mouseY;
 	private static float _lastMouseX, _lastMouseY;
+	private static LinkedList<TypedKey> _keysTyped = new LinkedList<>();
+	private static ObjectPool<TypedKey> _typedKeyPool = new ObjectPool<Input.TypedKey>()
+	{
+		@Override
+		protected TypedKey build()
+		{
+			return new TypedKey();
+		}
+	};
 
 	static
 	{
@@ -149,7 +142,7 @@ public class Input
 	 * @param pressed
 	 *            - True if the key was just changed, false otherwise.
 	 */
-	public static void setKeyPressed(int key, boolean pressed)
+	public static void setKeyPressed(int key, boolean pressed, int mods)
 	{
 		if (key < 0 || key >= 350)
 		{
@@ -159,6 +152,29 @@ public class Input
 
 		Log.tracef("Set key %d to state %s.", key, pressed);
 		_keys[key] = pressed;
+
+		if (key == GLFW.GLFW_KEY_BACKSPACE && pressed)
+			addTypedKey(0, mods, BACKSPACE_KEY);
+	}
+
+	public static void addTypedKey(int key, int modifiers)
+	{
+		addTypedKey(key, modifiers, NO_KEY);
+	}
+
+	public static void addTypedKey(int key, int modifiers, int extraKey)
+	{
+		TypedKey k = _typedKeyPool.get();
+
+		k.extraKey = extraKey;
+		k.shift = (modifiers & GLFW.GLFW_MOD_SHIFT) > 0;
+		k.control = (modifiers & GLFW.GLFW_MOD_CONTROL) > 0;
+		k.alt = (modifiers & GLFW.GLFW_MOD_ALT) > 0;
+		k.sup = (modifiers & GLFW.GLFW_MOD_SUPER) > 0;
+		k.key = (char) key;
+		Log.tracef("Typed key %d, with modifiers %d.", key, modifiers);
+
+		_keysTyped.add(k);
 	}
 
 	/**
@@ -221,6 +237,11 @@ public class Input
 		return !_keys[key] && _keysLastFrame[key];
 	}
 
+	public static LinkedList<TypedKey> getTypedKeys()
+	{
+		return _keysTyped;
+	}
+
 	/**
 	 * Checks if a key was just released on this frame.
 	 *
@@ -243,6 +264,12 @@ public class Input
 			_keysLastFrame[i] = _keys[i];
 		_lastMouseX = _mouseX;
 		_lastMouseY = _mouseY;
+
+		for (TypedKey k : _keysTyped)
+		{
+			_typedKeyPool.put(k);
+		}
+		_keysTyped.clear();
 	}
 
 	/**
@@ -317,5 +344,26 @@ public class Input
 	public static float getDeltaMouseY()
 	{
 		return _mouseY - _lastMouseY;
+	}
+
+	public static class TypedKey implements Poolable
+	{
+		public char key;
+		public boolean shift;
+		public boolean control;
+		public boolean alt;
+		public boolean sup;
+
+		public int extraKey;
+
+		@Override
+		public void init()
+		{
+		}
+
+		@Override
+		public void dispose()
+		{
+		}
 	}
 }

@@ -187,6 +187,12 @@ public class QueuedWindow
 			_listener.onKey(key, state, mods);
 	}
 
+	void onType(int key, int mods)
+	{
+		if (_listener != null)
+			_listener.onType(key, mods);
+	}
+
 	void onMouseMove(float mouseX, float mouseY)
 	{
 		if (_listener != null)

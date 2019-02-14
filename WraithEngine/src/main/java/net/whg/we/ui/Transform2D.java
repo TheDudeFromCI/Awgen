@@ -7,8 +7,8 @@ import net.whg.we.utils.Transform;
 public class Transform2D implements Transform
 {
 	private Transform _parent;
-	private Vector2f _position = new Vector2f();
-	private Vector2f _size = new Vector2f();
+	private Vector2f _position = new Vector2f(0f, 0f);
+	private Vector2f _size = new Vector2f(1f, 1f);
 	private float _rotation;
 	private Matrix4f _localMatrix = new Matrix4f();
 	private Matrix4f _fullMatrix = new Matrix4f();

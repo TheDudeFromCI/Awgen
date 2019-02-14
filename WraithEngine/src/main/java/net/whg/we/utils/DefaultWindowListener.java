@@ -18,14 +18,21 @@ public class DefaultWindowListener implements WindowListener
 	public void onKey(int key, KeyState state, int mods)
 	{
 		if (state == KeyState.PRESSED)
-			Input.setKeyPressed(key, true);
+			Input.setKeyPressed(key, true, mods);
 		else if (state == KeyState.RELEASED)
-			Input.setKeyPressed(key, false);
+			Input.setKeyPressed(key, false, mods);
+
 	}
 
 	@Override
 	public void onMouseMoved(float mouseX, float mouseY)
 	{
 		Input.setMousePosition(mouseX, mouseY);
+	}
+
+	@Override
+	public void onType(int key, int mods)
+	{
+		Input.addTypedKey(key, mods);
 	}
 }

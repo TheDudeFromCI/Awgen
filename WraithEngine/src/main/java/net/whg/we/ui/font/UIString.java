@@ -54,4 +54,14 @@ public class UIString extends UIImage
 		getMesh().dispose();
 		super.dispose();
 	}
+
+	public Font getFont()
+	{
+		return _font;
+	}
+
+	public float getMonoWidth()
+	{
+		return _font.getGlyphs()[0].getWidth() * _size;
+	}
 }

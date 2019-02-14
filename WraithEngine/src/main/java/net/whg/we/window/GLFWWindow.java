@@ -173,6 +173,17 @@ public class GLFWWindow implements Window
 							_mouseX = (float) mouseX;
 							_mouseY = (float) mouseY;
 						});
+
+				Log.trace("Creating text input callback.");
+				GLFW.glfwSetCharModsCallback(_windowId, (long window, int key, int mods) ->
+				{
+					if (_window != null)
+						_window.addEvent(() ->
+						{
+							_window.onType(key, mods);
+						});
+				});
+
 				Log.unindent();
 			}
 

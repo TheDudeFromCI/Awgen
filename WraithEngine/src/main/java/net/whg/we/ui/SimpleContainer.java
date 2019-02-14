@@ -112,6 +112,8 @@ public abstract class SimpleContainer implements UIContainer
 			_components.add(component);
 		else
 			_components.addInstant(component);
+
+		component.getTransform().setParent(getTransform());
 	}
 
 	@Override
@@ -124,6 +126,8 @@ public abstract class SimpleContainer implements UIContainer
 			_components.remove(component);
 		else
 			_components.removeInstant(component);
+
+		component.getTransform().setParent(null);
 		component.dispose();
 	}
 

@@ -5,10 +5,11 @@ import net.whg.we.rendering.Mesh;
 
 public class UIImage implements UIComponent
 {
-	private boolean _disposed;
+	private Transform2D _transform = new Transform2D();
 	private Mesh _mesh;
 	private Material _material;
-	private Transform2D _transform = new Transform2D();
+	private boolean _visible = true;
+	private boolean _disposed;
 
 	public UIImage(Mesh mesh, Material material)
 	{
@@ -41,6 +42,8 @@ public class UIImage implements UIComponent
 	public void render()
 	{
 		if (_mesh == null || _material == null)
+			return;
+		if (!_visible)
 			return;
 
 		_material.bind();
@@ -81,5 +84,15 @@ public class UIImage implements UIComponent
 	public void setMaterial(Material material)
 	{
 		_material = material;
+	}
+
+	public boolean isVisible()
+	{
+		return _visible;
+	}
+
+	public void setVisible(boolean visible)
+	{
+		_visible = visible;
 	}
 }

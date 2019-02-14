@@ -6,5 +6,7 @@ public interface WindowListener
 
 	public void onKey(int key, KeyState action, int mods);
 
+	public void onType(int key, int mods);
+
 	public void onMouseMoved(float mouseX, float mouseY);
 }
