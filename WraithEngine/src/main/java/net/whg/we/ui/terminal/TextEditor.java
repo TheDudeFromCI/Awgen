@@ -21,13 +21,6 @@ public class TextEditor
 
 	public void updateFrame()
 	{
-		_cursor.setVisible(Time.time() % 1f < 0.5f);
-
-		Vector2f textPos = _text.getTransform().getPosition();
-		Vector2f cursorPos = _cursor.getTransform().getPosition();
-		float charWidth = _text.getMonoWidth();
-		_cursor.getTransform().setPosition(textPos.x + _cursorPos * charWidth, cursorPos.y);
-
 		String text = _text.getText();
 		for (TypedKey key : Input.getTypedKeys())
 		{
@@ -46,7 +39,32 @@ public class TextEditor
 					_cursorPos--;
 				}
 			}
+			else if (key.extraKey == Input.LEFT_KEY)
+			{
+				if (_cursorPos > 0)
+					_cursorPos--;
+			}
+			else if (key.extraKey == Input.RIGHT_KEY)
+			{
+				if (_cursorPos < text.length())
+					_cursorPos++;
+			}
+			else if (key.extraKey == Input.HOME_KEY)
+			{
+				_cursorPos = 0;
+			}
+			else if (key.extraKey == Input.END_KEY)
+			{
+				_cursorPos = text.length();
+			}
 		}
 		_text.setText(text);
+
+		_cursor.setVisible(Time.time() % 0.666f < 0.333f);
+
+		Vector2f textPos = _text.getTransform().getPosition();
+		Vector2f cursorPos = _cursor.getTransform().getPosition();
+		float charWidth = _text.getMonoWidth();
+		_cursor.getTransform().setPosition(textPos.x + _cursorPos * charWidth, cursorPos.y);
 	}
 }

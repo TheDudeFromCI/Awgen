@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import org.lwjgl.glfw.GLFW;
 import net.whg.we.utils.logging.Log;
+import net.whg.we.window.KeyState;
 
 /**
  * Represents the current input states for mouse and keyboard.
@@ -14,6 +15,10 @@ public class Input
 {
 	public static final int NO_KEY = -1;
 	public static final int BACKSPACE_KEY = 0;
+	public static final int LEFT_KEY = 1;
+	public static final int RIGHT_KEY = 2;
+	public static final int HOME_KEY = 3;
+	public static final int END_KEY = 4;
 
 	private static boolean[] _keys = new boolean[350];
 	private static boolean[] _keysLastFrame = new boolean[350];
@@ -142,7 +147,7 @@ public class Input
 	 * @param pressed
 	 *            - True if the key was just changed, false otherwise.
 	 */
-	public static void setKeyPressed(int key, boolean pressed, int mods)
+	public static void setKeyPressed(int key, KeyState state, int mods)
 	{
 		if (key < 0 || key >= 350)
 		{
@@ -150,11 +155,30 @@ public class Input
 			return;
 		}
 
-		Log.tracef("Set key %d to state %s.", key, pressed);
-		_keys[key] = pressed;
+		_keys[key] = state == KeyState.PRESSED;
+		Log.tracef("Set key %d to state %s.", key, _keys[key]);
 
-		if (key == GLFW.GLFW_KEY_BACKSPACE && pressed)
-			addTypedKey(0, mods, BACKSPACE_KEY);
+		if (state == KeyState.PRESSED || state == KeyState.REPEATED)
+		{
+			switch (key)
+			{
+				case GLFW.GLFW_KEY_BACKSPACE:
+					addTypedKey(0, mods, BACKSPACE_KEY);
+					break;
+				case GLFW.GLFW_KEY_LEFT:
+					addTypedKey(0, mods, LEFT_KEY);
+					break;
+				case GLFW.GLFW_KEY_RIGHT:
+					addTypedKey(0, mods, RIGHT_KEY);
+					break;
+				case GLFW.GLFW_KEY_HOME:
+					addTypedKey(0, mods, HOME_KEY);
+					break;
+				case GLFW.GLFW_KEY_END:
+					addTypedKey(0, mods, END_KEY);
+					break;
+			}
+		}
 	}
 
 	public static void addTypedKey(int key, int modifiers)
