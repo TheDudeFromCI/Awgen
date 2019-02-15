@@ -69,16 +69,13 @@ public class Terminal extends SimpleContainer
 			bar.getTransform().setSize(800f, 16f);
 			bar.getTransform().setPosition(400f, 0f);
 
-			UIImage cursor = new UIImage(_imageMesh, cursorMat);
-			cursor.getTransform().setSize(1f, 12f);
-			cursor.getTransform().setPosition(2f, 0f);
-
 			Font font = _fetcher.getFont(plugin, "ui/fonts/ubuntu.fnt");
 			Material textMat = _fetcher.getMaterial(plugin, "ui/fonts/ubuntu.material");
-			UIString string = new UIString(font, "", _fetcher.getGraphics(), textMat);
+			UIString string =
+					new UIString(font, "", _fetcher.getGraphics(), textMat, _imageMesh, cursorMat);
 			string.getTransform().setPosition(2f, -6f);
 
-			InputBar inputBar = new InputBar(bar, string, cursor);
+			InputBar inputBar = new InputBar(bar, string);
 			inputBar.getTransform().setPosition(0f, 308f);
 			addComponent(inputBar);
 		}

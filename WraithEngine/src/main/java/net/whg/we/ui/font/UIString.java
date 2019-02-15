@@ -11,8 +11,10 @@ public class UIString extends UIImage
 	private Font _font;
 	private String _text;
 	private float _size = 12f;
+	private UICursor _cursor;
 
-	public UIString(Font font, String text, Graphics graphics, Material material)
+	public UIString(Font font, String text, Graphics graphics, Material material, Mesh quadMesh,
+			Material cursorMat)
 	{
 		super(new Mesh("TextMesh", UIUtils.textVertexData(font, text), graphics), material);
 
@@ -20,6 +22,9 @@ public class UIString extends UIImage
 		_text = text;
 
 		getTransform().setSize(_size, _size);
+
+		_cursor = new UICursor(quadMesh, cursorMat, this);
+		_cursor.getTransform().setParent(getTransform());
 	}
 
 	public String getText()
@@ -35,6 +40,7 @@ public class UIString extends UIImage
 		_text = text;
 
 		getMesh().rebuild(UIUtils.textVertexData(_font, text));
+		_cursor.updateCaretPos();
 	}
 
 	public float getFontSize()
@@ -55,6 +61,13 @@ public class UIString extends UIImage
 		super.dispose();
 	}
 
+	@Override
+	public void render()
+	{
+		super.render();
+		_cursor.render();
+	}
+
 	public Font getFont()
 	{
 		return _font;
@@ -63,5 +76,10 @@ public class UIString extends UIImage
 	public float getMonoWidth()
 	{
 		return _font.getGlyphs()[0].getWidth() * _size;
+	}
+
+	public Cursor getCursor()
+	{
+		return _cursor;
 	}
 }

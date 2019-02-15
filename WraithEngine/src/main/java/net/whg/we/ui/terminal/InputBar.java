@@ -1,5 +1,6 @@
 package net.whg.we.ui.terminal;
 
+import net.whg.we.ui.TextEditor;
 import net.whg.we.ui.Transform2D;
 import net.whg.we.ui.UIComponent;
 import net.whg.we.ui.UIImage;
@@ -9,21 +10,18 @@ public class InputBar implements UIComponent
 {
 	private Transform2D _transform = new Transform2D();
 	private UIImage _entryBar;
-	private UIImage _cursor;
 	private UIString _text;
 	private TextEditor _textEditor;
 	private boolean _disposed;
 
-	public InputBar(UIImage entryBar, UIString text, UIImage cursor)
+	public InputBar(UIImage entryBar, UIString text)
 	{
 		_entryBar = entryBar;
 		_text = text;
-		_cursor = cursor;
 
-		_textEditor = new TextEditor(_text, cursor);
+		_textEditor = new TextEditor(_text);
 
 		_entryBar.getTransform().setParent(_transform);
-		_cursor.getTransform().setParent(_transform);
 		_text.getTransform().setParent(_transform);
 	}
 
@@ -54,7 +52,6 @@ public class InputBar implements UIComponent
 	{
 		_entryBar.render();
 		_text.render();
-		_cursor.render();
 	}
 
 	@Override
