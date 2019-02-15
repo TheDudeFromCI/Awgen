@@ -11,4 +11,6 @@ public interface Cursor
 	void setCaretPos(int x, int y);
 
 	void setInsertMode(boolean insert);
+
+	boolean getInsertMode();
 }

@@ -78,8 +78,10 @@ public class UIString extends UIImage
 		return _font;
 	}
 
-	public float getMonoWidth()
+	public float getMonoWidth(boolean normalized)
 	{
+		if (normalized)
+			return _font.getGlyphs()[0].getWidth();
 		return _font.getGlyphs()[0].getWidth() * _size;
 	}
 

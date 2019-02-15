@@ -23,6 +23,7 @@ public class Input
 	public static final int DOWN_KEY = 6;
 	public static final int ENTER_KEY = 7;
 	public static final int DELETE_KEY = 8;
+	public static final int INSERT_KEY = 9;
 
 	private static boolean[] _keys = new boolean[350];
 	private static boolean[] _keysLastFrame = new boolean[350];
@@ -192,6 +193,9 @@ public class Input
 					break;
 				case GLFW.GLFW_KEY_DELETE:
 					addTypedKey(0, mods, DELETE_KEY);
+					break;
+				case GLFW.GLFW_KEY_INSERT:
+					addTypedKey(0, mods, INSERT_KEY);
 					break;
 			}
 		}

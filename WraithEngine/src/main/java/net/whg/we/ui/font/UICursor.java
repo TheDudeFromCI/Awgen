@@ -50,9 +50,11 @@ public class UICursor extends UIImage implements Cursor
 		_insert = insert;
 
 		if (_insert)
-			getTransform().setSize(_uiString.getMonoWidth(), 1f);
+			getTransform().setSize(_uiString.getMonoWidth(true), 1 / 12f);
 		else
 			getTransform().setSize(1f / 12f, 1f);
+
+		updateCaretPos();
 	}
 
 	public void updateCaretPos()
@@ -90,8 +92,19 @@ public class UICursor extends UIImage implements Cursor
 		}
 
 		if (_insert)
-			x += _uiString.getMonoWidth() / 2f;
+		{
+			x += _uiString.getMonoWidth(true) / 2f;
+			y = y - 0.5f + 1f / 24f;
+		}
+		else
+			x -= 1f / 24f;
 
 		getTransform().setPosition(x, y);
+	}
+
+	@Override
+	public boolean getInsertMode()
+	{
+		return _insert;
 	}
 }

@@ -114,6 +114,8 @@ public class TextEditor
 
 	public void updateFrame()
 	{
+		boolean insertMode = _cursor.getInsertMode();
+
 		boolean changedText = false;
 		for (TypedKey key : Input.getTypedKeys())
 		{
@@ -122,12 +124,21 @@ public class TextEditor
 				if (_textOut.getFont().getGlyph(key.key) == null)
 					continue;
 
-				if (_selStart != -1)
-					deleteSelection();
+				if (insertMode && _selStart == -1 && _caretX < _lines[_caretY].length())
+				{
+					_lines[_caretY] = _lines[_caretY].substring(0, _caretX) + key.key
+							+ _lines[_caretY].substring(_caretX + 1, _lines[_caretY].length());
+					_caretX++;
+				}
+				else
+				{
+					if (_selStart != -1)
+						deleteSelection();
 
-				_lines[_caretY] = _lines[_caretY].substring(0, _caretX) + key.key
-						+ _lines[_caretY].substring(_caretX, _lines[_caretY].length());
-				_caretX++;
+					_lines[_caretY] = _lines[_caretY].substring(0, _caretX) + key.key
+							+ _lines[_caretY].substring(_caretX, _lines[_caretY].length());
+					_caretX++;
+				}
 
 				changedText = true;
 			}
@@ -354,6 +365,8 @@ public class TextEditor
 
 				changedText = true;
 			}
+			else if (key.extraKey == Input.INSERT_KEY)
+				_cursor.setInsertMode(!insertMode);
 		}
 
 		if (changedText)
