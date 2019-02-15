@@ -73,7 +73,7 @@ public class FontLoader implements FileLoader
 					for (int i = 0; i < parts.length; i++)
 					{
 						if (parts[i].startsWith("count="))
-							glyphs = new Glyph[Integer.parseInt(parts[i].substring(6))];
+							glyphs = new Glyph[Integer.parseInt(parts[i].substring(6)) + 1];
 					}
 				}
 				else if (line.startsWith("char "))
@@ -121,6 +121,23 @@ public class FontLoader implements FileLoader
 					offset.y = 1f - (offset.y / lineHeight + size.y);
 
 					glyphs[glyphIndex++] = new Glyph(c, pos, size, offset, width);
+				}
+			}
+
+			// Add tab glyph
+			{
+				Glyph space = null;
+				for (int i = 0; i < glyphs.length; i++)
+					if (glyphs[i] != null && glyphs[i].getCharacter() == ' ')
+					{
+						space = glyphs[i];
+						break;
+					}
+
+				if (space != null)
+				{
+					glyphs[glyphIndex++] = new Glyph('\t', new Vector4f(), new Vector2f(),
+							new Vector2f(), space.getWidth() * 4);
 				}
 			}
 
