@@ -35,6 +35,9 @@ public class UICursor extends UIImage implements Cursor
 	@Override
 	public void setCaretPos(int x, int y)
 	{
+		if (_caretX == x && _caretY == y)
+			return;
+
 		_caretX = x;
 		_caretY = y;
 
@@ -47,7 +50,7 @@ public class UICursor extends UIImage implements Cursor
 		_insert = insert;
 
 		if (_insert)
-			getTransform().setSize(0.5f, 1f);
+			getTransform().setSize(_uiString.getMonoWidth(), 1f);
 		else
 			getTransform().setSize(1f / 12f, 1f);
 	}
@@ -85,6 +88,9 @@ public class UICursor extends UIImage implements Cursor
 			lineX++;
 			x += g.getWidth();
 		}
+
+		if (_insert)
+			x += _uiString.getMonoWidth() / 2f;
 
 		getTransform().setPosition(x, y);
 	}
