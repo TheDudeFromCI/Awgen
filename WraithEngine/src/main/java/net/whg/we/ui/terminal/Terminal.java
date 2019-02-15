@@ -56,6 +56,9 @@ public class Terminal extends SimpleContainer
 		Material bgMat = new Material(shader, "");
 		bgMat.setColor(new Color(0f, 0f, 0f, 0.5f));
 
+		Material inputMat = new Material(shader, "");
+		inputMat.setColor(new Color(0f, 0f, 0f, 0.75f));
+
 		Material cursorMat = new Material(shader, "");
 		cursorMat.setColor(new Color(1f));
 
@@ -68,18 +71,18 @@ public class Terminal extends SimpleContainer
 		addComponent(background);
 
 		{
-			UIImage bar = new UIImage(_imageMesh, bgMat);
+			UIImage bar = new UIImage(_imageMesh, inputMat);
 			bar.getTransform().setSize(800f, 16f);
 			bar.getTransform().setPosition(400f, 0f);
 
-			Font font = _fetcher.getFont(plugin, "ui/fonts/ubuntu.fnt");
-			Material textMat = _fetcher.getMaterial(plugin, "ui/fonts/ubuntu.material");
+			Font font = _fetcher.getFont(plugin, "ui/fonts/ink_free.fnt");
+			Material textMat = _fetcher.getMaterial(plugin, "ui/fonts/ink_free.material");
 			UIString string = new UIString(font, "", _fetcher.getGraphics(), textMat, _imageMesh,
 					cursorMat, selMat);
-			string.getTransform().setPosition(2f, -6f);
+			string.getTransform().setPosition(2f, -14f);
 
 			InputBar inputBar = new InputBar(bar, string);
-			inputBar.getTransform().setPosition(0f, 308f);
+			inputBar.getTransform().setPosition(0f, 300f);
 			addComponent(inputBar);
 		}
 

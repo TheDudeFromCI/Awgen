@@ -20,6 +20,7 @@ public class InputBar implements UIComponent
 		_text = text;
 
 		_textEditor = new TextEditor(_text);
+		_textEditor.setSingleLine(false);
 
 		_entryBar.getTransform().setParent(_transform);
 		_text.getTransform().setParent(_transform);
@@ -45,6 +46,11 @@ public class InputBar implements UIComponent
 	public void updateFrame()
 	{
 		_textEditor.updateFrame();
+
+		int lineCount = _textEditor.getLineCount();
+		float height = lineCount * 12f + 4f;
+		_entryBar.getTransform().setSize(800f, height);
+		_entryBar.getTransform().setPosition(400f, height / -2f);
 	}
 
 	@Override

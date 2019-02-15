@@ -18,6 +18,7 @@ public class TextEditor
 	private int _selStart = -1;
 	private int _selOrigin = -1;
 	private int _selEnd = -1;
+	private boolean _singleLine;
 
 	public TextEditor(UIString textOut)
 	{
@@ -32,6 +33,16 @@ public class TextEditor
 	private int caretIndex()
 	{
 		return caretIndex(_caretX, _caretY);
+	}
+
+	public void setSingleLine(boolean singleLine)
+	{
+		_singleLine = singleLine;
+	}
+
+	public boolean getSingleLine()
+	{
+		return _singleLine;
 	}
 
 	private int caretIndex(int x, int y)
@@ -339,7 +350,7 @@ public class TextEditor
 				else
 					_selStart = _selEnd = _selOrigin = -1;
 			}
-			else if (key.extraKey == Input.ENTER_KEY)
+			else if (key.extraKey == Input.ENTER_KEY && !_singleLine)
 			{
 				if (_selStart != -1)
 					deleteSelection();
@@ -376,5 +387,10 @@ public class TextEditor
 		_sel.setSelection(_selStart, _selEnd);
 
 		_cursor.setVisible(Time.time() % 0.666f < 0.333f);
+	}
+
+	public int getLineCount()
+	{
+		return _lines.length;
 	}
 }
