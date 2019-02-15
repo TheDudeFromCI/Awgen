@@ -16,7 +16,7 @@ public class UICursor extends UIImage implements Cursor
 		super(mesh, material);
 		_uiString = uiString;
 
-		getTransform().setPosition(0f, 0f);
+		getTransform().setPosition(0f, 0.5f);
 		getTransform().setSize(1f / 12f, 1f);
 	}
 
@@ -70,6 +70,7 @@ public class UICursor extends UIImage implements Cursor
 				if (lineY == _caretY)
 					break;
 
+				lineX = 0;
 				lineY++;
 
 				x = 0f;

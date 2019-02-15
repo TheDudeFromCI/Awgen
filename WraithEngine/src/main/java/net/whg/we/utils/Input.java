@@ -19,6 +19,10 @@ public class Input
 	public static final int RIGHT_KEY = 2;
 	public static final int HOME_KEY = 3;
 	public static final int END_KEY = 4;
+	public static final int UP_KEY = 5;
+	public static final int DOWN_KEY = 6;
+	public static final int ENTER_KEY = 7;
+	public static final int DELETE_KEY = 8;
 
 	private static boolean[] _keys = new boolean[350];
 	private static boolean[] _keysLastFrame = new boolean[350];
@@ -176,6 +180,18 @@ public class Input
 					break;
 				case GLFW.GLFW_KEY_END:
 					addTypedKey(0, mods, END_KEY);
+					break;
+				case GLFW.GLFW_KEY_UP:
+					addTypedKey(0, mods, UP_KEY);
+					break;
+				case GLFW.GLFW_KEY_DOWN:
+					addTypedKey(0, mods, DOWN_KEY);
+					break;
+				case GLFW.GLFW_KEY_ENTER:
+					addTypedKey(0, mods, ENTER_KEY);
+					break;
+				case GLFW.GLFW_KEY_DELETE:
+					addTypedKey(0, mods, DELETE_KEY);
 					break;
 			}
 		}

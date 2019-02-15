@@ -40,6 +40,7 @@ public class FontLoader implements FileLoader
 
 			int glyphIndex = 0;
 			String line;
+
 			while ((line = in.readLine()) != null)
 			{
 				if (line.startsWith("info "))
@@ -77,7 +78,7 @@ public class FontLoader implements FileLoader
 				}
 				else if (line.startsWith("char "))
 				{
-					char c = ' ';
+					char c = '\n';
 					Vector4f pos = new Vector4f();
 					Vector2f size = new Vector2f();
 					Vector2f offset = new Vector2f();
@@ -111,6 +112,9 @@ public class FontLoader implements FileLoader
 							width = Integer.parseInt(parts[i].substring(9)) / lineHeight;
 					}
 
+					if (c == '\n')
+						continue;
+
 					size.x = pos.z * imageWidth / lineHeight;
 					size.y = pos.w * imageHeight / lineHeight;
 					offset.x /= lineHeight;
@@ -118,6 +122,16 @@ public class FontLoader implements FileLoader
 
 					glyphs[glyphIndex++] = new Glyph(c, pos, size, offset, width);
 				}
+			}
+
+			if (glyphIndex < glyphs.length)
+			{
+				Glyph[] g = new Glyph[glyphIndex];
+
+				for (int i = 0; i < glyphIndex; i++)
+					g[i] = glyphs[i];
+
+				glyphs = g;
 			}
 
 			return new FontResource(resourceFile, fontName, new Font(glyphs));

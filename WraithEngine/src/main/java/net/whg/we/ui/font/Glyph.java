@@ -13,6 +13,9 @@ public class Glyph
 
 	public Glyph(char c, Vector4f position, Vector2f size, Vector2f offset, float width)
 	{
+		if (c == '\n')
+			throw new IllegalArgumentException("Cannot assign a Glyph for new line characters!");
+
 		_c = c;
 		_position = position;
 		_size = size;
