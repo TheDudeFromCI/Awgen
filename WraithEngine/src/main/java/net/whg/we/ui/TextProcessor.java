@@ -1,0 +1,174 @@
+package net.whg.we.ui;
+
+public class TextProcessor
+{
+	private String[] _lines;
+	private StringBuilder _sb = new StringBuilder();
+
+	public TextProcessor()
+	{
+		_lines = new String[1];
+		_lines[0] = "";
+	}
+
+	public TextProcessor(String text)
+	{
+		set(text);
+	}
+
+	public void set(String s)
+	{
+		if (s == null)
+			s = "";
+
+		int lineCount = 1;
+		for (int i = 0; i < s.length(); i++)
+			if (s.charAt(i) == '\n')
+				lineCount++;
+
+		String[] lines = new String[lineCount];
+		for (int i = 0; i < lineCount; i++)
+			lines[i] = "";
+
+		int lineIndex = 0;
+		for (int i = 0; i < s.length(); i++)
+		{
+
+			if (s.charAt(i) == '\n')
+			{
+				lineIndex++;
+				continue;
+			}
+
+			lines[lineIndex] += s.charAt(i);
+		}
+
+		_lines = lines;
+	}
+
+	public void insert(int line, int position, String s)
+	{
+		if (line < 0 || line >= _lines.length)
+			throw new ArrayIndexOutOfBoundsException(line);
+		if (position < 0 || position > _lines[line].length())
+			throw new ArrayIndexOutOfBoundsException(position);
+
+		_lines[line] = _lines[line].substring(0, position) + s
+				+ _lines[line].substring(position, _lines[line].length());
+
+		wrapNewLineCharacters(line);
+	}
+
+	private void wrapNewLineCharacters(int line)
+	{
+		int newLineIndex;
+		while ((newLineIndex = _lines[line].indexOf('\n')) != -1)
+		{
+			String leftOver = _lines[line].substring(newLineIndex + 1, _lines[line].length());
+			_lines[line] = _lines[line].substring(0, newLineIndex);
+
+			insertNewLineAt(++line);
+			_lines[line] = leftOver;
+		}
+	}
+
+	public void insertNewLineAt(int line)
+	{
+		String[] lines = new String[_lines.length + 1];
+
+		int j = 0;
+		for (int i = 0; i < lines.length; i++)
+		{
+			if (i == line)
+			{
+				lines[i] = "";
+				continue;
+			}
+			lines[i] = _lines[j++];
+		}
+
+		_lines = lines;
+	}
+
+	public void append(int line, String s)
+	{
+		if (s == null)
+			return;
+
+		_lines[line] += s;
+
+		wrapNewLineCharacters(line);
+	}
+
+	public void delete(int line, int position, int count)
+	{
+		int toRemove = position + Math.min(count, _lines[line].length() - position);
+		_lines[line] = _lines[line].substring(0, position)
+				+ _lines[line].substring(toRemove, _lines[line].length());
+	}
+
+	public void deleteLine(int line)
+	{
+		if (line < 0 || line >= _lines.length)
+			throw new ArrayIndexOutOfBoundsException(line);
+
+		if (_lines.length == 1)
+		{
+			_lines[0] = "";
+			return;
+		}
+
+		String[] lines = new String[_lines.length - 1];
+
+		int j = 0;
+		for (int i = 0; i < _lines.length; i++)
+		{
+			if (i == line)
+				continue;
+			lines[j++] = _lines[i];
+		}
+
+		_lines = lines;
+	}
+
+	public int getLineCount()
+	{
+		return _lines.length;
+	}
+
+	public String getLine(int index)
+	{
+		return _lines[index];
+	}
+
+	public int getLineLength(int line)
+	{
+		return _lines[line].length();
+	}
+
+	public void appendNewLine(int line, String text)
+	{
+		insertNewLineAt(line);
+		append(line, text);
+	}
+
+	public void setLine(int line, String text)
+	{
+		_lines[line] = text;
+	}
+
+	@Override
+	public String toString()
+	{
+		_sb.setLength(0);
+
+		for (int i = 0; i < _lines.length; i++)
+		{
+			if (i > 0)
+				_sb.append('\n');
+			_sb.append(_lines[i]);
+		}
+
+		return _sb.toString();
+	}
+}
