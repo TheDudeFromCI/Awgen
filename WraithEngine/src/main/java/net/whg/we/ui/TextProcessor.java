@@ -102,9 +102,58 @@ public class TextProcessor
 
 	public void delete(int line, int position, int count)
 	{
+		if (line < 0 || line >= _lines.length)
+			throw new ArrayIndexOutOfBoundsException(line);
+		if (position < 0)
+			throw new ArrayIndexOutOfBoundsException(position);
+		if (count <= 0 || position >= _lines[line].length())
+			return;
+
 		int toRemove = position + Math.min(count, _lines[line].length() - position);
 		_lines[line] = _lines[line].substring(0, position)
 				+ _lines[line].substring(toRemove, _lines[line].length());
+	}
+
+	public int caretPosition(int line, int position)
+	{
+		if (line < 0 || line >= _lines.length)
+			throw new ArrayIndexOutOfBoundsException(line);
+		if (position < 0)
+			throw new ArrayIndexOutOfBoundsException(position);
+
+		if (position > _lines[line].length())
+			position = _lines[line].length();
+
+		int c = position;
+		for (int i = 0; i < line; i++)
+			c += _lines[i].length() + 1;
+
+		return c;
+	}
+
+	public void deleteInlcudeLines(int line, int position, int count)
+	{
+		if (line < 0 || line >= _lines.length)
+			throw new ArrayIndexOutOfBoundsException(line);
+		if (position < 0)
+			throw new ArrayIndexOutOfBoundsException(position);
+		if (count <= 0)
+			return;
+
+		// Small optimization for same line deletions.
+		if (position + count < _lines[line].length())
+		{
+			delete(line, position, count);
+			return;
+		}
+
+		String s = toString();
+		int caret = caretPosition(line, position);
+
+		int toRemove = caret + Math.min(count, s.length() - caret);
+		s = s.substring(0, caret) + s.substring(toRemove, s.length());
+
+		set(s);
 	}
 
 	public void deleteLine(int line)

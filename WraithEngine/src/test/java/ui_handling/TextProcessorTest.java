@@ -117,12 +117,49 @@ public class TextProcessorTest
 	}
 
 	@Test
+	public void delete_startPastEnd()
+	{
+		TextProcessor text = new TextProcessor("SomeText");
+		text.delete(0, 10, 4);
+
+		Assert.assertEquals("SomeText", text.getLine(0));
+	}
+
+	@Test
 	public void delete_tooFar()
 	{
 		TextProcessor text = new TextProcessor("SomeText");
 		text.delete(0, 4, 50);
 
 		Assert.assertEquals("Some", text.getLine(0));
+	}
+
+	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	public void delete_NegativePosition()
+	{
+		TextProcessor text = new TextProcessor("SomeText");
+		text.delete(0, -1, 2);
+	}
+
+	@Test
+	public void delete_NegativeCount()
+	{
+		TextProcessor text = new TextProcessor("SomeText");
+		text.delete(0, 0, -2);
+	}
+
+	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	public void delete_NegativeLine()
+	{
+		TextProcessor text = new TextProcessor("SomeText");
+		text.delete(-1, 0, 1);
+	}
+
+	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	public void delete_OutOfBoundsLine()
+	{
+		TextProcessor text = new TextProcessor("SomeText");
+		text.delete(1, 0, 1);
 	}
 
 	@Test
@@ -310,5 +347,94 @@ public class TextProcessorTest
 		text.appendNewLine(1, "B");
 
 		Assert.assertEquals("A\nB\nC", text.toString());
+	}
+
+	@Test
+	public void caretPosition()
+	{
+		TextProcessor text = new TextProcessor("ABC\n1234\n\n\nCatDog");
+
+		Assert.assertEquals(0, text.caretPosition(0, 0));
+		Assert.assertEquals(7, text.caretPosition(1, 3));
+		Assert.assertEquals(14, text.caretPosition(4, 3));
+		Assert.assertEquals(3, text.caretPosition(0, 3));
+		Assert.assertEquals(3, text.caretPosition(0, 10));
+	}
+
+	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	public void caretPosition_OutofBounds1()
+	{
+		TextProcessor text = new TextProcessor("ABC\n1234\n\n\nCatDog");
+		text.caretPosition(-1, 0);
+	}
+
+	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	public void caretPosition_OutofBounds2()
+	{
+		TextProcessor text = new TextProcessor("ABC\n1234\n\n\nCatDog");
+		text.caretPosition(10, 0);
+	}
+
+	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	public void caretPosition_OutofBounds3()
+	{
+		TextProcessor text = new TextProcessor("ABC\n1234\n\n\nCatDog");
+		text.caretPosition(0, -1);
+	}
+
+	@Test
+	public void deleteIncludeLines()
+	{
+		TextProcessor text = new TextProcessor();
+
+		text.set("ABC\n1234\n\n\nCatDog");
+		text.deleteInlcudeLines(0, 0, 1);
+		Assert.assertEquals("BC\n1234\n\n\nCatDog", text.toString());
+
+		text.set("ABC\n1234\n\n\nCatDog");
+		text.deleteInlcudeLines(0, 0, 3);
+		Assert.assertEquals("\n1234\n\n\nCatDog", text.toString());
+
+		text.set("ABC\n1234\n\n\nCatDog");
+		text.deleteInlcudeLines(0, 2, 5);
+		Assert.assertEquals("AB4\n\n\nCatDog", text.toString());
+
+		text.set("ABC\n1234\n\n\nCatDog");
+		text.deleteInlcudeLines(0, 2, 500);
+		Assert.assertEquals("AB", text.toString());
+
+		text.set("ABC\n1234\n\n\nCatDog");
+		text.deleteInlcudeLines(1, 2, 2);
+		Assert.assertEquals("ABC\n12\n\n\nCatDog", text.toString());
+
+		text.set("ABC\n1234\n\n\nCatDog");
+		text.deleteInlcudeLines(3, 0, 1);
+		Assert.assertEquals("ABC\n1234\n\nCatDog", text.toString());
+
+		text.set("ABC\n1234\n\n\nCatDog");
+		text.deleteInlcudeLines(3, 0, -1);
+		Assert.assertEquals("ABC\n1234\n\n\nCatDog", text.toString());
+
+		text.set("ABC\n1234\n\n\nCatDog");
+		text.deleteInlcudeLines(3, 0, 0);
+		Assert.assertEquals("ABC\n1234\n\n\nCatDog", text.toString());
+	}
+
+	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	public void deleteIncludeLines_OutOfBounds1()
+	{
+		new TextProcessor("ABC\n123").deleteInlcudeLines(-1, 0, 1);
+	}
+
+	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	public void deleteIncludeLines_OutOfBounds2()
+	{
+		new TextProcessor("ABC\n123").deleteInlcudeLines(2, 0, 1);
+	}
+
+	@Test(expected = ArrayIndexOutOfBoundsException.class)
+	public void deleteIncludeLines_OutOfBounds3()
+	{
+		new TextProcessor("ABC\n123").deleteInlcudeLines(0, -1, 1);
 	}
 }
