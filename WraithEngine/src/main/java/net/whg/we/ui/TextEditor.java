@@ -2,37 +2,21 @@ package net.whg.we.ui;
 
 import net.whg.we.ui.font.Cursor;
 import net.whg.we.ui.font.TextSelection;
-import net.whg.we.ui.font.UIString;
-import net.whg.we.utils.Input;
-import net.whg.we.utils.Input.TypedKey;
-import net.whg.we.utils.Time;
 
 public class TextEditor
 {
-	private UIString _textOut;
+	private TextProcessor _processor;
+	private TextHolder _holder;
 	private Cursor _cursor;
-	private TextSelection _sel;
-	private String[] _lines;
-	private int _caretX;
-	private int _caretY;
-	private int _selStart = -1;
-	private int _selOrigin = -1;
-	private int _selEnd = -1;
+	private TextSelection _selection;
 	private boolean _singleLine;
 
-	public TextEditor(UIString textOut)
+	public TextEditor(TextHolder holder, Cursor cursor, TextSelection selection)
 	{
-		_textOut = textOut;
-		_cursor = textOut.getCursor();
-		_sel = textOut.getTextSelection();
-
-		_lines = new String[1];
-		_lines[0] = "";
-	}
-
-	private int caretIndex()
-	{
-		return caretIndex(_caretX, _caretY);
+		_holder = holder;
+		_cursor = cursor;
+		_selection = selection;
+		_processor = new TextProcessor();
 	}
 
 	public void setSingleLine(boolean singleLine)
@@ -45,352 +29,283 @@ public class TextEditor
 		return _singleLine;
 	}
 
-	private int caretIndex(int x, int y)
+	public boolean validChar(char c)
 	{
-		int index = x;
-
-		for (int i = 0; i < y; i++)
-			index += _lines[i].length() + 1;
-
-		return index;
+		return _holder.getFont().getGlyph(c) != null;
 	}
 
-	private String textAsString()
+	public void deleteSelection()
 	{
-		String s = "";
+		if (!_selection.hasSelection())
+			return;
 
-		for (int i = 0; i < _lines.length; i++)
+		int startLine = _processor.getLineByIndex(_selection.selStart());
+		int startPos = _processor.getPositionByIndex(_selection.selStart());
+		int count = _selection.selEnd() - _selection.selStart() + 1;
+
+		_processor.deleteInlcudeLines(startLine, startPos, count);
+		_selection.clearSelection();
+		curXY(startPos, startLine);
+	}
+
+	private void startSelection(int origin)
+	{
+		_selection.setSelection(origin, origin, origin);
+	}
+
+	private int curX()
+	{
+		return _cursor.getCaretX();
+	}
+
+	private int curY()
+	{
+		return _cursor.getCaretY();
+	}
+
+	private int selO()
+	{
+		return _selection.selOrigin();
+	}
+
+	private void curX(int x)
+	{
+		_cursor.setCaretPos(x, _cursor.getCaretY());
+	}
+
+	private void curY(int y)
+	{
+		_cursor.setCaretPos(_cursor.getCaretX(), y);
+	}
+
+	private void curXY(int x, int y)
+	{
+		_cursor.setCaretPos(x, y);
+	}
+
+	private int len(int line)
+	{
+		return _processor.getLineLength(line);
+	}
+
+	private boolean insert()
+	{
+		return _cursor.getInsertMode();
+	}
+
+	private boolean hasSel()
+	{
+		return _selection.hasSelection();
+	}
+
+	private void checkSelectionStart(boolean shift)
+	{
+		if (shift && !hasSel())
+			startSelection(_processor.caretPosition(curY(), curX()));
+	}
+
+	private void checkSelectionEnd(boolean shift)
+	{
+		if (shift)
 		{
-			if (i > 0)
-				s += '\n';
-
-			s += _lines[i];
+			int car = _processor.caretPosition(curY(), curX());
+			_selection.setSelection(Math.min(selO(), car), selO(), Math.max(selO(), car));
 		}
-
-		return s;
+		else
+			_selection.clearSelection();
 	}
 
-	private void stringToText(String s)
+	public void typeCharacter(TypedKeyInput input)
 	{
-		int lineCount = 1;
-		for (int i = 0; i < s.length(); i++)
-			if (s.charAt(i) == '\n')
-				lineCount++;
-
-		String[] lines = new String[lineCount];
-		for (int i = 0; i < lineCount; i++)
-			lines[i] = "";
-
-		int lineIndex = 0;
-		for (int i = 0; i < s.length(); i++)
+		switch (input.extraKey)
 		{
-
-			if (s.charAt(i) == '\n')
+			case TypedKeyInput.NO_KEY:
 			{
-				lineIndex++;
-				continue;
-			}
+				if (!validChar(input.key))
+					return;
 
-			lines[lineIndex] += s.charAt(i);
-		}
-
-		_lines = lines;
-	}
-
-	private void deleteSelection()
-	{
-		String s = textAsString();
-		s = s.substring(0, _selStart) + s.substring(_selEnd, s.length());
-		stringToText(s);
-
-		_caretX = 0;
-		_caretY = 0;
-		for (int i = 0; i < s.length(); i++)
-		{
-			if (i == _selStart)
-				break;
-
-			if (s.charAt(i) == '\n')
-			{
-				_caretX = 0;
-				_caretY++;
-				continue;
-			}
-
-			_caretX++;
-		}
-
-		_selStart = _selEnd = _selOrigin = -1;
-	}
-
-	public void updateFrame()
-	{
-		boolean insertMode = _cursor.getInsertMode();
-
-		boolean changedText = false;
-		for (TypedKey key : Input.getTypedKeys())
-		{
-			if (key.extraKey == Input.NO_KEY)
-			{
-				if (_textOut.getFont().getGlyph(key.key) == null)
-					continue;
-
-				if (insertMode && _selStart == -1 && _caretX < _lines[_caretY].length())
+				if (insert() && !hasSel() && curX() < len(curY()))
 				{
-					_lines[_caretY] = _lines[_caretY].substring(0, _caretX) + key.key
-							+ _lines[_caretY].substring(_caretX + 1, _lines[_caretY].length());
-					_caretX++;
+					_processor.deleteInlcudeLines(curY(), curX(), 1);
+					_processor.insert(curY(), curX(), Character.toString(input.key));
+					curX(curX() + 1);
 				}
 				else
 				{
-					if (_selStart != -1)
+					if (hasSel())
 						deleteSelection();
 
-					_lines[_caretY] = _lines[_caretY].substring(0, _caretX) + key.key
-							+ _lines[_caretY].substring(_caretX, _lines[_caretY].length());
-					_caretX++;
+					_processor.insert(curY(), curX(), Character.toString(input.key));
+					curX(curX() + 1);
 				}
 
-				changedText = true;
+				updateText();
+				break;
 			}
-			else if (key.extraKey == Input.BACKSPACE_KEY)
+
+			case TypedKeyInput.BACKSPACE_KEY:
 			{
-				if (_selStart == -1)
+				if (!hasSel())
 				{
-					if (_caretX > 0 || _caretY > 0)
+					if (curX() > 0 || curY() > 0)
 					{
-						if (_caretX == 0)
-						{
-							_caretY--;
-							_caretX = _lines[_caretY].length();
-
-							_lines[_caretY] += _lines[_caretY + 1];
-
-							String[] newLines = new String[_lines.length - 1];
-							for (int i = 0; i <= _caretY; i++)
-								newLines[i] = _lines[i];
-
-							for (int i = _caretY + 1; i < newLines.length; i++)
-								newLines[i] = _lines[i + 1];
-
-							_lines = newLines;
-						}
+						if (curX() == 0)
+							curXY(len(curY() - 1), curY() - 1);
 						else
-						{
-							_lines[_caretY] = _lines[_caretY].substring(0, _caretX - 1)
-									+ _lines[_caretY].substring(_caretX, _lines[_caretY].length());
-							_caretX--;
-						}
+							curX(curX() - 1);
 
-						_selStart = _selEnd = -1;
-
-						changedText = true;
+						_processor.deleteInlcudeLines(curY(), curX(), 1);
+						updateText();
 					}
 				}
 				else
 				{
 					deleteSelection();
-					changedText = true;
+					updateText();
 				}
+				break;
 			}
-			else if (key.extraKey == Input.DELETE_KEY)
+
+			case TypedKeyInput.DELETE_KEY:
 			{
-				if (_selStart == -1)
+				if (!hasSel())
 				{
-					if (_caretX < _lines[_caretY].length() || _caretY < _lines.length - 1)
-					{
-						if (_caretX == _lines[_caretY].length())
-						{
-							_lines[_caretY] += _lines[_caretY + 1];
-
-							String[] newLines = new String[_lines.length - 1];
-							for (int i = 0; i <= _caretY; i++)
-								newLines[i] = _lines[i];
-
-							for (int i = _caretY + 1; i < newLines.length; i++)
-								newLines[i] = _lines[i + 1];
-
-							_lines = newLines;
-						}
-						else
-						{
-							_lines[_caretY] =
-									_lines[_caretY].substring(0, _caretX) + _lines[_caretY]
-											.substring(_caretX + 1, _lines[_caretY].length());
-						}
-
-						_selStart = _selEnd = -1;
-
-						changedText = true;
-					}
+					_processor.deleteInlcudeLines(curY(), curX(), 1);
+					updateText();
 				}
 				else
 				{
 					deleteSelection();
-					changedText = true;
+					updateText();
 				}
+				break;
 			}
-			else if (key.extraKey == Input.LEFT_KEY)
+
+			case TypedKeyInput.LEFT_KEY:
 			{
-				if (key.shift && _selStart == -1)
-					_selStart = _selEnd = _selOrigin = caretIndex();
+				checkSelectionStart(input.shift);
 
-				if (_caretX > 0)
-				{
-					_caretX--;
-				}
-				else if (_caretY > 0)
-				{
-					_caretY--;
-					_caretX = _lines[_caretY].length();
-				}
+				if (curX() > 0)
+					_cursor.setCaretPos(curX() - 1, curY());
+				else if (curY() > 0)
+					curXY(len(curY() - 1), curY() - 1);
 
-				if (key.shift)
-				{
-					int car = caretIndex();
-					_selEnd = Math.max(_selOrigin, car);
-					_selStart = Math.min(_selOrigin, car);
-				}
-				else
-					_selStart = _selEnd = _selOrigin = -1;
+				checkSelectionEnd(input.shift);
+				break;
 			}
-			else if (key.extraKey == Input.RIGHT_KEY)
+
+			case TypedKeyInput.RIGHT_KEY:
 			{
-				if (key.shift && _selStart == -1)
-					_selStart = _selEnd = _selOrigin = caretIndex();
+				checkSelectionStart(input.shift);
 
-				if (_caretX < _lines[_caretY].length())
-				{
-					_caretX++;
-				}
-				else if (_caretY < _lines.length - 1)
-				{
-					_caretX = 0;
-					_caretY++;
-				}
+				if (curX() < len(curY()))
+					curX(curX() + 1);
+				else if (curY() < _processor.getLineCount() - 1)
+					curXY(0, curY() + 1);
 
-				if (key.shift)
-				{
-					int car = caretIndex();
-					_selEnd = Math.max(_selOrigin, car);
-					_selStart = Math.min(_selOrigin, car);
-				}
-				else
-					_selStart = _selEnd = _selOrigin = -1;
+				checkSelectionEnd(input.shift);
+				break;
 			}
-			else if (key.extraKey == Input.HOME_KEY)
+
+			case TypedKeyInput.HOME_KEY:
 			{
-				if (key.shift && _selStart == -1)
-					_selStart = _selEnd = _selOrigin = caretIndex();
+				checkSelectionStart(input.shift);
 
-				_caretX = 0;
+				curX(0);
 
-				if (key.shift)
-				{
-					int car = caretIndex();
-					_selEnd = Math.max(_selOrigin, car);
-					_selStart = Math.min(_selOrigin, car);
-				}
-				else
-					_selStart = _selEnd = _selOrigin = -1;
+				checkSelectionEnd(input.shift);
+				break;
 			}
-			else if (key.extraKey == Input.END_KEY)
+
+			case TypedKeyInput.END_KEY:
 			{
-				if (key.shift && _selStart == -1)
-					_selStart = _selEnd = _selOrigin = caretIndex();
+				checkSelectionStart(input.shift);
 
-				_caretX = _lines[_caretY].length();
+				curX(len(curY()));
 
-				if (key.shift)
-				{
-					int car = caretIndex();
-					_selEnd = Math.max(_selOrigin, car);
-					_selStart = Math.min(_selOrigin, car);
-				}
-				else
-					_selStart = _selEnd = _selOrigin = -1;
+				checkSelectionEnd(input.shift);
+				break;
 			}
-			else if (key.extraKey == Input.UP_KEY)
+
+			case TypedKeyInput.UP_KEY:
 			{
-				if (key.shift && _selStart == -1)
-					_selStart = _selEnd = _selOrigin = caretIndex();
+				checkSelectionStart(input.shift);
 
-				if (_caretY > 0)
+				if (curY() > 0)
 				{
-					_caretY--;
-					_caretX = Math.min(_caretX, _lines[_caretY].length());
-
-					if (key.shift)
-					{
-						int car = caretIndex();
-						_selEnd = Math.max(_selOrigin, car);
-						_selStart = Math.min(_selOrigin, car);
-					}
+					curY(curY() - 1);
+					curX(Math.min(curX(), len(curY())));
 				}
-				else
-					_selStart = _selEnd = _selOrigin = -1;
-			}
-			else if (key.extraKey == Input.DOWN_KEY)
-			{
-				if (key.shift && _selStart == -1)
-					_selStart = _selEnd = _selOrigin = caretIndex();
 
-				if (_caretY < _lines.length - 1)
+				checkSelectionEnd(input.shift);
+				break;
+			}
+
+			case TypedKeyInput.DOWN_KEY:
+			{
+				checkSelectionStart(input.shift);
+
+				if (curY() < _processor.getLineCount())
 				{
-					_caretY++;
-					_caretX = Math.min(_caretX, _lines[_caretY].length());
-
-					if (key.shift)
-					{
-						int car = caretIndex();
-						_selEnd = Math.max(_selOrigin, car);
-						_selStart = Math.min(_selOrigin, car);
-					}
+					curY(curY() + 1);
+					curX(Math.min(curX(), len(curY())));
 				}
-				else
-					_selStart = _selEnd = _selOrigin = -1;
+
+				checkSelectionEnd(input.shift);
+				break;
 			}
-			else if (key.extraKey == Input.ENTER_KEY && !_singleLine)
+
+			case TypedKeyInput.ENTER_KEY:
 			{
-				if (_selStart != -1)
-					deleteSelection();
+				if (!_singleLine)
+				{
+					if (hasSel())
+						deleteSelection();
 
-				String[] newLines = new String[_lines.length + 1];
+					_processor.insert(curY(), curX(), "\n");
+					curXY(0, curY() + 1);
 
-				for (int i = 0; i < _caretY; i++)
-					newLines[i] = _lines[i];
+					updateText();
+				}
 
-				newLines[_caretY] = _lines[_caretY].substring(0, _caretX);
-				newLines[_caretY + 1] =
-						_lines[_caretY].substring(_caretX, _lines[_caretY].length());
-
-				for (int i = _caretY + 1; i < _lines.length; i++)
-					newLines[i + 1] = _lines[i];
-
-				_lines = newLines;
-
-				_caretX = 0;
-				_caretY++;
-
-				_selStart = _selEnd = -1;
-
-				changedText = true;
+				break;
 			}
-			else if (key.extraKey == Input.INSERT_KEY)
-				_cursor.setInsertMode(!insertMode);
+
+			case TypedKeyInput.INSERT_KEY:
+			{
+				_cursor.setInsertMode(!_cursor.getInsertMode());
+				break;
+			}
 		}
+	}
 
-		if (changedText)
-			_textOut.setText(textAsString());
+	private void updateText()
+	{
+		_holder.setText(_processor.toString());
+	}
 
-		_cursor.setCaretPos(_caretX, _caretY);
-		_sel.setSelection(_selStart, _selEnd);
+	public TextHolder getTextHolder()
+	{
+		return _holder;
+	}
 
-		_cursor.setVisible(Time.time() % 0.666f < 0.333f);
+	public Cursor getCursor()
+	{
+		return _cursor;
+	}
+
+	public TextSelection getSelection()
+	{
+		return _selection;
 	}
 
 	public int getLineCount()
 	{
-		return _lines.length;
+		return _processor.getLineCount();
+	}
+
+	public int lineLength(int line)
+	{
+		return _processor.getLineLength(line);
 	}
 }

@@ -8,6 +8,7 @@ import net.whg.we.ui.UIImage;
 public class UISelection implements TextSelection
 {
 	private int _selStart = -1;
+	private int _selOrigin = -1;
 	private int _selEnd = -1;
 	private Mesh _mesh;
 	private Material _material;
@@ -23,24 +24,31 @@ public class UISelection implements TextSelection
 	}
 
 	@Override
-	public int getSelectionStart()
+	public int selStart()
 	{
 		return _selStart;
 	}
 
 	@Override
-	public int getSelectionEnd()
+	public int selOrigin()
+	{
+		return _selOrigin;
+	}
+
+	@Override
+	public int selEnd()
 	{
 		return _selEnd;
 	}
 
 	@Override
-	public void setSelection(int start, int end)
+	public void setSelection(int start, int origin, int end)
 	{
-		if (_selStart == start && _selEnd == end)
+		if (_selStart == start && _selOrigin == origin && _selEnd == end)
 			return;
 
 		_selStart = start;
+		_selOrigin = origin;
 		_selEnd = end;
 
 		updateSelectionPos();
@@ -130,5 +138,17 @@ public class UISelection implements TextSelection
 	{
 		for (UIImage image : _render)
 			image.render();
+	}
+
+	@Override
+	public boolean hasSelection()
+	{
+		return _selStart != -1;
+	}
+
+	@Override
+	public void clearSelection()
+	{
+		setSelection(-1, -1, -1);
 	}
 }

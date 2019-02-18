@@ -2,9 +2,15 @@ package net.whg.we.ui.font;
 
 public interface TextSelection
 {
-	int getSelectionStart();
+	int selStart();
 
-	int getSelectionEnd();
+	int selOrigin();
 
-	void setSelection(int start, int end);
+	int selEnd();
+
+	boolean hasSelection();
+
+	void clearSelection();
+
+	void setSelection(int start, int origin, int end);
 }

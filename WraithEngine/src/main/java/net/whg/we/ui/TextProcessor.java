@@ -131,6 +131,37 @@ public class TextProcessor
 		return c;
 	}
 
+	public int getLineByIndex(int index)
+	{
+		if (index < 0)
+			return -1;
+
+		int c = 0;
+		for (int i = 0; i < _lines.length; i++)
+		{
+			c += _lines[i].length();
+			if (c >= index)
+				return i;
+		}
+
+		return -1;
+	}
+
+	public int getPositionByIndex(int index)
+	{
+		if (index < 0)
+			return -1;
+
+		for (int i = 0; i < _lines.length; i++)
+		{
+			if (_lines[i].length() >= index)
+				return index;
+			index -= _lines[i].length() + 1;
+		}
+
+		return Math.min(index, _lines[_lines.length - 1].length());
+	}
+
 	public void deleteInlcudeLines(int line, int position, int count)
 	{
 		if (line < 0 || line >= _lines.length)

@@ -3,6 +3,7 @@ package net.whg.we.utils;
 import java.util.HashMap;
 import java.util.LinkedList;
 import org.lwjgl.glfw.GLFW;
+import net.whg.we.ui.TypedKeyInput;
 import net.whg.we.utils.logging.Log;
 import net.whg.we.window.KeyState;
 
@@ -31,15 +32,9 @@ public class Input
 	private static HashMap<String, Integer> _keyMap;
 	private static float _mouseX, _mouseY;
 	private static float _lastMouseX, _lastMouseY;
-	private static LinkedList<TypedKey> _keysTyped = new LinkedList<>();
-	private static ObjectPool<TypedKey> _typedKeyPool = new ObjectPool<Input.TypedKey>()
-	{
-		@Override
-		protected TypedKey build()
-		{
-			return new TypedKey();
-		}
-	};
+	private static LinkedList<TypedKeyInput> _keysTyped = new LinkedList<>();
+	private static ObjectPool<TypedKeyInput> _typedKeyPool =
+			new SimpleObjectPool<>(TypedKeyInput.class);
 
 	static
 	{
@@ -212,7 +207,7 @@ public class Input
 
 	public static void addTypedKey(int key, int modifiers, int extraKey)
 	{
-		TypedKey k = _typedKeyPool.get();
+		TypedKeyInput k = _typedKeyPool.get();
 
 		k.extraKey = extraKey;
 		k.shift = (modifiers & GLFW.GLFW_MOD_SHIFT) > 0;
@@ -220,7 +215,7 @@ public class Input
 		k.alt = (modifiers & GLFW.GLFW_MOD_ALT) > 0;
 		k.sup = (modifiers & GLFW.GLFW_MOD_SUPER) > 0;
 		k.key = (char) key;
-		Log.tracef("Typed key %d, with modifiers %d.", key, modifiers);
+		Log.tracef("Typed key %d, with modifiers %d, key type: %d.", key, modifiers, extraKey);
 
 		_keysTyped.add(k);
 	}
@@ -285,7 +280,7 @@ public class Input
 		return !_keys[key] && _keysLastFrame[key];
 	}
 
-	public static LinkedList<TypedKey> getTypedKeys()
+	public static LinkedList<TypedKeyInput> getTypedKeys()
 	{
 		return _keysTyped;
 	}
@@ -313,7 +308,7 @@ public class Input
 		_lastMouseX = _mouseX;
 		_lastMouseY = _mouseY;
 
-		for (TypedKey k : _keysTyped)
+		for (TypedKeyInput k : _keysTyped)
 		{
 			_typedKeyPool.put(k);
 		}
@@ -392,26 +387,5 @@ public class Input
 	public static float getDeltaMouseY()
 	{
 		return _mouseY - _lastMouseY;
-	}
-
-	public static class TypedKey implements Poolable
-	{
-		public char key;
-		public boolean shift;
-		public boolean control;
-		public boolean alt;
-		public boolean sup;
-
-		public int extraKey;
-
-		@Override
-		public void init()
-		{
-		}
-
-		@Override
-		public void dispose()
-		{
-		}
 	}
 }

@@ -437,4 +437,29 @@ public class TextProcessorTest
 	{
 		new TextProcessor("ABC\n123").deleteInlcudeLines(0, -1, 1);
 	}
+
+	@Test
+	public void getPositionByIndex()
+	{
+		TextProcessor text = new TextProcessor("ABC\n123\nXYZ");
+		Assert.assertEquals(-1, text.getPositionByIndex(-10));
+		Assert.assertEquals(0, text.getPositionByIndex(0));
+		Assert.assertEquals(2, text.getPositionByIndex(2));
+		Assert.assertEquals(3, text.getPositionByIndex(3));
+		Assert.assertEquals(0, text.getPositionByIndex(4));
+		Assert.assertEquals(3, text.getPositionByIndex(100));
+		Assert.assertEquals(1, text.getPositionByIndex(9));
+	}
+
+	@Test
+	public void getLineByIndex()
+	{
+		TextProcessor text = new TextProcessor("ABC\n123");
+		Assert.assertEquals(-1, text.getLineByIndex(-10));
+		Assert.assertEquals(0, text.getLineByIndex(2));
+		Assert.assertEquals(0, text.getLineByIndex(3));
+		Assert.assertEquals(1, text.getLineByIndex(4));
+		Assert.assertEquals(1, text.getLineByIndex(5));
+		Assert.assertEquals(-1, text.getLineByIndex(10));
+	}
 }

@@ -3,10 +3,11 @@ package net.whg.we.ui.font;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;
+import net.whg.we.ui.TextHolder;
 import net.whg.we.ui.UIImage;
 import net.whg.we.ui.UIUtils;
 
-public class UIString extends UIImage
+public class UIString extends UIImage implements TextHolder
 {
 	private Font _font;
 	private String _text;
@@ -30,11 +31,13 @@ public class UIString extends UIImage
 		_selection = new UISelection(quadMesh, selMat, this);
 	}
 
+	@Override
 	public String getText()
 	{
 		return _text;
 	}
 
+	@Override
 	public void setText(String text)
 	{
 		if (_text.equals(text))
