@@ -1,11 +1,12 @@
 package event_handling;
 
-import net.whg.we.event.EventCallerBase;
-import net.whg.we.event.Listener;
-import net.whg.we.main.Plugin;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+import net.whg.we.event.EventCallerBase;
+import net.whg.we.event.Listener;
+import net.whg.we.main.Plugin;
+import net.whg.we.utils.logging.Log;
 
 public class EventCallerBaseTest
 {
@@ -58,7 +59,7 @@ public class EventCallerBaseTest
 		@Override
 		protected void runEvent(TestListener listener, int index, Object arg)
 		{
-			switch(index)
+			switch (index)
 			{
 				case ADD_LISTENER_EVENT:
 					listener.addAnotherListener(this);
@@ -73,7 +74,7 @@ public class EventCallerBaseTest
 					break;
 
 				case INPUT_PARAM_EVENT:
-					listener.inputParamEvent((int)arg);
+					listener.inputParamEvent((int) arg);
 					break;
 
 				case THROW_ERROR_EVENT:
@@ -321,6 +322,7 @@ public class EventCallerBaseTest
 	@Test
 	public void listenerThrowsError()
 	{
+		Log.setLogLevel(Log.FATAL);
 		TestEventCaller caller = new TestEventCaller();
 		TestListener listener0 = new TestListener();
 		TestListener listener1 = new TestListener();
