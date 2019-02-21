@@ -1,5 +1,7 @@
 package net.whg.we.ui.terminal;
 
+import net.whg.we.command.CommandList;
+import net.whg.we.command.common.HelpCommand;
 import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;
@@ -16,11 +18,15 @@ public class Terminal extends SimpleContainer
 {
 	private ResourceFetcher _fetcher;
 	private Mesh _imageMesh;
+	private CommandList _commandList;
 
 	public Terminal(ResourceFetcher fetcher)
 	{
 		_fetcher = fetcher;
 		_imageMesh = new Mesh("UI Quad", UIUtils.defaultImageVertexData(), fetcher.getGraphics());
+
+		_commandList = new CommandList();
+		_commandList.addCommand(new HelpCommand(_commandList));
 	}
 
 	@Override
@@ -81,7 +87,7 @@ public class Terminal extends SimpleContainer
 					cursorMat, selMat);
 			string.getTransform().setPosition(2f, -14f);
 
-			InputBar inputBar = new InputBar(bar, string);
+			InputBar inputBar = new InputBar(_commandList, bar, string);
 			inputBar.getTransform().setPosition(0f, 300f);
 			addComponent(inputBar);
 		}
@@ -94,5 +100,10 @@ public class Terminal extends SimpleContainer
 	{
 		_imageMesh.dispose();
 		super.dispose();
+	}
+
+	public CommandList getCommandList()
+	{
+		return _commandList;
 	}
 }

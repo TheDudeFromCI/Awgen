@@ -30,30 +30,35 @@ public class CommandList
 			_commands.removeInstant(handler);
 	}
 
-	public boolean executeCommand(Command command)
+	public void executeCommandSet(CommandSet set)
 	{
 		try
 		{
 			_running = true;
 
-			CommandHandler handler = getCommand(command.getName());
-
-			if (handler != null)
+			for (CommandExecution exe : set.getCommandExecutions())
 			{
-				handler.executeCommand(command);
-				return true;
+				Command cmd = exe.getCommand();
+				CommandHandler handler = getCommand(cmd.getName());
+
+				if (handler == null)
+					continue;
+
+				try
+				{
+					String out = handler.executeCommand(cmd);
+					exe.getOutput().setValue(out);
+				}
+				catch (Exception exception)
+				{
+					Log.errorf("Failed to execute command '%s'!", exception, cmd.toString());
+				}
 			}
-		}
-		catch (Exception exception)
-		{
-			Log.errorf("Failed to execute command '%s'!", exception, command.toString());
 		}
 		finally
 		{
 			_running = false;
 		}
-
-		return false;
 	}
 
 	public CommandHandler getCommand(String name)

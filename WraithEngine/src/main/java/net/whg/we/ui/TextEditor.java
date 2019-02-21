@@ -308,4 +308,9 @@ public class TextEditor
 	{
 		return _processor.getLineLength(line);
 	}
+
+	public void clear()
+	{
+		_processor.set("");
+	}
 }
