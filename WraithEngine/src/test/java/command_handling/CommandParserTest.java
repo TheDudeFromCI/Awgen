@@ -29,7 +29,7 @@ public class CommandParserTest
 	@Test
 	public void parse1()
 	{
-		CommandSet set = CommandParser.parse("clear");
+		CommandSet set = CommandParser.parse(null, "clear");
 
 		Assert.assertEquals(1, set.getVariableCount());
 		Assert.assertEquals(1, set.getCommandCount());
@@ -43,7 +43,7 @@ public class CommandParserTest
 	@Test
 	public void parse2()
 	{
-		CommandSet set = CommandParser.parse("time -f ss");
+		CommandSet set = CommandParser.parse(null, "time -f ss");
 
 		Assert.assertEquals(1, set.getVariableCount());
 		Assert.assertEquals(1, set.getCommandCount());
@@ -57,7 +57,7 @@ public class CommandParserTest
 	@Test
 	public void parse3()
 	{
-		CommandSet set = CommandParser.parse("");
+		CommandSet set = CommandParser.parse(null, "");
 
 		Assert.assertEquals(0, set.getVariableCount());
 		Assert.assertEquals(0, set.getCommandCount());
@@ -66,7 +66,7 @@ public class CommandParserTest
 	@Test
 	public void parse4()
 	{
-		CommandSet set = CommandParser.parse(";;;");
+		CommandSet set = CommandParser.parse(null, ";;;");
 
 		Assert.assertEquals(0, set.getVariableCount());
 		Assert.assertEquals(0, set.getCommandCount());
@@ -75,7 +75,7 @@ public class CommandParserTest
 	@Test
 	public void parse5()
 	{
-		CommandSet set = CommandParser.parse("clear; time -f ss");
+		CommandSet set = CommandParser.parse(null, "clear; time -f ss");
 
 		Assert.assertEquals(2, set.getVariableCount());
 		Assert.assertEquals(2, set.getCommandCount());
@@ -90,7 +90,7 @@ public class CommandParserTest
 	@Test
 	public void parse6()
 	{
-		CommandSet set = CommandParser.parse("$out = clear; time -f ss");
+		CommandSet set = CommandParser.parse(null, "$out = clear; time -f ss");
 
 		Assert.assertEquals(2, set.getVariableCount());
 		Assert.assertEquals(2, set.getCommandCount());
@@ -105,7 +105,7 @@ public class CommandParserTest
 	@Test
 	public void parse7()
 	{
-		CommandSet set = CommandParser.parse("$out = get1; $out = get2");
+		CommandSet set = CommandParser.parse(null, "$out = get1; $out = get2");
 
 		Assert.assertEquals(1, set.getVariableCount());
 		Assert.assertEquals(2, set.getCommandCount());
@@ -120,7 +120,7 @@ public class CommandParserTest
 	@Test
 	public void parse8()
 	{
-		CommandSet set = CommandParser.parse("a123 (abc -1; def -2)");
+		CommandSet set = CommandParser.parse(null, "a123 (abc -1; def -2)");
 
 		Assert.assertEquals(3, set.getVariableCount());
 		Assert.assertEquals(3, set.getCommandCount());
@@ -136,7 +136,7 @@ public class CommandParserTest
 	@Test
 	public void parse9()
 	{
-		CommandSet set = CommandParser.parse("a123 ($out1 = abc -1; $out2 = def -2)");
+		CommandSet set = CommandParser.parse(null, "a123 ($out1 = abc -1; $out2 = def -2)");
 
 		Assert.assertEquals(3, set.getVariableCount());
 		Assert.assertEquals(3, set.getCommandCount());
@@ -152,7 +152,7 @@ public class CommandParserTest
 	@Test
 	public void parse10()
 	{
-		CommandSet set = CommandParser.parse("list $[hello world]");
+		CommandSet set = CommandParser.parse(null, "list $[hello world]");
 
 		Assert.assertEquals(1, set.getVariableCount());
 		Assert.assertEquals(1, set.getCommandCount());

@@ -16,11 +16,25 @@ public interface CommandHandler
 	String[] getCommandAliases();
 
 	/**
-	 * Executes this command instance.
+	 * Gets the description text for this command.
 	 * 
+	 * @return The description text for this command.
+	 */
+	String getDescription();
+
+	/**
+	 * Gets the help text for this command.
+	 * 
+	 * @return - The help text for this command.
+	 */
+	String getHelpText();
+
+	/**
+	 * Executes this command instance.
+	 *
 	 * @param command
 	 *            - The command instance to execute.
-	 * @return The return value of the command, or null if there isn't one.
+	 * @return The output of the command, or null if there isn't one.
 	 */
 	String executeCommand(Command command);
 }

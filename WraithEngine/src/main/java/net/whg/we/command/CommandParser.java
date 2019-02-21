@@ -2,14 +2,14 @@ package net.whg.we.command;
 
 public class CommandParser
 {
-	public static CommandSet parse(String line)
+	public static CommandSet parse(CommandSender sender, String line)
 	{
 		CommandSet set = new CommandSet();
-		parse(set, line);
+		parse(set, line, sender);
 		return set;
 	}
 
-	private static CommandVariable parse(CommandSet set, String line)
+	private static CommandVariable parse(CommandSet set, String line, CommandSender sender)
 	{
 		TokenTree tree = new TokenTree();
 		tree.addTokens(new Tokenizer(line));
@@ -46,14 +46,14 @@ public class CommandParser
 
 				if (tokens[a].getType() == TokenTemplate.NESTED_COMMAND)
 				{
-					CommandVariable v2 = parse(set, val);
+					CommandVariable v2 = parse(set, val, sender);
 					if (v2 == null)
 						args[i] = new StringArgument("");
 					else
 						args[i] = new VariableArgument(v2);
 				}
 				else
-					args[i] = asCommandArgument(set, tokens[a]);
+					args[i] = asCommandArgument(set, tokens[a], sender);
 			}
 
 			if (tokens[0].getType() == TokenTemplate.VARIABLE)
@@ -61,7 +61,7 @@ public class CommandParser
 			else
 				lastVar = set.getOrCreateVariable(String.valueOf(set.getVariableCount()));
 
-			Command command = new Command(commandName, args);
+			Command command = new Command(commandName, args, sender);
 			CommandExecution exe = new CommandExecution(command, lastVar);
 			set.insertCommandExecution(exe);
 		}
@@ -69,7 +69,8 @@ public class CommandParser
 		return lastVar;
 	}
 
-	private static CommandArgument asCommandArgument(CommandSet set, Token token)
+	private static CommandArgument asCommandArgument(CommandSet set, Token token,
+			CommandSender sender)
 	{
 		switch (token.getType())
 		{
@@ -81,7 +82,7 @@ public class CommandParser
 				return new VariableArgument(set.getOrCreateVariable(token.getValue().substring(1)));
 
 			case TokenTemplate.DYNAMIC_VARIABLE:
-				return new DynamicVariableArgument(
+				return new DynamicVariableArgument(sender,
 						token.getValue().substring(2, token.getValue().length() - 1));
 
 			default:

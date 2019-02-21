@@ -4,11 +4,13 @@ public class Command
 {
 	private String _name;
 	private CommandArgument[] _args;
+	private CommandSender _sender;
 
-	public Command(String name, CommandArgument[] args)
+	public Command(String name, CommandArgument[] args, CommandSender sender)
 	{
 		_name = name;
 		_args = args;
+		_sender = sender;
 	}
 
 	public String getName()
@@ -29,6 +31,11 @@ public class Command
 	public CommandArgument getArg(int index)
 	{
 		return _args[index];
+	}
+
+	public CommandSender getCommandSender()
+	{
+		return _sender;
 	}
 
 	@Override
