@@ -81,8 +81,8 @@ public class Terminal extends SimpleContainer
 			bar.getTransform().setSize(800f, 16f);
 			bar.getTransform().setPosition(400f, 0f);
 
-			Font font = _fetcher.getFont(plugin, "ui/fonts/ink_free.fnt");
-			Material textMat = _fetcher.getMaterial(plugin, "ui/fonts/ink_free.material");
+			Font font = _fetcher.getFont(plugin, "ui/fonts/ubuntu.fnt");
+			Material textMat = _fetcher.getMaterial(plugin, "ui/fonts/ubuntu.material");
 			UIString string = new UIString(font, "", _fetcher.getGraphics(), textMat, _imageMesh,
 					cursorMat, selMat);
 			string.getTransform().setPosition(2f, -14f);

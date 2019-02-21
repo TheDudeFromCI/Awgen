@@ -312,5 +312,7 @@ public class TextEditor
 	public void clear()
 	{
 		_processor.set("");
+		updateText();
+		_selection.clearSelection();
 	}
 }
