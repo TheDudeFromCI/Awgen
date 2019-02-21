@@ -12,13 +12,18 @@ import net.whg.we.ui.UIImage;
 import net.whg.we.ui.UIUtils;
 import net.whg.we.ui.font.Font;
 import net.whg.we.ui.font.UIString;
+import net.whg.we.utils.AnimatedProperty;
 import net.whg.we.utils.Color;
+import net.whg.we.utils.Input;
+import net.whg.we.utils.Time;
 
 public class Terminal extends SimpleContainer
 {
 	private ResourceFetcher _fetcher;
 	private Mesh _imageMesh;
 	private CommandList _commandList;
+	private AnimatedProperty _verticalPos;
+	private boolean _active;
 
 	public Terminal(ResourceFetcher fetcher)
 	{
@@ -27,6 +32,9 @@ public class Terminal extends SimpleContainer
 
 		_commandList = new CommandList();
 		_commandList.addCommand(new HelpCommand(_commandList));
+
+		_verticalPos = new AnimatedProperty(1f);
+		_verticalPos.setSpeed(0.4f);
 	}
 
 	@Override
@@ -87,12 +95,26 @@ public class Terminal extends SimpleContainer
 					cursorMat, selMat);
 			string.getTransform().setPosition(2f, -14f);
 
-			InputBar inputBar = new InputBar(_commandList, bar, string);
+			InputBar inputBar = new InputBar(this, bar, string);
 			inputBar.getTransform().setPosition(0f, 300f);
 			addComponent(inputBar);
 		}
 
 		super.init();
+	}
+
+	@Override
+	public void updateFrame()
+	{
+		if (Input.isKeyDown("`") && Input.isKeyHeld("shift"))
+			_active = !_active;
+
+		_verticalPos.setGoalValue(_active ? 0f : 1f);
+		float vertPos = _verticalPos.update(Time.deltaTime());
+		vertPos *= 316f;
+		getTransform().setPosition(0f, vertPos);
+
+		super.updateFrame();
 	}
 
 	@Override
@@ -105,5 +127,15 @@ public class Terminal extends SimpleContainer
 	public CommandList getCommandList()
 	{
 		return _commandList;
+	}
+
+	public boolean isActive()
+	{
+		return _active;
+	}
+
+	public boolean activeAndOpen()
+	{
+		return _active && _verticalPos.getValue() == 0f;
 	}
 }

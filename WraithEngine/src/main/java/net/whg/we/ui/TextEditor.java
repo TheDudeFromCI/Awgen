@@ -314,5 +314,6 @@ public class TextEditor
 		_processor.set("");
 		updateText();
 		_selection.clearSelection();
+		_cursor.setCaretPos(0, 0);
 	}
 }

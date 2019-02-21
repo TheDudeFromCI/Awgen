@@ -1,6 +1,5 @@
 package net.whg.we.ui.terminal;
 
-import net.whg.we.command.CommandList;
 import net.whg.we.command.CommandParser;
 import net.whg.we.command.CommandSender;
 import net.whg.we.command.CommandSet;
@@ -21,13 +20,13 @@ public class InputBar implements UIComponent, CommandSender
 	private UIString _text;
 	private TextEditor _textEditor;
 	private boolean _disposed;
-	private CommandList _commandList;
+	private Terminal _terminal;
 
-	public InputBar(CommandList commandList, UIImage entryBar, UIString text)
+	public InputBar(Terminal terminal, UIImage entryBar, UIString text)
 	{
 		_entryBar = entryBar;
 		_text = text;
-		_commandList = commandList;
+		_terminal = terminal;
 
 		_textEditor = new TextEditor(_text, _text.getCursor(), _text.getTextSelection());
 		_textEditor.setSingleLine(false);
@@ -55,6 +54,9 @@ public class InputBar implements UIComponent, CommandSender
 	@Override
 	public void updateFrame()
 	{
+		if (!_terminal.activeAndOpen())
+			return;
+
 		_text.getCursor().setVisible(Time.time() % 0.666f < 0.333f);
 
 		for (TypedKeyInput input : Input.getTypedKeys())
@@ -66,7 +68,7 @@ public class InputBar implements UIComponent, CommandSender
 
 				Log.infof(">>> %s", command);
 				CommandSet commandSet = CommandParser.parse(this, command);
-				_commandList.executeCommandSet(commandSet);
+				_terminal.getCommandList().executeCommandSet(commandSet);
 				continue;
 			}
 

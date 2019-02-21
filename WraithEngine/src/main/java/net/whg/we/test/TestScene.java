@@ -1,6 +1,7 @@
 package net.whg.we.test;
 
 import org.joml.Vector3f;
+import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.ScreenClearType;
@@ -49,46 +50,45 @@ public class TestScene implements UpdateListener
 				ResourceManager resourceManager = _gameLoop.getResourceManager();
 				ResourceFetcher fetch = new ResourceFetcher(resourceManager, graphics);
 
-				// Plugin plugin = new Plugin()
-				// {
-				//
-				// @Override
-				// public String getPluginName()
-				// {
-				// return "TestPlugin";
-				// }
-				//
-				// @Override
-				// public void initPlugin()
-				// {
-				// }
-				//
-				// @Override
-				// public void enablePlugin()
-				// {
-				// }
-				//
-				// @Override
-				// public int getPriority()
-				// {
-				// return 0;
-				// }
-				//
-				// };
+				@SuppressWarnings("unused")
+				Plugin plugin = new Plugin()
+				{
 
-				// ModelResource terrain = (ModelResource) resourceManager.loadResource(plugin,
-				// "models/terrain.model");
-				// terrain.compile(_gameLoop.getGraphicsPipeline().getGraphics());
-				//
-				// Model model = terrain.getData();
-				// model.getLocation().setScale(new Vector3f(100f, 100f, 100f));
-				// model.getLocation()
-				// .setRotation(new Quaternionf().rotateX((float) Math.toRadians(-90f)));
-				//
-				// GameObject go = _scene.getGameObjectManager().createNew();
-				// go.addBehaviour(new RenderBehaviour(model));
-				// go.addBehaviour(new MeshColliderBehaviour(
-				// terrain.getMeshResource(0).getVertexData(), model.getLocation()));
+					@Override
+					public String getPluginName()
+					{
+						return "TestPlugin";
+					}
+
+					@Override
+					public void initPlugin()
+					{
+					}
+
+					@Override
+					public void enablePlugin()
+					{
+					}
+
+					@Override
+					public int getPriority()
+					{
+						return 0;
+					}
+
+				};
+
+				/*
+				 * ModelResource terrain = (ModelResource) resourceManager.loadResource(plugin,
+				 * "models/terrain.model");
+				 * terrain.compile(_gameLoop.getGraphicsPipeline().getGraphics()); Model model =
+				 * terrain.getData(); model.getLocation().setScale(new Vector3f(100f, 100f,
+				 * 100f)); model.getLocation() .setRotation(new Quaternionf().rotateX((float)
+				 * Math.toRadians(-90f))); GameObject go =
+				 * _scene.getGameObjectManager().createNew(); go.addBehaviour(new
+				 * RenderBehaviour(model)); go.addBehaviour(new MeshColliderBehaviour(
+				 * terrain.getMeshResource(0).getVertexData(), model.getLocation()));
+				 */
 
 				_scene.getUIStack().addComponent(new Terminal(fetch));
 			}
