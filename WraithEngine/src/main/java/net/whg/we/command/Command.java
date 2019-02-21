@@ -3,9 +3,9 @@ package net.whg.we.command;
 public class Command
 {
 	private String _name;
-	private String[] _args;
+	private CommandArgument[] _args;
 
-	public Command(String name, String[] args)
+	public Command(String name, CommandArgument[] args)
 	{
 		_name = name;
 		_args = args;
@@ -16,17 +16,17 @@ public class Command
 		return _name;
 	}
 
-	public String[] getArgs()
+	public CommandArgument[] getArgs()
 	{
 		return _args;
 	}
 
-	public void setArg(int index, String value)
+	public void setArg(int index, CommandArgument value)
 	{
 		_args[index] = value;
 	}
 
-	public String getArg(int index)
+	public CommandArgument getArg(int index)
 	{
 		return _args[index];
 	}
@@ -38,8 +38,8 @@ public class Command
 
 		sb.append(_name);
 
-		for (String s : _args)
-			sb.append(" ").append(s);
+		for (CommandArgument s : _args)
+			sb.append(" ").append(s.getValue());
 
 		return sb.toString();
 	}

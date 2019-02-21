@@ -65,11 +65,15 @@ public class TokenPatternSolver
 			case 's':
 				return token.getType() == TokenTemplate.STRING;
 
+			case 'd':
+				return token.getType() == TokenTemplate.DYNAMIC_VARIABLE;
+
 			case 'p':
 				return token.getType() == TokenTemplate.STANDARD
 						|| token.getType() == TokenTemplate.STRING
 						|| token.getType() == TokenTemplate.VARIABLE
-						|| token.getType() == TokenTemplate.NESTED_COMMAND;
+						|| token.getType() == TokenTemplate.NESTED_COMMAND
+						|| token.getType() == TokenTemplate.DYNAMIC_VARIABLE;
 
 			case '=':
 				return token.getType() == TokenTemplate.SYMBOL && token.getValue().equals("=");

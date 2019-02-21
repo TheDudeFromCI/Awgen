@@ -33,11 +33,11 @@ public class CommandParser
 
 			String commandName = tokens[commandTokenIndex].getValue();
 
-			String[] args;
+			CommandArgument[] args;
 			if (tokens[tokens.length - 1].getType() == TokenTemplate.SYMBOL)
-				args = new String[tokens.length - commandTokenIndex - 2];
+				args = new CommandArgument[tokens.length - commandTokenIndex - 2];
 			else
-				args = new String[tokens.length - commandTokenIndex - 1];
+				args = new CommandArgument[tokens.length - commandTokenIndex - 1];
 
 			for (int i = 0; i < args.length; i++)
 			{
@@ -48,12 +48,12 @@ public class CommandParser
 				{
 					CommandVariable v2 = parse(set, val);
 					if (v2 == null)
-						val = "";
+						args[i] = new StringArgument("");
 					else
-						val = "$" + v2.getName();
+						args[i] = new VariableArgument(v2);
 				}
-
-				args[i] = val;
+				else
+					args[i] = asCommandArgument(set, tokens[a]);
 			}
 
 			if (tokens[0].getType() == TokenTemplate.VARIABLE)
@@ -68,4 +68,25 @@ public class CommandParser
 
 		return lastVar;
 	}
+
+	private static CommandArgument asCommandArgument(CommandSet set, Token token)
+	{
+		switch (token.getType())
+		{
+			case TokenTemplate.STANDARD:
+			case TokenTemplate.STRING:
+				return new StringArgument(token.getValue());
+
+			case TokenTemplate.VARIABLE:
+				return new VariableArgument(set.getOrCreateVariable(token.getValue().substring(1)));
+
+			case TokenTemplate.DYNAMIC_VARIABLE:
+				return new DynamicVariableArgument(
+						token.getValue().substring(2, token.getValue().length() - 1));
+
+			default:
+				throw new CommandParseException("Unknown token type! " + token.getType());
+		}
+	}
+
 }

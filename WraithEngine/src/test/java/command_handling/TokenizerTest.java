@@ -123,6 +123,26 @@ public class TokenizerTest
 		Assert.assertFalse(token.hasNextToken());
 	}
 
+	@Test
+	public void dynamicVariable()
+	{
+		String code = "$[clear]";
+		Tokenizer token = new Tokenizer(code);
+
+		validateToken(token.nextToken(), "$[clear]", TokenTemplate.DYNAMIC_VARIABLE);
+		Assert.assertFalse(token.hasNextToken());
+	}
+
+	@Test
+	public void nestedDynamicVariable()
+	{
+		String code = "$[clear (time -f ss)]";
+		Tokenizer token = new Tokenizer(code);
+
+		validateToken(token.nextToken(), "$[clear (time -f ss)]", TokenTemplate.DYNAMIC_VARIABLE);
+		Assert.assertFalse(token.hasNextToken());
+	}
+
 	@Test(expected = CommandParseException.class)
 	public void unquotedSymbols()
 	{
@@ -139,34 +159,41 @@ public class TokenizerTest
 	public void noSpace_Variable()
 	{
 		new Tokenizer("$red$green").nextToken();
-
 	}
 
 	@Test(expected = CommandParseException.class)
 	public void unfinishedQuote()
 	{
 		new Tokenizer("\"Hello World!").nextToken();
-
 	}
 
 	@Test(expected = CommandParseException.class)
 	public void midSentenceQuote()
 	{
 		new Tokenizer("arg\"arg2").nextToken();
-
 	}
 
 	@Test(expected = CommandParseException.class)
 	public void unfinishedNest()
 	{
 		new Tokenizer("(Nest").nextToken();
-
 	}
 
 	@Test(expected = CommandParseException.class)
 	public void endOfNest()
 	{
 		new Tokenizer(")").nextToken();
+	}
 
+	@Test(expected = CommandParseException.class)
+	public void numberOnlyVariable()
+	{
+		new Tokenizer("$0123").nextToken();
+	}
+
+	@Test(expected = CommandParseException.class)
+	public void numberPrefixedVariable()
+	{
+		new Tokenizer("$0abc").nextToken();
 	}
 }

@@ -18,7 +18,7 @@ public class CommandParserTest
 		Assert.assertEquals(out.getName(), exe.getOutput().getName());
 
 		for (int i = 0; i < args.length; i++)
-			Assert.assertEquals(args[i], exe.getCommand().getArg(i));
+			Assert.assertEquals(args[i], exe.getCommand().getArg(i).toString());
 	}
 
 	private String[] args(String... args)
@@ -147,5 +147,19 @@ public class CommandParserTest
 		validateCommand(cmds.get(0), "abc", args("-1"), vars.get(0));
 		validateCommand(cmds.get(1), "def", args("-2"), vars.get(1));
 		validateCommand(cmds.get(2), "a123", args("$out2"), vars.get(2));
+	}
+
+	@Test
+	public void parse10()
+	{
+		CommandSet set = CommandParser.parse("list $[hello world]");
+
+		Assert.assertEquals(1, set.getVariableCount());
+		Assert.assertEquals(1, set.getCommandCount());
+
+		List<CommandExecution> cmds = set.getCommandExecutions();
+		List<CommandVariable> vars = set.getVariables();
+
+		validateCommand(cmds.get(0), "list", args("$[hello world]"), vars.get(0));
 	}
 }

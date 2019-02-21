@@ -77,8 +77,8 @@ public class CommandSet
 		{
 			sb.append("$").append(exe.getOutput().getName()).append(" = ")
 					.append(exe.getCommand().getName());
-			for (String arg : exe.getCommand().getArgs())
-				sb.append(" '").append(arg).append('\'');
+			for (CommandArgument arg : exe.getCommand().getArgs())
+				sb.append(" ").append(arg);
 			sb.append('\n');
 		}
 
@@ -93,5 +93,12 @@ public class CommandSet
 	public int getCommandCount()
 	{
 		return _commands.size();
+	}
+
+	public CommandVariable getFinalOutput()
+	{
+		if (_commands.size() == 0)
+			return null;
+		return _commands.get(getCommandCount() - 1).getOutput();
 	}
 }
