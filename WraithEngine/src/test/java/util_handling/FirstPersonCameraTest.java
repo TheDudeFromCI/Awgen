@@ -3,11 +3,16 @@ package util_handling;
 import static org.junit.Assert.*;
 
 import org.joml.Vector3f;
+import org.junit.Before;
 import org.junit.Test;
 
 import net.whg.we.rendering.Camera;
 import net.whg.we.utils.FirstPersonCamera;
+import net.whg.we.utils.Input;
 import net.whg.we.utils.MathUtils;
+import net.whg.we.utils.Screen;
+import net.whg.we.utils.Time;
+import net.whg.we.window.KeyState;
 
 public class FirstPersonCameraTest {
 	
@@ -34,19 +39,60 @@ public class FirstPersonCameraTest {
 		assertTrue(MathUtils.clamp(6f, 4f, 5f) == 5f);
 	}
 	
-	@Test
-	public void testUpdateCameraRotation() {
-		FirstPersonCamera fpc = new FirstPersonCamera(new Camera());
-		fpc.update();
-		assertTrue(true);
+	@Before
+	public void setup() {
+		Screen.setMouseLocked(true);
+		Time.updateTime();
+		try {	
+			Thread.sleep(10);
+		} catch(InterruptedException e) { }
+		Time.updateTime();
 	}
 	
-	/*
+	@Test
+	public void testUpdateCameraRotation() {
+		float delta = 0.0001f;
+		FirstPersonCamera fpc = new FirstPersonCamera(new Camera());
+		
+		Vector3f pre_base = fpc.getBaseRotation();
+		Vector3f pre_extra = fpc.getExtraRotation();
+		
+		Input.setMousePosition(0, 0);
+		Input.endFrame();
+		Input.setMousePosition(0, 0);
+		Input.endFrame();
+		fpc.updateCameraRotation();
+		
+		Vector3f post_base = fpc.getBaseRotation();
+		Vector3f post_extra = fpc.getExtraRotation();
+		assertTrue(pre_base.equals(post_base, delta) && pre_extra.equals(post_extra, delta));
+		
+		Input.setMousePosition(10, 5);
+		fpc.updateCameraRotation();
+		
+		post_base = fpc.getBaseRotation();
+		post_extra = fpc.getExtraRotation();
+		assertFalse(pre_base.equals(post_base, delta) && pre_extra.equals(post_extra, delta));
+	}
+	
 	@Test
 	public void testUpdateCameraPosition() {
+		float delta = 0.0001f;		
+		FirstPersonCamera fpc = new FirstPersonCamera(new Camera());
+		Vector3f pre = fpc.getLocation().getPosition();
 		
+		fpc.updateCameraPosition();
+		
+		Vector3f post = fpc.getLocation().getPosition();
+		assertTrue(pre.equals(post, delta));
+		
+		Input.setKeyPressed(Input.getKeyId("w"), KeyState.PRESSED, 0);
+		fpc.updateCameraPosition();
+		
+		post = fpc.getLocation().getPosition();
+		
+		assertFalse(pre.equals(post, delta));
 	}
-	*/
 	
 
 }
