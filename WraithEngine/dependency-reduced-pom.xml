@@ -113,10 +113,10 @@
     </dependency>
   </dependencies>
   <properties>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <lwjgl.version>3.1.6</lwjgl.version>
+    <joml.version>1.9.11</joml.version>
     <maven.compiler.source>1.8</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <joml.version>1.9.11</joml.version>
-    <lwjgl.version>3.1.6</lwjgl.version>
+    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 </project>
