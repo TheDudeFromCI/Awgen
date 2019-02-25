@@ -5,6 +5,12 @@ import org.joml.Vector3f;
 
 import net.whg.we.rendering.Camera;
 
+/**
+ * This abstract class represents a camera in game which will be updated when the character moves.
+ * It can be implemented to be first person or third person.
+ * It contains all the setters and getters, 
+ * the Camera Rotation and Position have to be defined by the inheriting classes.
+ */
 public abstract class PersonCamera {
 
 	protected static final float MAX_ANGLE = (float) Math.toRadians(89);
@@ -61,8 +67,18 @@ public abstract class PersonCamera {
 		return getExtraRotation(new Vector3f());
 	}
 
+	/**
+	 * This sets the Camera Rotation by updating the vectors rotationBuffer and rotationStorageBuffer.
+	 * The updating method will depend on the view.
+	 * The mouse movement, speed and sensitivity are taken into account to update the vectors.
+	 */
 	public abstract void updateCameraRotation();
 
+	/**
+	 * This updates the camera position given the player's moves.
+	 * The updating method will depend on the view.
+	 * 
+	 */
 	public abstract void updateCameraPosition();
 
 	public Location getLocation()
@@ -70,6 +86,9 @@ public abstract class PersonCamera {
 		return _camera.getLocation();
 	}
 
+	/**
+	 * This method calls the two methods used to update the camera's position and rotation.
+	 */
 	public void update()
 	{
 		updateCameraRotation();

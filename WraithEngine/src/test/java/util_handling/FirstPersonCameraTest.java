@@ -17,6 +17,9 @@ import net.whg.we.window.KeyState;
 public class FirstPersonCameraTest {
 	
 	@Test
+	/**
+	 * These tests test the setters and getters of the class FirstPersonCamera
+	 */
 	public void testInstantiation() {
 		FirstPersonCamera fpc = new FirstPersonCamera(new Camera());
 		assertTrue(fpc.getMouseSensitivity() == 3f);
@@ -31,6 +34,9 @@ public class FirstPersonCameraTest {
 	}
 	
 	@Test
+	/**
+	 * Check that the math methods send the expected value.
+	 */
 	public void testMathUtils() {
 		Vector3f v = new Vector3f();
 		assertTrue(MathUtils.isValid(v));

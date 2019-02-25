@@ -3,6 +3,10 @@ package net.whg.we.utils;
 import org.joml.Vector3f;
 import net.whg.we.rendering.Camera;
 
+/**
+ * An instance of a PersonCamera.
+ * In this case the camera is first person and the updating methods are constructed given this.
+ */
 public class FirstPersonCamera extends PersonCamera
 {
 	public FirstPersonCamera(Camera camera)
@@ -12,7 +16,7 @@ public class FirstPersonCamera extends PersonCamera
 		_extraRotation = new Vector3f();
 	}
 
-
+	@Override
 	public void updateCameraRotation()
 	{
 		if (!Screen.isMouseLocked())
@@ -38,6 +42,7 @@ public class FirstPersonCamera extends PersonCamera
 		_camera.getLocation().setRotation(_rotationStorageBuffer);
 	}
 
+	@Override
 	public void updateCameraPosition()
 	{
 		if (!Screen.isMouseLocked())
