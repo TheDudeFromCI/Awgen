@@ -2,8 +2,8 @@ package net.whg.we.command.common;
 
 import net.whg.we.command.Command;
 import net.whg.we.command.CommandArgument;
+import net.whg.we.command.CommandConsole;
 import net.whg.we.command.CommandHandler;
-import net.whg.we.ui.terminal.Console;
 
 public class PrintCommand implements CommandHandler
 {
@@ -28,7 +28,7 @@ public class PrintCommand implements CommandHandler
 	public String executeCommand(Command command)
 	{
 		CommandArgument[] args = command.getArgs();
-		Console console = command.getCommandSender().getConsole();
+		CommandConsole console = command.getCommandSender().getConsole();
 
 		StringBuilder sb = new StringBuilder();
 

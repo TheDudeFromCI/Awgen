@@ -1,8 +1,8 @@
 package net.whg.we.command.common;
 
 import net.whg.we.command.Command;
+import net.whg.we.command.CommandConsole;
 import net.whg.we.command.CommandHandler;
-import net.whg.we.ui.terminal.Console;
 
 public class ClearCommand implements CommandHandler
 {
@@ -23,7 +23,7 @@ public class ClearCommand implements CommandHandler
 	@Override
 	public String executeCommand(Command command)
 	{
-		Console console = command.getCommandSender().getConsole();
+		CommandConsole console = command.getCommandSender().getConsole();
 
 		if (command.getArgs().length > 0)
 		{
