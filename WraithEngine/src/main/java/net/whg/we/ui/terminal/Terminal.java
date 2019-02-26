@@ -6,6 +6,7 @@ import net.whg.we.command.VariableKeyring;
 import net.whg.we.command.common.ClearCommand;
 import net.whg.we.command.common.ForCommand;
 import net.whg.we.command.common.HelpCommand;
+import net.whg.we.command.common.ListCommand;
 import net.whg.we.command.common.PrintCommand;
 import net.whg.we.command.common.RandomCommand;
 import net.whg.we.command.common.SetCommand;
@@ -46,6 +47,7 @@ public class Terminal extends SimpleContainer implements CommandSender
 		_commandList.addCommand(new SetCommand());
 		_commandList.addCommand(new RandomCommand());
 		_commandList.addCommand(new ForCommand());
+		_commandList.addCommand(new ListCommand());
 
 		_variables = new TerminalKeyring();
 
