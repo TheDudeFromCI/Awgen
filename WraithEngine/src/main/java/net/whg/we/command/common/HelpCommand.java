@@ -61,7 +61,7 @@ public class HelpCommand implements CommandHandler
 				return "";
 			}
 
-			console.println(commandToFind + ":\n" + handler.getHelpText());
+			console.println(handler.getHelpText());
 			return "";
 		}
 
