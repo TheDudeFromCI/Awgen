@@ -39,7 +39,7 @@ public class SetCommand implements CommandHandler
 	@Override
 	public String getDescription()
 	{
-		return "Prints the input arguments, seperated by spaces.";
+		return "Returns the input argument. Used for variable assignment.";
 	}
 
 	@Override
@@ -47,8 +47,8 @@ public class SetCommand implements CommandHandler
 	{
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("print <args>\n");
-		sb.append("  Prints the input arguments(s), seperated by spaces.\n");
+		sb.append("set <arg>\n");
+		sb.append("  Returns the input argument.\n");
 
 		return sb.toString();
 	}
