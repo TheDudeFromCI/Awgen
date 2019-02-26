@@ -29,7 +29,7 @@ public class SetCommand implements CommandHandler
 
 		if (args.length != 1)
 		{
-			console.println("Unknown number of parameters! Please use as:\n" + "set <arg>\n");
+			console.println("Unknown number of parameters!");
 			return "";
 		}
 

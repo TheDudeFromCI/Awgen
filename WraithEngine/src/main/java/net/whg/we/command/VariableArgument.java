@@ -20,4 +20,9 @@ public class VariableArgument implements CommandArgument
 	{
 		return "$" + _var.getName();
 	}
+
+	public void setValue(String value)
+	{
+		_var.setValue(value);
+	}
 }

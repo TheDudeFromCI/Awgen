@@ -5,8 +5,13 @@ import java.util.List;
 
 public class CommandSet
 {
-	private List<CommandVariable> _variables = new LinkedList<>();
 	private List<CommandExecution> _commands = new LinkedList<>();
+	private VariableKeyring _variables;
+
+	public CommandSet(VariableKeyring variables)
+	{
+		_variables = variables;
+	}
 
 	public void insertCommandExecution(CommandExecution execution)
 	{
@@ -24,10 +29,7 @@ public class CommandSet
 		if (name == null)
 			return null;
 
-		for (CommandVariable variable : _variables)
-			if (variable.getName().equals(name))
-				return variable;
-		return null;
+		return _variables.getVariable(name);
 	}
 
 	public CommandVariable getOrCreateVariable(String name)
@@ -46,10 +48,7 @@ public class CommandSet
 		if (variable == null)
 			return;
 
-		if (_variables.contains(variable))
-			return;
-
-		_variables.add(variable);
+		_variables.addVariable(variable);
 	}
 
 	public List<CommandExecution> getCommandExecutions()
@@ -59,12 +58,11 @@ public class CommandSet
 
 	public List<CommandVariable> getVariables()
 	{
-		return _variables;
+		return _variables.getVariables();
 	}
 
 	public void clear()
 	{
-		_variables.clear();
 		_commands.clear();
 	}
 
@@ -87,7 +85,7 @@ public class CommandSet
 
 	public int getVariableCount()
 	{
-		return _variables.size();
+		return _variables.getVariables().size();
 	}
 
 	public int getCommandCount()

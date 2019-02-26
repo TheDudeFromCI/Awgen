@@ -27,7 +27,7 @@ public class ClearCommand implements CommandHandler
 
 		if (command.getArgs().length > 0)
 		{
-			console.println("Unknown number of parameters! Please use as:\n" + "clear");
+			console.println("Unknown number of parameters!");
 			return "";
 		}
 

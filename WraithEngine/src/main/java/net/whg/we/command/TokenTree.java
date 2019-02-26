@@ -2,6 +2,7 @@ package net.whg.we.command;
 
 import java.util.LinkedList;
 import java.util.List;
+import net.whg.we.utils.logging.Log;
 
 public class TokenTree
 {
@@ -14,7 +15,7 @@ public class TokenTree
 		new TokenTreePattern("v=s;?"),
 		new TokenTreePattern("v=n;?"),
 		new TokenTreePattern("v=v;?"),
-		new TokenTreePattern(";?"),
+		new TokenTreePattern(";"),
 
 		/* @formatter:on */
 	};
@@ -33,11 +34,17 @@ public class TokenTree
 
 	public TokenPath nextPath()
 	{
+		int patternId = -1;
 		for (TokenTreePattern pattern : _patterns)
 		{
+			patternId++;
+
 			TokenPath path = pattern.build(_tokens);
 			if (path != null)
+			{
+				Log.tracef("Found path; Pattern Id: %d", patternId);
 				return path;
+			}
 		}
 
 		throw new CommandParseException("Incorrectly formatted command!");

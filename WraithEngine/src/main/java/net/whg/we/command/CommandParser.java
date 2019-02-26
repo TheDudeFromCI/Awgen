@@ -4,7 +4,7 @@ public class CommandParser
 {
 	public static CommandSet parse(CommandSender sender, String line)
 	{
-		CommandSet set = new CommandSet();
+		CommandSet set = new CommandSet(sender.getVariableKeyring());
 		parse(set, line, sender);
 		return set;
 	}
@@ -22,8 +22,7 @@ public class CommandParser
 
 			if (tokens.length == 0)
 				continue;
-			if (tokens.length == 1 && tokens[0].getType() == TokenTemplate.SYMBOL
-					&& tokens[0].getValue().equals(";"))
+			if (tokens.length == 1 && tokens[0].getType() == TokenTemplate.SYMBOL)
 				continue;
 
 			int commandTokenIndex = 0;
@@ -99,8 +98,7 @@ public class CommandParser
 				return new VariableArgument(set.getOrCreateVariable(token.getValue().substring(1)));
 
 			case TokenTemplate.DYNAMIC_VARIABLE:
-				return new DynamicVariableArgument(sender,
-						token.getValue().substring(2, token.getValue().length() - 1));
+				return new DynamicVariableArgument(sender, token.getValue());
 
 			default:
 				throw new CommandParseException("Unknown token type! " + token.getType());
