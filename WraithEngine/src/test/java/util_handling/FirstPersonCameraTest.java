@@ -22,8 +22,6 @@ public class FirstPersonCameraTest {
 	 */
 	public void testInstantiation() {
 		FirstPersonCamera fpc = new FirstPersonCamera(new Camera());
-		assertTrue(fpc.getMouseSensitivity() == 3f);
-		assertTrue(fpc.getMoveSpeed() == 7f);
 		fpc.setMouseSensitivity(5f);
 		fpc.setMoveSpeed(8f);
 		assertTrue(fpc.getMouseSensitivity() == 5f);
