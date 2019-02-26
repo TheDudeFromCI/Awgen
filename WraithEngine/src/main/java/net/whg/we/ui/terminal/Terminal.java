@@ -1,7 +1,10 @@
 package net.whg.we.ui.terminal;
 
 import net.whg.we.command.CommandList;
+import net.whg.we.command.CommandSender;
+import net.whg.we.command.common.ClearCommand;
 import net.whg.we.command.common.HelpCommand;
+import net.whg.we.command.common.PrintCommand;
 import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;
@@ -12,13 +15,19 @@ import net.whg.we.ui.UIImage;
 import net.whg.we.ui.UIUtils;
 import net.whg.we.ui.font.Font;
 import net.whg.we.ui.font.UIString;
+import net.whg.we.utils.AnimatedProperty;
 import net.whg.we.utils.Color;
+import net.whg.we.utils.Input;
+import net.whg.we.utils.Time;
 
-public class Terminal extends SimpleContainer
+public class Terminal extends SimpleContainer implements CommandSender
 {
 	private ResourceFetcher _fetcher;
 	private Mesh _imageMesh;
 	private CommandList _commandList;
+	private AnimatedProperty _verticalPos;
+	private ConsoleOutput _consoleOut;
+	private boolean _active;
 
 	public Terminal(ResourceFetcher fetcher)
 	{
@@ -27,6 +36,11 @@ public class Terminal extends SimpleContainer
 
 		_commandList = new CommandList();
 		_commandList.addCommand(new HelpCommand(_commandList));
+		_commandList.addCommand(new PrintCommand());
+		_commandList.addCommand(new ClearCommand());
+
+		_verticalPos = new AnimatedProperty(1f);
+		_verticalPos.setSpeed(0.4f);
 	}
 
 	@Override
@@ -87,12 +101,31 @@ public class Terminal extends SimpleContainer
 					cursorMat, selMat);
 			string.getTransform().setPosition(2f, -14f);
 
-			InputBar inputBar = new InputBar(_commandList, bar, string);
+			InputBar inputBar = new InputBar(this, bar, string);
 			inputBar.getTransform().setPosition(0f, 300f);
 			addComponent(inputBar);
+
+			_consoleOut = new ConsoleOutput(font, _fetcher.getGraphics(), textMat);
+			_consoleOut.getTransform().setParent(getTransform());
+			_consoleOut.getTransform().setPosition(0f, 600f - 24f);
+			addComponent(_consoleOut);
 		}
 
 		super.init();
+	}
+
+	@Override
+	public void updateFrame()
+	{
+		if (Input.isKeyDown("`") && Input.isKeyHeld("shift"))
+			_active = !_active;
+
+		_verticalPos.setGoalValue(_active ? 0f : 1f);
+		float vertPos = _verticalPos.update(Time.deltaTime());
+		vertPos *= 316f;
+		getTransform().setPosition(0f, vertPos);
+
+		super.updateFrame();
 	}
 
 	@Override
@@ -105,5 +138,26 @@ public class Terminal extends SimpleContainer
 	public CommandList getCommandList()
 	{
 		return _commandList;
+	}
+
+	public boolean isActive()
+	{
+		return _active;
+	}
+
+	public boolean activeAndOpen()
+	{
+		return _active && _verticalPos.getValue() == 0f;
+	}
+
+	public ConsoleOutput getConsoleOutput()
+	{
+		return _consoleOut;
+	}
+
+	@Override
+	public Console getConsole()
+	{
+		return _consoleOut.getConsole();
 	}
 }

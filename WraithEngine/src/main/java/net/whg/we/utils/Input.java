@@ -121,6 +121,7 @@ public class Input
 		_keyMap.put("period", GLFW.GLFW_KEY_PERIOD);
 		_keyMap.put("apostrophe", GLFW.GLFW_KEY_APOSTROPHE);
 		_keyMap.put("backspace", GLFW.GLFW_KEY_BACKSPACE);
+		_keyMap.put("grave", GLFW.GLFW_KEY_GRAVE_ACCENT);
 
 		// edge keys
 		_keyMap.put("left shift", GLFW.GLFW_KEY_LEFT_SHIFT);
@@ -138,6 +139,7 @@ public class Input
 		_keyMap.put("alt", GLFW.GLFW_KEY_LEFT_ALT);
 		_keyMap.put("super", GLFW.GLFW_KEY_LEFT_SUPER);
 		_keyMap.put("numpad period", GLFW.GLFW_KEY_KP_DECIMAL);
+		_keyMap.put("`", GLFW.GLFW_KEY_GRAVE_ACCENT);
 	}
 
 	/**
