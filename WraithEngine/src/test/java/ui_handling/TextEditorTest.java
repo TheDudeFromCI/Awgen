@@ -383,4 +383,70 @@ public class TextEditorTest
 		Assert.assertEquals(0, editor.getCursor().getCaretX());
 		Assert.assertEquals(1, editor.getCursor().getCaretY());
 	}
+	
+	@Test
+    public void upAndDownKey()
+    {
+        TextEditor editor = textEditor();
+        editor.typeCharacter(keyInput('a'));
+        editor.typeCharacter(keyInput('b'));
+        editor.typeCharacter(keyInput('c'));
+        editor.typeCharacter(keyInput(TypedKeyInput.ENTER_KEY));
+        editor.typeCharacter(keyInput('d'));
+        editor.typeCharacter(keyInput('e'));
+        editor.typeCharacter(keyInput(TypedKeyInput.ENTER_KEY));
+        editor.typeCharacter(keyInput('f'));
+        editor.typeCharacter(keyInput(TypedKeyInput.ENTER_KEY));
+        editor.typeCharacter(keyInput('g'));
+        editor.typeCharacter(keyInput('h'));
+        //writing
+        //  "abc
+        //   de
+        //   f
+        //   gh"
+        //       in the text editor
+        Assert.assertEquals(3, editor.getCursor().getCaretY());
+        editor.typeCharacter(keyInput(TypedKeyInput.UP_KEY));
+        Assert.assertEquals(2, editor.getCursor().getCaretY());
+        Assert.assertEquals(1, editor.getCursor().getCaretX());
+        editor.typeCharacter(keyInput(TypedKeyInput.UP_KEY));
+        Assert.assertEquals(1, editor.getCursor().getCaretY());
+        Assert.assertEquals(1, editor.getCursor().getCaretX());
+        editor.typeCharacter(keyInput(TypedKeyInput.DOWN_KEY));
+        Assert.assertEquals(2, editor.getCursor().getCaretY());
+        Assert.assertEquals(1, editor.getCursor().getCaretX());
+        
+        //setting the cursor on the first row after the "abc"
+        editor.typeCharacter(keyInput(TypedKeyInput.UP_KEY));
+        editor.typeCharacter(keyInput(TypedKeyInput.UP_KEY)); 
+        editor.typeCharacter(keyInput(TypedKeyInput.RIGHT_KEY));
+        editor.typeCharacter(keyInput(TypedKeyInput.RIGHT_KEY));
+        Assert.assertEquals(0, editor.getCursor().getCaretY());
+        Assert.assertEquals(3, editor.getCursor().getCaretX());
+        //to be sure that the cursor is in the right place
+        
+        editor.typeCharacter(keyInput(TypedKeyInput.DOWN_KEY));
+        Assert.assertEquals(1, editor.getCursor().getCaretY());
+        Assert.assertEquals(2, editor.getCursor().getCaretX());  
+    }
+	
+	@Test
+    public void homeAndEndKey()
+    {
+        TextEditor editor = textEditor();
+        editor.typeCharacter(keyInput(TypedKeyInput.HOME_KEY));
+        Assert.assertEquals(0, editor.getCursor().getCaretX());  
+        editor.typeCharacter(keyInput(TypedKeyInput.END_KEY));
+        Assert.assertEquals(0, editor.getCursor().getCaretX());  
+        editor.typeCharacter(keyInput('a'));
+        editor.typeCharacter(keyInput('b'));
+        editor.typeCharacter(keyInput('c'));
+        editor.typeCharacter(keyInput(TypedKeyInput.END_KEY));
+        Assert.assertEquals(3, editor.getCursor().getCaretX());  
+        editor.typeCharacter(keyInput(TypedKeyInput.HOME_KEY));
+        Assert.assertEquals(0, editor.getCursor().getCaretX());  
+        editor.typeCharacter(keyInput(TypedKeyInput.END_KEY));
+        Assert.assertEquals(3, editor.getCursor().getCaretX());          
+    }
+	
 }
