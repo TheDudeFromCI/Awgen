@@ -4,7 +4,7 @@ import net.whg.we.command.Command;
 import net.whg.we.command.CommandArgument;
 import net.whg.we.command.CommandHandler;
 import net.whg.we.command.CommandList;
-import net.whg.we.command.CommandSender;
+import net.whg.we.ui.terminal.Console;
 
 public class HelpCommand implements CommandHandler
 {
@@ -36,7 +36,7 @@ public class HelpCommand implements CommandHandler
 	public String executeCommand(Command command)
 	{
 		CommandArgument[] args = command.getArgs();
-		CommandSender sender = command.getCommandSender();
+		Console console = command.getCommandSender().getConsole();
 
 		if (args.length == 0)
 		{
@@ -44,7 +44,7 @@ public class HelpCommand implements CommandHandler
 			{
 				CommandHandler handler = _commandList.getCommand(i);
 
-				sender.sendMessage(handler.getCommandName() + "\n    " + handler.getDescription());
+				console.println(handler.getCommandName() + "\n    " + handler.getDescription());
 			}
 
 			return "";
@@ -57,16 +57,16 @@ public class HelpCommand implements CommandHandler
 
 			if (handler == null)
 			{
-				sender.sendMessage("Unable to find command '" + commandToFind + "'");
+				console.println("Unable to find command '" + commandToFind + "'");
 				return "";
 			}
 
-			sender.sendMessage(commandToFind + ":\n" + handler.getHelpText());
+			console.println(commandToFind + ":\n" + handler.getHelpText());
 			return "";
 		}
 
-		sender.sendMessage("Unknown number of parameters! Please use as:\n"
-				+ "help [command name]\n" + "Where [] arguments are optional.");
+		console.println("Unknown number of parameters! Please use as:\n" + "help [command name]\n"
+				+ "Where [] arguments are optional.");
 		return "";
 	}
 

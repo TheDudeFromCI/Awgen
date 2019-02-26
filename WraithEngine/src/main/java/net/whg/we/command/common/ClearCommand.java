@@ -1,21 +1,17 @@
 package net.whg.we.command.common;
 
 import net.whg.we.command.Command;
-import net.whg.we.command.CommandArgument;
 import net.whg.we.command.CommandHandler;
 import net.whg.we.ui.terminal.Console;
 
-public class PrintCommand implements CommandHandler
+public class ClearCommand implements CommandHandler
 {
-	private final String[] ALIAS =
-	{
-			"echo", "say"
-	};
+	private final String[] ALIAS = {};
 
 	@Override
 	public String getCommandName()
 	{
-		return "print";
+		return "clear";
 	}
 
 	@Override
@@ -27,21 +23,17 @@ public class PrintCommand implements CommandHandler
 	@Override
 	public String executeCommand(Command command)
 	{
-		CommandArgument[] args = command.getArgs();
 		Console console = command.getCommandSender().getConsole();
 
-		StringBuilder sb = new StringBuilder();
-
-		for (int i = 0; i < args.length; i++)
+		if (command.getArgs().length > 0)
 		{
-			if (i > 0)
-				sb.append(' ');
-			sb.append(args[i].getValue());
+			console.println("Unknown number of parameters! Please use as:\n"
+					+ "help [command name]\n" + "Where [] arguments are optional.");
+			return "";
 		}
 
-		String out = sb.toString();
-		console.println(out);
-		return out;
+		console.clear();
+		return "";
 	}
 
 	@Override
@@ -55,8 +47,8 @@ public class PrintCommand implements CommandHandler
 	{
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("print <args>\n");
-		sb.append("  Prints the input arguments(s), seperated by spaces.\n");
+		sb.append("clear\n");
+		sb.append("  Clears the console.\n");
 
 		return sb.toString();
 	}

@@ -2,6 +2,7 @@ package net.whg.we.ui.terminal;
 
 import net.whg.we.command.CommandList;
 import net.whg.we.command.CommandSender;
+import net.whg.we.command.common.ClearCommand;
 import net.whg.we.command.common.HelpCommand;
 import net.whg.we.command.common.PrintCommand;
 import net.whg.we.main.Plugin;
@@ -18,7 +19,6 @@ import net.whg.we.utils.AnimatedProperty;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.Input;
 import net.whg.we.utils.Time;
-import net.whg.we.utils.logging.Log;
 
 public class Terminal extends SimpleContainer implements CommandSender
 {
@@ -37,6 +37,7 @@ public class Terminal extends SimpleContainer implements CommandSender
 		_commandList = new CommandList();
 		_commandList.addCommand(new HelpCommand(_commandList));
 		_commandList.addCommand(new PrintCommand());
+		_commandList.addCommand(new ClearCommand());
 
 		_verticalPos = new AnimatedProperty(1f);
 		_verticalPos.setSpeed(0.4f);
@@ -155,9 +156,8 @@ public class Terminal extends SimpleContainer implements CommandSender
 	}
 
 	@Override
-	public void sendMessage(String message)
+	public Console getConsole()
 	{
-		Log.infof("> %s", message);
-		_consoleOut.append(message);
+		return _consoleOut.getConsole();
 	}
 }

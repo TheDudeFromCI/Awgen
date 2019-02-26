@@ -16,18 +16,47 @@ public class ConsoleOutput implements UIComponent
 
 	private Mesh[] _lines = new Mesh[CONSOLE_LINE_BUFFER_COUNT];
 	private Transform2D _transform = new Transform2D();
+	private Console _console = new Console(CONSOLE_LINE_BUFFER_COUNT);
+
 	private Matrix4f _lineBuffer = new Matrix4f();
 	private Font _font;
 	private Graphics _graphics;
 	private Material _material;
-	private int _scrollPos = CONSOLE_LINE_BUFFER_COUNT - 1;
 	private boolean _disposed;
+	private int _scrollPos;
 
 	public ConsoleOutput(Font font, Graphics graphics, Material material)
 	{
 		_font = font;
 		_graphics = graphics;
 		_material = material;
+
+		_console.getEvent().addListener(new ConsoleListener()
+		{
+			@Override
+			public int getPriority()
+			{
+				return 0;
+			}
+
+			@Override
+			public void onLineChanged(LineChangedEvent event)
+			{
+				int line = event.getLine();
+				String text = event.getText();
+
+				if (_lines[line] == null)
+					_lines[line] = new Mesh("", UIUtils.textVertexData(_font, text), _graphics);
+				else
+					_lines[line].rebuild(UIUtils.textVertexData(_font, text));
+			}
+
+			@Override
+			public void onScrollPosChanged(ScrollPosChanged event)
+			{
+				_scrollPos = event.getLine();
+			}
+		});
 	}
 
 	@Override
@@ -49,35 +78,6 @@ public class ConsoleOutput implements UIComponent
 	@Override
 	public void updateFrame()
 	{
-	}
-
-	public void append(String text)
-	{
-		if (text == null)
-			text = "";
-
-		int lineStart = 0;
-		for (int i = 0; i < text.length(); i++)
-		{
-			if (text.charAt(i) != '\n')
-				continue;
-
-			appendLine(text.substring(lineStart, i));
-			lineStart = i + 1;
-		}
-
-		appendLine(text.substring(lineStart, text.length()));
-	}
-
-	private void appendLine(String text)
-	{
-		_scrollPos = (_scrollPos + 1) % CONSOLE_LINE_BUFFER_COUNT;
-		int line = (_scrollPos - 1 + CONSOLE_LINE_BUFFER_COUNT) % CONSOLE_LINE_BUFFER_COUNT;
-
-		if (_lines[line] == null)
-			_lines[line] = new Mesh("", UIUtils.textVertexData(_font, text), _graphics);
-		else
-			_lines[line].rebuild(UIUtils.textVertexData(_font, text));
 	}
 
 	@Override
@@ -119,5 +119,10 @@ public class ConsoleOutput implements UIComponent
 	public boolean isDisposed()
 	{
 		return _disposed;
+	}
+
+	public Console getConsole()
+	{
+		return _console;
 	}
 }

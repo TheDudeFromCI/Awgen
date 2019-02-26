@@ -75,11 +75,12 @@ public class InputBar implements UIComponent
 				}
 				catch (CommandParseException exception)
 				{
-					_terminal.sendMessage("Failed to parse command '" + command + "'!");
+					_terminal.getConsole().println("Failed to parse command '" + command + "'!");
 				}
 				catch (Exception exception)
 				{
-					_terminal.sendMessage("An error has occured while executing this command.!");
+					_terminal.getConsole()
+							.println("An error has occured while executing this command.!");
 					Log.errorf("Error while preforming command! '%s'", exception, command);
 				}
 

@@ -43,7 +43,8 @@ public class CommandList
 
 				if (handler == null)
 				{
-					cmd.getCommandSender().sendMessage("Unknown command '" + cmd.getName() + "'");
+					cmd.getCommandSender().getConsole()
+							.println("Unknown command '" + cmd.getName() + "'");
 					continue;
 				}
 
