@@ -66,7 +66,7 @@ public class InputBar implements UIComponent
 				String command = _text.getText();
 				_textEditor.clear();
 
-				Log.infof(">>> %s", command);
+				_terminal.getConsole().println("> " + command);
 
 				try
 				{
