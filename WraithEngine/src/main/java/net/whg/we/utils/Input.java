@@ -157,9 +157,19 @@ public class Input
 			Log.debugf("Tried to update unknown key %d.", key);
 			return;
 		}
-
-		_keys[key] = state == KeyState.PRESSED;
-		Log.tracef("Set key %d to state %s.", key, _keys[key]);
+		
+		if (state == KeyState.PRESSED)
+		{
+			_keys[key] = true;
+			Log.tracef("Set key %d to state true.", key);
+		}
+		else if (state == KeyState.RELEASED)
+		{
+			_keys[key] = false;
+			Log.tracef("Set key %d to state false.", key);
+		}
+		else if (state == KeyState.REPEATED)
+		{ }
 
 		if (state == KeyState.PRESSED || state == KeyState.REPEATED)
 		{
