@@ -52,15 +52,16 @@ public class HelpCommand implements CommandHandler
 
 		if (args.length == 1)
 		{
-			CommandHandler handler = _commandList.getCommand(command.getName());
+			String commandToFind = args[0].getValue();
+			CommandHandler handler = _commandList.getCommand(commandToFind);
 
 			if (handler == null)
 			{
-				sender.sendMessage("Unable to find command '" + command.getName() + "'");
+				sender.sendMessage("Unable to find command '" + commandToFind + "'");
 				return "";
 			}
 
-			sender.sendMessage(command.getName() + ":\n" + handler.getHelpText());
+			sender.sendMessage(commandToFind + ":\n" + handler.getHelpText());
 			return "";
 		}
 
