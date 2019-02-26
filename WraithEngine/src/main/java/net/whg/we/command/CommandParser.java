@@ -49,27 +49,33 @@ public class CommandParser
 
 			String commandName = tokens[commandTokenIndex].getValue();
 
-			CommandArgument[] args;
-			if (tokens[tokens.length - 1].getType() == TokenTemplate.SYMBOL)
-				args = new CommandArgument[tokens.length - commandTokenIndex - 2];
-			else
-				args = new CommandArgument[tokens.length - commandTokenIndex - 1];
+			int argCount = 0;
+			for (int i = commandTokenIndex + 1; i < tokens.length; i++)
+				if (tokens[i].getType() != TokenTemplate.SYMBOL)
+					argCount++;
 
-			for (int i = 0; i < args.length; i++)
+			CommandArgument[] args = new CommandArgument[argCount];
+
+			int a = 0;
+			for (int i = commandTokenIndex + 1; i < tokens.length; i++)
 			{
-				int a = commandTokenIndex + i + 1;
-				String val = tokens[a].getValue();
+				if (tokens[i].getType() == TokenTemplate.SYMBOL)
+					continue;
 
-				if (tokens[a].getType() == TokenTemplate.NESTED_COMMAND)
+				String val = tokens[i].getValue();
+
+				if (tokens[i].getType() == TokenTemplate.NESTED_COMMAND)
 				{
 					CommandVariable v2 = parse(set, val, sender);
 					if (v2 == null)
-						args[i] = new StringArgument("");
+						args[a] = new StringArgument("");
 					else
-						args[i] = new VariableArgument(v2);
+						args[a] = new VariableArgument(v2);
 				}
 				else
-					args[i] = asCommandArgument(set, tokens[a], sender);
+					args[a] = asCommandArgument(set, tokens[i], sender);
+
+				a++;
 			}
 
 			if (tokens[0].getType() == TokenTemplate.VARIABLE)

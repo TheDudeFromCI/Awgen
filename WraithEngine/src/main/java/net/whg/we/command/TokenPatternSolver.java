@@ -73,7 +73,8 @@ public class TokenPatternSolver
 						|| token.getType() == TokenTemplate.STRING
 						|| token.getType() == TokenTemplate.VARIABLE
 						|| token.getType() == TokenTemplate.NESTED_COMMAND
-						|| token.getType() == TokenTemplate.DYNAMIC_VARIABLE;
+						|| token.getType() == TokenTemplate.DYNAMIC_VARIABLE
+						|| token.getType() == TokenTemplate.SYMBOL && token.getValue().equals(",");
 
 			case '=':
 				return token.getType() == TokenTemplate.SYMBOL && token.getValue().equals("=");

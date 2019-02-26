@@ -7,13 +7,15 @@ public class Tokenizer
 {
 	private TokenTemplate[] _tokenTemplates =
 	{
-			new TokenTemplate(TokenTemplate.STRING, "^(\".*\"(?=$|\\s+|;|=))"),
-			new TokenTemplate(TokenTemplate.NESTED_COMMAND, "^(\\(.*\\)(?=$|\\s+|;|=))"),
-			new TokenTemplate(TokenTemplate.STANDARD, "^([a-zA-Z0-9_/.-]+(?=$|\\s+|;|=))"),
-			new TokenTemplate(TokenTemplate.VARIABLE, "^(\\$[a-zA-Z][a-zA-Z0-9_-]*(?=$|\\s+|;|=))"),
-			new TokenTemplate(TokenTemplate.DYNAMIC_VARIABLE, "^(\\$\\[.*\\](?=$|\\s+|;|=))"),
+			new TokenTemplate(TokenTemplate.STRING, "^(\".*\"(?=$|\\s+|;|=|,))"),
+			new TokenTemplate(TokenTemplate.NESTED_COMMAND, "^(\\(.*\\)(?=$|\\s+|;|=|,))"),
+			new TokenTemplate(TokenTemplate.STANDARD, "^([a-zA-Z0-9_/.-]+(?=$|\\s+|;|=|,))"),
+			new TokenTemplate(TokenTemplate.VARIABLE,
+					"^(\\$[a-zA-Z][a-zA-Z0-9_-]*(?=$|\\s+|;|=|,))"),
+			new TokenTemplate(TokenTemplate.DYNAMIC_VARIABLE, "^(\\$\\[.*\\](?=$|\\s+|;|=|,))"),
 			new TokenTemplate(TokenTemplate.SYMBOL, "^(\\=)"),
 			new TokenTemplate(TokenTemplate.SYMBOL, "^(\\;)"),
+			new TokenTemplate(TokenTemplate.SYMBOL, "^(\\,)"),
 	};
 
 	private String _code;
