@@ -1,7 +1,7 @@
 package net.whg.we.ui.terminal;
 
+import net.whg.we.command.CommandParseException;
 import net.whg.we.command.CommandParser;
-import net.whg.we.command.CommandSender;
 import net.whg.we.command.CommandSet;
 import net.whg.we.ui.TextEditor;
 import net.whg.we.ui.Transform2D;
@@ -13,7 +13,7 @@ import net.whg.we.utils.Input;
 import net.whg.we.utils.Time;
 import net.whg.we.utils.logging.Log;
 
-public class InputBar implements UIComponent, CommandSender
+public class InputBar implements UIComponent
 {
 	private Transform2D _transform = new Transform2D();
 	private UIImage _entryBar;
@@ -67,8 +67,22 @@ public class InputBar implements UIComponent, CommandSender
 				_textEditor.clear();
 
 				Log.infof(">>> %s", command);
-				CommandSet commandSet = CommandParser.parse(this, command);
-				_terminal.getCommandList().executeCommandSet(commandSet);
+
+				try
+				{
+					CommandSet commandSet = CommandParser.parse(_terminal, command);
+					_terminal.getCommandList().executeCommandSet(commandSet);
+				}
+				catch (CommandParseException exception)
+				{
+					_terminal.sendMessage("Failed to parse command '" + command + "'!");
+				}
+				catch (Exception exception)
+				{
+					_terminal.sendMessage("An error has occured while executing this command.!");
+					Log.errorf("Error while preforming command! '%s'", exception, command);
+				}
+
 				continue;
 			}
 
@@ -102,11 +116,5 @@ public class InputBar implements UIComponent, CommandSender
 	public boolean isDisposed()
 	{
 		return _disposed;
-	}
-
-	@Override
-	public void sendMessage(String message)
-	{
-		Log.infof("> %s", message);
 	}
 }

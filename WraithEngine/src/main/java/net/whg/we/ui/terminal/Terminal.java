@@ -1,7 +1,9 @@
 package net.whg.we.ui.terminal;
 
 import net.whg.we.command.CommandList;
+import net.whg.we.command.CommandSender;
 import net.whg.we.command.common.HelpCommand;
+import net.whg.we.command.common.PrintCommand;
 import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;
@@ -16,13 +18,15 @@ import net.whg.we.utils.AnimatedProperty;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.Input;
 import net.whg.we.utils.Time;
+import net.whg.we.utils.logging.Log;
 
-public class Terminal extends SimpleContainer
+public class Terminal extends SimpleContainer implements CommandSender
 {
 	private ResourceFetcher _fetcher;
 	private Mesh _imageMesh;
 	private CommandList _commandList;
 	private AnimatedProperty _verticalPos;
+	private ConsoleOutput _consoleOut;
 	private boolean _active;
 
 	public Terminal(ResourceFetcher fetcher)
@@ -32,6 +36,7 @@ public class Terminal extends SimpleContainer
 
 		_commandList = new CommandList();
 		_commandList.addCommand(new HelpCommand(_commandList));
+		_commandList.addCommand(new PrintCommand());
 
 		_verticalPos = new AnimatedProperty(1f);
 		_verticalPos.setSpeed(0.4f);
@@ -98,6 +103,11 @@ public class Terminal extends SimpleContainer
 			InputBar inputBar = new InputBar(this, bar, string);
 			inputBar.getTransform().setPosition(0f, 300f);
 			addComponent(inputBar);
+
+			_consoleOut = new ConsoleOutput(font, _fetcher.getGraphics(), textMat);
+			_consoleOut.getTransform().setParent(getTransform());
+			_consoleOut.getTransform().setPosition(0f, 600f - 24f);
+			addComponent(_consoleOut);
 		}
 
 		super.init();
@@ -137,5 +147,17 @@ public class Terminal extends SimpleContainer
 	public boolean activeAndOpen()
 	{
 		return _active && _verticalPos.getValue() == 0f;
+	}
+
+	public ConsoleOutput getConsoleOutput()
+	{
+		return _consoleOut;
+	}
+
+	@Override
+	public void sendMessage(String message)
+	{
+		Log.infof("> %s", message);
+		_consoleOut.append(message);
 	}
 }
