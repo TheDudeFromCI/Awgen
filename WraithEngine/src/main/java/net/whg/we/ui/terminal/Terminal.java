@@ -5,6 +5,7 @@ import net.whg.we.command.CommandSender;
 import net.whg.we.command.common.ClearCommand;
 import net.whg.we.command.common.HelpCommand;
 import net.whg.we.command.common.PrintCommand;
+import net.whg.we.command.common.SetCommand;
 import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;
@@ -38,6 +39,7 @@ public class Terminal extends SimpleContainer implements CommandSender
 		_commandList.addCommand(new HelpCommand(_commandList));
 		_commandList.addCommand(new PrintCommand());
 		_commandList.addCommand(new ClearCommand());
+		_commandList.addCommand(new SetCommand());
 
 		_verticalPos = new AnimatedProperty(1f);
 		_verticalPos.setSpeed(0.4f);

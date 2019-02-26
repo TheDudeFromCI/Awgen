@@ -31,6 +31,23 @@ public class CommandParser
 			if (tokens[0].getType() == TokenTemplate.VARIABLE)
 				commandTokenIndex = 2;
 
+			if (tokens[commandTokenIndex].getType() != TokenTemplate.STANDARD)
+			{
+				if (tokens[0].getType() == TokenTemplate.VARIABLE)
+					lastVar = set.getOrCreateVariable(tokens[0].getValue().substring(1));
+				else
+					lastVar = set.getOrCreateVariable(String.valueOf(set.getVariableCount()));
+
+				Command command = new Command("set", new CommandArgument[]
+				{
+						asCommandArgument(set, tokens[commandTokenIndex], sender)
+				}, sender);
+				CommandExecution exe = new CommandExecution(command, lastVar);
+				set.insertCommandExecution(exe);
+
+				continue;
+			}
+
 			String commandName = tokens[commandTokenIndex].getValue();
 
 			CommandArgument[] args;
