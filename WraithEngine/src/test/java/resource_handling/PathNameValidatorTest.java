@@ -28,6 +28,7 @@ public class PathNameValidatorTest
 		Assert.assertTrue(val.isValidPathName("123 asd/a_1/abasdd.baast123"));
 		Assert.assertTrue(val.isValidPathName("123 asd/a_1/abasd"));
 		Assert.assertFalse(val.isValidPathName("a%basd"));
+		Assert.assertTrue(val.isValidPathName("abd/a/b/cd")); //you should be able to have a path that doesn't end in a file?
 	}
 
 	@Test
