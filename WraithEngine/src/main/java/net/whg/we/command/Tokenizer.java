@@ -12,7 +12,7 @@ public class Tokenizer
 			new TokenTemplate(TokenTemplate.STANDARD, "^([a-zA-Z0-9_/.-]+(?=$|\\s+|;|=|,))"),
 			new TokenTemplate(TokenTemplate.VARIABLE,
 					"^(\\$[a-zA-Z][a-zA-Z0-9_-]*(?=$|\\s+|;|=|,))"),
-			new TokenTemplate(TokenTemplate.DYNAMIC_VARIABLE, "^(\\$\\[.*\\](?=$|\\s+|;|=|,))"),
+			new TokenTemplate(TokenTemplate.DYNAMIC_VARIABLE, "^(\\$\\[.*\\](?=\\s+|$|;|=|,))"),
 			new TokenTemplate(TokenTemplate.SYMBOL, "^(\\=)"),
 			new TokenTemplate(TokenTemplate.SYMBOL, "^(\\;)"),
 			new TokenTemplate(TokenTemplate.SYMBOL, "^(\\,)"),
@@ -22,7 +22,7 @@ public class Tokenizer
 
 	public Tokenizer(String code)
 	{
-		_code = code;
+		_code = code.replace('\n', ' ');
 	}
 
 	public Token nextToken()
