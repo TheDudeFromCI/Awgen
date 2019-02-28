@@ -1,25 +1,28 @@
 package net.whg.we.command;
 
 import java.util.regex.Matcher;
+import net.whg.we.utils.logging.Log;
 
 public class Tokenizer
 {
 	private TokenTemplate[] _tokenTemplates =
 	{
-			new TokenTemplate(TokenTemplate.STRING, "^(\".*\"(?=$|\\s+|;))"),
-			new TokenTemplate(TokenTemplate.NESTED_COMMAND, "^(\\(.*\\)(?=$|\\s+|;))"),
-			new TokenTemplate(TokenTemplate.STANDARD, "^([a-zA-Z0-9_-]+(?=$|\\s+|;))"),
-			new TokenTemplate(TokenTemplate.VARIABLE, "^(\\$[a-zA-Z][a-zA-Z0-9_-]*(?=$|\\s+|;))"),
-			new TokenTemplate(TokenTemplate.DYNAMIC_VARIABLE, "^(\\$\\[.*\\](?=$|\\s+|;))"),
+			new TokenTemplate(TokenTemplate.STRING, "^(\".*\"(?=$|\\s+|;|=|,))"),
+			new TokenTemplate(TokenTemplate.NESTED_COMMAND, "^(\\(.*\\)(?=$|\\s+|;|=|,))"),
+			new TokenTemplate(TokenTemplate.STANDARD, "^([a-zA-Z0-9_/.-]+(?=$|\\s+|;|=|,))"),
+			new TokenTemplate(TokenTemplate.VARIABLE,
+					"^(\\$[a-zA-Z][a-zA-Z0-9_-]*(?=$|\\s+|;|=|,))"),
+			new TokenTemplate(TokenTemplate.DYNAMIC_VARIABLE, "^(\\$\\[.*\\](?=\\s+|$|;|=|,))"),
 			new TokenTemplate(TokenTemplate.SYMBOL, "^(\\=)"),
 			new TokenTemplate(TokenTemplate.SYMBOL, "^(\\;)"),
+			new TokenTemplate(TokenTemplate.SYMBOL, "^(\\,)"),
 	};
 
 	private String _code;
 
 	public Tokenizer(String code)
 	{
-		_code = code;
+		_code = code.replace('\n', ' ');
 	}
 
 	public Token nextToken()
@@ -37,9 +40,14 @@ public class Tokenizer
 				String token = matcher.group().trim();
 				_code = matcher.replaceAll("");
 
+				Log.tracef("Found Token '%s'", token);
+
 				if (tem.getType() == TokenTemplate.STRING
 						|| tem.getType() == TokenTemplate.NESTED_COMMAND)
 					return new Token(tem.getType(), token.substring(1, token.length() - 1));
+
+				if (tem.getType() == TokenTemplate.DYNAMIC_VARIABLE)
+					return new Token(tem.getType(), token.substring(2, token.length() - 1));
 
 				return new Token(tem.getType(), token);
 			}

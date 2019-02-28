@@ -13,13 +13,6 @@ public class HelpCommand implements CommandHandler
 			"?"
 	};
 
-	private CommandList _commandList;
-
-	public HelpCommand(CommandList commandList)
-	{
-		_commandList = commandList;
-	}
-
 	@Override
 	public String getCommandName()
 	{
@@ -37,12 +30,13 @@ public class HelpCommand implements CommandHandler
 	{
 		CommandArgument[] args = command.getArgs();
 		CommandConsole console = command.getCommandSender().getConsole();
+		CommandList commandList = command.getCommandSender().getCommandList();
 
 		if (args.length == 0)
 		{
-			for (int i = 0; i < _commandList.getCommandCount(); i++)
+			for (int i = 0; i < commandList.getCommandCount(); i++)
 			{
-				CommandHandler handler = _commandList.getCommand(i);
+				CommandHandler handler = commandList.getCommand(i);
 
 				console.println(handler.getCommandName() + "\n    " + handler.getDescription());
 			}
@@ -53,7 +47,7 @@ public class HelpCommand implements CommandHandler
 		if (args.length == 1)
 		{
 			String commandToFind = args[0].getValue();
-			CommandHandler handler = _commandList.getCommand(commandToFind);
+			CommandHandler handler = commandList.getCommand(commandToFind);
 
 			if (handler == null)
 			{
@@ -65,8 +59,7 @@ public class HelpCommand implements CommandHandler
 			return "";
 		}
 
-		console.println("Unknown number of parameters! Please use as:\n" + "help [command name]\n"
-				+ "Where [] arguments are optional.");
+		console.println("Unknown number of parameters!");
 		return "";
 	}
 

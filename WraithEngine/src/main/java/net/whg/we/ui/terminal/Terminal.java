@@ -2,9 +2,14 @@ package net.whg.we.ui.terminal;
 
 import net.whg.we.command.CommandList;
 import net.whg.we.command.CommandSender;
+import net.whg.we.command.VariableKeyring;
 import net.whg.we.command.common.ClearCommand;
+import net.whg.we.command.common.ForCommand;
 import net.whg.we.command.common.HelpCommand;
+import net.whg.we.command.common.ListCommand;
 import net.whg.we.command.common.PrintCommand;
+import net.whg.we.command.common.RandomCommand;
+import net.whg.we.command.common.SetCommand;
 import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;
@@ -28,6 +33,7 @@ public class Terminal extends SimpleContainer implements CommandSender
 	private AnimatedProperty _verticalPos;
 	private ConsoleOutput _consoleOut;
 	private boolean _active;
+	private VariableKeyring _variables;
 
 	public Terminal(ResourceFetcher fetcher)
 	{
@@ -35,9 +41,15 @@ public class Terminal extends SimpleContainer implements CommandSender
 		_imageMesh = new Mesh("UI Quad", UIUtils.defaultImageVertexData(), fetcher.getGraphics());
 
 		_commandList = new CommandList();
-		_commandList.addCommand(new HelpCommand(_commandList));
+		_commandList.addCommand(new HelpCommand());
 		_commandList.addCommand(new PrintCommand());
 		_commandList.addCommand(new ClearCommand());
+		_commandList.addCommand(new SetCommand());
+		_commandList.addCommand(new RandomCommand());
+		_commandList.addCommand(new ForCommand());
+		_commandList.addCommand(new ListCommand());
+
+		_variables = new TerminalKeyring();
 
 		_verticalPos = new AnimatedProperty(1f);
 		_verticalPos.setSpeed(0.4f);
@@ -135,6 +147,7 @@ public class Terminal extends SimpleContainer implements CommandSender
 		super.dispose();
 	}
 
+	@Override
 	public CommandList getCommandList()
 	{
 		return _commandList;
@@ -159,5 +172,11 @@ public class Terminal extends SimpleContainer implements CommandSender
 	public Console getConsole()
 	{
 		return _consoleOut.getConsole();
+	}
+
+	@Override
+	public VariableKeyring getVariableKeyring()
+	{
+		return _variables;
 	}
 }

@@ -1,17 +1,18 @@
 package net.whg.we.command.common;
 
 import net.whg.we.command.Command;
+import net.whg.we.command.CommandArgument;
 import net.whg.we.command.CommandConsole;
 import net.whg.we.command.CommandHandler;
 
-public class ClearCommand implements CommandHandler
+public class SetCommand implements CommandHandler
 {
 	private final String[] ALIAS = {};
 
 	@Override
 	public String getCommandName()
 	{
-		return "clear";
+		return "set";
 	}
 
 	@Override
@@ -23,22 +24,22 @@ public class ClearCommand implements CommandHandler
 	@Override
 	public String executeCommand(Command command)
 	{
+		CommandArgument[] args = command.getArgs();
 		CommandConsole console = command.getCommandSender().getConsole();
 
-		if (command.getArgs().length > 0)
+		if (args.length != 1)
 		{
 			console.println("Unknown number of parameters!");
 			return "";
 		}
 
-		console.clear();
-		return "";
+		return args[0].getValue();
 	}
 
 	@Override
 	public String getDescription()
 	{
-		return "Prints the input arguments, seperated by spaces.";
+		return "Returns the input argument. Used for variable assignment.";
 	}
 
 	@Override
@@ -46,8 +47,8 @@ public class ClearCommand implements CommandHandler
 	{
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("clear\n");
-		sb.append("  Clears the console.\n");
+		sb.append("set <arg>\n");
+		sb.append("  Returns the input argument.\n");
 
 		return sb.toString();
 	}

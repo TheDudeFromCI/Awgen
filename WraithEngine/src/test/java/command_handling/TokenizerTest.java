@@ -129,7 +129,7 @@ public class TokenizerTest
 		String code = "$[clear]";
 		Tokenizer token = new Tokenizer(code);
 
-		validateToken(token.nextToken(), "$[clear]", TokenTemplate.DYNAMIC_VARIABLE);
+		validateToken(token.nextToken(), "clear", TokenTemplate.DYNAMIC_VARIABLE);
 		Assert.assertFalse(token.hasNextToken());
 	}
 
@@ -139,7 +139,7 @@ public class TokenizerTest
 		String code = "$[clear (time -f ss)]";
 		Tokenizer token = new Tokenizer(code);
 
-		validateToken(token.nextToken(), "$[clear (time -f ss)]", TokenTemplate.DYNAMIC_VARIABLE);
+		validateToken(token.nextToken(), "clear (time -f ss)", TokenTemplate.DYNAMIC_VARIABLE);
 		Assert.assertFalse(token.hasNextToken());
 	}
 

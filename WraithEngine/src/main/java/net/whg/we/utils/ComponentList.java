@@ -57,6 +57,9 @@ public class ComponentList<T> extends ArrayList<T>
 
 	public void addInstant(T e)
 	{
+		if (super.contains(e))
+			return;
+
 		super.add(e);
 
 		_toAdd.remove(e);

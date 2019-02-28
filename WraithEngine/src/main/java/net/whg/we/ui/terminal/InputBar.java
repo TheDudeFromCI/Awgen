@@ -61,7 +61,7 @@ public class InputBar implements UIComponent
 
 		for (TypedKeyInput input : Input.getTypedKeys())
 		{
-			if (input.extraKey == TypedKeyInput.ENTER_KEY)
+			if (input.extraKey == TypedKeyInput.ENTER_KEY && !input.shift)
 			{
 				String command = _text.getText();
 				_textEditor.clear();
