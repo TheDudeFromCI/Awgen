@@ -71,13 +71,16 @@ public class CommandSet
 	{
 		StringBuilder sb = new StringBuilder();
 
-		for (CommandExecution exe : _commands)
+		for (int i = 0; i < _commands.size(); i++)
 		{
+			CommandExecution exe = _commands.get(i);
 			sb.append("$").append(exe.getOutput().getName()).append(" = ")
 					.append(exe.getCommand().getName());
 			for (CommandArgument arg : exe.getCommand().getArgs())
 				sb.append(" ").append(arg);
-			sb.append('\n');
+
+			if (i < _commands.size() - 1)
+				sb.append('\n');
 		}
 
 		return sb.toString();

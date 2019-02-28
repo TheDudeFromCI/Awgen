@@ -12,6 +12,7 @@ import net.whg.we.command.CommandSender;
 import net.whg.we.command.CommandSet;
 import net.whg.we.command.VariableKeyring;
 import net.whg.we.ui.terminal.TerminalKeyring;
+import net.whg.we.utils.logging.Log;
 
 public class CommandListTest
 {
@@ -187,6 +188,8 @@ public class CommandListTest
 	@Test
 	public void errorWhileRunningCommand()
 	{
+		Log.setLogLevel(Log.FATAL);
+
 		CommandList list = new CommandList();
 		CommandHandler clear = new CommandHandler()
 		{

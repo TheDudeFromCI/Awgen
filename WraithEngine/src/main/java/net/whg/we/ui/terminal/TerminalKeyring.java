@@ -41,4 +41,16 @@ public class TerminalKeyring implements VariableKeyring
 	{
 		return _variables;
 	}
+
+	@Override
+	public void clearTemp()
+	{
+		for (int i = 0; i < _variables.size();)
+		{
+			if (_variables.get(i).getName().matches("[0-9]*"))
+				_variables.remove(i);
+			else
+				i++;
+		}
+	}
 }

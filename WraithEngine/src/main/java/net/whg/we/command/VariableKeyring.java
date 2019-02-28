@@ -11,4 +11,6 @@ public interface VariableKeyring
 	void addVariable(CommandVariable var);
 
 	List<CommandVariable> getVariables();
+
+	void clearTemp();
 }
