@@ -62,6 +62,7 @@ public class CommandList
 		finally
 		{
 			_running = false;
+			_commands.endFrame();
 		}
 	}
 
@@ -71,7 +72,10 @@ public class CommandList
 		{
 			if (handler.getCommandName().equals(name))
 				return handler;
+		}
 
+		for (CommandHandler handler : _commands)
+		{
 			for (String s : handler.getCommandAliases())
 				if (s.equals(name))
 					return handler;
