@@ -18,3 +18,15 @@ The goal in mind when developing this engine was to push the concept of creating
 ### Why use it?
 
 Yes, there's a lot of other game engines out there. Most are significantly nicer than this one. But the goal of WraithEngine is not to compete with them, but to offer a fun new way to develop games. There are many advantages for using WraithEngine over writing your own engine. WraithEngine takes care of most of the low level game engine code. So you don't need to worry about loading the correct rendering engine, or tweaking optimization for hours. You can dive right into the higher level game logic. It's the feel of making games that should come as naturally as playing games.
+
+### Who is Wraithaven Games?
+
+Wraithaven Games is an independant development studio founded by Bryan Brown, also known as TheDudeFromCI. Founded back in 2014, Wraithaven Games has been developing games for many years, with nearly a decade of experience befor then. The goal of Wraithaven Games is simply to making fun games; to make new worlds to explore and share.
+
+You can contact us by emailing wraithavengames@gmail.com. We'd love to hear from you!
+
+### Is this project open source?
+
+Yes! The project, while maintained by Wraithaven Games, can be contributed to by anyone. This project is meant to be a fun experience for everyone to enjoy. If you have some ideas you want to push forth, or have some features you've been itching to see published, let's see what you've got. Simply make a fork of the project and let's see that you come up with.
+
+Please note, that not all pull requests will be accepted. Code quality and core features are very important, so your code will be heavily reviewed before accepting. Some features may fit better as a plugin for example, and will be requested to be published as a plugin instead. Other features may conflict with the core direction of the project, or may require heavy editing before being considered. If you're not sure about what's allowed and what's not allowed, contact us at wraithavengames@gmail.com, and we'll get back to you as soon as we can. We're here to help!
