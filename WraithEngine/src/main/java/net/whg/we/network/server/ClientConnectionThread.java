@@ -4,12 +4,12 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import net.whg.we.network.Packet;
 import net.whg.we.utils.logging.Log;
 
 class ClientConnectionThread
 {
-	private static final int MAX_PACKET_SIZE = 4096;
-
 	private Object LOCK = new Object();
 	private Socket _socket;
 	private Thread _thread;
@@ -33,15 +33,20 @@ class ClientConnectionThread
 			{
 				try (BufferedInputStream in = new BufferedInputStream(_socket.getInputStream()))
 				{
-					byte[] buffer = new byte[MAX_PACKET_SIZE];
-
 					while (true)
 					{
 						int packetSize = (in.read() & 0xFF) << 8;
 						packetSize |= in.read() & 0xFF;
-						in.read(buffer, 0, packetSize);
 
-						// TODO Handle input packet
+						int packetTypeBytes = in.read() & 0xFF;
+						byte[] nameBytes = new byte[packetTypeBytes];
+						in.read(nameBytes);
+						String name = new String(nameBytes, StandardCharsets.UTF_8);
+
+						Packet packet = _client.getPacketPool().get();
+						in.read(packet.getBytes(), 0, packetSize);
+
+						_listener.onIncomingPacket(_client, packet, name, packetSize);
 					}
 				}
 				catch (IOException e)
@@ -103,10 +108,17 @@ class ClientConnectionThread
 		}
 	}
 
-	public void send(byte[] data, int pos, int length)
+	public void send(Packet packet)
 	{
-		if (length > MAX_PACKET_SIZE)
-			throw new IllegalArgumentException("Packets may not exceed maximum packet size!");
+		if (packet.getPacketType() == null)
+		{
+			Log.warn("Tried to send a packet with no packet type!");
+			return;
+		}
+
+		byte[] nameBytes = packet.getPacketType().getTypePath().getBytes(StandardCharsets.UTF_8);
+		if (nameBytes.length > 255)
+			throw new IllegalArgumentException("Packet type name may not exceed 255 bytes!");
 
 		synchronized (LOCK)
 		{
@@ -115,9 +127,15 @@ class ClientConnectionThread
 
 			try
 			{
-				_out.write(length >> 8 & 0xFF);
-				_out.write(length & 0xFF);
-				_out.write(data, pos, length);
+				int length = packet.encode();
+
+				_out.write(length >> 8);
+				_out.write(length);
+
+				_out.write(nameBytes.length);
+				_out.write(nameBytes);
+
+				_out.write(packet.getBytes(), 0, length);
 				_out.flush();
 			}
 			catch (IOException e)

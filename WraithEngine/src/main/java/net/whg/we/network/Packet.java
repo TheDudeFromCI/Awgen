@@ -1,0 +1,65 @@
+package net.whg.we.network;
+
+import java.util.HashMap;
+import java.util.Map;
+import net.whg.we.utils.Poolable;
+
+public class Packet implements Poolable
+{
+	public static final int MAX_PACKET_SIZE = 4096;
+
+	private byte[] _bytes = new byte[MAX_PACKET_SIZE];
+	private PacketType _packetType;
+	private Map<String, Object> _packetData = new HashMap<>();
+
+	@Override
+	public void init()
+	{
+	}
+
+	@Override
+	public void dispose()
+	{
+		_packetType = null;
+		_packetData.clear();
+	}
+
+	public byte[] getBytes()
+	{
+		return _bytes;
+	}
+
+	public PacketType getPacketType()
+	{
+		return _packetType;
+	}
+
+	public void setPacketType(PacketType packetType)
+	{
+		_packetType = packetType;
+	}
+
+	public int encode()
+	{
+		if (_packetType == null)
+			return 0;
+
+		return _packetType.encode(_bytes, _packetData);
+	}
+
+	public void decode(int length)
+	{
+		if (_packetType == null)
+			return;
+
+		_packetData.clear();
+		_packetType.decode(_bytes, length, _packetData);
+	}
+
+	public void process(PacketPool pool)
+	{
+		if (_packetType != null)
+			_packetType.process(_packetData);
+		pool.put(this);
+	}
+}

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import net.whg.we.network.PacketPool;
 import net.whg.we.utils.logging.Log;
 
 public class ServerThread
@@ -15,11 +16,13 @@ public class ServerThread
 	private ServerSocket _serverSocket;
 	private int _port;
 	private ClientHandler _clientHandler;
+	private PacketPool _packetPool;
 
-	public ServerThread(int port, ClientHandler clientHandler)
+	public ServerThread(int port, ClientHandler clientHandler, PacketPool packetPool)
 	{
 		_port = port;
 		_clientHandler = clientHandler;
+		_packetPool = packetPool;
 	}
 
 	public int getPort()
@@ -59,7 +62,7 @@ public class ServerThread
 							Log.infof("A client has connected to the server. IP: %s",
 									socket.getInetAddress());
 
-							new ClientConnection(socket, _clientHandler);
+							new ClientConnection(socket, _clientHandler, _packetPool);
 						}
 						catch (SocketException e)
 						{
