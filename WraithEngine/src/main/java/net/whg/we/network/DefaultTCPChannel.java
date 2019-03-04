@@ -21,6 +21,9 @@ public class DefaultTCPChannel implements TCPChannel
 	@Override
 	public void close() throws IOException
 	{
+		if (isClosed())
+			return;
+
 		try
 		{
 			_socket.close();
@@ -34,12 +37,18 @@ public class DefaultTCPChannel implements TCPChannel
 	@Override
 	public OutputStream getOutputStream() throws IOException
 	{
+		if (isClosed())
+			return null;
+
 		return _socket.getOutputStream();
 	}
 
 	@Override
 	public InputStream getInputStream() throws IOException
 	{
+		if (isClosed())
+			return null;
+
 		return _socket.getInputStream();
 	}
 
@@ -58,6 +67,6 @@ public class DefaultTCPChannel implements TCPChannel
 	@Override
 	public boolean isClosed()
 	{
-		return _socket.isClosed();
+		return _socket == null || _socket.isClosed();
 	}
 }
