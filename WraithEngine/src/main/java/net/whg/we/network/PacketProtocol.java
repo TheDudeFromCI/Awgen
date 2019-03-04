@@ -16,6 +16,7 @@ public class PacketProtocol implements ChannelProtocol
 	private PacketFactory _packetFactory;
 	private PacketListener _packetListener;
 	private TCPChannel _sender;
+	private boolean _closed;
 
 	/**
 	 * Creates a new instance of the packet protocol.
@@ -41,12 +42,24 @@ public class PacketProtocol implements ChannelProtocol
 	@Override
 	public void close() throws IOException
 	{
+		if (_closed)
+			return;
+
 		_in.close();
 		_out.close();
+		_closed = true;
+	}
+
+	public boolean isClosed()
+	{
+		return _closed;
 	}
 
 	public void sendPacket(Packet packet) throws IOException
 	{
+		if (_closed)
+			throw new IllegalStateException("Streams already closed!");
+
 		if (packet == null)
 			return;
 
@@ -82,11 +95,15 @@ public class PacketProtocol implements ChannelProtocol
 	{
 		_in = new BufferedInputStream(in);
 		_out = new BufferedOutputStream(out);
+		_closed = false;
 	}
 
 	@Override
 	public void next() throws IOException
 	{
+		if (_closed)
+			throw new IllegalStateException("Streams already closed!");
+
 		Packet packet;
 		int packetSize;
 		byte[] nameBytes;
@@ -110,6 +127,8 @@ public class PacketProtocol implements ChannelProtocol
 
 		if (packet.decode(packetSize))
 			_packetListener.onPacketRecieved(packet);
+		else
+			Log.warnf("Recived unknown packet type '%s', from %s.", name, _sender.getIP());
 
 		_packetPool.put(packet);
 	}
