@@ -1,8 +1,6 @@
 package net.whg.we.network.server;
 
 import java.io.IOException;
-import net.whg.we.network.PacketFactory;
-import net.whg.we.network.PacketProcessor;
 import net.whg.we.utils.logging.Log;
 
 public class ServerThread
@@ -10,17 +8,13 @@ public class ServerThread
 	private Thread _thread;
 	private TCPSocket _serverSocket;
 	private int _port;
+	private ServerProtocol _protocol;
 
-	private PacketFactory _packetFactory;
-	private PacketProcessor _packetProcessor;
-
-	public ServerThread(int port, TCPSocket serverSocket, PacketFactory packetFactory,
-			PacketProcessor packetProcessor)
+	public ServerThread(int port, TCPSocket serverSocket, ServerProtocol protocol)
 	{
 		_port = port;
 		_serverSocket = serverSocket;
-		_packetFactory = packetFactory;
-		_packetProcessor = packetProcessor;
+		_protocol = protocol;
 	}
 
 	public int getPort()
@@ -38,8 +32,7 @@ public class ServerThread
 			return;
 		}
 
-		_thread = new Thread(
-				new ServerClientAcceptor(_serverSocket, _port, _packetFactory, _packetProcessor));
+		_thread = new Thread(new ServerClientAcceptor(_serverSocket, _port, _protocol));
 		_thread.setDaemon(true);
 		_thread.setName("Server");
 		_thread.start();

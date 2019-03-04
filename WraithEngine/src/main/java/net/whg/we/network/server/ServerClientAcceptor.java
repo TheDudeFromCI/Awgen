@@ -2,10 +2,6 @@ package net.whg.we.network.server;
 
 import java.io.IOException;
 import java.net.SocketException;
-import net.whg.we.network.PacketFactory;
-import net.whg.we.network.PacketPool;
-import net.whg.we.network.PacketProcessor;
-import net.whg.we.network.PacketProtocol;
 import net.whg.we.network.TCPChannel;
 import net.whg.we.utils.logging.Log;
 
@@ -13,16 +9,13 @@ public class ServerClientAcceptor implements Runnable
 {
 	private TCPSocket _serverSocket;
 	private int _port;
-	private PacketFactory _packetFactory;
-	private PacketProcessor _packetProcessor;
+	private ServerProtocol _protocol;
 
-	public ServerClientAcceptor(TCPSocket serverSocket, int port, PacketFactory packetFactory,
-			PacketProcessor packetProcessor)
+	public ServerClientAcceptor(TCPSocket serverSocket, int port, ServerProtocol protocol)
 	{
 		_serverSocket = serverSocket;
 		_port = port;
-		_packetFactory = packetFactory;
-		_packetProcessor = packetProcessor;
+		_protocol = protocol;
 	}
 
 	@Override
@@ -30,8 +23,6 @@ public class ServerClientAcceptor implements Runnable
 	{
 		try
 		{
-			PacketPool packetPool = new PacketPool();
-
 			_serverSocket.open(_port);
 			Log.trace("Initialized server thread.");
 
@@ -45,8 +36,7 @@ public class ServerClientAcceptor implements Runnable
 
 					Log.infof("A client has connected to the server. IP: %s", socket.getIP());
 
-					new ClientConnection(socket, new PacketProtocol(packetPool, _packetFactory,
-							_packetProcessor, socket));
+					new ClientConnection(socket, _protocol.openChannelProtocol(socket));
 				}
 				catch (SocketException e)
 				{

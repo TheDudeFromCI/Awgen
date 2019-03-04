@@ -1,8 +1,5 @@
 package net.whg.we.network.server;
 
-import net.whg.we.network.PacketFactory;
-import net.whg.we.network.PacketProcessor;
-
 public class DefaultServer implements Server
 {
 	public static final int DEFAULT_PORT = 45634;
@@ -11,13 +8,11 @@ public class DefaultServer implements Server
 	private boolean _running;
 	private ServerThread _serverThread;
 	private ConnectedClientList _clientList;
-	private PacketFactory _packetFactory;
-	private PacketProcessor _packetProcessor;
+	private ServerProtocol _protocol;
 
-	public DefaultServer(PacketFactory packetFactory, PacketProcessor packetProcessor)
+	public DefaultServer(ServerProtocol protocol)
 	{
-		_packetFactory = packetFactory;
-		_packetProcessor = packetProcessor;
+		_protocol = protocol;
 	}
 
 	@Override
@@ -27,8 +22,7 @@ public class DefaultServer implements Server
 			return;
 
 		_clientList = new ConnectedClientList();
-		_serverThread =
-				new ServerThread(_port, new DefaultTCPSocket(), _packetFactory, _packetProcessor);
+		_serverThread = new ServerThread(_port, new DefaultTCPSocket(), _protocol);
 	}
 
 	@Override
