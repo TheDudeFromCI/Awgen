@@ -1,6 +1,5 @@
 package net.whg.we.network.server;
 
-import net.whg.we.network.DefaultTCPSocket;
 import net.whg.we.network.PacketFactory;
 import net.whg.we.network.PacketProcessor;
 

@@ -7,7 +7,6 @@ import net.whg.we.network.PacketPool;
 import net.whg.we.network.PacketProcessor;
 import net.whg.we.network.PacketProtocol;
 import net.whg.we.network.TCPChannel;
-import net.whg.we.network.TCPSocket;
 import net.whg.we.utils.logging.Log;
 
 public class ServerThread

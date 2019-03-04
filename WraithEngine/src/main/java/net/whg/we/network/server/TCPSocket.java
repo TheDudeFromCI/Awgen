@@ -1,8 +1,9 @@
-package net.whg.we.network;
+package net.whg.we.network.server;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.SocketException;
+import net.whg.we.network.TCPChannel;
 
 /**
  * Represents a passive, TCP, server connection.

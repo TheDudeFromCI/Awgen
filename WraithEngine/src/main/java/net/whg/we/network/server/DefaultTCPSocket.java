@@ -1,7 +1,9 @@
-package net.whg.we.network;
+package net.whg.we.network.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import net.whg.we.network.DefaultTCPChannel;
+import net.whg.we.network.TCPChannel;
 
 public class DefaultTCPSocket implements TCPSocket
 {
