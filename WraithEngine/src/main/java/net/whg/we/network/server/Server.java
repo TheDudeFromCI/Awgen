@@ -1,5 +1,7 @@
 package net.whg.we.network.server;
 
+import java.io.IOException;
+
 /**
  * Represents a server which handles accept and communicating with clients. This
  * class should handle it's own threading, and should not block the main thread.
@@ -12,12 +14,12 @@ public interface Server
 	/**
 	 * Starts the server. If the server is already running, nothing happens.
 	 */
-	void startServer();
+	void startServer() throws IOException;
 
 	/**
 	 * Stops the server. If the server is not currently running, nothing happens.
 	 */
-	void stopServer();
+	void stopServer() throws IOException;
 
 	/**
 	 * Checks if the server is currently running.
@@ -47,12 +49,4 @@ public interface Server
 	 * @return A list of all connected clients.
 	 */
 	ConnectedClientList getClientList();
-
-	/**
-	 * Processes and pending packets which are currently waiting to be handled.
-	 * These packets are handled in the order in which they are recieved. Packets
-	 * from the same client will always be handled in the order in which they are
-	 * sent.
-	 */
-	void handlePackets();
 }

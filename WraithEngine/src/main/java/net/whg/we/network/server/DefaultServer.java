@@ -65,10 +65,4 @@ public class DefaultServer implements Server
 	{
 		return _clientList;
 	}
-
-	@Override
-	public void handlePackets()
-	{
-		_packetProcessor.handlePackets();
-	}
 }
