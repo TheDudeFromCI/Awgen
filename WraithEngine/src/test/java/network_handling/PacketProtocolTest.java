@@ -10,13 +10,13 @@ import java.io.PipedOutputStream;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+import net.whg.we.network.DefaultPacketFactory;
 import net.whg.we.network.Packet;
 import net.whg.we.network.PacketFactory;
 import net.whg.we.network.PacketListener;
 import net.whg.we.network.PacketPool;
 import net.whg.we.network.PacketProtocol;
 import net.whg.we.network.PacketType;
-import net.whg.we.network.SimplePacketFactory;
 import net.whg.we.network.TCPChannel;
 
 public class PacketProtocolTest
@@ -25,7 +25,7 @@ public class PacketProtocolTest
 	public void init() throws IOException
 	{
 		PacketPool pool = new PacketPool();
-		PacketFactory factory = new SimplePacketFactory();
+		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
 		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
@@ -44,7 +44,7 @@ public class PacketProtocolTest
 	public void sendPacket() throws IOException
 	{
 		PacketPool pool = new PacketPool();
-		PacketFactory factory = new SimplePacketFactory();
+		PacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
 		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
@@ -99,7 +99,7 @@ public class PacketProtocolTest
 	public void sendPacket_Null() throws IOException
 	{
 		PacketPool pool = new PacketPool();
-		PacketFactory factory = new SimplePacketFactory();
+		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
 		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
@@ -119,7 +119,7 @@ public class PacketProtocolTest
 	public void sendPacket_AlreadyClosed() throws IOException
 	{
 		PacketPool pool = new PacketPool();
-		PacketFactory factory = new SimplePacketFactory();
+		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
 		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
@@ -141,7 +141,7 @@ public class PacketProtocolTest
 	public void sendPacket_NoPacketType() throws IOException
 	{
 		PacketPool pool = new PacketPool();
-		PacketFactory factory = new SimplePacketFactory();
+		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
 		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
@@ -161,7 +161,7 @@ public class PacketProtocolTest
 	public void sendPacket_VeryLongPacketName() throws IOException
 	{
 		PacketPool pool = new PacketPool();
-		PacketFactory factory = new SimplePacketFactory();
+		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
 		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
@@ -189,7 +189,7 @@ public class PacketProtocolTest
 	public void closeProtocolTwice() throws IOException
 	{
 		PacketPool pool = new PacketPool();
-		PacketFactory factory = new SimplePacketFactory();
+		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
 		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
@@ -211,7 +211,7 @@ public class PacketProtocolTest
 	public void nextPacket() throws IOException
 	{
 		PacketPool pool = new PacketPool();
-		SimplePacketFactory factory = new SimplePacketFactory();
+		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
 		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
@@ -247,7 +247,7 @@ public class PacketProtocolTest
 	public void nextPacket_UnknownType() throws IOException
 	{
 		PacketPool pool = new PacketPool();
-		SimplePacketFactory factory = new SimplePacketFactory();
+		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
 		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
@@ -279,7 +279,7 @@ public class PacketProtocolTest
 	public void nextPacket_AlreadyClosed() throws IOException
 	{
 		PacketPool pool = new PacketPool();
-		SimplePacketFactory factory = new SimplePacketFactory();
+		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
 		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
