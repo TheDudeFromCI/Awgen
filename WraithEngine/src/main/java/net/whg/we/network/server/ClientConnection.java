@@ -1,19 +1,16 @@
 package net.whg.we.network.server;
 
 import java.io.IOException;
-import net.whg.we.network.PacketPool;
+import net.whg.we.network.ChannelProtocol;
 import net.whg.we.network.TCPChannel;
 
 public class ClientConnection
 {
 	private ClientConnectionThread _connection;
-	private PacketPool _packetPool;
 
-	public ClientConnection(TCPChannel socket, ConnectionListener listener, PacketPool packetPool)
-			throws IOException
+	public ClientConnection(TCPChannel socket, ChannelProtocol protocol) throws IOException
 	{
-		_packetPool = packetPool;
-		_connection = new ClientConnectionThread(socket, this, listener);
+		_connection = new ClientConnectionThread(socket, protocol);
 	}
 
 	public boolean isClosed()
@@ -28,10 +25,5 @@ public class ClientConnection
 
 		_connection.close();
 		_connection = null;
-	}
-
-	public PacketPool getPacketPool()
-	{
-		return _packetPool;
 	}
 }

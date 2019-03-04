@@ -9,11 +9,13 @@ public class DefaultTCPChannel implements TCPChannel
 {
 	private Socket _socket;
 	private boolean _isClient;
+	private IPAddress _ip;
 
 	public DefaultTCPChannel(Socket socket, boolean isClient)
 	{
 		_socket = socket;
 		_isClient = isClient;
+		_ip = new DefaultIPAddress(socket.getInetAddress());
 	}
 
 	@Override
@@ -27,12 +29,6 @@ public class DefaultTCPChannel implements TCPChannel
 		{
 			_socket = null;
 		}
-	}
-
-	@Override
-	public String getIPString()
-	{
-		return _socket.getInetAddress().toString();
 	}
 
 	@Override
@@ -51,5 +47,11 @@ public class DefaultTCPChannel implements TCPChannel
 	public boolean isClient()
 	{
 		return _isClient;
+	}
+
+	@Override
+	public IPAddress getIP()
+	{
+		return _ip;
 	}
 }

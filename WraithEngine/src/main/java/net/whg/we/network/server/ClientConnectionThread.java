@@ -1,10 +1,7 @@
 package net.whg.we.network.server;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import net.whg.we.network.Packet;
+import net.whg.we.network.ChannelProtocol;
 import net.whg.we.network.TCPChannel;
 import net.whg.we.utils.logging.Log;
 
@@ -14,40 +11,22 @@ class ClientConnectionThread
 	private TCPChannel _socket;
 	private Thread _thread;
 	private boolean _closed;
-	private ClientConnection _client;
-	private ConnectionListener _listener;
-	private BufferedOutputStream _out;
+	private ChannelProtocol _protocol;
 
-	ClientConnectionThread(TCPChannel socket, ClientConnection client, ConnectionListener listener)
-			throws IOException
+	ClientConnectionThread(TCPChannel socket, ChannelProtocol protocol) throws IOException
 	{
 		_socket = socket;
-		_client = client;
-		_listener = listener;
+		_protocol = protocol;
+		_protocol.init(socket.getInputStream(), socket.getOutputStream());
 
 		synchronized (LOCK)
 		{
-			_out = new BufferedOutputStream(_socket.getOutputStream());
-
 			_thread = new Thread(() ->
 			{
-				try (BufferedInputStream in = new BufferedInputStream(_socket.getInputStream()))
+				try
 				{
 					while (true)
-					{
-						int packetSize = (in.read() & 0xFF) << 8;
-						packetSize |= in.read() & 0xFF;
-
-						int packetTypeBytes = in.read() & 0xFF;
-						byte[] nameBytes = new byte[packetTypeBytes];
-						in.read(nameBytes);
-						String name = new String(nameBytes, StandardCharsets.UTF_8);
-
-						Packet packet = _client.getPacketPool().get();
-						in.read(packet.getBytes(), 0, packetSize);
-
-						_listener.onIncomingPacket(_client, packet, name, packetSize);
-					}
+						_protocol.next();
 				}
 				catch (IOException e)
 				{
@@ -55,7 +34,7 @@ class ClientConnectionThread
 					close();
 				}
 
-				_listener.onDisconnected(_client);
+				_protocol.onDisconnected();
 			});
 
 			_thread.setDaemon(true);
@@ -84,6 +63,7 @@ class ClientConnectionThread
 
 			try
 			{
+				_protocol.close();
 				_socket.close();
 			}
 			catch (IOException e)
@@ -102,47 +82,11 @@ class ClientConnectionThread
 
 			_socket = null;
 			_thread = null;
-			_out = null;
-			_client = null;
-			_listener = null;
 		}
 	}
 
-	public void send(Packet packet)
+	public ChannelProtocol getProtocol()
 	{
-		if (packet.getPacketType() == null)
-		{
-			Log.warn("Tried to send a packet with no packet type!");
-			return;
-		}
-
-		byte[] nameBytes = packet.getPacketType().getTypePath().getBytes(StandardCharsets.UTF_8);
-		if (nameBytes.length > 255)
-			throw new IllegalArgumentException("Packet type name may not exceed 255 bytes!");
-
-		synchronized (LOCK)
-		{
-			if (isClosed())
-				return;
-
-			try
-			{
-				int length = packet.encode();
-
-				_out.write(length >> 8);
-				_out.write(length);
-
-				_out.write(nameBytes.length);
-				_out.write(nameBytes);
-
-				_out.write(packet.getBytes(), 0, length);
-				_out.flush();
-			}
-			catch (IOException e)
-			{
-				Log.errorf("Failed to write to output stream!", e);
-				close();
-			}
-		}
+		return _protocol;
 	}
 }

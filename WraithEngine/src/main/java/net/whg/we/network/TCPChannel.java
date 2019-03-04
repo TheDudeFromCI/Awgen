@@ -13,11 +13,11 @@ import java.io.OutputStream;
 public interface TCPChannel extends Closeable
 {
 	/**
-	 * Gets the IP address of the client as a string.
+	 * Gets the IP address of the client or server on the other end of this channel.
 	 *
-	 * @return The IP address of the client as a string.
+	 * @return The IP address.
 	 */
-	String getIPString();
+	IPAddress getIP();
 
 	/**
 	 * Gets the output stream for sending out information to other side of the
@@ -25,7 +25,7 @@ public interface TCPChannel extends Closeable
 	 *
 	 * @return The open outut stream for sending out information.
 	 * @throws IOException
-	 *             - If an error occurs while attempting to send out information.
+	 *             If an error occurs while attempting to send out information.
 	 */
 	OutputStream getOutputStream() throws IOException;
 
@@ -35,15 +35,14 @@ public interface TCPChannel extends Closeable
 	 *
 	 * @return The open input stream for reading incoming information.
 	 * @throws IOException
-	 *             - If an error occurs while waiting for information to be
-	 *             received.
+	 *             If an error occurs while waiting for information to be received.
 	 */
 	InputStream getInputStream() throws IOException;
 
 	/**
 	 * Checks if the computer running this software represents the client side of
 	 * the connection.
-	 * 
+	 *
 	 * @return True if this channel represents a client that is connected to a
 	 *         server, false if this channel represents a server that recieved a
 	 *         connection from a client.

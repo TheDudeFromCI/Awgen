@@ -13,11 +13,11 @@ public interface TCPSocket extends Closeable
 {
 	/**
 	 * Opens the connection on the given port, if not already open.
-	 * 
+	 *
 	 * @param port
 	 *            - The port to open the server socket on.
 	 * @throws IOException
-	 *             - If an error occurs while attempting to open this server socket.
+	 *             If an error occurs while attempting to open this server socket.
 	 */
 	void open(int port) throws IOException;
 
@@ -28,10 +28,10 @@ public interface TCPSocket extends Closeable
 	 *
 	 * @return The next channel that has connected to this server socket.
 	 * @throws IOException
-	 *             - If an error has occured while connecting to a client, or while
+	 *             If an error has occured while connecting to a client, or while
 	 *             waiting for a client.
 	 * @throws SocketException
-	 *             - If the connection is forcefully closed while waiting for a
+	 *             If the connection is forcefully closed while waiting for a
 	 *             client.
 	 */
 	TCPChannel nextChannel() throws IOException;

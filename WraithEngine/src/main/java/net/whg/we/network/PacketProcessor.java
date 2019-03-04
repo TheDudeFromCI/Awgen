@@ -3,7 +3,7 @@ package net.whg.we.network;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PacketProcessor
+public class PacketProcessor implements PacketListener
 {
 	private Object LOCK = new Object();
 	private List<Packet> _packets = new LinkedList<>();
@@ -36,5 +36,16 @@ public class PacketProcessor
 				packet.process(_packetPool);
 			_packets.clear();
 		}
+	}
+
+	@Override
+	public void onPacketSent(Packet packet)
+	{
+	}
+
+	@Override
+	public void onPacketRecieved(Packet packet)
+	{
+		addPacket(packet);
 	}
 }

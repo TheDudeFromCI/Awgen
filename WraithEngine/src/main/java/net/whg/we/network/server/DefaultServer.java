@@ -2,7 +2,6 @@ package net.whg.we.network.server;
 
 import net.whg.we.network.DefaultTCPSocket;
 import net.whg.we.network.PacketFactory;
-import net.whg.we.network.PacketPool;
 import net.whg.we.network.PacketProcessor;
 
 public class DefaultServer implements Server
@@ -13,9 +12,7 @@ public class DefaultServer implements Server
 	private boolean _running;
 	private ServerThread _serverThread;
 	private ConnectedClientList _clientList;
-	private ClientHandler _clientHandler;
 	private PacketFactory _packetFactory;
-	private PacketPool _packetPool;
 	private PacketProcessor _packetProcessor;
 
 	public DefaultServer(PacketFactory packetFactory)
@@ -30,11 +27,8 @@ public class DefaultServer implements Server
 			return;
 
 		_clientList = new ConnectedClientList();
-		_clientHandler = new ClientHandler(_clientList, _packetFactory);
-		_packetPool = new PacketPool();
-		_packetProcessor = new PacketProcessor(_packetPool);
 		_serverThread =
-				new ServerThread(_port, _clientHandler, _packetPool, new DefaultTCPSocket());
+				new ServerThread(_port, new DefaultTCPSocket(), _packetFactory, _packetProcessor);
 	}
 
 	@Override

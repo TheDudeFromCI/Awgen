@@ -1,5 +1,6 @@
 package net.whg.we.network;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import net.whg.we.utils.Poolable;
@@ -11,16 +12,19 @@ public class Packet implements Poolable
 	private byte[] _bytes = new byte[MAX_PACKET_SIZE];
 	private PacketType _packetType;
 	private Map<String, Object> _packetData = new HashMap<>();
+	private TCPChannel _sender;
 
 	@Override
 	public void init()
 	{
+		Arrays.fill(_bytes, (byte) 0);
 	}
 
 	@Override
 	public void dispose()
 	{
 		_packetType = null;
+		_sender = null;
 		_packetData.clear();
 	}
 
@@ -61,5 +65,15 @@ public class Packet implements Poolable
 		if (_packetType != null)
 			_packetType.process(_packetData);
 		pool.put(this);
+	}
+
+	public TCPChannel getSender()
+	{
+		return _sender;
+	}
+
+	public void setSender(TCPChannel sender)
+	{
+		_sender = sender;
 	}
 }
