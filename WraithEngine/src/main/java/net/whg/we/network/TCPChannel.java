@@ -6,7 +6,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Represents an open connection between a server and a client.
+ * Represents an open connection between a server and a client. All methods in
+ * this class may be called from any thread.
  *
  * @author TheDudeFromCI
  */
@@ -48,4 +49,11 @@ public interface TCPChannel extends Closeable
 	 *         connection from a client.
 	 */
 	boolean isClient();
+
+	/**
+	 * Checks if the channel has been closed.
+	 *
+	 * @return True if the channel is closed, false if the channel is still open.
+	 */
+	boolean isClosed();
 }

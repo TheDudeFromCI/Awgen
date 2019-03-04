@@ -54,4 +54,10 @@ public class DefaultTCPChannel implements TCPChannel
 	{
 		return _ip;
 	}
+
+	@Override
+	public boolean isClosed()
+	{
+		return _socket.isClosed();
+	}
 }
