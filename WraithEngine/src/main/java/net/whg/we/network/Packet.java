@@ -61,11 +61,10 @@ public class Packet implements Poolable
 		return true;
 	}
 
-	public void process(PacketPool pool)
+	public void process()
 	{
 		if (_packetType != null)
 			_packetType.process(_packetData);
-		pool.put(this);
 	}
 
 	public TCPChannel getSender()

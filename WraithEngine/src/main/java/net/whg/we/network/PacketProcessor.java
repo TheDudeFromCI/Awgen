@@ -33,7 +33,10 @@ public class PacketProcessor implements PacketListener
 		synchronized (LOCK)
 		{
 			for (Packet packet : _packets)
-				packet.process(_packetPool);
+			{
+				packet.process();
+				_packetPool.put(packet);
+			}
 			_packets.clear();
 		}
 	}
@@ -47,5 +50,13 @@ public class PacketProcessor implements PacketListener
 	public void onPacketRecieved(Packet packet)
 	{
 		addPacket(packet);
+	}
+
+	public int getPendingPackets()
+	{
+		synchronized (LOCK)
+		{
+			return _packets.size();
+		}
 	}
 }
