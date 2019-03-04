@@ -5,13 +5,13 @@ import net.whg.we.network.ChannelProtocol;
 import net.whg.we.network.TCPChannel;
 import net.whg.we.utils.logging.Log;
 
-class ClientConnectionThread
+public class ClientConnectionThread
 {
 	private TCPChannel _socket;
 	private Thread _thread;
 	private ChannelProtocol _protocol;
 
-	ClientConnectionThread(TCPChannel socket, ChannelProtocol protocol) throws IOException
+	public ClientConnectionThread(TCPChannel socket, ChannelProtocol protocol) throws IOException
 	{
 		_socket = socket;
 		_protocol = protocol;

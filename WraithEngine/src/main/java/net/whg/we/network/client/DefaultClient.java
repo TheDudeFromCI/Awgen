@@ -5,11 +5,21 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import net.whg.we.network.ChannelProtocol;
 
+/**
+ * A default implementation of the Client interface.
+ *
+ * @author TheDudeFromCI
+ */
 public class DefaultClient implements Client
 {
 	private Socket _socket;
 	private ChannelProtocol _protocol;
 
+	/**
+	 * Creates a new default client instance with the set protocol.
+	 * 
+	 * @param protocol
+	 */
 	public DefaultClient(ChannelProtocol protocol)
 	{
 		_protocol = protocol;
