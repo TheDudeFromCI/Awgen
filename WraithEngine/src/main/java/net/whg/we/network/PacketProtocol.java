@@ -107,9 +107,11 @@ public class PacketProtocol implements ChannelProtocol
 		String name = new String(nameBytes, StandardCharsets.UTF_8);
 		packet.setPacketType(_packetFactory.findPacketType(name));
 		packet.setSender(_sender);
-		packet.decode(packetSize);
 
-		_packetListener.onPacketRecieved(packet);
+		if (packet.decode(packetSize))
+			_packetListener.onPacketRecieved(packet);
+
+		_packetPool.put(packet);
 	}
 
 	@Override

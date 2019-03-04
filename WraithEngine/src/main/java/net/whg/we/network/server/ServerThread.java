@@ -1,20 +1,13 @@
 package net.whg.we.network.server;
 
 import java.io.IOException;
-import java.net.SocketException;
 import net.whg.we.network.PacketFactory;
-import net.whg.we.network.PacketPool;
 import net.whg.we.network.PacketProcessor;
-import net.whg.we.network.PacketProtocol;
-import net.whg.we.network.TCPChannel;
 import net.whg.we.utils.logging.Log;
 
 public class ServerThread
 {
-	private Object LOCK = new Object();
-
 	private Thread _thread;
-	private boolean _running;
 	private TCPSocket _serverSocket;
 	private int _port;
 
@@ -39,73 +32,19 @@ public class ServerThread
 	{
 		Log.info("Starting a server thread.");
 
-		synchronized (LOCK)
+		if (_thread != null)
 		{
-			if (_thread != null)
-			{
-				Log.warn("Server thread is already running.");
-				return;
-			}
-
-			_running = true;
-
-			_thread = new Thread(() ->
-			{
-				try
-				{
-					PacketPool packetPool = new PacketPool();
-
-					_serverSocket.open(_port);
-					Log.trace("Initialized server thread.");
-
-					while (_running)
-					{
-						Log.trace("Waiting for connection.");
-
-						try
-						{
-							TCPChannel socket = _serverSocket.nextChannel();
-
-							Log.infof("A client has connected to the server. IP: %s",
-									socket.getIP());
-
-							new ClientConnection(socket, new PacketProtocol(packetPool,
-									_packetFactory, _packetProcessor, socket));
-						}
-						catch (SocketException e)
-						{
-							_running = false;
-							Log.info("Server socket has been forcefully closed.");
-						}
-						catch (Exception e)
-						{
-							Log.errorf("There has been an internal error in the server socket!", e);
-						}
-					}
-				}
-				catch (Exception e)
-				{
-					Log.fatalf("There has been a fatal error while opening the server socket!", e);
-				}
-				finally
-				{
-					try
-					{
-						_serverSocket.close();
-					}
-					catch (IOException e)
-					{
-						Log.errorf("Failed to properly close server socket!", e);
-					}
-				}
-			});
-
-			_thread.setDaemon(true);
-			_thread.setName("Server");
-			_thread.start();
-
-			Log.debug("The server thread has been started.");
+			Log.warn("Server thread is already running.");
+			return;
 		}
+
+		_thread = new Thread(
+				new ServerClientAcceptor(_serverSocket, _port, _packetFactory, _packetProcessor));
+		_thread.setDaemon(true);
+		_thread.setName("Server");
+		_thread.start();
+
+		Log.debug("The server thread has been started.");
 	}
 
 	public void stop()
@@ -121,37 +60,30 @@ public class ServerThread
 		if (Log.getLogLevel() == Log.TRACE)
 			Log.indent();
 
-		synchronized (LOCK)
+		if (_serverSocket != null)
 		{
-			_running = false;
-
-			if (_serverSocket != null)
-			{
-				try
-				{
-					Log.trace("Force closing server socket.");
-					_serverSocket.close();
-				}
-				catch (IOException e)
-				{
-					Log.errorf("Failed to properly close server socket!", e);
-				}
-			}
-
 			try
 			{
-				Log.trace("Waiting until thread is fully closed.");
-				_thread.join();
+				Log.trace("Force closing server socket.");
+				_serverSocket.close();
 			}
-			catch (InterruptedException e)
+			catch (IOException e)
 			{
-				Log.errorf("Failed to wait for server thread to close!", e);
+				Log.errorf("Failed to properly close server socket!", e);
 			}
-
-			Log.trace("Final memory clean ups.");
-			_serverSocket = null;
-			_thread = null;
 		}
+
+		try
+		{
+			Log.trace("Waiting until thread is fully closed.");
+			_thread.join();
+		}
+		catch (InterruptedException e)
+		{
+			Log.errorf("Failed to wait for server thread to close!", e);
+		}
+
+		_thread = null;
 
 		if (Log.getLogLevel() == Log.TRACE)
 			Log.unindent();

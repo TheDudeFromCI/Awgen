@@ -46,18 +46,19 @@ public class Packet implements Poolable
 	public int encode()
 	{
 		if (_packetType == null)
-			return 0;
+			return -1;
 
 		return _packetType.encode(_bytes, _packetData);
 	}
 
-	public void decode(int length)
+	public boolean decode(int length)
 	{
 		if (_packetType == null)
-			return;
+			return false;
 
 		_packetData.clear();
 		_packetType.decode(_bytes, length, _packetData);
+		return true;
 	}
 
 	public void process(PacketPool pool)

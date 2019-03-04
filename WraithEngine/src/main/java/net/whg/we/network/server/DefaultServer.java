@@ -14,9 +14,10 @@ public class DefaultServer implements Server
 	private PacketFactory _packetFactory;
 	private PacketProcessor _packetProcessor;
 
-	public DefaultServer(PacketFactory packetFactory)
+	public DefaultServer(PacketFactory packetFactory, PacketProcessor packetProcessor)
 	{
 		_packetFactory = packetFactory;
+		_packetProcessor = packetProcessor;
 	}
 
 	@Override
