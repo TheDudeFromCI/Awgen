@@ -8,10 +8,12 @@ import java.net.Socket;
 public class DefaultTCPChannel implements TCPChannel
 {
 	private Socket _socket;
+	private boolean _isClient;
 
-	public DefaultTCPChannel(Socket socket)
+	public DefaultTCPChannel(Socket socket, boolean isClient)
 	{
 		_socket = socket;
+		_isClient = isClient;
 	}
 
 	@Override
@@ -45,4 +47,9 @@ public class DefaultTCPChannel implements TCPChannel
 		return _socket.getInputStream();
 	}
 
+	@Override
+	public boolean isClient()
+	{
+		return _isClient;
+	}
 }

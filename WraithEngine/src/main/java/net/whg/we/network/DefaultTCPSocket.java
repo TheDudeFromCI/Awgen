@@ -32,7 +32,7 @@ public class DefaultTCPSocket implements TCPSocket
 	@Override
 	public TCPChannel nextChannel() throws IOException
 	{
-		return new DefaultTCPChannel(_serverSocket.accept());
+		return new DefaultTCPChannel(_serverSocket.accept(), false);
 	}
 
 }
