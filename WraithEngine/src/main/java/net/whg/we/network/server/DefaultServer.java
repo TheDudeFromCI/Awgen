@@ -1,5 +1,6 @@
 package net.whg.we.network.server;
 
+import net.whg.we.network.DefaultTCPSocket;
 import net.whg.we.network.PacketFactory;
 import net.whg.we.network.PacketPool;
 import net.whg.we.network.PacketProcessor;
@@ -32,7 +33,8 @@ public class DefaultServer implements Server
 		_clientHandler = new ClientHandler(_clientList, _packetFactory);
 		_packetPool = new PacketPool();
 		_packetProcessor = new PacketProcessor(_packetPool);
-		_serverThread = new ServerThread(_port, _clientHandler, _packetPool);
+		_serverThread =
+				new ServerThread(_port, _clientHandler, _packetPool, new DefaultTCPSocket());
 	}
 
 	@Override

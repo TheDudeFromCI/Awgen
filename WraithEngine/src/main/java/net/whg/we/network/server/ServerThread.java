@@ -1,10 +1,10 @@
 package net.whg.we.network.server;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.SocketException;
 import net.whg.we.network.PacketPool;
+import net.whg.we.network.TCPChannel;
+import net.whg.we.network.TCPSocket;
 import net.whg.we.utils.logging.Log;
 
 public class ServerThread
@@ -13,16 +13,18 @@ public class ServerThread
 
 	private Thread _thread;
 	private boolean _running;
-	private ServerSocket _serverSocket;
+	private TCPSocket _serverSocket;
 	private int _port;
 	private ClientHandler _clientHandler;
 	private PacketPool _packetPool;
 
-	public ServerThread(int port, ClientHandler clientHandler, PacketPool packetPool)
+	public ServerThread(int port, ClientHandler clientHandler, PacketPool packetPool,
+			TCPSocket serverSocket)
 	{
 		_port = port;
 		_clientHandler = clientHandler;
 		_packetPool = packetPool;
+		_serverSocket = serverSocket;
 	}
 
 	public int getPort()
@@ -48,7 +50,7 @@ public class ServerThread
 			{
 				try
 				{
-					_serverSocket = new ServerSocket(_port);
+					_serverSocket.open(_port);
 					Log.trace("Initialized server thread.");
 
 					while (_running)
@@ -57,10 +59,10 @@ public class ServerThread
 
 						try
 						{
-							Socket socket = _serverSocket.accept();
+							TCPChannel socket = _serverSocket.nextChannel();
 
 							Log.infof("A client has connected to the server. IP: %s",
-									socket.getInetAddress());
+									socket.getIPString());
 
 							new ClientConnection(socket, _clientHandler, _packetPool);
 						}

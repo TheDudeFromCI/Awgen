@@ -1,15 +1,15 @@
 package net.whg.we.network.server;
 
 import java.io.IOException;
-import java.net.Socket;
 import net.whg.we.network.PacketPool;
+import net.whg.we.network.TCPChannel;
 
 public class ClientConnection
 {
 	private ClientConnectionThread _connection;
 	private PacketPool _packetPool;
 
-	public ClientConnection(Socket socket, ConnectionListener listener, PacketPool packetPool)
+	public ClientConnection(TCPChannel socket, ConnectionListener listener, PacketPool packetPool)
 			throws IOException
 	{
 		_packetPool = packetPool;

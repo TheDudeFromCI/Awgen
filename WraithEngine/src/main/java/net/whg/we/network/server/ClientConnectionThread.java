@@ -3,22 +3,22 @@ package net.whg.we.network.server;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import net.whg.we.network.Packet;
+import net.whg.we.network.TCPChannel;
 import net.whg.we.utils.logging.Log;
 
 class ClientConnectionThread
 {
 	private Object LOCK = new Object();
-	private Socket _socket;
+	private TCPChannel _socket;
 	private Thread _thread;
 	private boolean _closed;
 	private ClientConnection _client;
 	private ConnectionListener _listener;
 	private BufferedOutputStream _out;
 
-	ClientConnectionThread(Socket socket, ClientConnection client, ConnectionListener listener)
+	ClientConnectionThread(TCPChannel socket, ClientConnection client, ConnectionListener listener)
 			throws IOException
 	{
 		_socket = socket;
