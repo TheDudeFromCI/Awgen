@@ -25,7 +25,7 @@ public class DefaultTCPSocket implements TCPSocket
 	@Override
 	public void open(int port) throws IOException
 	{
-		if (_serverSocket != null)
+		if (!isClosed())
 			throw new IllegalStateException("Server socket already open!");
 
 		_serverSocket = new ServerSocket(port);
@@ -34,7 +34,16 @@ public class DefaultTCPSocket implements TCPSocket
 	@Override
 	public TCPChannel nextChannel() throws IOException
 	{
+		if (isClosed())
+			return null;
+
 		return new DefaultTCPChannel(_serverSocket.accept(), false);
+	}
+
+	@Override
+	public boolean isClosed()
+	{
+		return _serverSocket == null || _serverSocket.isClosed();
 	}
 
 }

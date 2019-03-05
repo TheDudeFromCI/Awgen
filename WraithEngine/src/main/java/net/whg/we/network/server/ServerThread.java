@@ -50,9 +50,6 @@ public class ServerThread
 			return;
 		}
 
-		if (Log.getLogLevel() == Log.TRACE)
-			Log.indent();
-
 		if (_serverSocket != null)
 		{
 			try
@@ -77,8 +74,5 @@ public class ServerThread
 		}
 
 		_thread = null;
-
-		if (Log.getLogLevel() == Log.TRACE)
-			Log.unindent();
 	}
 }

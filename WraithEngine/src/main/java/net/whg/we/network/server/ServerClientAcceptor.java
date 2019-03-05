@@ -58,7 +58,8 @@ public class ServerClientAcceptor implements Runnable
 		{
 			try
 			{
-				_serverSocket.close();
+				if (!_serverSocket.isClosed())
+					_serverSocket.close();
 			}
 			catch (IOException e)
 			{

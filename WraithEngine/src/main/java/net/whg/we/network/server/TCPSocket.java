@@ -36,4 +36,12 @@ public interface TCPSocket extends Closeable
 	 *             client.
 	 */
 	TCPChannel nextChannel() throws IOException;
+
+	/**
+	 * Checks if the socket is currently closed.
+	 * 
+	 * @return True if the socket has been closed, false if the socket is still
+	 *         open.
+	 */
+	boolean isClosed();
 }
