@@ -9,12 +9,15 @@ public class ServerThread
 	private TCPSocket _serverSocket;
 	private int _port;
 	private ServerProtocol _protocol;
+	private ConnectedClientList _clientList;
 
-	public ServerThread(int port, TCPSocket serverSocket, ServerProtocol protocol)
+	public ServerThread(int port, TCPSocket serverSocket, ServerProtocol protocol,
+			ConnectedClientList clientList)
 	{
 		_port = port;
 		_serverSocket = serverSocket;
 		_protocol = protocol;
+		_clientList = clientList;
 	}
 
 	public int getPort()
@@ -32,7 +35,8 @@ public class ServerThread
 			return;
 		}
 
-		_thread = new Thread(new ServerClientAcceptor(_serverSocket, _port, _protocol));
+		_thread =
+				new Thread(new ServerClientAcceptor(_serverSocket, _port, _protocol, _clientList));
 		_thread.setDaemon(true);
 		_thread.setName("Server");
 		_thread.start();

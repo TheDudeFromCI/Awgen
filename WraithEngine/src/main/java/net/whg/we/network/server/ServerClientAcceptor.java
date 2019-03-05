@@ -10,12 +10,15 @@ public class ServerClientAcceptor implements Runnable
 	private TCPSocket _serverSocket;
 	private int _port;
 	private ServerProtocol _protocol;
+	private ConnectedClientList _clientList;
 
-	public ServerClientAcceptor(TCPSocket serverSocket, int port, ServerProtocol protocol)
+	public ServerClientAcceptor(TCPSocket serverSocket, int port, ServerProtocol protocol,
+			ConnectedClientList clientList)
 	{
 		_serverSocket = serverSocket;
 		_port = port;
 		_protocol = protocol;
+		_clientList = clientList;
 	}
 
 	@Override
@@ -36,7 +39,7 @@ public class ServerClientAcceptor implements Runnable
 
 					Log.infof("A client has connected to the server. IP: %s", socket.getIP());
 
-					_protocol.openChannelProtocol(socket);
+					_clientList.addClient(_protocol.openChannelProtocol(socket));
 				}
 				catch (SocketException e)
 				{
@@ -52,7 +55,7 @@ public class ServerClientAcceptor implements Runnable
 		}
 		catch (Exception e)
 		{
-			Log.fatalf("There has been a fatal error while opening the server socket!", e);
+			Log.errorf("There has been a error while opening the server socket!", e);
 		}
 		finally
 		{

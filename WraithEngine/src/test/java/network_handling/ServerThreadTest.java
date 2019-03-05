@@ -7,6 +7,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
 import org.mockito.Mockito;
+import net.whg.we.network.server.ConnectedClientList;
 import net.whg.we.network.server.ServerProtocol;
 import net.whg.we.network.server.ServerThread;
 import net.whg.we.network.server.TCPSocket;
@@ -21,8 +22,9 @@ public class ServerThreadTest
 	{
 		TCPSocket socket = Mockito.mock(TCPSocket.class);
 		ServerProtocol protocol = Mockito.mock(ServerProtocol.class);
+		ConnectedClientList clientList = Mockito.mock(ConnectedClientList.class);
 
-		ServerThread serverThread = new ServerThread(123, socket, protocol);
+		ServerThread serverThread = new ServerThread(123, socket, protocol, clientList);
 
 		Assert.assertEquals(123, serverThread.getPort());
 	}
@@ -33,8 +35,9 @@ public class ServerThreadTest
 		TCPSocket socket = Mockito.mock(TCPSocket.class);
 		ServerProtocol protocol = Mockito.mock(ServerProtocol.class);
 		Mockito.doThrow(new SocketException()).when(socket).nextChannel();
+		ConnectedClientList clientList = Mockito.mock(ConnectedClientList.class);
 
-		ServerThread serverThread = new ServerThread(123, socket, protocol);
+		ServerThread serverThread = new ServerThread(123, socket, protocol, clientList);
 		serverThread.start();
 
 		Thread.sleep(100);
@@ -48,8 +51,9 @@ public class ServerThreadTest
 		TCPSocket socket = Mockito.mock(TCPSocket.class);
 		ServerProtocol protocol = Mockito.mock(ServerProtocol.class);
 		Mockito.doThrow(new SocketException()).when(socket).nextChannel();
+		ConnectedClientList clientList = Mockito.mock(ConnectedClientList.class);
 
-		ServerThread serverThread = new ServerThread(123, socket, protocol);
+		ServerThread serverThread = new ServerThread(123, socket, protocol, clientList);
 		serverThread.start();
 		Thread.sleep(100);
 
@@ -64,6 +68,7 @@ public class ServerThreadTest
 	{
 		TCPSocket socket = Mockito.mock(TCPSocket.class);
 		ServerProtocol protocol = Mockito.mock(ServerProtocol.class);
+		ConnectedClientList clientList = Mockito.mock(ConnectedClientList.class);
 
 		// This has to be an array, as primitives cannot be assigned from
 		// inside of an anonymous class.
@@ -92,7 +97,7 @@ public class ServerThreadTest
 			throw new IOException();
 		});
 
-		ServerThread serverThread = new ServerThread(123, socket, protocol);
+		ServerThread serverThread = new ServerThread(123, socket, protocol, clientList);
 
 		isSocketClosed[0] = false;
 		serverThread.start();
@@ -114,6 +119,7 @@ public class ServerThreadTest
 	{
 		TCPSocket socket = Mockito.mock(TCPSocket.class);
 		ServerProtocol protocol = Mockito.mock(ServerProtocol.class);
+		ConnectedClientList clientList = Mockito.mock(ConnectedClientList.class);
 
 		// This has to be an array, as primitives cannot be assigned from
 		// inside of an anonymous class.
@@ -142,7 +148,7 @@ public class ServerThreadTest
 			throw new IOException();
 		});
 
-		ServerThread serverThread = new ServerThread(123, socket, protocol);
+		ServerThread serverThread = new ServerThread(123, socket, protocol, clientList);
 		serverThread.start();
 
 		Thread.sleep(100);
@@ -157,8 +163,9 @@ public class ServerThreadTest
 	{
 		TCPSocket socket = Mockito.mock(TCPSocket.class);
 		ServerProtocol protocol = Mockito.mock(ServerProtocol.class);
+		ConnectedClientList clientList = Mockito.mock(ConnectedClientList.class);
 
-		ServerThread serverThread = new ServerThread(123, socket, protocol);
+		ServerThread serverThread = new ServerThread(123, socket, protocol, clientList);
 		serverThread.stop();
 
 		Mockito.verify(socket, Mockito.never()).open(123);
@@ -170,6 +177,7 @@ public class ServerThreadTest
 	{
 		TCPSocket socket = Mockito.mock(TCPSocket.class);
 		ServerProtocol protocol = Mockito.mock(ServerProtocol.class);
+		ConnectedClientList clientList = Mockito.mock(ConnectedClientList.class);
 
 		// This has to be an array, as primitives cannot be assigned from
 		// inside of an anonymous class.
@@ -198,7 +206,7 @@ public class ServerThreadTest
 			throw new IOException();
 		});
 
-		ServerThread serverThread = new ServerThread(123, socket, protocol);
+		ServerThread serverThread = new ServerThread(123, socket, protocol, clientList);
 		serverThread.start();
 
 		Thread.sleep(100);

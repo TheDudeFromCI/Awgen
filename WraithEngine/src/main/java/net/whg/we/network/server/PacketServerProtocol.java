@@ -1,6 +1,6 @@
 package net.whg.we.network.server;
 
-import net.whg.we.network.ChannelProtocol;
+import java.io.IOException;
 import net.whg.we.network.PacketFactory;
 import net.whg.we.network.PacketPool;
 import net.whg.we.network.PacketProcessor;
@@ -13,17 +13,19 @@ public class PacketServerProtocol implements ServerProtocol
 	private PacketProcessor _packetProcessor;
 	private PacketPool _packetPool;
 
-	public PacketServerProtocol(PacketFactory packetFactory, PacketProcessor packetProcessor)
+	public PacketServerProtocol(PacketFactory packetFactory, PacketProcessor packetProcessor,
+			PacketPool pool)
 	{
 		_packetFactory = packetFactory;
 		_packetProcessor = packetProcessor;
-		_packetPool = new PacketPool();
+		_packetPool = pool;
 	}
 
 	@Override
-	public ChannelProtocol openChannelProtocol(TCPChannel channel)
+	public ClientConnection openChannelProtocol(TCPChannel channel) throws IOException
 	{
-		return new PacketProtocol(_packetPool, _packetFactory, _packetProcessor, channel);
+		return new ClientConnection(channel,
+				new PacketProtocol(_packetPool, _packetFactory, _packetProcessor, channel));
 	}
 
 }

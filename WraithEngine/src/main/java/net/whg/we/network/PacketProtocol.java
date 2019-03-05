@@ -27,6 +27,24 @@ public class PacketProtocol implements ChannelProtocol
 	 *            - A factory for returning packet type encoders and decoders.
 	 * @param packetListener
 	 *            - A listener for when packets are sent or recieved.
+	 */
+	public PacketProtocol(PacketPool packetPool, PacketFactory packetFactory,
+			PacketListener packetListener)
+	{
+		_packetPool = packetPool;
+		_packetFactory = packetFactory;
+		_packetListener = packetListener;
+	}
+
+	/**
+	 * Creates a new instance of the packet protocol.
+	 *
+	 * @param packetPool
+	 *            - The pool to pull new packet instances from.
+	 * @param packetFactory
+	 *            - A factory for returning packet type encoders and decoders.
+	 * @param packetListener
+	 *            - A listener for when packets are sent or recieved.
 	 * @param sender
 	 *            - Represents the client or server who is sending the packet.
 	 */
@@ -37,6 +55,16 @@ public class PacketProtocol implements ChannelProtocol
 		_packetFactory = packetFactory;
 		_packetListener = packetListener;
 		_sender = sender;
+	}
+
+	public void setSender(TCPChannel sender)
+	{
+		_sender = sender;
+	}
+
+	public TCPChannel getSender()
+	{
+		return _sender;
 	}
 
 	@Override
@@ -50,6 +78,7 @@ public class PacketProtocol implements ChannelProtocol
 		_closed = true;
 	}
 
+	@Override
 	public boolean isClosed()
 	{
 		return _closed;
@@ -68,6 +97,8 @@ public class PacketProtocol implements ChannelProtocol
 			Log.warn("Tried to send a packet with no packet type!");
 			return;
 		}
+
+		Log.tracef("Attempting to send packet. Type: %s", packet.getPacketType().getTypePath());
 
 		_packetListener.onPacketSent(packet);
 
@@ -125,16 +156,38 @@ public class PacketProtocol implements ChannelProtocol
 		packet.setPacketType(_packetFactory.findPacketType(name));
 		packet.setSender(_sender);
 
+		if (packet.getPacketType() == null)
+			Log.tracef("Recived packet of unknown type: '%s'", name);
+		else
+			Log.tracef("Attempting to recive packet. Type: %s",
+					packet.getPacketType().getTypePath());
+
 		if (packet.decode(packetSize))
 			_packetListener.onPacketRecieved(packet);
 		else
+		{
 			Log.warnf("Recived unknown packet type '%s', from %s.", name, _sender.getIP());
-
-		_packetPool.put(packet);
+			_packetPool.put(packet);
+		}
 	}
 
 	@Override
 	public void onDisconnected()
 	{
+	}
+
+	public PacketFactory getPacketFactory()
+	{
+		return _packetFactory;
+	}
+
+	public PacketPool getPacketPool()
+	{
+		return _packetPool;
+	}
+
+	public PacketListener getListener()
+	{
+		return _packetListener;
 	}
 }

@@ -46,7 +46,7 @@ public interface PacketType
 
 	/**
 	 * This is called on the main thread during a physics update after a packet is
-	 * recieved and decoded. References to this map should not be stores, as this
+	 * recieved and decoded. References to this map should not be stored as this
 	 * packet information is placed back into a pool after this packet is processed.
 	 *
 	 * @param packetData

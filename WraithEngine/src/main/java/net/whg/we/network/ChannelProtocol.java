@@ -35,4 +35,12 @@ public interface ChannelProtocol extends Closeable
 	 * Called when the connected is closed.
 	 */
 	void onDisconnected();
+
+	/**
+	 * Checks if the connection has been closed.
+	 * 
+	 * @return True if the connection has been closed, false if the connection is
+	 *         still open.
+	 */
+	boolean isClosed();
 }

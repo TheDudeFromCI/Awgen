@@ -76,4 +76,9 @@ public class Packet implements Poolable
 	{
 		_sender = sender;
 	}
+
+	public Map<String, Object> getData()
+	{
+		return _packetData;
+	}
 }

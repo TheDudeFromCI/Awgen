@@ -2,6 +2,7 @@ package net.whg.we.network;
 
 import java.util.LinkedList;
 import java.util.List;
+import net.whg.we.utils.logging.Log;
 
 public class PacketProcessor implements PacketListener
 {
@@ -49,6 +50,16 @@ public class PacketProcessor implements PacketListener
 	@Override
 	public void onPacketRecieved(Packet packet)
 	{
+		if (Log.getLogLevel() <= Log.TRACE)
+		{
+			String sender =
+					packet.getSender() == null ? "null" : packet.getSender().getIP().toString();
+			String type =
+					packet.getPacketType() == null ? "null" : packet.getPacketType().getTypePath();
+
+			Log.tracef("Recieved packet from %s. Type: %s", sender, type);
+		}
+
 		addPacket(packet);
 	}
 

@@ -22,7 +22,8 @@ public class DefaultServer implements Server
 			return;
 
 		_clientList = new ConnectedClientList();
-		_serverThread = new ServerThread(_port, new DefaultTCPSocket(), _protocol);
+		_serverThread = new ServerThread(_port, new DefaultTCPSocket(), _protocol, _clientList);
+		_serverThread.start();
 	}
 
 	@Override
