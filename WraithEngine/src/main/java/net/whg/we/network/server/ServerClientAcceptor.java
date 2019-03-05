@@ -36,7 +36,7 @@ public class ServerClientAcceptor implements Runnable
 
 					Log.infof("A client has connected to the server. IP: %s", socket.getIP());
 
-					new ClientConnection(socket, _protocol.openChannelProtocol(socket));
+					_protocol.openChannelProtocol(socket);
 				}
 				catch (SocketException e)
 				{
@@ -46,6 +46,7 @@ public class ServerClientAcceptor implements Runnable
 				catch (Exception e)
 				{
 					Log.errorf("There has been an internal error in the server socket!", e);
+					break;
 				}
 			}
 		}
