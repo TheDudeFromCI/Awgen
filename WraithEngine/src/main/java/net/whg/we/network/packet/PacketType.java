@@ -49,8 +49,8 @@ public interface PacketType
 	 * recieved and decoded. References to this map should not be stored as this
 	 * packet information is placed back into a pool after this packet is processed.
 	 *
-	 * @param packetData
-	 *            - The packet data which has been recieved.
+	 * @param packet
+	 *            - The packet which has been recieved.
 	 */
-	void process(Map<String, Object> packetData);
+	void process(Packet packet);
 }

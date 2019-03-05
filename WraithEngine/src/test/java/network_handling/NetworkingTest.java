@@ -65,8 +65,8 @@ public class NetworkingTest
 
 			Mockito.doAnswer(a ->
 			{
-				Map<String, Object> data = (Map<String, Object>) a.getArgument(0);
-				Assert.assertEquals("hello", data.get("message"));
+				Packet packet = (Packet) a.getArgument(0);
+				Assert.assertEquals("hello", packet.getData().get("message"));
 
 				return null;
 			}).when(handshakePacket).process(Mockito.any());

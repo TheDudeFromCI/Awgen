@@ -65,7 +65,7 @@ public class Packet implements Poolable
 	public void process()
 	{
 		if (_packetType != null)
-			_packetType.process(_packetData);
+			_packetType.process(this);
 	}
 
 	public TCPChannel getSender()
