@@ -1,11 +1,9 @@
-package net.whg.we.network.server;
+package net.whg.we.network.packet;
 
 import java.io.IOException;
-import net.whg.we.network.PacketFactory;
-import net.whg.we.network.PacketPool;
-import net.whg.we.network.PacketProcessor;
-import net.whg.we.network.PacketProtocol;
 import net.whg.we.network.TCPChannel;
+import net.whg.we.network.server.ClientConnection;
+import net.whg.we.network.server.ServerProtocol;
 
 public class PacketServerProtocol implements ServerProtocol
 {

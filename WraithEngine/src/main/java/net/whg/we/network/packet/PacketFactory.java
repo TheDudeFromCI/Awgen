@@ -1,4 +1,4 @@
-package net.whg.we.network;
+package net.whg.we.network.packet;
 
 /**
  * An interface for locating packet types based on their type path.

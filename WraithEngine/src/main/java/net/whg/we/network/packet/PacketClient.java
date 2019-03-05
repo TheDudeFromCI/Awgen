@@ -1,15 +1,12 @@
-package net.whg.we.network.client;
+package net.whg.we.network.packet;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import net.whg.we.network.DefaultTCPChannel;
-import net.whg.we.network.Packet;
-import net.whg.we.network.PacketFactory;
-import net.whg.we.network.PacketPool;
-import net.whg.we.network.PacketProcessor;
-import net.whg.we.network.PacketProtocol;
 import net.whg.we.network.TCPChannel;
+import net.whg.we.network.client.ClientThread;
+import net.whg.we.network.client.DefaultClient;
 import net.whg.we.utils.logging.Log;
 
 public class PacketClient extends DefaultClient

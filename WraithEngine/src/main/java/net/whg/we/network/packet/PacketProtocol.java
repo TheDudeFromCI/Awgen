@@ -1,4 +1,4 @@
-package net.whg.we.network;
+package net.whg.we.network.packet;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import net.whg.we.network.ChannelProtocol;
+import net.whg.we.network.TCPChannel;
 import net.whg.we.utils.logging.Log;
 
 public class PacketProtocol implements ChannelProtocol

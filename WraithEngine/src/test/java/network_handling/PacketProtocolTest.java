@@ -10,14 +10,14 @@ import java.io.PipedOutputStream;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
-import net.whg.we.network.DefaultPacketFactory;
-import net.whg.we.network.Packet;
-import net.whg.we.network.PacketFactory;
-import net.whg.we.network.PacketListener;
-import net.whg.we.network.PacketPool;
-import net.whg.we.network.PacketProtocol;
-import net.whg.we.network.PacketType;
 import net.whg.we.network.TCPChannel;
+import net.whg.we.network.packet.DefaultPacketFactory;
+import net.whg.we.network.packet.Packet;
+import net.whg.we.network.packet.PacketFactory;
+import net.whg.we.network.packet.PacketListener;
+import net.whg.we.network.packet.PacketPool;
+import net.whg.we.network.packet.PacketProtocol;
+import net.whg.we.network.packet.PacketType;
 
 public class PacketProtocolTest
 {

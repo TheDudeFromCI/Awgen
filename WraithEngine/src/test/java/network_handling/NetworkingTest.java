@@ -8,14 +8,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
 import org.mockito.Mockito;
-import net.whg.we.network.DefaultPacketFactory;
-import net.whg.we.network.Packet;
-import net.whg.we.network.PacketPool;
-import net.whg.we.network.PacketProcessor;
-import net.whg.we.network.PacketType;
-import net.whg.we.network.client.PacketClient;
+import net.whg.we.network.packet.DefaultPacketFactory;
+import net.whg.we.network.packet.Packet;
+import net.whg.we.network.packet.PacketClient;
+import net.whg.we.network.packet.PacketPool;
+import net.whg.we.network.packet.PacketProcessor;
+import net.whg.we.network.packet.PacketServerProtocol;
+import net.whg.we.network.packet.PacketType;
 import net.whg.we.network.server.DefaultServer;
-import net.whg.we.network.server.PacketServerProtocol;
 import net.whg.we.network.server.Server;
 
 public class NetworkingTest

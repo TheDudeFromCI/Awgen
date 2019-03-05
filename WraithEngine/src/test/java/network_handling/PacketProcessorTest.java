@@ -3,9 +3,9 @@ package network_handling;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
-import net.whg.we.network.Packet;
-import net.whg.we.network.PacketPool;
-import net.whg.we.network.PacketProcessor;
+import net.whg.we.network.packet.Packet;
+import net.whg.we.network.packet.PacketPool;
+import net.whg.we.network.packet.PacketProcessor;
 
 public class PacketProcessorTest
 {

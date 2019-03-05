@@ -1,8 +1,9 @@
-package net.whg.we.network;
+package net.whg.we.network.packet;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import net.whg.we.network.TCPChannel;
 import net.whg.we.utils.Poolable;
 
 public class Packet implements Poolable

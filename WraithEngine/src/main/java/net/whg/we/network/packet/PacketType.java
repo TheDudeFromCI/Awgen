@@ -1,4 +1,4 @@
-package net.whg.we.network;
+package net.whg.we.network.packet;
 
 import java.util.Map;
 
