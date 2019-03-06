@@ -26,4 +26,18 @@ public class PacketServerProtocol implements ServerProtocol
 				new PacketProtocol(_packetPool, _packetFactory, _packetProcessor, channel));
 	}
 
+	public PacketPool getPacketPool()
+	{
+		return _packetPool;
+	}
+
+	public PacketFactory getPacketFactory()
+	{
+		return _packetFactory;
+	}
+
+	public PacketProcessor getPacketProcessor()
+	{
+		return _packetProcessor;
+	}
 }

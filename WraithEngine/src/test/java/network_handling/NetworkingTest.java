@@ -13,6 +13,7 @@ import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketClient;
 import net.whg.we.network.packet.PacketPool;
 import net.whg.we.network.packet.PacketProcessor;
+import net.whg.we.network.packet.PacketServer;
 import net.whg.we.network.packet.PacketServerProtocol;
 import net.whg.we.network.packet.PacketType;
 import net.whg.we.network.server.DefaultServer;
@@ -73,15 +74,9 @@ public class NetworkingTest
 		}
 
 		// Start Server
-		Server server;
-		PacketProcessor packetProcessor;
+		PacketServer server;
 		{
-			PacketPool pool = new PacketPool();
-			packetProcessor = new PacketProcessor(pool);
-			PacketServerProtocol serverProtocol =
-					new PacketServerProtocol(packetFactory, packetProcessor, pool);
-
-			server = new DefaultServer(serverProtocol);
+			server = new PacketServer(packetFactory);
 			server.setPort(13579);
 			server.startServer();
 		}
@@ -101,10 +96,10 @@ public class NetworkingTest
 
 		// Wait for packet
 		{
-			while (packetProcessor.getPendingPackets() == 0)
+			while (server.getPacketProcessor().getPendingPackets() == 0)
 				Thread.sleep(1);
 
-			packetProcessor.handlePackets();
+			server.handlePackets();
 		}
 	}
 }

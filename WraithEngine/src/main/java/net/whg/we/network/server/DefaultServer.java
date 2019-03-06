@@ -4,11 +4,11 @@ public class DefaultServer implements Server
 {
 	public static final int DEFAULT_PORT = 45634;
 
-	private int _port = DEFAULT_PORT;
-	private boolean _running;
-	private ServerThread _serverThread;
-	private ConnectedClientList _clientList;
-	private ServerProtocol _protocol;
+	protected int _port = DEFAULT_PORT;
+	protected boolean _running;
+	protected ServerThread _serverThread;
+	protected ConnectedClientList _clientList;
+	protected ServerProtocol _protocol;
 
 	public DefaultServer(ServerProtocol protocol)
 	{

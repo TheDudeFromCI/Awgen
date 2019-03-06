@@ -11,11 +11,11 @@ import net.whg.we.utils.logging.Log;
 
 public class PacketClient extends DefaultClient
 {
-	private static PacketProtocol buildPacketProtocol(PacketFactory packetFactory)
+	private static PacketProtocol buildPacketProtocol(PacketFactory factory)
 	{
 		PacketPool pool = new PacketPool();
-		PacketProcessor packetProcessor = new PacketProcessor(pool);
-		return new PacketProtocol(pool, packetFactory, packetProcessor);
+		PacketProcessor processor = new PacketProcessor(pool);
+		return new PacketProtocol(pool, factory, processor);
 	}
 
 	private PacketPool _pool;
