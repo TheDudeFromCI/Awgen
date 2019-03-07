@@ -10,6 +10,9 @@ assignees: ''
 **Description**
 What needs to happen?
 
+**How to Fix**
+How do you suggest we do about this?
+
 **Classes Involved**
 - A
 - B
