@@ -11,6 +11,7 @@ import net.whg.we.network.TCPChannel;
  */
 public class ClientConnection
 {
+	private ChannelProtocol _protocol;
 	private ClientConnectionThread _connection;
 
 	/**
@@ -28,6 +29,7 @@ public class ClientConnection
 	 */
 	public ClientConnection(TCPChannel socket, ChannelProtocol protocol) throws IOException
 	{
+		_protocol = protocol;
 		_connection = new ClientConnectionThread(socket, protocol);
 	}
 
@@ -51,5 +53,10 @@ public class ClientConnection
 
 		_connection.close();
 		_connection = null;
+	}
+
+	public ChannelProtocol getProtocol()
+	{
+		return _protocol;
 	}
 }

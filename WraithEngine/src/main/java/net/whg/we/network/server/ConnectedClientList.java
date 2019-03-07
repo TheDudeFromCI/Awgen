@@ -3,6 +3,8 @@ package net.whg.we.network.server;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.whg.we.utils.GenericRunnable;
+
 public class ConnectedClientList
 {
 	private Object LOCK = new Object();
@@ -30,6 +32,22 @@ public class ConnectedClientList
 		synchronized (LOCK)
 		{
 			_clients.remove(connection);
+		}
+	}
+
+	public int getClientCount()
+	{
+		synchronized (LOCK)
+		{
+			return _clients.size();
+		}
+	}
+
+	public ClientConnection getClient(int index)
+	{
+		synchronized (LOCK)
+		{
+			return _clients.get(index);
 		}
 	}
 }

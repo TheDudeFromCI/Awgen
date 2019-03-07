@@ -33,6 +33,11 @@ public class PacketClient extends DefaultClient
 		_factory = _protocol.getPacketFactory();
 	}
 
+	public PacketProcessor getPacketProcessor()
+	{
+		return _processor;
+	}
+
 	public void handlePackets()
 	{
 		_processor.handlePackets();
