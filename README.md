@@ -28,7 +28,7 @@ Yes, there's a lot of other game engines out there. Most are significantly nicer
 
 ### Who is Wraithaven Games?
 
-Wraithaven Games is an independant development studio founded by Bryan Brown, also known as TheDudeFromCI. Founded back in 2014, Wraithaven Games has been developing games for many years, with nearly a decade of experience befor then. The goal of Wraithaven Games is simply to making fun games; to make new worlds to explore and share.
+Wraithaven Games is an independant development studio founded by Bryan Brown, also known as TheDudeFromCI. Founded back in 2014, Wraithaven Games has been developing games for many years, with nearly a decade of experience before then. The goal of Wraithaven Games is simply to making fun games; to make new worlds to explore and share.
 
 You can contact us by emailing wraithavengames@gmail.com. We'd love to hear from you!
 
