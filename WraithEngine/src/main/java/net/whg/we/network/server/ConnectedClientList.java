@@ -3,8 +3,6 @@ package net.whg.we.network.server;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.whg.we.utils.GenericRunnable;
-
 public class ConnectedClientList
 {
 	private Object LOCK = new Object();

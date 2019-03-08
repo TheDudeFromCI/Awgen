@@ -2,7 +2,6 @@ package net.whg.we.event;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import org.lwjgl.system.CallbackI.P;
 import net.whg.we.main.Plugin;
 import net.whg.we.utils.ObjectPool;
 import net.whg.we.utils.SimpleObjectPool;

@@ -1,11 +1,6 @@
 package net.whg.we.network.packet;
 
 import java.io.IOException;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import net.whg.we.network.DefaultTCPChannel;
-import net.whg.we.network.TCPChannel;
-import net.whg.we.network.client.ClientThread;
 import net.whg.we.network.client.DefaultClient;
 import net.whg.we.utils.logging.Log;
 
@@ -23,9 +18,10 @@ public class PacketClient extends DefaultClient
 	private PacketProcessor _processor;
 	private PacketFactory _factory;
 
-	public PacketClient(PacketFactory packetFactory)
+	public PacketClient(PacketFactory packetFactory, String ip, int port)
+			throws IOException
 	{
-		super(buildPacketProtocol(packetFactory));
+		super(buildPacketProtocol(packetFactory), ip, port);
 
 		_protocol = (PacketProtocol) getProtocol();
 		_pool = _protocol.getPacketPool();
@@ -51,7 +47,9 @@ public class PacketClient extends DefaultClient
 		}
 		catch (IOException e)
 		{
-			Log.errorf("There has been an error while attempting to send a packet!", e);
+			Log.errorf(
+					"There has been an error while attempting to send a packet!",
+					e);
 
 			try
 			{
@@ -59,7 +57,9 @@ public class PacketClient extends DefaultClient
 			}
 			catch (IOException e1)
 			{
-				Log.errorf("There has been an error while attempting to close client" + "socket!",
+				Log.errorf(
+						"There has been an error while attempting to close client"
+								+ "socket!",
 						e1);
 			}
 		}
@@ -73,17 +73,5 @@ public class PacketClient extends DefaultClient
 		packet.setPacketType(_factory.findPacketType(typePath));
 
 		return packet;
-	}
-
-	@Override
-	public TCPChannel connect(String ip, int port) throws UnknownHostException, IOException
-	{
-		_channel = new DefaultTCPChannel(new Socket(ip, port), true);
-		_protocol.init(_channel.getInputStream(), _channel.getOutputStream());
-		_protocol.setSender(_channel);
-		_clientThread = new ClientThread(_channel, _protocol);
-		_clientThread.start();
-
-		return _channel;
 	}
 }

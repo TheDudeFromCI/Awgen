@@ -17,17 +17,18 @@ public interface ChannelProtocol extends Closeable
 	 * Initializes the protocol with the incoming and outgoing streams.
 	 *
 	 * @param in
-	 *            - The stream of bytes being recieved.
+	 *                - The stream of bytes being recieved.
 	 * @param out
-	 *            - The stream of bytes being sent.
+	 *                - The stream of bytes being sent.
 	 */
-	void init(InputStream in, OutputStream out);
+	void init(InputStream in, OutputStream out, TCPChannel sender);
 
 	/**
 	 * Blocks until the next packet of information is recieved and processed.
 	 *
 	 * @throws IOException
-	 *             If an error occurs while waiting for the information to be read.
+	 *                         If an error occurs while waiting for the
+	 *                         information to be read.
 	 */
 	void next() throws IOException;
 
@@ -39,8 +40,8 @@ public interface ChannelProtocol extends Closeable
 	/**
 	 * Checks if the connection has been closed.
 	 * 
-	 * @return True if the connection has been closed, false if the connection is
-	 *         still open.
+	 * @return True if the connection has been closed, false if the connection
+	 *         is still open.
 	 */
 	boolean isClosed();
 }

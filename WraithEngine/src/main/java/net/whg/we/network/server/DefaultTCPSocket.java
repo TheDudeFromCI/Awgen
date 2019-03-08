@@ -12,6 +12,9 @@ public class DefaultTCPSocket implements TCPSocket
 	@Override
 	public void close() throws IOException
 	{
+		if (isClosed())
+			return;
+
 		try
 		{
 			_serverSocket.close();

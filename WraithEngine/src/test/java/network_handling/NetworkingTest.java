@@ -11,9 +11,10 @@ import org.mockito.Mockito;
 import net.whg.we.network.packet.DefaultPacketFactory;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketClient;
+import net.whg.we.network.packet.PacketFactory;
 import net.whg.we.network.packet.PacketServer;
 import net.whg.we.network.packet.PacketType;
-import net.whg.we.utils.logging.Log;
+import net.whg.we.network.server.ServerListener;
 
 public class NetworkingTest
 {
@@ -27,21 +28,27 @@ public class NetworkingTest
 		// This test sends a packet from the client to the server which is
 		// then loaded and processed.
 
+		int port = 13579;
+
 		// Packet Encoding rules
 		DefaultPacketFactory packetFactory = new DefaultPacketFactory();
 
 		// Handshake packet
 		{
 			PacketType handshakePacket = Mockito.mock(PacketType.class);
-			Mockito.when(handshakePacket.getTypePath()).thenReturn("core.handshake");
+			Mockito.when(handshakePacket.getTypePath())
+					.thenReturn("core.handshake");
 			packetFactory.addPacketType(handshakePacket);
 
 			Mockito.doAnswer(a ->
 			{
 				byte[] bytes = a.getArgument(0);
-				String message = (String) ((Map<String, Object>) a.getArgument(1)).get("message");
+				String message =
+						(String) ((Map<String, Object>) a.getArgument(1))
+								.get("message");
 
-				byte[] messageAsBytes = message.getBytes(StandardCharsets.UTF_8);
+				byte[] messageAsBytes =
+						message.getBytes(StandardCharsets.UTF_8);
 				for (int i = 0; i < messageAsBytes.length; i++)
 					bytes[i] = messageAsBytes[i];
 
@@ -52,16 +59,19 @@ public class NetworkingTest
 			{
 				byte[] bytes = a.getArgument(0);
 				int length = a.getArgument(1);
-				Map<String, Object> data = (Map<String, Object>) a.getArgument(2);
+				Map<String, Object> data =
+						(Map<String, Object>) a.getArgument(2);
 
 				byte[] messageAsBytes = new byte[length];
 				for (int i = 0; i < messageAsBytes.length; i++)
 					messageAsBytes[i] = bytes[i];
 
-				data.put("message", new String(messageAsBytes, StandardCharsets.UTF_8));
+				data.put("message",
+						new String(messageAsBytes, StandardCharsets.UTF_8));
 
 				return null;
-			}).when(handshakePacket).decode(Mockito.any(), Mockito.anyInt(), Mockito.any());
+			}).when(handshakePacket).decode(Mockito.any(), Mockito.anyInt(),
+					Mockito.any());
 
 			Mockito.doAnswer(a ->
 			{
@@ -73,18 +83,12 @@ public class NetworkingTest
 		}
 
 		// Start Server
-		PacketServer server;
-		{
-			server = new PacketServer(packetFactory);
-			server.setPort(13579);
-			server.startServer();
-		}
-
+		PacketServer server = new PacketServer(packetFactory, port);
 		Thread.sleep(100);
 
 		// Start Client
-		PacketClient client = new PacketClient(packetFactory);
-		client.connect("localhost", 13579);
+		PacketClient client =
+				new PacketClient(packetFactory, "localhost", port);
 
 		// Send packet from client to server.
 		{
@@ -104,9 +108,12 @@ public class NetworkingTest
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void simplePacketNetwork_SendToClient() throws IOException, InterruptedException
+	public void simplePacketNetwork_SendToClient()
+			throws IOException, InterruptedException
 	{
 		// This test sends a packet from the server to the client.
+
+		int port = 53655;
 
 		// Packet Encoding rules
 		DefaultPacketFactory packetFactory = new DefaultPacketFactory();
@@ -114,15 +121,19 @@ public class NetworkingTest
 		// Handshake packet
 		{
 			PacketType handshakePacket = Mockito.mock(PacketType.class);
-			Mockito.when(handshakePacket.getTypePath()).thenReturn("core.handshake");
+			Mockito.when(handshakePacket.getTypePath())
+					.thenReturn("core.handshake");
 			packetFactory.addPacketType(handshakePacket);
 
 			Mockito.doAnswer(a ->
 			{
 				byte[] bytes = a.getArgument(0);
-				String message = (String) ((Map<String, Object>) a.getArgument(1)).get("message");
+				String message =
+						(String) ((Map<String, Object>) a.getArgument(1))
+								.get("message");
 
-				byte[] messageAsBytes = message.getBytes(StandardCharsets.UTF_8);
+				byte[] messageAsBytes =
+						message.getBytes(StandardCharsets.UTF_8);
 				for (int i = 0; i < messageAsBytes.length; i++)
 					bytes[i] = messageAsBytes[i];
 
@@ -133,16 +144,19 @@ public class NetworkingTest
 			{
 				byte[] bytes = a.getArgument(0);
 				int length = a.getArgument(1);
-				Map<String, Object> data = (Map<String, Object>) a.getArgument(2);
+				Map<String, Object> data =
+						(Map<String, Object>) a.getArgument(2);
 
 				byte[] messageAsBytes = new byte[length];
 				for (int i = 0; i < messageAsBytes.length; i++)
 					messageAsBytes[i] = bytes[i];
 
-				data.put("message", new String(messageAsBytes, StandardCharsets.UTF_8));
+				data.put("message",
+						new String(messageAsBytes, StandardCharsets.UTF_8));
 
 				return null;
-			}).when(handshakePacket).decode(Mockito.any(), Mockito.anyInt(), Mockito.any());
+			}).when(handshakePacket).decode(Mockito.any(), Mockito.anyInt(),
+					Mockito.any());
 
 			Mockito.doAnswer(a ->
 			{
@@ -153,19 +167,12 @@ public class NetworkingTest
 			}).when(handshakePacket).process(Mockito.any());
 		}
 
-		// Start Server
-		PacketServer server;
-		{
-			server = new PacketServer(packetFactory);
-			server.setPort(53655);
-			server.startServer();
-		}
-
+		PacketServer server = new PacketServer(packetFactory, port);
 		Thread.sleep(100);
 
 		// Start Client
-		PacketClient client = new PacketClient(packetFactory);
-		client.connect("localhost", 53655);
+		PacketClient client =
+				new PacketClient(packetFactory, "localhost", port);
 
 		Thread.sleep(500);
 
@@ -183,5 +190,32 @@ public class NetworkingTest
 
 			client.handlePackets();
 		}
+	}
+
+	@Test
+	public void kickClientFromServer() throws IOException, InterruptedException
+	{
+		int port = 34534;
+		ServerListener listener = Mockito.mock(ServerListener.class);
+
+		PacketFactory factory = new DefaultPacketFactory();
+
+		PacketServer server = new PacketServer(factory, port);
+		server.getEvents().addListener(listener);
+		Thread.sleep(100);
+
+		new PacketClient(factory, "localhost", port);
+		Thread.sleep(500);
+
+		server.getEvents().handlePendingEvents();
+		Mockito.verify(listener, Mockito.never())
+				.onClientDisconnected(Mockito.eq(server), Mockito.any());
+
+		server.getClientList().getClient(0).close();
+		Thread.sleep(500);
+
+		server.getEvents().handlePendingEvents();
+		Mockito.verify(listener).onClientDisconnected(Mockito.eq(server),
+				Mockito.any());
 	}
 }

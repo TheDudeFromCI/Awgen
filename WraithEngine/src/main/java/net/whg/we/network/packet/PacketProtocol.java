@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import net.whg.we.network.ChannelProtocol;
 import net.whg.we.network.TCPChannel;
+import net.whg.we.network.server.TCPSocket;
 import net.whg.we.utils.logging.Log;
 
 public class PacketProtocol implements ChannelProtocol
@@ -24,11 +25,13 @@ public class PacketProtocol implements ChannelProtocol
 	 * Creates a new instance of the packet protocol.
 	 *
 	 * @param packetPool
-	 *            - The pool to pull new packet instances from.
+	 *                           - The pool to pull new packet instances from.
 	 * @param packetFactory
-	 *            - A factory for returning packet type encoders and decoders.
+	 *                           - A factory for returning packet type encoders
+	 *                           and decoders.
 	 * @param packetListener
-	 *            - A listener for when packets are sent or recieved.
+	 *                           - A listener for when packets are sent or
+	 *                           recieved.
 	 */
 	public PacketProtocol(PacketPool packetPool, PacketFactory packetFactory,
 			PacketListener packetListener)
@@ -36,32 +39,6 @@ public class PacketProtocol implements ChannelProtocol
 		_packetPool = packetPool;
 		_packetFactory = packetFactory;
 		_packetListener = packetListener;
-	}
-
-	/**
-	 * Creates a new instance of the packet protocol.
-	 *
-	 * @param packetPool
-	 *            - The pool to pull new packet instances from.
-	 * @param packetFactory
-	 *            - A factory for returning packet type encoders and decoders.
-	 * @param packetListener
-	 *            - A listener for when packets are sent or recieved.
-	 * @param sender
-	 *            - Represents the client or server who is sending the packet.
-	 */
-	public PacketProtocol(PacketPool packetPool, PacketFactory packetFactory,
-			PacketListener packetListener, TCPChannel sender)
-	{
-		_packetPool = packetPool;
-		_packetFactory = packetFactory;
-		_packetListener = packetListener;
-		_sender = sender;
-	}
-
-	public void setSender(TCPChannel sender)
-	{
-		_sender = sender;
 	}
 
 	public TCPChannel getSender()
@@ -72,7 +49,7 @@ public class PacketProtocol implements ChannelProtocol
 	@Override
 	public void close() throws IOException
 	{
-		if (_closed)
+		if (isClosed())
 			return;
 
 		_in.close();
@@ -100,13 +77,16 @@ public class PacketProtocol implements ChannelProtocol
 			return;
 		}
 
-		Log.tracef("Attempting to send packet. Type: %s", packet.getPacketType().getTypePath());
+		Log.tracef("Attempting to send packet. Type: %s",
+				packet.getPacketType().getTypePath());
 
 		_packetListener.onPacketSent(packet);
 
-		byte[] nameBytes = packet.getPacketType().getTypePath().getBytes(StandardCharsets.UTF_8);
+		byte[] nameBytes = packet.getPacketType().getTypePath()
+				.getBytes(StandardCharsets.UTF_8);
 		if (nameBytes.length > 255)
-			throw new IllegalArgumentException("Packet type name may not exceed 255 bytes!");
+			throw new IllegalArgumentException(
+					"Packet type name may not exceed 255 bytes!");
 
 		int length = packet.encode();
 
@@ -124,10 +104,11 @@ public class PacketProtocol implements ChannelProtocol
 	}
 
 	@Override
-	public void init(InputStream in, OutputStream out)
+	public void init(InputStream in, OutputStream out, TCPChannel sender)
 	{
 		_in = new BufferedInputStream(in);
 		_out = new BufferedOutputStream(out);
+		_sender = sender;
 		_closed = false;
 	}
 
@@ -168,7 +149,8 @@ public class PacketProtocol implements ChannelProtocol
 			_packetListener.onPacketRecieved(packet);
 		else
 		{
-			Log.warnf("Recived unknown packet type '%s', from %s.", name, _sender.getIP());
+			Log.warnf("Recived unknown packet type '%s', from %s.", name,
+					_sender.getIP());
 			_packetPool.put(packet);
 		}
 	}

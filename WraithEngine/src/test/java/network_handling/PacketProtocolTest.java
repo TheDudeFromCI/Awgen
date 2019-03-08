@@ -28,12 +28,12 @@ public class PacketProtocolTest
 		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
-		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
+		PacketProtocol protocol = new PacketProtocol(pool, factory, listener);
 
 		InputStream in = Mockito.mock(InputStream.class);
 		OutputStream out = Mockito.mock(OutputStream.class);
 
-		protocol.init(in, out);
+		protocol.init(in, out, sender);
 		protocol.close();
 
 		Mockito.verify(in).close();
@@ -47,13 +47,14 @@ public class PacketProtocolTest
 		PacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
-		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
+		PacketProtocol protocol = new PacketProtocol(pool, factory, listener);
 
 		PipedInputStream outputReader = new PipedInputStream();
 		InputStream in = Mockito.mock(InputStream.class);
-		OutputStream out = new BufferedOutputStream(new PipedOutputStream(outputReader));
+		OutputStream out =
+				new BufferedOutputStream(new PipedOutputStream(outputReader));
 
-		protocol.init(in, out);
+		protocol.init(in, out, sender);
 
 		PacketType type = Mockito.mock(PacketType.class);
 		Mockito.when(type.encode(Mockito.any(), Mockito.any())).then(a ->
@@ -102,17 +103,17 @@ public class PacketProtocolTest
 		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
-		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
+		PacketProtocol protocol = new PacketProtocol(pool, factory, listener);
 
 		InputStream in = Mockito.mock(InputStream.class);
 		OutputStream out = Mockito.mock(OutputStream.class);
 
-		protocol.init(in, out);
+		protocol.init(in, out, sender);
 		protocol.sendPacket(null);
 		protocol.close();
 
-		Mockito.verify(out, Mockito.never()).write(Mockito.any(), Mockito.anyInt(),
-				Mockito.anyInt());
+		Mockito.verify(out, Mockito.never()).write(Mockito.any(),
+				Mockito.anyInt(), Mockito.anyInt());
 	}
 
 	@Test(expected = IllegalStateException.class)
@@ -122,14 +123,14 @@ public class PacketProtocolTest
 		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
-		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
+		PacketProtocol protocol = new PacketProtocol(pool, factory, listener);
 
 		InputStream in = Mockito.mock(InputStream.class);
 		OutputStream out = Mockito.mock(OutputStream.class);
 
 		PacketType type = Mockito.mock(PacketType.class);
 
-		protocol.init(in, out);
+		protocol.init(in, out, sender);
 		protocol.close();
 
 		Packet packet = new Packet();
@@ -144,17 +145,17 @@ public class PacketProtocolTest
 		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
-		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
+		PacketProtocol protocol = new PacketProtocol(pool, factory, listener);
 
 		InputStream in = Mockito.mock(InputStream.class);
 		OutputStream out = Mockito.mock(OutputStream.class);
 
-		protocol.init(in, out);
+		protocol.init(in, out, sender);
 		protocol.sendPacket(new Packet());
 		protocol.close();
 
-		Mockito.verify(out, Mockito.never()).write(Mockito.any(), Mockito.anyInt(),
-				Mockito.anyInt());
+		Mockito.verify(out, Mockito.never()).write(Mockito.any(),
+				Mockito.anyInt(), Mockito.anyInt());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -164,7 +165,7 @@ public class PacketProtocolTest
 		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
-		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
+		PacketProtocol protocol = new PacketProtocol(pool, factory, listener);
 
 		InputStream in = Mockito.mock(InputStream.class);
 		OutputStream out = Mockito.mock(OutputStream.class);
@@ -180,7 +181,7 @@ public class PacketProtocolTest
 		Packet packet = new Packet();
 		packet.setPacketType(type);
 
-		protocol.init(in, out);
+		protocol.init(in, out, sender);
 		protocol.sendPacket(packet);
 		protocol.close();
 	}
@@ -192,12 +193,12 @@ public class PacketProtocolTest
 		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
-		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
+		PacketProtocol protocol = new PacketProtocol(pool, factory, listener);
 
 		InputStream in = Mockito.mock(InputStream.class);
 		OutputStream out = Mockito.mock(OutputStream.class);
 
-		protocol.init(in, out);
+		protocol.init(in, out, sender);
 		protocol.close();
 		protocol.close();
 		protocol.onDisconnected();
@@ -214,14 +215,15 @@ public class PacketProtocolTest
 		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
-		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
+		PacketProtocol protocol = new PacketProtocol(pool, factory, listener);
 
 		PacketType packetType = Mockito.mock(PacketType.class);
 		Mockito.when(packetType.getTypePath()).thenReturn("a");
 		factory.addPacketType(packetType);
 
 		PipedOutputStream inputWriter = new PipedOutputStream();
-		InputStream in = new BufferedInputStream(new PipedInputStream(inputWriter));
+		InputStream in =
+				new BufferedInputStream(new PipedInputStream(inputWriter));
 		OutputStream out = Mockito.mock(OutputStream.class);
 
 		inputWriter.write(new byte[]
@@ -236,7 +238,7 @@ public class PacketProtocolTest
 				0x0A, 0x0B, 0x0C,
 		});
 
-		protocol.init(in, out);
+		protocol.init(in, out, sender);
 		protocol.next();
 		protocol.close();
 
@@ -250,10 +252,11 @@ public class PacketProtocolTest
 		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
-		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
+		PacketProtocol protocol = new PacketProtocol(pool, factory, listener);
 
 		PipedOutputStream inputWriter = new PipedOutputStream();
-		InputStream in = new BufferedInputStream(new PipedInputStream(inputWriter));
+		InputStream in =
+				new BufferedInputStream(new PipedInputStream(inputWriter));
 		OutputStream out = Mockito.mock(OutputStream.class);
 
 		inputWriter.write(new byte[]
@@ -268,11 +271,12 @@ public class PacketProtocolTest
 				0x0A, 0x0B, 0x0C,
 		});
 
-		protocol.init(in, out);
+		protocol.init(in, out, sender);
 		protocol.next();
 		protocol.close();
 
-		Mockito.verify(listener, Mockito.never()).onPacketRecieved(Mockito.any());
+		Mockito.verify(listener, Mockito.never())
+				.onPacketRecieved(Mockito.any());
 	}
 
 	@Test(expected = IllegalStateException.class)
@@ -282,12 +286,12 @@ public class PacketProtocolTest
 		DefaultPacketFactory factory = new DefaultPacketFactory();
 		PacketListener listener = Mockito.mock(PacketListener.class);
 		TCPChannel sender = Mockito.mock(TCPChannel.class);
-		PacketProtocol protocol = new PacketProtocol(pool, factory, listener, sender);
+		PacketProtocol protocol = new PacketProtocol(pool, factory, listener);
 
 		InputStream in = Mockito.mock(InputStream.class);
 		OutputStream out = Mockito.mock(OutputStream.class);
 
-		protocol.init(in, out);
+		protocol.init(in, out, sender);
 		protocol.close();
 		protocol.next();
 	}
