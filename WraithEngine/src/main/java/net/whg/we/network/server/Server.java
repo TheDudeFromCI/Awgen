@@ -1,7 +1,6 @@
 package net.whg.we.network.server;
 
 import java.io.IOException;
-import net.whg.we.utils.EventQueue;
 
 /**
  * Represents a server which handles accept and communicating with clients. This

@@ -3,7 +3,6 @@ package net.whg.we.network.client;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import net.whg.we.network.ChannelProtocol;
 import net.whg.we.network.DefaultTCPChannel;
 import net.whg.we.network.TCPChannel;

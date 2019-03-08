@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import net.whg.we.network.ChannelProtocol;
 import net.whg.we.network.TCPChannel;
-import net.whg.we.network.server.TCPSocket;
 import net.whg.we.utils.logging.Log;
 
 public class PacketProtocol implements ChannelProtocol
