@@ -6,7 +6,7 @@ public interface ServerListener extends Listener
 {
     void onServerStarted(Server server);
 
-    void onServerFailedToStart(Server server);
+    void onServerFailedToStart(Server server, int port);
 
     void onClientConnected(Server server, ClientConnection client);
 
