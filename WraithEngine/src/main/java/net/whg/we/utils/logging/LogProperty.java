@@ -218,4 +218,9 @@ public class LogProperty implements Poolable
 	{
 		return _properties.toString();
 	}
+
+	public void push()
+	{
+		Log.log(this);
+	}
 }
