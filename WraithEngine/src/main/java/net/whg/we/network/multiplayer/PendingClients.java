@@ -2,7 +2,6 @@ package net.whg.we.network.multiplayer;
 
 import java.util.ArrayList;
 import net.whg.we.network.IPAddress;
-import net.whg.we.network.TCPChannel;
 import net.whg.we.network.server.ClientConnection;
 
 public class PendingClients
