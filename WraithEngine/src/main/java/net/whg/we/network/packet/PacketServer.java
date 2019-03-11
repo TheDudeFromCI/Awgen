@@ -12,19 +12,20 @@ import net.whg.we.utils.logging.Log;
 
 public class PacketServer extends DefaultServer
 {
-    private static ServerProtocol
-            buildPacketServerProtocol(PacketFactory factory)
+    private static ServerProtocol buildPacketServerProtocol(
+            PacketFactory factory, PacketHandler handler)
     {
         PacketPool pool = new PacketPool();
-        PacketProcessor processor = new PacketProcessor(pool);
+        PacketProcessor processor = new PacketProcessor(pool, handler);
         return new PacketServerProtocol(null, factory, processor, pool);
     }
 
     protected PacketServerProtocol _packetServerProtocol;
 
-    public PacketServer(PacketFactory factory, int port) throws IOException
+    public PacketServer(PacketFactory factory, PacketHandler handler, int port)
+            throws IOException
     {
-        super(buildPacketServerProtocol(factory), port);
+        super(buildPacketServerProtocol(factory, handler), port);
         _packetServerProtocol = (PacketServerProtocol) getProtocol();
         _packetServerProtocol.setServer(this);
     }

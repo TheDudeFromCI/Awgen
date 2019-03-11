@@ -4,21 +4,21 @@ import java.net.InetAddress;
 
 public class DefaultIPAddress implements IPAddress
 {
-	private InetAddress _ip;
+    private InetAddress _ip;
 
-	public DefaultIPAddress(InetAddress ip)
-	{
-		_ip = ip;
-	}
+    public DefaultIPAddress(InetAddress ip)
+    {
+        _ip = ip;
+    }
 
-	public InetAddress asInetAddress()
-	{
-		return _ip;
-	}
+    public InetAddress asInetAddress()
+    {
+        return _ip;
+    }
 
-	@Override
-	public String toString()
-	{
-		return _ip.toString();
-	}
+    @Override
+    public String toString()
+    {
+        return _ip.toString();
+    }
 }

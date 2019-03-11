@@ -34,10 +34,10 @@ public class DefaultClient
         _protocol.init(_channel.getInputStream(), _channel.getOutputStream(),
                 _channel);
 
-        _event.onConnectToServer(_channel);
-
         _thread = new Thread(() ->
         {
+            _event.onConnectToServer(_channel);
+
             try
             {
                 while (true)
