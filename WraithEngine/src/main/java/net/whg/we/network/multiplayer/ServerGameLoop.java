@@ -16,11 +16,14 @@ public class ServerGameLoop implements GameLoop
     private PacketServer _server;
     private UpdateEventCaller _updateListener = new UpdateEventCaller();
     private ResourceManager _resourceManager;
+    private boolean _disconnectWhenNoClients;
 
-    public ServerGameLoop(PacketServer server, ResourceManager resourceManager)
+    public ServerGameLoop(PacketServer server, ResourceManager resourceManager,
+            boolean disconnectWhenNoClients)
     {
         _server = server;
         _resourceManager = resourceManager;
+        _disconnectWhenNoClients = disconnectWhenNoClients;
     }
 
     @Override
@@ -31,6 +34,7 @@ public class ServerGameLoop implements GameLoop
 
         _updateListener.init();
 
+        boolean clientConnected = false;
         while (_running)
         {
             try
@@ -43,6 +47,15 @@ public class ServerGameLoop implements GameLoop
                 {
                     _server.handlePackets();
                     _updateListener.onUpdate();
+
+                    // Sets flag to true when at least one client has connected.
+                    if (_server.getClientList().getClientCount() > 0)
+                        clientConnected = true;
+
+                    // Closes server when last player has logged off.
+                    if (clientConnected
+                            && _server.getClientList().getClientCount() == 0)
+                        requestClose();
                 }
 
                 // Sleep for 1 millisecond to prevent maxing the CPU.
