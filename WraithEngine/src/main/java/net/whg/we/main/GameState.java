@@ -17,16 +17,13 @@ public class GameState
     private PluginLoader _pluginLoader;
     private EventManager _eventManager;
     private GameLoop _gameLoop;
-    private NetworkManager _networkManager;
 
-    public GameState(ResourceManager resourceManager, GameLoop gameLoop,
-            NetworkManager networkManager)
+    public GameState(ResourceManager resourceManager, GameLoop gameLoop)
     {
         _resourceManager = resourceManager;
         _pluginLoader = new PluginLoader();
         _eventManager = new EventManager();
         _gameLoop = gameLoop;
-        _networkManager = networkManager;
     }
 
     public void run()
@@ -68,10 +65,5 @@ public class GameState
     public GameLoop getGameLoop()
     {
         return _gameLoop;
-    }
-
-    public NetworkManager getNetworkManager()
-    {
-        return _networkManager;
     }
 }

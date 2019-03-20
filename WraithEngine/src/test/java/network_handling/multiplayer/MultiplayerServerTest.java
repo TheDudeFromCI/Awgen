@@ -16,9 +16,6 @@ public class MultiplayerServerTest
     @Test
     public void playerConnect() throws InterruptedException
     {
-        Log.dispose();
-        Log.setLogLevel(Log.TRACE);
-
         int port = 34579;
 
         // Start server

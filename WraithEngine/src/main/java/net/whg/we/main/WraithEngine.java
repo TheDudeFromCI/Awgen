@@ -3,6 +3,7 @@ package net.whg.we.main;
 import java.io.File;
 import org.lwjgl.Version;
 import net.whg.we.network.multiplayer.NetworkManager;
+import net.whg.we.network.multiplayer.ServerGameLoop;
 import net.whg.we.resources.FileDatabase;
 import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.resources.ResourceLoader;
@@ -51,9 +52,37 @@ public class WraithEngine
         Log.debugf("LWJGL Version: %s", Version.getVersion());
 
         NetworkManager networkManager = NetworkManager.parseArgs(args);
-        ResourceManager resourceManager = buildResourceManager();
-        GameLoop gameLoop = new WindowedGameLoop(resourceManager);
-        new GameState(resourceManager, gameLoop, networkManager).run();
+
+        if (networkManager.hasServer())
+        {
+            // Start server
+
+            Thread thread = new Thread(() ->
+            {
+                ResourceManager resourceManager = buildResourceManager();
+                GameLoop gameLoop = new ServerGameLoop(
+                        networkManager.getServer(), resourceManager);
+                new GameState(resourceManager, gameLoop).run();
+            });
+            thread.setDaemon(false);
+            thread.setName("server_main");
+            thread.start();
+        }
+
+        if (networkManager.hasClient())
+        {
+            // Start client
+
+            Thread thread = new Thread(() ->
+            {
+                ResourceManager resourceManager = buildResourceManager();
+                GameLoop gameLoop = new WindowedGameLoop(resourceManager);
+                new GameState(resourceManager, gameLoop).run();
+            });
+            thread.setDaemon(false);
+            thread.setName("client_main");
+            thread.start();
+        }
     }
 
     private static ResourceManager buildResourceManager()

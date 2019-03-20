@@ -1,6 +1,5 @@
 package net.whg.we.network.multiplayer;
 
-import static org.mockito.Mockito.timeout;
 import java.io.IOException;
 import net.whg.we.network.multiplayer.MultiplayerUtils;
 import net.whg.we.network.packet.DefaultPacketFactory;
@@ -17,9 +16,9 @@ public class NetworkManager
 
         for (int i = 0; i < args.length; i++)
         {
-            if (args[0].equals("-s") || args[0].equals("-server"))
+            if (args[i].equals("-s") || args[i].equals("-server"))
             {
-                if (args.length <= i + 2)
+                if (args.length <= i + 1)
                     throw new IllegalArgumentException(
                             "Port not specified for server!");
 
@@ -47,9 +46,9 @@ public class NetworkManager
 
             }
 
-            if (args[0].equals("-c") || args[0].equals("-client"))
+            if (args[i].equals("-c") || args[i].equals("-client"))
             {
-                if (args.length <= i + 2)
+                if (args.length <= i + 1)
                     throw new IllegalArgumentException(
                             "IP not specified for client!");
 
@@ -62,7 +61,7 @@ public class NetworkManager
 
                 try
                 {
-                    port = Integer.valueOf(ip_parts[i]);
+                    port = Integer.valueOf(ip_parts[1]);
                 }
                 catch (NumberFormatException e)
                 {
@@ -135,5 +134,10 @@ public class NetworkManager
     public PacketClient getClient()
     {
         return _client;
+    }
+
+    public boolean isLocalHost()
+    {
+        return hasServer() && hasClient();
     }
 }
