@@ -1,84 +1,93 @@
 package net.whg.we.network.multiplayer;
 
+import static org.mockito.Mockito.timeout;
 import java.io.IOException;
 import net.whg.we.network.multiplayer.MultiplayerUtils;
 import net.whg.we.network.packet.DefaultPacketFactory;
 import net.whg.we.network.packet.PacketClient;
 import net.whg.we.network.packet.PacketHandler;
 import net.whg.we.network.packet.PacketServer;
+import net.whg.we.utils.logging.Log;
 
 public class NetworkManager
 {
     public static NetworkManager parseArgs(String[] args)
     {
-        // TODO Sanity check inputs, and give better error feedback.
+        NetworkManager networkManager = new NetworkManager();
 
-        if (args[0].equals("-s") || args[0].equals("-server"))
+        for (int i = 0; i < args.length; i++)
         {
-            // Server but no client
-
-            int port = Integer.valueOf(args[1]);
-
-            NetworkManager networkManager = new NetworkManager();
-
-            try
+            if (args[0].equals("-s") || args[0].equals("-server"))
             {
-                networkManager.attachServer(port);
-            }
-            catch (IOException e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                if (args.length <= i + 2)
+                    throw new IllegalArgumentException(
+                            "Port not specified for server!");
+
+                i++;
+                int port;
+
+                try
+                {
+                    port = Integer.valueOf(args[i]);
+                }
+                catch (NumberFormatException e)
+                {
+                    throw new IllegalArgumentException(
+                            "Not a number! '" + args[i] + "'");
+                }
+
+                try
+                {
+                    networkManager.attachServer(port);
+                }
+                catch (IOException e)
+                {
+                    Log.errorf("Failed to start server!", e);
+                }
+
             }
 
-            return networkManager;
+            if (args[0].equals("-c") || args[0].equals("-client"))
+            {
+                if (args.length <= i + 2)
+                    throw new IllegalArgumentException(
+                            "IP not specified for client!");
+
+                i++;
+
+                String[] ip_parts = args[i].split(":");
+
+                String ip = ip_parts[0];
+                int port;
+
+                try
+                {
+                    port = Integer.valueOf(ip_parts[i]);
+                }
+                catch (NumberFormatException e)
+                {
+                    throw new IllegalArgumentException(
+                            "Not a number! '" + args[i] + "'");
+                }
+                catch (ArrayIndexOutOfBoundsException e)
+                {
+                    throw new IllegalArgumentException(
+                            "Port not specified! '" + args[i] + "'");
+                }
+
+                try
+                {
+                    networkManager.attachClient(ip, port);
+                }
+                catch (IOException e)
+                {
+                    Log.errorf("Failed to start server!", e);
+                }
+
+            }
         }
 
-        if (args[0].equals("-c") || args[0].equals("-client"))
-        {
-            // Client but no server
-
-            String[] ip_parts = args[1].split(":");
-            String ip = ip_parts[0];
-            int port = Integer.valueOf(ip_parts[1]);
-
-            NetworkManager networkManager = new NetworkManager();
-
-            try
-            {
-                networkManager.attachClient(ip, port);
-            }
-            catch (IOException e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-            return networkManager;
-        }
-
-        if (args[0].equals("-l") || args[0].equals("-localhost"))
-        {
-            // Server and Client
-            int port = Integer.valueOf(args[1]);
-
-            NetworkManager networkManager = new NetworkManager();
-
-            try
-            {
-                networkManager.attachServer(port);
-                networkManager.attachClient("localhost", port);
-            }
-            catch (IOException e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-            return networkManager;
-        }
-
-        throw new RuntimeException("Unspecified run time!");
+        return networkManager;
     }
 
     private DefaultPacketFactory _factory;
