@@ -12,9 +12,14 @@ public class MultiplayerClient
     private DefaultPacketFactory _factory;
     private PacketClient _client;
     private ClientPacketHandler _handler;
+    private String _username;
+    private String _token;
 
-    public MultiplayerClient()
+    public MultiplayerClient(String username, String token)
     {
+        _username = username;
+        _token = token;
+
         _handler = new ClientPacketHandler();
 
         _factory = new DefaultPacketFactory();
@@ -46,7 +51,8 @@ public class MultiplayerClient
             Log.infof("Opening multiplayer client on ip %s, port %d.", ip,
                     port);
             _client = new PacketClient(_factory, _handler, ip, port);
-            _client.getEvents().addListener(new MultiplayerClientListener());
+            _client.getEvents()
+                    .addListener(new MultiplayerClientListener(this));
         }
         catch (IOException e)
         {
@@ -101,5 +107,15 @@ public class MultiplayerClient
             throw new IllegalStateException("Client socket not open!");
 
         _client.sendPacket(packet);
+    }
+
+    public String getUsername()
+    {
+        return _username;
+    }
+
+    public String getToken()
+    {
+        return _token;
     }
 }

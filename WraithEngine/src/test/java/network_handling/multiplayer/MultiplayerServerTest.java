@@ -27,7 +27,7 @@ public class MultiplayerServerTest
         Assert.assertEquals(0, server.getPlayerList().getPlayerCount());
 
         // Start client
-        MultiplayerClient client = new MultiplayerClient();
+        MultiplayerClient client = new MultiplayerClient("username", "token");
         client.startClient("localhost", port);
 
         // Let client send packet

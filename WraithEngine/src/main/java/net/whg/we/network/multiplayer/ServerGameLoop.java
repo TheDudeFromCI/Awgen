@@ -43,8 +43,9 @@ public class ServerGameLoop implements GameLoop
                 double passed = (currentTime - startTime) / 1000.0;
                 double physicsFrames = passed * Time.getPhysicsFramerate();
 
-                while (usedPhysicsFrames++ < physicsFrames)
+                while (usedPhysicsFrames < physicsFrames)
                 {
+                    usedPhysicsFrames++;
                     _server.updatePhysics();
                     _updateListener.onUpdate();
 

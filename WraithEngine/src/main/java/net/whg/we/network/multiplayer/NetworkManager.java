@@ -46,6 +46,9 @@ public class NetworkManager
                 if (args.length <= i + 1)
                     throw new IllegalArgumentException(
                             "IP not specified for client!");
+                if (args.length <= i + 2)
+                    throw new IllegalArgumentException(
+                            "Username not specified for client!");
 
                 i++;
 
@@ -69,9 +72,12 @@ public class NetworkManager
                             "Port not specified! '" + args[i] + "'");
                 }
 
+                i++;
+                String username = args[i];
+
                 try
                 {
-                    networkManager.attachClient(ip, port);
+                    networkManager.attachClient(username, ip, port);
                 }
                 catch (IOException e)
                 {
@@ -96,12 +102,14 @@ public class NetworkManager
         _server.startServer(port);
     }
 
-    public void attachClient(String ip, int port) throws IOException
+    public void attachClient(String username, String ip, int port)
+            throws IOException
     {
         if (hasClient())
             throw new IllegalStateException("Client already attached!");
 
-        _client = new MultiplayerClient();
+        _client = new MultiplayerClient(username,
+                "w234jhlr12qmd0932fkjshd092h2sdr534");
         _client.startClient(ip, port);
     }
 

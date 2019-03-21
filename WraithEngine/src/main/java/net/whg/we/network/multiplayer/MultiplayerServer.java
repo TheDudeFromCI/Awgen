@@ -86,7 +86,7 @@ public class MultiplayerServer
 
         _server.getEvents().handlePendingEvents();
         _pendingClients.update();
-        _server.getPacketProcessor().handlePackets();
+        _server.handlePackets();
     }
 
     PendingClients getPendingClients()

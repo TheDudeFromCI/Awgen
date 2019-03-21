@@ -9,6 +9,13 @@ import net.whg.we.utils.logging.Log;
 
 public class MultiplayerClientListener implements ClientListener
 {
+    private MultiplayerClient _client;
+
+    public MultiplayerClientListener(MultiplayerClient client)
+    {
+        _client = client;
+    }
+
     @Override
     public int getPriority()
     {
@@ -18,11 +25,8 @@ public class MultiplayerClientListener implements ClientListener
     @Override
     public void onConnectToServer(DefaultClient client, TCPChannel server)
     {
-        // Normally these values are retrieved from logging in. (And the token
-        // should be passed from the auth server to the server directly, but,
-        // eh.)
-        String username = "user";
-        String token = "abcdef";
+        String username = _client.getUsername();
+        String token = _client.getToken();
 
         Log.infof(
                 "Successfully connected to server. Sending handshake packet now. Username: %s, Token: %s",
