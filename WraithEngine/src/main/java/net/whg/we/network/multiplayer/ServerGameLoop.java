@@ -1,6 +1,5 @@
 package net.whg.we.network.multiplayer;
 
-import javax.annotation.Resource;
 import net.whg.we.event.EventCaller;
 import net.whg.we.network.packet.PacketServer;
 import net.whg.we.resources.ResourceManager;
@@ -29,6 +28,8 @@ public class ServerGameLoop implements GameLoop
     @Override
     public void run()
     {
+        Log.info("Starting server game loop.");
+
         long startTime = System.currentTimeMillis();
         long usedPhysicsFrames = 0;
 
@@ -53,9 +54,13 @@ public class ServerGameLoop implements GameLoop
                         clientConnected = true;
 
                     // Closes server when last player has logged off.
-                    if (clientConnected
+                    if (clientConnected && _disconnectWhenNoClients
                             && _server.getClientList().getClientCount() == 0)
+                    {
+                        Log.info(
+                                "Last player has disconnected from server. Closing server.");
                         requestClose();
+                    }
                 }
 
                 // Sleep for 1 millisecond to prevent maxing the CPU.
@@ -68,6 +73,7 @@ public class ServerGameLoop implements GameLoop
             }
         }
 
+        Log.info("Stopping server game loop.");
         _server.stopServer();
         _resourceManager.disposeAllResources();
     }
@@ -86,13 +92,14 @@ public class ServerGameLoop implements GameLoop
     @Override
     public void requestClose()
     {
+        Log.debug("Requesting close for server game loop.");
         _running = false;
     }
 
     @Override
     public EventCaller<UpdateListener> getUpdateEvent()
     {
-        return null;
+        return _updateListener;
     }
 
     public PacketServer getServer()
