@@ -46,7 +46,11 @@ public class ClientConnection
                 while (true)
                     _protocol.next();
             }
-            catch (IOException e)
+            catch (IOException | IndexOutOfBoundsException e)
+            {
+                Log.infof("Client %s has disconnected.", _socket.getIP());
+            }
+            catch (Exception e)
             {
                 Log.errorf("An error has occured within the client connection!",
                         e);
@@ -66,6 +70,7 @@ public class ClientConnection
                 server.getEvents().onClientDisconnected(ClientConnection.this);
             }
         });
+        _thread.setName("client_con-" + socket.getIP().toString());
         _thread.setDaemon(true);
         _thread.start();
     }

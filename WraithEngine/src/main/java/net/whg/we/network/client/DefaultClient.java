@@ -72,6 +72,7 @@ public class DefaultClient
                 }
             }
         });
+        _thread.setName("Client");
         _thread.setDaemon(true);
         _thread.start();
     }
