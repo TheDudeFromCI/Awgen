@@ -1,11 +1,6 @@
 package net.whg.we.network.multiplayer;
 
 import java.io.IOException;
-import net.whg.we.network.multiplayer.MultiplayerUtils;
-import net.whg.we.network.packet.DefaultPacketFactory;
-import net.whg.we.network.packet.PacketClient;
-import net.whg.we.network.packet.PacketHandler;
-import net.whg.we.network.packet.PacketServer;
 import net.whg.we.utils.logging.Log;
 
 public class NetworkManager
@@ -89,23 +84,16 @@ public class NetworkManager
         return networkManager;
     }
 
-    private DefaultPacketFactory _factory;
-    private PacketHandler _handler;
-    private PacketServer _server;
-    private PacketClient _client;
-
-    public NetworkManager()
-    {
-        _factory = new DefaultPacketFactory();
-        MultiplayerUtils.addDefaultPackets(_factory);
-    }
+    private MultiplayerServer _server;
+    private MultiplayerClient _client;
 
     public void attachServer(int port) throws IOException
     {
         if (hasServer())
             throw new IllegalStateException("Server already attached!");
 
-        _server = new PacketServer(_factory, _handler, port);
+        _server = new MultiplayerServer();
+        _server.startServer(port);
     }
 
     public void attachClient(String ip, int port) throws IOException
@@ -113,7 +101,8 @@ public class NetworkManager
         if (hasClient())
             throw new IllegalStateException("Client already attached!");
 
-        _client = new PacketClient(_factory, _handler, ip, port);
+        _client = new MultiplayerClient();
+        _client.startClient(ip, port);
     }
 
     public boolean hasServer()
@@ -126,12 +115,12 @@ public class NetworkManager
         return _client != null;
     }
 
-    public PacketServer getServer()
+    public MultiplayerServer getServer()
     {
         return _server;
     }
 
-    public PacketClient getClient()
+    public MultiplayerClient getClient()
     {
         return _client;
     }

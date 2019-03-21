@@ -63,6 +63,7 @@ public class MultiplayerServer
             Log.errorf(
                     "There has been an error while trying to start this server!",
                     e);
+            _server = null;
         }
     }
 

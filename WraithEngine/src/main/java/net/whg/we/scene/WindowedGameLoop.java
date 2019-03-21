@@ -1,8 +1,7 @@
 package net.whg.we.scene;
 
-import java.io.IOException;
 import net.whg.we.event.EventCaller;
-import net.whg.we.network.packet.PacketClient;
+import net.whg.we.network.multiplayer.MultiplayerClient;
 import net.whg.we.rendering.GraphicsPipeline;
 import net.whg.we.resources.ResourceManager;
 import net.whg.we.test.TestScene;
@@ -17,10 +16,10 @@ public class WindowedGameLoop implements GameLoop
     private UpdateEventCaller _updateListener = new UpdateEventCaller();
     private GraphicsPipeline _graphicsPipeline;
     private ResourceManager _resourceManager;
-    private PacketClient _client;
+    private MultiplayerClient _client;
 
     public WindowedGameLoop(ResourceManager resourceManager,
-            PacketClient client)
+            MultiplayerClient client)
     {
         _resourceManager = resourceManager;
         _graphicsPipeline = new GraphicsPipeline();
@@ -57,10 +56,10 @@ public class WindowedGameLoop implements GameLoop
 
                     while (usedPhysicsFrames++ < physicsFrames)
                     {
-                        if (_client.isClosed())
+                        if (!_client.isRunning())
                             requestClose();
 
-                        _client.handlePackets();
+                        _client.updatePhysics();
                         _updateListener.onUpdate();
                     }
 
@@ -92,15 +91,7 @@ public class WindowedGameLoop implements GameLoop
         }
         finally
         {
-            try
-            {
-                _client.close();
-            }
-            catch (IOException e)
-            {
-                Log.errorf("Failed to close client!", e);
-            }
-
+            _client.stopClient();
             _resourceManager.disposeAllResources();
             _graphicsPipeline.dispose();
             _isRunning = false;
@@ -129,7 +120,7 @@ public class WindowedGameLoop implements GameLoop
         return _resourceManager;
     }
 
-    public PacketClient getClient()
+    public MultiplayerClient getClient()
     {
         return _client;
     }

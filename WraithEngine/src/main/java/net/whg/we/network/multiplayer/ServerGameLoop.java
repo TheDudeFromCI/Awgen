@@ -1,7 +1,6 @@
 package net.whg.we.network.multiplayer;
 
 import net.whg.we.event.EventCaller;
-import net.whg.we.network.packet.PacketServer;
 import net.whg.we.resources.ResourceManager;
 import net.whg.we.scene.GameLoop;
 import net.whg.we.scene.UpdateEventCaller;
@@ -12,13 +11,13 @@ import net.whg.we.utils.logging.Log;
 public class ServerGameLoop implements GameLoop
 {
     private boolean _running = true;
-    private PacketServer _server;
+    private MultiplayerServer _server;
     private UpdateEventCaller _updateListener = new UpdateEventCaller();
     private ResourceManager _resourceManager;
     private boolean _disconnectWhenNoClients;
 
-    public ServerGameLoop(PacketServer server, ResourceManager resourceManager,
-            boolean disconnectWhenNoClients)
+    public ServerGameLoop(MultiplayerServer server,
+            ResourceManager resourceManager, boolean disconnectWhenNoClients)
     {
         _server = server;
         _resourceManager = resourceManager;
@@ -46,16 +45,16 @@ public class ServerGameLoop implements GameLoop
 
                 while (usedPhysicsFrames++ < physicsFrames)
                 {
-                    _server.handlePackets();
+                    _server.updatePhysics();
                     _updateListener.onUpdate();
 
                     // Sets flag to true when at least one client has connected.
-                    if (_server.getClientList().getClientCount() > 0)
+                    if (_server.getPlayerList().getPlayerCount() > 0)
                         clientConnected = true;
 
                     // Closes server when last player has logged off.
                     if (clientConnected && _disconnectWhenNoClients
-                            && _server.getClientList().getClientCount() == 0)
+                            && _server.getPlayerList().getPlayerCount() == 0)
                     {
                         Log.info(
                                 "Last player has disconnected from server. Closing server.");
@@ -102,7 +101,7 @@ public class ServerGameLoop implements GameLoop
         return _updateListener;
     }
 
-    public PacketServer getServer()
+    public MultiplayerServer getServer()
     {
         return _server;
     }
