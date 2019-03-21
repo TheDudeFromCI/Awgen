@@ -77,7 +77,8 @@ public class WraithEngine
             Thread thread = new Thread(() ->
             {
                 ResourceManager resourceManager = buildResourceManager();
-                GameLoop gameLoop = new WindowedGameLoop(resourceManager);
+                GameLoop gameLoop = new WindowedGameLoop(resourceManager,
+                        networkManager.getClient());
                 new GameState(resourceManager, gameLoop).run();
             });
             thread.setDaemon(false);
