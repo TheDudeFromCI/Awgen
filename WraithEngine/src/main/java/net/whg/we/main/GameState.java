@@ -1,7 +1,6 @@
 package net.whg.we.main;
 
 import net.whg.we.event.EventManager;
-import net.whg.we.network.multiplayer.NetworkManager;
 import net.whg.we.resources.ResourceManager;
 import net.whg.we.resources.graphics.GLSLShaderLoader;
 import net.whg.we.resources.graphics.MeshLoader;

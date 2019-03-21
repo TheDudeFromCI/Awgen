@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.rules.Timeout;
 import net.whg.we.network.multiplayer.MultiplayerClient;
 import net.whg.we.network.multiplayer.MultiplayerServer;
-import net.whg.we.utils.logging.Log;
 
 public class MultiplayerServerTest
 {
