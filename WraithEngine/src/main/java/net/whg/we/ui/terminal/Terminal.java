@@ -16,6 +16,7 @@ import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;
 import net.whg.we.rendering.Shader;
 import net.whg.we.resources.ResourceFetcher;
+import net.whg.we.scene.WindowedGameLoop;
 import net.whg.we.ui.SimpleContainer;
 import net.whg.we.ui.UIImage;
 import net.whg.we.ui.UIUtils;
@@ -26,32 +27,21 @@ import net.whg.we.utils.Color;
 import net.whg.we.utils.Input;
 import net.whg.we.utils.Time;
 
-public class Terminal extends SimpleContainer implements CommandSender
+public class Terminal extends SimpleContainer
 {
     private ResourceFetcher _fetcher;
     private Mesh _imageMesh;
-    private CommandList _commandList;
     private AnimatedProperty _verticalPos;
     private ConsoleOutput _consoleOut;
     private boolean _active;
-    private VariableKeyring _variables;
+    private WindowedGameLoop _gameLoop;
 
-    public Terminal(ResourceFetcher fetcher)
+    public Terminal(WindowedGameLoop gameLoop, ResourceFetcher fetcher)
     {
+        _gameLoop = gameLoop;
         _fetcher = fetcher;
         _imageMesh = new Mesh("UI Quad", UIUtils.defaultImageVertexData(),
                 fetcher.getGraphics());
-
-        _commandList = new CommandList();
-        _commandList.addCommand(new HelpCommand(_commandList));
-        _commandList.addCommand(new PrintCommand());
-        _commandList.addCommand(new ClearCommand());
-        _commandList.addCommand(new SetCommand());
-        _commandList.addCommand(new RandomCommand());
-        _commandList.addCommand(new ForCommand());
-        _commandList.addCommand(new ListCommand());
-
-        _variables = new TerminalKeyring();
 
         _verticalPos = new AnimatedProperty(1f);
         _verticalPos.setSpeed(0.4f);
@@ -166,20 +156,8 @@ public class Terminal extends SimpleContainer implements CommandSender
         return _consoleOut;
     }
 
-    public CommandList getCommandList()
+    public WindowedGameLoop getGameLoop()
     {
-        return _commandList;
-    }
-
-    @Override
-    public Console getConsole()
-    {
-        return _consoleOut.getConsole();
-    }
-
-    @Override
-    public VariableKeyring getVariableKeyring()
-    {
-        return _variables;
+        return _gameLoop;
     }
 }

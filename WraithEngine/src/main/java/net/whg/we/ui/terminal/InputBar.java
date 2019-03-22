@@ -3,6 +3,9 @@ package net.whg.we.ui.terminal;
 import net.whg.we.command.CommandParseException;
 import net.whg.we.command.CommandParser;
 import net.whg.we.command.CommandSet;
+import net.whg.we.network.multiplayer.MultiplayerClient;
+import net.whg.we.network.multiplayer.packets.TerminalCommandPacket;
+import net.whg.we.network.packet.Packet;
 import net.whg.we.ui.TextEditor;
 import net.whg.we.ui.Transform2D;
 import net.whg.we.ui.TypedKeyInput;
@@ -67,26 +70,11 @@ public class InputBar implements UIComponent
                 String command = _text.getText();
                 _textEditor.clear();
 
-                _terminal.getConsole().println("> " + command);
-
-                try
-                {
-                    CommandSet commandSet = CommandParser.parse(
-                            _terminal.getCommandList(), _terminal, command);
-                    _terminal.getCommandList().executeCommandSet(commandSet);
-                }
-                catch (CommandParseException exception)
-                {
-                    _terminal.getConsole().println(
-                            "Failed to parse command '" + command + "'!");
-                }
-                catch (Exception exception)
-                {
-                    _terminal.getConsole().println(
-                            "An error has occured while executing this command.!");
-                    Log.errorf("Error while preforming command! '%s'",
-                            exception, command);
-                }
+                MultiplayerClient client = _terminal.getGameLoop().getClient();
+                Packet packet = client.newPacket("common.terminal.out");
+                ((TerminalCommandPacket) packet.getPacketType()).build(packet,
+                        command);
+                client.sendPacket(packet);
 
                 continue;
             }

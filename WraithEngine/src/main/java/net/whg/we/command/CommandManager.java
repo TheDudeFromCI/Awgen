@@ -2,6 +2,7 @@ package net.whg.we.command;
 
 import net.whg.we.command.common.*;
 import net.whg.we.ui.terminal.TerminalKeyring;
+import net.whg.we.utils.logging.Log;
 
 public class CommandManager
 {
@@ -34,8 +35,23 @@ public class CommandManager
 
     public void execute(String command, CommandSender sender)
     {
-        CommandSet commandSet =
-                CommandParser.parse(_commandList, sender, command);
-        _commandList.executeCommandSet(commandSet);
+        try
+        {
+            CommandSet commandSet =
+                    CommandParser.parse(_commandList, sender, command);
+            _commandList.executeCommandSet(commandSet);
+        }
+        catch (CommandParseException exception)
+        {
+            sender.getConsole()
+                    .println("Failed to parse command '" + command + "'!");
+        }
+        catch (Exception exception)
+        {
+            sender.getConsole().println(
+                    "An error has occured while executing this command.!");
+            Log.errorf("Error while preforming command! '%s'", exception,
+                    command);
+        }
     }
 }
