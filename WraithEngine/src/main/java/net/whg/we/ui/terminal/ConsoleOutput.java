@@ -2,9 +2,6 @@ package net.whg.we.ui.terminal;
 
 import org.joml.Matrix4f;
 import net.whg.we.command.console.Console;
-import net.whg.we.command.console.ConsoleListener;
-import net.whg.we.command.console.LineChangedEvent;
-import net.whg.we.command.console.ScrollPosChanged;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;

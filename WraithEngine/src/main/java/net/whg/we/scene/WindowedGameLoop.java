@@ -25,7 +25,6 @@ public class WindowedGameLoop implements GameLoop
     private ResourceManager _resourceManager;
     private MultiplayerClient _client;
     private Terminal _terminal;
-    private UIStack _ui;
     private Scene _scene;
     private Camera _camera;
     private FirstPersonCamera _firstPerson;
@@ -54,7 +53,6 @@ public class WindowedGameLoop implements GameLoop
             ResourceFetcher fetch = new ResourceFetcher(_resourceManager,
                     _graphicsPipeline.getGraphics());
             _terminal = new Terminal(this, fetch);
-            _ui = new UIStack();
             _scene = new Scene();
             _scene.getUIStack().addComponent(_terminal);
 
@@ -94,8 +92,7 @@ public class WindowedGameLoop implements GameLoop
                     Time.updateTime();
                     FPSLogger.logFramerate();
 
-                    _updateListener.onUpdateFrame();
-                    _scene.updateFrame();
+                    updateFrame();
 
                     _graphicsPipeline.getGraphics().clearScreenPass(
                             ScreenClearType.CLEAR_COLOR_AND_DEPTH);
@@ -132,6 +129,9 @@ public class WindowedGameLoop implements GameLoop
 
     private void updateFrame()
     {
+        _updateListener.onUpdateFrame();
+        _scene.updateFrame();
+
         _firstPerson.setMoveSpeed(Input.isKeyHeld("control") ? 70f : 7f);
         _firstPerson.update();
 
