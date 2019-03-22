@@ -54,6 +54,14 @@ public class OnlinePlayer implements Player
         }
     }
 
+    public Packet newPacket(String type)
+    {
+        Packet packet = _packetProtocol.getPacketPool().get();
+        packet.setPacketType(
+                _packetProtocol.getPacketFactory().findPacketType(type));
+        return packet;
+    }
+
     /**
      * Kicks a player from the server.
      */

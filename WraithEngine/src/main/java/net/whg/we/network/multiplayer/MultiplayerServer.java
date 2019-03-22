@@ -28,7 +28,7 @@ public class MultiplayerServer
 
     public boolean isRunning()
     {
-        return _server != null;
+        return _server != null && _server.isRunning();
     }
 
     public PacketServer getServer()

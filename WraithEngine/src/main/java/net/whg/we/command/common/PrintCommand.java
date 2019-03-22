@@ -4,60 +4,63 @@ import net.whg.we.command.Command;
 import net.whg.we.command.CommandArgument;
 import net.whg.we.command.CommandConsole;
 import net.whg.we.command.CommandHandler;
+import net.whg.we.utils.logging.Log;
 
 public class PrintCommand implements CommandHandler
 {
-	private final String[] ALIAS =
-	{
-			"echo", "say"
-	};
+    private final String[] ALIAS =
+    {
+            "echo", "say"
+    };
 
-	@Override
-	public String getCommandName()
-	{
-		return "print";
-	}
+    @Override
+    public String getCommandName()
+    {
+        return "print";
+    }
 
-	@Override
-	public String[] getCommandAliases()
-	{
-		return ALIAS;
-	}
+    @Override
+    public String[] getCommandAliases()
+    {
+        return ALIAS;
+    }
 
-	@Override
-	public String executeCommand(Command command)
-	{
-		CommandArgument[] args = command.getArgs();
-		CommandConsole console = command.getCommandSender().getConsole();
+    @Override
+    public String executeCommand(Command command)
+    {
+        CommandArgument[] args = command.getArgs();
+        CommandConsole console = command.getCommandSender().getConsole();
 
-		StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-		for (int i = 0; i < args.length; i++)
-		{
-			if (i > 0)
-				sb.append(' ');
-			sb.append(args[i].getValue());
-		}
+        for (int i = 0; i < args.length; i++)
+        {
+            if (i > 0)
+                sb.append(' ');
+            sb.append(args[i].getValue());
+        }
 
-		String out = sb.toString();
-		console.println(out);
-		return out;
-	}
+        String out = sb.toString();
+        console.println(out);
 
-	@Override
-	public String getDescription()
-	{
-		return "Prints the input arguments, seperated by spaces.";
-	}
+        Log.tracef("Printed line '%s' to console '%s'.", out, console);
+        return out;
+    }
 
-	@Override
-	public String getHelpText()
-	{
-		StringBuilder sb = new StringBuilder();
+    @Override
+    public String getDescription()
+    {
+        return "Prints the input arguments, seperated by spaces.";
+    }
 
-		sb.append("print <args>\n");
-		sb.append("  Prints the input arguments(s), seperated by spaces.\n");
+    @Override
+    public String getHelpText()
+    {
+        StringBuilder sb = new StringBuilder();
 
-		return sb.toString();
-	}
+        sb.append("print <args>\n");
+        sb.append("  Prints the input arguments(s), seperated by spaces.\n");
+
+        return sb.toString();
+    }
 }

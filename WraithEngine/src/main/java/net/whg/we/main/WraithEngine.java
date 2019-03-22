@@ -37,7 +37,8 @@ public class WraithEngine
      */
     public static void main(String[] args)
     {
-        setLogLevel(args);
+        if (!setLogLevel(args))
+            return;
 
         // Log some automatic system info
         Log.trace("Starting WraithEngine.");

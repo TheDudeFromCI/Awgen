@@ -33,7 +33,7 @@ public class TerminalCommandPacket implements PacketType
         ByteWriter out = new ByteWriter(bytes);
 
         String command = (String) packetData.get("command");
-        out.writeString(command, StandardCharsets.UTF_8);
+        out.writeString(command, StandardCharsets.UTF_16);
 
         return out.getPos();
     }
@@ -43,7 +43,7 @@ public class TerminalCommandPacket implements PacketType
     {
         ByteReader in = new ByteReader(bytes);
 
-        String command = in.getString(StandardCharsets.UTF_8);
+        String command = in.getString(StandardCharsets.UTF_16);
 
         packetData.put("command", command);
     }

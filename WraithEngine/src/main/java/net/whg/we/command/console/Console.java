@@ -4,14 +4,16 @@ import net.whg.we.command.CommandConsole;
 
 public class Console implements CommandConsole
 {
+    public static final int LINE_COUNT = 512;
+
     private ConsoleEvent _consoleEvent = new ConsoleEvent();
     private String[] _text;
     private int _scrollPos;
 
-    public Console(int lineCount)
+    public Console()
     {
-        _text = new String[lineCount];
-        _scrollPos = lineCount - 1;
+        _text = new String[LINE_COUNT];
+        _scrollPos = LINE_COUNT - 1;
 
         for (int i = 0; i < _text.length; i++)
             _text[i] = "";

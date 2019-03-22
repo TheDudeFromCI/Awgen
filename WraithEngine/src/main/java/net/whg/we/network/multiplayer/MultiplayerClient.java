@@ -28,7 +28,7 @@ public class MultiplayerClient
 
     public boolean isRunning()
     {
-        return _client != null;
+        return _client != null && !_client.isClosed();
     }
 
     public PacketClient getClient()
@@ -94,6 +94,7 @@ public class MultiplayerClient
             return;
 
         _client.getEvents().handlePendingEvents();
+        _client.handlePackets();
     }
 
     public Packet newPacket(String type)

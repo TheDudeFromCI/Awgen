@@ -7,6 +7,8 @@ import net.whg.we.command.console.Console;
 import net.whg.we.command.console.ConsoleListener;
 import net.whg.we.command.console.LineChangedEvent;
 import net.whg.we.command.console.ScrollPosChanged;
+import net.whg.we.network.multiplayer.packets.TerminalOutputPacket;
+import net.whg.we.network.packet.Packet;
 import net.whg.we.ui.terminal.TerminalKeyring;
 import net.whg.we.utils.logging.Log;
 
@@ -17,7 +19,7 @@ public class PlayerCommandSender implements CommandSender
 
     public PlayerCommandSender(OnlinePlayer player)
     {
-        _console = new Console(512);
+        _console = new Console();
         _variables = new TerminalKeyring();
 
         _console.getEvent().addListener(new ConsoleListener()
@@ -31,15 +33,19 @@ public class PlayerCommandSender implements CommandSender
             @Override
             public void onScrollPosChanged(ScrollPosChanged event)
             {
-                // TODO Send scroll pos adjustment to player.
+                Packet packet = player.newPacket("common.terminal.in");
+                ((TerminalOutputPacket) packet.getPacketType())
+                        .build_ScollPos(packet, event.getLine());
+                player.sendPacket(packet);
             }
 
             @Override
             public void onLineChanged(LineChangedEvent event)
             {
-                Log.infof("> %s", event.getText());
-
-                // TODO Send line changed adjustment to player.
+                Packet packet = player.newPacket("common.terminal.in");
+                ((TerminalOutputPacket) packet.getPacketType()).build_SetLine(
+                        packet, event.getLine(), event.getText());
+                player.sendPacket(packet);
             }
         });
     }

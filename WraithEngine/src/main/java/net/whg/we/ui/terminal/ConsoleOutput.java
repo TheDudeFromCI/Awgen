@@ -15,12 +15,10 @@ import net.whg.we.ui.font.Font;
 
 public class ConsoleOutput implements UIComponent
 {
-    public static final int CONSOLE_LINE_BUFFER_COUNT = 500;
     public static final int SHOWN_ROWS = 25;
 
-    private Mesh[] _lines = new Mesh[CONSOLE_LINE_BUFFER_COUNT];
+    private Mesh[] _lines = new Mesh[Console.LINE_COUNT];
     private Transform2D _transform = new Transform2D();
-    private Console _console = new Console(CONSOLE_LINE_BUFFER_COUNT);
 
     private Matrix4f _lineBuffer = new Matrix4f();
     private Font _font;
@@ -34,34 +32,20 @@ public class ConsoleOutput implements UIComponent
         _font = font;
         _graphics = graphics;
         _material = material;
+    }
 
-        _console.getEvent().addListener(new ConsoleListener()
-        {
-            @Override
-            public int getPriority()
-            {
-                return 0;
-            }
+    public void setLine(int lineIndex, String text)
+    {
+        if (_lines[lineIndex] == null)
+            _lines[lineIndex] = new Mesh("",
+                    UIUtils.textVertexData(_font, text), _graphics);
+        else
+            _lines[lineIndex].rebuild(UIUtils.textVertexData(_font, text));
+    }
 
-            @Override
-            public void onLineChanged(LineChangedEvent event)
-            {
-                int line = event.getLine();
-                String text = event.getText();
-
-                if (_lines[line] == null)
-                    _lines[line] = new Mesh("",
-                            UIUtils.textVertexData(_font, text), _graphics);
-                else
-                    _lines[line].rebuild(UIUtils.textVertexData(_font, text));
-            }
-
-            @Override
-            public void onScrollPosChanged(ScrollPosChanged event)
-            {
-                _scrollPos = event.getLine();
-            }
-        });
+    public void setScroll(int scrollPos)
+    {
+        _scrollPos = scrollPos;
     }
 
     @Override
@@ -92,8 +76,8 @@ public class ConsoleOutput implements UIComponent
 
         for (int i = 0; i < SHOWN_ROWS; i++)
         {
-            int line = (_scrollPos - i + CONSOLE_LINE_BUFFER_COUNT)
-                    % CONSOLE_LINE_BUFFER_COUNT;
+            int line =
+                    (_scrollPos - i + Console.LINE_COUNT) % Console.LINE_COUNT;
 
             if (_lines[line] == null)
                 continue;
@@ -112,7 +96,7 @@ public class ConsoleOutput implements UIComponent
     {
         _disposed = true;
 
-        for (int i = 0; i < CONSOLE_LINE_BUFFER_COUNT; i++)
+        for (int i = 0; i < Console.LINE_COUNT; i++)
         {
             if (_lines[i] == null)
                 continue;
@@ -125,10 +109,5 @@ public class ConsoleOutput implements UIComponent
     public boolean isDisposed()
     {
         return _disposed;
-    }
-
-    public Console getConsole()
-    {
-        return _console;
     }
 }

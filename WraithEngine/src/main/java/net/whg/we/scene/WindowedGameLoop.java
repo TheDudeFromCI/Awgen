@@ -2,11 +2,18 @@ package net.whg.we.scene;
 
 import net.whg.we.event.EventCaller;
 import net.whg.we.network.multiplayer.MultiplayerClient;
+import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.GraphicsPipeline;
+import net.whg.we.rendering.ScreenClearType;
+import net.whg.we.resources.ResourceFetcher;
 import net.whg.we.resources.ResourceManager;
-import net.whg.we.test.TestScene;
+import net.whg.we.ui.UIStack;
+import net.whg.we.ui.terminal.Terminal;
+import net.whg.we.utils.Color;
 import net.whg.we.utils.FPSLogger;
+import net.whg.we.utils.FirstPersonCamera;
 import net.whg.we.utils.Input;
+import net.whg.we.utils.Screen;
 import net.whg.we.utils.Time;
 import net.whg.we.utils.logging.Log;
 
@@ -17,6 +24,11 @@ public class WindowedGameLoop implements GameLoop
     private GraphicsPipeline _graphicsPipeline;
     private ResourceManager _resourceManager;
     private MultiplayerClient _client;
+    private Terminal _terminal;
+    private UIStack _ui;
+    private Scene _scene;
+    private Camera _camera;
+    private FirstPersonCamera _firstPerson;
 
     public WindowedGameLoop(ResourceManager resourceManager,
             MultiplayerClient client)
@@ -39,7 +51,19 @@ public class WindowedGameLoop implements GameLoop
 
         try
         {
-            new TestScene(this);
+            ResourceFetcher fetch = new ResourceFetcher(_resourceManager,
+                    _graphicsPipeline.getGraphics());
+            _terminal = new Terminal(this, fetch);
+            _ui = new UIStack();
+            _scene = new Scene();
+            _scene.getUIStack().addComponent(_terminal);
+
+            _camera = new Camera();
+            _scene.getRenderPass().setCamera(_camera);
+            _firstPerson = new FirstPersonCamera(_camera);
+
+            _graphicsPipeline.getGraphics()
+                    .setClearScreenColor(new Color(0.2f, 0.4f, 0.8f));
 
             long startTime = System.currentTimeMillis();
             long usedPhysicsFrames = 0;
@@ -63,6 +87,7 @@ public class WindowedGameLoop implements GameLoop
 
                         _client.updatePhysics();
                         _updateListener.onUpdate();
+                        _scene.update();
                     }
 
                     // Calculate frame data
@@ -70,7 +95,12 @@ public class WindowedGameLoop implements GameLoop
                     FPSLogger.logFramerate();
 
                     _updateListener.onUpdateFrame();
+                    _scene.updateFrame();
+
+                    _graphicsPipeline.getGraphics().clearScreenPass(
+                            ScreenClearType.CLEAR_COLOR_AND_DEPTH);
                     _updateListener.render();
+                    _scene.render();
 
                     // End frame
                     Input.endFrame();
@@ -100,6 +130,17 @@ public class WindowedGameLoop implements GameLoop
         }
     }
 
+    private void updateFrame()
+    {
+        _firstPerson.setMoveSpeed(Input.isKeyHeld("control") ? 70f : 7f);
+        _firstPerson.update();
+
+        if (Input.isKeyDown("q"))
+            Screen.setMouseLocked(!Screen.isMouseLocked());
+        if (Input.isKeyDown("escape"))
+            requestClose();
+    }
+
     @Override
     public EventCaller<UpdateListener> getUpdateEvent()
     {
@@ -125,5 +166,10 @@ public class WindowedGameLoop implements GameLoop
     public MultiplayerClient getClient()
     {
         return _client;
+    }
+
+    public Terminal getTerminal()
+    {
+        return _terminal;
     }
 }
