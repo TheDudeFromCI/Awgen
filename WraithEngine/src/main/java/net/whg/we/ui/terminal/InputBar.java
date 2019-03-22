@@ -1,8 +1,5 @@
 package net.whg.we.ui.terminal;
 
-import net.whg.we.command.CommandParseException;
-import net.whg.we.command.CommandParser;
-import net.whg.we.command.CommandSet;
 import net.whg.we.network.multiplayer.MultiplayerClient;
 import net.whg.we.network.multiplayer.packets.TerminalCommandPacket;
 import net.whg.we.network.packet.Packet;
@@ -69,6 +66,8 @@ public class InputBar implements UIComponent
             {
                 String command = _text.getText();
                 _textEditor.clear();
+
+                Log.infof("Issued command '%s'.", command);
 
                 MultiplayerClient client = _terminal.getGameLoop().getClient();
                 Packet packet = client.newPacket("common.terminal.out");

@@ -1,16 +1,5 @@
 package net.whg.we.ui.terminal;
 
-import net.whg.we.command.CommandList;
-import net.whg.we.command.CommandSender;
-import net.whg.we.command.VariableKeyring;
-import net.whg.we.command.common.ClearCommand;
-import net.whg.we.command.common.ForCommand;
-import net.whg.we.command.common.HelpCommand;
-import net.whg.we.command.common.ListCommand;
-import net.whg.we.command.common.PrintCommand;
-import net.whg.we.command.common.RandomCommand;
-import net.whg.we.command.common.SetCommand;
-import net.whg.we.command.console.Console;
 import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;
