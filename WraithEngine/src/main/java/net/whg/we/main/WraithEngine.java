@@ -37,8 +37,7 @@ public class WraithEngine
      */
     public static void main(String[] args)
     {
-        // Set default log parameters
-        Log.setLogLevel(Log.TRACE);
+        setLogLevel(args);
 
         // Log some automatic system info
         Log.trace("Starting WraithEngine.");
@@ -104,5 +103,44 @@ public class WraithEngine
         ResourceLoader resourceLoader = new ResourceLoader();
         return new ResourceManager(resourceDatabase, resourceLoader,
                 fileDatabase);
+    }
+
+    private static boolean setLogLevel(String[] args)
+    {
+        for (int i = 0; i < args.length; i++)
+        {
+            if (args[i].equals("-log"))
+            {
+                if (args.length <= i + 1)
+                {
+                    System.out.println("Log level not specified!");
+                    return false;
+                }
+
+                int level;
+                try
+                {
+                    level = Integer.valueOf(args[i + 1]);
+                }
+                catch (NumberFormatException e)
+                {
+                    System.out.println("Not a number! '" + args[i + 1] + "'");
+                    return false;
+                }
+
+                if (level < Log.TRACE || level > Log.FATAL)
+                {
+                    System.out.println("Log level must be an interger between "
+                            + Log.TRACE + " and " + Log.FATAL + "!");
+                    return false;
+                }
+
+                Log.setLogLevel(level);
+                return true;
+            }
+        }
+
+        Log.setLogLevel(Log.INFO);
+        return true;
     }
 }
