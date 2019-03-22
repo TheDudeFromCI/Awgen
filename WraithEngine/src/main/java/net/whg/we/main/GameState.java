@@ -1,5 +1,6 @@
 package net.whg.we.main;
 
+import net.whg.we.command.CommandManager;
 import net.whg.we.event.EventManager;
 import net.whg.we.resources.ResourceManager;
 import net.whg.we.resources.graphics.GLSLShaderLoader;
@@ -16,12 +17,14 @@ public class GameState
     private PluginLoader _pluginLoader;
     private EventManager _eventManager;
     private GameLoop _gameLoop;
+    private CommandManager _commandManager;
 
     public GameState(ResourceManager resourceManager, GameLoop gameLoop)
     {
         _resourceManager = resourceManager;
         _pluginLoader = new PluginLoader();
         _eventManager = new EventManager();
+        _commandManager = new CommandManager();
         _gameLoop = gameLoop;
     }
 
@@ -64,5 +67,10 @@ public class GameState
     public GameLoop getGameLoop()
     {
         return _gameLoop;
+    }
+
+    public CommandManager getCommandManager()
+    {
+        return _commandManager;
     }
 }

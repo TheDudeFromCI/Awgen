@@ -123,4 +123,9 @@ public class ClientConnection
     {
         return _socket.getIP();
     }
+
+    public TCPChannel getTCPChannel()
+    {
+        return _socket;
+    }
 }

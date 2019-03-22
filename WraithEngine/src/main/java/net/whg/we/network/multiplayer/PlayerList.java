@@ -1,6 +1,7 @@
 package net.whg.we.network.multiplayer;
 
 import java.util.ArrayList;
+import net.whg.we.network.TCPChannel;
 import net.whg.we.network.server.ClientConnection;
 import net.whg.we.utils.GenericRunnable;
 import net.whg.we.utils.logging.Log;
@@ -47,6 +48,15 @@ public class PlayerList
     {
         for (OnlinePlayer player : _players)
             if (player.getUserToken().equals(token))
+                return player;
+
+        return null;
+    }
+
+    public OnlinePlayer getPlayerByTCPChannel(TCPChannel channel)
+    {
+        for (OnlinePlayer player : _players)
+            if (player.getClientConnection().getTCPChannel() == channel)
                 return player;
 
         return null;

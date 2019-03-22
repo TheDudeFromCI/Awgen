@@ -63,7 +63,12 @@ public class WraithEngine
                 GameLoop gameLoop =
                         new ServerGameLoop(networkManager.getServer(),
                                 resourceManager, networkManager.isLocalHost());
-                new GameState(resourceManager, gameLoop).run();
+
+                GameState gameState = new GameState(resourceManager, gameLoop);
+                networkManager.getServer().getPacketHandler()
+                        .setGameState(gameState);
+
+                gameState.run();
             });
             thread.setDaemon(false);
             thread.setName("server_main");
@@ -79,7 +84,11 @@ public class WraithEngine
                 ResourceManager resourceManager = buildResourceManager();
                 GameLoop gameLoop = new WindowedGameLoop(resourceManager,
                         networkManager.getClient());
-                new GameState(resourceManager, gameLoop).run();
+                GameState gameState = new GameState(resourceManager, gameLoop);
+                networkManager.getClient().getPacketHandler()
+                        .setGameState(gameState);
+
+                gameState.run();
             });
             thread.setDaemon(false);
             thread.setName("client_main");

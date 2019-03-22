@@ -11,6 +11,7 @@ public class OnlinePlayer implements Player
     private String _token;
     private ClientConnection _client;
     private PacketProtocol _packetProtocol;
+    private PlayerCommandSender _commandSender;
 
     public OnlinePlayer(ClientConnection client, String username, String token)
     {
@@ -18,6 +19,7 @@ public class OnlinePlayer implements Player
         _username = username;
         _token = token;
         _packetProtocol = (PacketProtocol) _client.getProtocol();
+        _commandSender = new PlayerCommandSender(this);
     }
 
     @Override
@@ -63,5 +65,10 @@ public class OnlinePlayer implements Player
     ClientConnection getClientConnection()
     {
         return _client;
+    }
+
+    public PlayerCommandSender getCommandSender()
+    {
+        return _commandSender;
     }
 }

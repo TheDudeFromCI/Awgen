@@ -118,4 +118,9 @@ public class MultiplayerClient
     {
         return _token;
     }
+
+    public ClientPacketHandler getPacketHandler()
+    {
+        return _handler;
+    }
 }

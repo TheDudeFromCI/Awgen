@@ -93,4 +93,9 @@ public class MultiplayerServer
     {
         return _pendingClients;
     }
+
+    public ServerPacketHandler getPacketHandler()
+    {
+        return _packetHandler;
+    }
 }
