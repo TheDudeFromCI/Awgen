@@ -10,7 +10,7 @@ import net.whg.we.command.CommandSender;
 import net.whg.we.command.CommandSet;
 import net.whg.we.command.CommandVariable;
 import net.whg.we.command.VariableKeyring;
-import net.whg.we.ui.terminal.TerminalKeyring;
+import net.whg.we.command.console.DefaultKeyring;
 
 public class CommandParserTest
 {
@@ -34,7 +34,7 @@ public class CommandParserTest
     public void parse1()
     {
         CommandSender sender = Mockito.mock(CommandSender.class);
-        VariableKeyring key = new TerminalKeyring();
+        VariableKeyring key = new DefaultKeyring();
         Mockito.when(sender.getVariableKeyring()).thenReturn(key);
 
         CommandSet set = CommandParser.parse(null, sender, "clear");
@@ -52,7 +52,7 @@ public class CommandParserTest
     public void parse2()
     {
         CommandSender sender = Mockito.mock(CommandSender.class);
-        VariableKeyring key = new TerminalKeyring();
+        VariableKeyring key = new DefaultKeyring();
         Mockito.when(sender.getVariableKeyring()).thenReturn(key);
 
         CommandSet set = CommandParser.parse(null, sender, "time -f ss");
@@ -70,7 +70,7 @@ public class CommandParserTest
     public void parse3()
     {
         CommandSender sender = Mockito.mock(CommandSender.class);
-        VariableKeyring key = new TerminalKeyring();
+        VariableKeyring key = new DefaultKeyring();
         Mockito.when(sender.getVariableKeyring()).thenReturn(key);
 
         CommandSet set = CommandParser.parse(null, sender, "");
@@ -83,7 +83,7 @@ public class CommandParserTest
     public void parse4()
     {
         CommandSender sender = Mockito.mock(CommandSender.class);
-        VariableKeyring key = new TerminalKeyring();
+        VariableKeyring key = new DefaultKeyring();
         Mockito.when(sender.getVariableKeyring()).thenReturn(key);
 
         CommandSet set = CommandParser.parse(null, sender, ";;;");
@@ -96,7 +96,7 @@ public class CommandParserTest
     public void parse5()
     {
         CommandSender sender = Mockito.mock(CommandSender.class);
-        VariableKeyring key = new TerminalKeyring();
+        VariableKeyring key = new DefaultKeyring();
         Mockito.when(sender.getVariableKeyring()).thenReturn(key);
 
         CommandSet set = CommandParser.parse(null, sender, "clear; time -f ss");
@@ -115,7 +115,7 @@ public class CommandParserTest
     public void parse6()
     {
         CommandSender sender = Mockito.mock(CommandSender.class);
-        VariableKeyring key = new TerminalKeyring();
+        VariableKeyring key = new DefaultKeyring();
         Mockito.when(sender.getVariableKeyring()).thenReturn(key);
 
         CommandSet set =
@@ -135,7 +135,7 @@ public class CommandParserTest
     public void parse7()
     {
         CommandSender sender = Mockito.mock(CommandSender.class);
-        VariableKeyring key = new TerminalKeyring();
+        VariableKeyring key = new DefaultKeyring();
         Mockito.when(sender.getVariableKeyring()).thenReturn(key);
 
         CommandSet set =
@@ -155,7 +155,7 @@ public class CommandParserTest
     public void parse8()
     {
         CommandSender sender = Mockito.mock(CommandSender.class);
-        VariableKeyring key = new TerminalKeyring();
+        VariableKeyring key = new DefaultKeyring();
         Mockito.when(sender.getVariableKeyring()).thenReturn(key);
 
         CommandSet set =
@@ -176,7 +176,7 @@ public class CommandParserTest
     public void parse9()
     {
         CommandSender sender = Mockito.mock(CommandSender.class);
-        VariableKeyring key = new TerminalKeyring();
+        VariableKeyring key = new DefaultKeyring();
         Mockito.when(sender.getVariableKeyring()).thenReturn(key);
 
         CommandSet set = CommandParser.parse(null, sender,
@@ -197,7 +197,7 @@ public class CommandParserTest
     public void parse10()
     {
         CommandSender sender = Mockito.mock(CommandSender.class);
-        VariableKeyring key = new TerminalKeyring();
+        VariableKeyring key = new DefaultKeyring();
         Mockito.when(sender.getVariableKeyring()).thenReturn(key);
 
         CommandSet set =

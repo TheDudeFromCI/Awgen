@@ -11,7 +11,7 @@ import net.whg.we.command.CommandParser;
 import net.whg.we.command.CommandSender;
 import net.whg.we.command.CommandSet;
 import net.whg.we.command.VariableKeyring;
-import net.whg.we.ui.terminal.TerminalKeyring;
+import net.whg.we.command.console.DefaultKeyring;
 import net.whg.we.utils.logging.Log;
 
 public class CommandListTest
@@ -64,7 +64,7 @@ public class CommandListTest
 
         CommandSender sender = Mockito.mock(CommandSender.class);
         CommandConsole console = Mockito.mock(CommandConsole.class);
-        VariableKeyring variables = new TerminalKeyring();
+        VariableKeyring variables = new DefaultKeyring();
         Mockito.when(sender.getConsole()).thenReturn(console);
         Mockito.when(sender.getVariableKeyring()).thenReturn(variables);
         CommandSet set = CommandParser.parse(list, sender, "clear; time");
@@ -173,7 +173,7 @@ public class CommandListTest
 
         CommandSender sender = Mockito.mock(CommandSender.class);
         CommandConsole console = Mockito.mock(CommandConsole.class);
-        VariableKeyring variables = new TerminalKeyring();
+        VariableKeyring variables = new DefaultKeyring();
         Mockito.when(sender.getConsole()).thenReturn(console);
         Mockito.when(sender.getVariableKeyring()).thenReturn(variables);
         CommandSet set = CommandParser.parse(list, sender, "clear; time");
@@ -229,7 +229,7 @@ public class CommandListTest
 
         CommandSender sender = Mockito.mock(CommandSender.class);
         CommandConsole console = Mockito.mock(CommandConsole.class);
-        VariableKeyring variables = new TerminalKeyring();
+        VariableKeyring variables = new DefaultKeyring();
         Mockito.when(sender.getConsole()).thenReturn(console);
         Mockito.when(sender.getVariableKeyring()).thenReturn(variables);
         CommandSet set = CommandParser.parse(list, sender, "clear; time");

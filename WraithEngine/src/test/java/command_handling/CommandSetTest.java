@@ -13,7 +13,7 @@ import net.whg.we.command.CommandParser;
 import net.whg.we.command.CommandSender;
 import net.whg.we.command.CommandSet;
 import net.whg.we.command.VariableKeyring;
-import net.whg.we.ui.terminal.TerminalKeyring;
+import net.whg.we.command.console.DefaultKeyring;
 
 public class CommandSetTest
 {
@@ -34,7 +34,7 @@ public class CommandSetTest
 
         CommandSender sender = Mockito.mock(CommandSender.class);
         CommandConsole console = Mockito.mock(CommandConsole.class);
-        VariableKeyring variables = new TerminalKeyring();
+        VariableKeyring variables = new DefaultKeyring();
         Mockito.when(sender.getConsole()).thenReturn(console);
         Mockito.when(sender.getVariableKeyring()).thenReturn(variables);
 
@@ -69,7 +69,7 @@ public class CommandSetTest
 
         CommandSender sender = Mockito.mock(CommandSender.class);
         CommandConsole console = Mockito.mock(CommandConsole.class);
-        VariableKeyring variables = new TerminalKeyring();
+        VariableKeyring variables = new DefaultKeyring();
         Mockito.when(sender.getConsole()).thenReturn(console);
         Mockito.when(sender.getVariableKeyring()).thenReturn(variables);
 
@@ -97,7 +97,7 @@ public class CommandSetTest
 
         CommandSender sender = Mockito.mock(CommandSender.class);
         CommandConsole console = Mockito.mock(CommandConsole.class);
-        VariableKeyring variables = new TerminalKeyring();
+        VariableKeyring variables = new DefaultKeyring();
         Mockito.when(sender.getConsole()).thenReturn(console);
         Mockito.when(sender.getVariableKeyring()).thenReturn(variables);
 
@@ -110,13 +110,13 @@ public class CommandSetTest
     public void finalOutput_NoCommands()
     {
         Assert.assertNull(
-                new CommandSet(new TerminalKeyring()).getFinalOutput());
+                new CommandSet(new DefaultKeyring()).getFinalOutput());
     }
 
     @Test
     public void addNullVariable()
     {
-        VariableKeyring variables = new TerminalKeyring();
+        VariableKeyring variables = new DefaultKeyring();
         CommandSet set = new CommandSet(variables);
 
         set.addVariable(null);
@@ -126,7 +126,7 @@ public class CommandSetTest
     @Test
     public void getNullVariable()
     {
-        VariableKeyring variables = new TerminalKeyring();
+        VariableKeyring variables = new DefaultKeyring();
         CommandSet set = new CommandSet(variables);
 
         Assert.assertNull(set.getVariable(null));
@@ -135,7 +135,7 @@ public class CommandSetTest
     @Test
     public void insertCommand_Null()
     {
-        VariableKeyring variables = new TerminalKeyring();
+        VariableKeyring variables = new DefaultKeyring();
         CommandSet set = new CommandSet(variables);
 
         set.insertCommandExecution(null);
@@ -145,7 +145,7 @@ public class CommandSetTest
     @Test
     public void insertCommand_Twice()
     {
-        VariableKeyring variables = new TerminalKeyring();
+        VariableKeyring variables = new DefaultKeyring();
         CommandSet set = new CommandSet(variables);
 
         Command com = new Command("clear", new CommandArgument[0], null);

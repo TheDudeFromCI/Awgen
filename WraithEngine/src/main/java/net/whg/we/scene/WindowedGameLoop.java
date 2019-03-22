@@ -7,7 +7,6 @@ import net.whg.we.rendering.GraphicsPipeline;
 import net.whg.we.rendering.ScreenClearType;
 import net.whg.we.resources.ResourceFetcher;
 import net.whg.we.resources.ResourceManager;
-import net.whg.we.ui.UIStack;
 import net.whg.we.ui.terminal.Terminal;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.FPSLogger;

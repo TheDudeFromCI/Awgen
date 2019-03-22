@@ -1,7 +1,7 @@
 package net.whg.we.command;
 
 import net.whg.we.command.common.*;
-import net.whg.we.ui.terminal.TerminalKeyring;
+import net.whg.we.command.console.DefaultKeyring;
 import net.whg.we.utils.logging.Log;
 
 public class CommandManager
@@ -20,7 +20,7 @@ public class CommandManager
         _commandList.addCommand(new ForCommand());
         _commandList.addCommand(new ListCommand());
 
-        _variableKeyRing = new TerminalKeyring();
+        _variableKeyRing = new DefaultKeyring();
     }
 
     public CommandList getCommandList()

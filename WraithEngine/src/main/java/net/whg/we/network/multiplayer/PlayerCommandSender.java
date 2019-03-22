@@ -5,12 +5,11 @@ import net.whg.we.command.CommandSender;
 import net.whg.we.command.VariableKeyring;
 import net.whg.we.command.console.Console;
 import net.whg.we.command.console.ConsoleListener;
+import net.whg.we.command.console.DefaultKeyring;
 import net.whg.we.command.console.LineChangedEvent;
 import net.whg.we.command.console.ScrollPosChanged;
 import net.whg.we.network.multiplayer.packets.TerminalOutputPacket;
 import net.whg.we.network.packet.Packet;
-import net.whg.we.ui.terminal.TerminalKeyring;
-import net.whg.we.utils.logging.Log;
 
 public class PlayerCommandSender implements CommandSender
 {
@@ -20,7 +19,7 @@ public class PlayerCommandSender implements CommandSender
     public PlayerCommandSender(OnlinePlayer player)
     {
         _console = new Console();
-        _variables = new TerminalKeyring();
+        _variables = new DefaultKeyring();
 
         _console.getEvent().addListener(new ConsoleListener()
         {
