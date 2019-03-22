@@ -1,7 +1,7 @@
 package net.whg.we.ui.terminal;
 
 import net.whg.we.network.multiplayer.MultiplayerClient;
-import net.whg.we.network.multiplayer.packets.TerminalCommandPacket;
+import net.whg.we.packets.TerminalCommandPacket;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.ui.TextEditor;
 import net.whg.we.ui.Transform2D;

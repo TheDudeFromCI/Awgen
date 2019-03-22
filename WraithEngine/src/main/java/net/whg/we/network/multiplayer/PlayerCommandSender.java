@@ -8,7 +8,7 @@ import net.whg.we.command.console.ConsoleListener;
 import net.whg.we.command.console.DefaultKeyring;
 import net.whg.we.command.console.LineChangedEvent;
 import net.whg.we.command.console.ScrollPosChanged;
-import net.whg.we.network.multiplayer.packets.TerminalOutputPacket;
+import net.whg.we.packets.TerminalOutputPacket;
 import net.whg.we.network.packet.Packet;
 
 public class PlayerCommandSender implements CommandSender

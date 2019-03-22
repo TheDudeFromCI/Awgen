@@ -1,9 +1,8 @@
 package net.whg.we.network.multiplayer;
 
 import net.whg.we.network.multiplayer.HandshakePacket;
-import net.whg.we.network.multiplayer.packets.TerminalCommandPacket;
-import net.whg.we.network.multiplayer.packets.TerminalOutputPacket;
 import net.whg.we.network.packet.DefaultPacketFactory;
+import net.whg.we.packets.*;
 
 public class MultiplayerUtils
 {

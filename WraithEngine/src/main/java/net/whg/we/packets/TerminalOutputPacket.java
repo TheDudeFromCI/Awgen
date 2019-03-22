@@ -1,4 +1,4 @@
-package net.whg.we.network.multiplayer.packets;
+package net.whg.we.packets;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
