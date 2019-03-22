@@ -69,6 +69,9 @@ public class MultiplayerClient
 
     public void stopClient()
     {
+        if (!isRunning())
+            return;
+
         Log.info("Closing multiplayer client.");
 
         try
