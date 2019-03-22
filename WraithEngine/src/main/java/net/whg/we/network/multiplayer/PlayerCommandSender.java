@@ -3,10 +3,10 @@ package net.whg.we.network.multiplayer;
 import net.whg.we.command.CommandConsole;
 import net.whg.we.command.CommandSender;
 import net.whg.we.command.VariableKeyring;
-import net.whg.we.ui.terminal.Console;
-import net.whg.we.ui.terminal.ConsoleListener;
-import net.whg.we.ui.terminal.LineChangedEvent;
-import net.whg.we.ui.terminal.ScrollPosChanged;
+import net.whg.we.command.console.Console;
+import net.whg.we.command.console.ConsoleListener;
+import net.whg.we.command.console.LineChangedEvent;
+import net.whg.we.command.console.ScrollPosChanged;
 import net.whg.we.ui.terminal.TerminalKeyring;
 import net.whg.we.utils.logging.Log;
 

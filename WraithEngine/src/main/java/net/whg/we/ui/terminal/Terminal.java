@@ -10,6 +10,7 @@ import net.whg.we.command.common.ListCommand;
 import net.whg.we.command.common.PrintCommand;
 import net.whg.we.command.common.RandomCommand;
 import net.whg.we.command.common.SetCommand;
+import net.whg.we.command.console.Console;
 import net.whg.we.main.Plugin;
 import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;
