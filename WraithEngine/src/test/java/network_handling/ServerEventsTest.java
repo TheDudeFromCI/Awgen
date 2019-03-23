@@ -23,7 +23,7 @@ public class ServerEventsTest
         ServerListener listener = Mockito.mock(ServerListener.class);
 
         PacketServer server =
-                new PacketServer(new DefaultPacketFactory(), port);
+                new PacketServer(new DefaultPacketFactory(), null, port);
         server.getEvents().addListener(listener);
 
         Thread.sleep(500);
@@ -47,7 +47,7 @@ public class ServerEventsTest
         ServerListener listener = Mockito.mock(ServerListener.class);
 
         PacketServer server =
-                new PacketServer(new DefaultPacketFactory(), port);
+                new PacketServer(new DefaultPacketFactory(), null, port);
         server.getEvents().addListener(listener);
 
         Thread.sleep(500);
@@ -65,7 +65,7 @@ public class ServerEventsTest
         ServerListener listener = Mockito.mock(ServerListener.class);
 
         PacketServer server =
-                new PacketServer(new DefaultPacketFactory(), port);
+                new PacketServer(new DefaultPacketFactory(), null, port);
         server.getEvents().addListener(listener);
 
         Thread.sleep(500);
@@ -95,7 +95,7 @@ public class ServerEventsTest
         ServerListener listener = Mockito.mock(ServerListener.class);
 
         PacketServer server =
-                new PacketServer(new DefaultPacketFactory(), port);
+                new PacketServer(new DefaultPacketFactory(), null, port);
         server.getEvents().addListener(listener);
         Thread.sleep(500);
 

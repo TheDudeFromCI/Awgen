@@ -4,9 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
-import net.whg.we.ui.UIComponent;
-import net.whg.we.ui.UIStack;
-import net.whg.we.ui.UIStack.ComponentAction;
+import net.whg.we.client_logic.ui.UIComponent;
+import net.whg.we.client_logic.ui.UIStack;
+import net.whg.we.client_logic.ui.UIStack.ComponentAction;
 
 public class UIStackTest
 {

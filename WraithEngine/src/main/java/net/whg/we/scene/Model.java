@@ -1,9 +1,8 @@
 package net.whg.we.scene;
 
-import net.whg.we.rendering.LocationHolder;
-import net.whg.we.rendering.Material;
-import net.whg.we.rendering.Mesh;
-import net.whg.we.utils.Location;
+import net.whg.we.client_logic.rendering.LocationHolder;
+import net.whg.we.client_logic.rendering.Material;
+import net.whg.we.client_logic.rendering.Mesh;
 
 public class Model implements LocationHolder
 {
@@ -45,5 +44,10 @@ public class Model implements LocationHolder
 	public String getName()
 	{
 		return _name;
+	}
+
+	public void setLocation(Location location)
+	{
+		_location = location;
 	}
 }

@@ -4,9 +4,9 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+import net.whg.we.client_logic.resources.SimpleFileDatabase;
+import net.whg.we.client_logic.resources.YamlFile;
 import net.whg.we.main.Plugin;
-import net.whg.we.resources.SimpleFileDatabase;
-import net.whg.we.resources.YamlFile;
 
 public class YamlFileTest
 {

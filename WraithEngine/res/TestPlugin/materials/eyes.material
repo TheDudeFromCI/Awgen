@@ -1,4 +1,4 @@
 name: eyes
 shader: shaders/vertex_lit.glsl
 textures:
-  diffuse: textures/blue_eye.png
+  _diffuse: textures/human/blue_eye.png

@@ -1,67 +1,90 @@
 package net.whg.we.main;
 
+import net.whg.we.client_logic.resources.ResourceManager;
+import net.whg.we.client_logic.resources.graphics.GLSLShaderLoader;
+import net.whg.we.client_logic.resources.graphics.MeshLoader;
+import net.whg.we.client_logic.resources.graphics.TextureLoader;
+import net.whg.we.client_logic.resources.scene.FontLoader;
+import net.whg.we.client_logic.resources.scene.MaterialLoader;
+import net.whg.we.client_logic.resources.scene.ModelLoader;
 import net.whg.we.event.EventManager;
-import net.whg.we.resources.ResourceManager;
-import net.whg.we.resources.graphics.GLSLShaderLoader;
-import net.whg.we.resources.graphics.MeshLoader;
-import net.whg.we.resources.graphics.TextureLoader;
-import net.whg.we.resources.scene.FontLoader;
-import net.whg.we.resources.scene.MaterialLoader;
-import net.whg.we.resources.scene.ModelLoader;
 import net.whg.we.scene.GameLoop;
+import net.whg.we.server_logic.command.CommandManager;
+import net.whg.we.server_logic.coms.CommandUtils;
 
 public class GameState
 {
-	private ResourceManager _resourceManager;
-	private PluginLoader _pluginLoader;
-	private EventManager _eventManager;
-	private GameLoop _gameLoop;
+    private ResourceManager _resourceManager;
+    private PluginLoader _pluginLoader;
+    private EventManager _eventManager;
+    private GameLoop _gameLoop;
+    private CommandManager _commandManager;
+    private boolean _isClient;
 
-	public GameState(ResourceManager resourceManager, GameLoop gameLoop)
-	{
-		_resourceManager = resourceManager;
-		_pluginLoader = new PluginLoader();
-		_eventManager = new EventManager();
-		_gameLoop = gameLoop;
-	}
+    public GameState(ResourceManager resourceManager, GameLoop gameLoop,
+            boolean isClient)
+    {
+        _resourceManager = resourceManager;
+        _pluginLoader = new PluginLoader();
+        _eventManager = new EventManager();
+        _commandManager = new CommandManager();// TODO Command manager should
+                                               // only exist on the server game
+                                               // state.
+        _gameLoop = gameLoop;
+        _isClient = isClient;
 
-	public void run()
-	{
-		// Load file loaders
-		_resourceManager.getResourceLoader().addFileLoader(new GLSLShaderLoader());
-		_resourceManager.getResourceLoader().addFileLoader(new MeshLoader());
-		_resourceManager.getResourceLoader().addFileLoader(new TextureLoader());
-		_resourceManager.getResourceLoader()
-				.addFileLoader(new MaterialLoader(_resourceManager.getFileDatabase()));
-		_resourceManager.getResourceLoader()
-				.addFileLoader(new ModelLoader(_resourceManager.getFileDatabase()));
-		_resourceManager.getResourceLoader().addFileLoader(new FontLoader());
+        CommandUtils.addAdvancedCommands(_commandManager.getCommandList(),
+                this);
+    }
 
-		// Load plugins
-		_pluginLoader.loadPluginsFromFile(_resourceManager.getFileDatabase());
-		_pluginLoader.enableAllPlugins();
+    public void run()
+    {
+        // Load file loaders
+        _resourceManager.getResourceLoader()
+                .addFileLoader(new GLSLShaderLoader());
+        _resourceManager.getResourceLoader().addFileLoader(new MeshLoader());
+        _resourceManager.getResourceLoader().addFileLoader(new TextureLoader());
+        _resourceManager.getResourceLoader().addFileLoader(
+                new MaterialLoader(_resourceManager.getFileDatabase()));
+        _resourceManager.getResourceLoader().addFileLoader(
+                new ModelLoader(_resourceManager.getFileDatabase()));
+        _resourceManager.getResourceLoader().addFileLoader(new FontLoader());
 
-		// Start game loop
-		_gameLoop.run();
-	}
+        // Load plugins
+        _pluginLoader.loadPluginsFromFile(_resourceManager.getFileDatabase());
+        _pluginLoader.enableAllPlugins();
 
-	public ResourceManager getResourceManager()
-	{
-		return _resourceManager;
-	}
+        // Start game loop
+        _gameLoop.run();
+    }
 
-	public PluginLoader getPluginLoader()
-	{
-		return _pluginLoader;
-	}
+    public ResourceManager getResourceManager()
+    {
+        return _resourceManager;
+    }
 
-	public EventManager getEventManager()
-	{
-		return _eventManager;
-	}
+    public PluginLoader getPluginLoader()
+    {
+        return _pluginLoader;
+    }
 
-	public GameLoop getGameLoop()
-	{
-		return _gameLoop;
-	}
+    public EventManager getEventManager()
+    {
+        return _eventManager;
+    }
+
+    public GameLoop getGameLoop()
+    {
+        return _gameLoop;
+    }
+
+    public CommandManager getCommandManager()
+    {
+        return _commandManager;
+    }
+
+    public boolean isClient()
+    {
+        return _isClient;
+    }
 }

@@ -2,7 +2,7 @@ package ui_handling;
 
 import org.junit.Assert;
 import org.junit.Test;
-import net.whg.we.ui.TextProcessor;
+import net.whg.we.client_logic.ui.TextProcessor;
 
 public class TextProcessorTest
 {

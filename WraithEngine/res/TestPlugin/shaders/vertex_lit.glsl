@@ -5,7 +5,9 @@ uniform vec3 _sunDir = vec3(0.466084958468, -0.847427197214, 0.254228159164);
 
 layout(location = 0) in vec3 _vertPos;
 layout(location = 1) in vec3 _normal;
-layout(location = 2) in vec2 _uv;
+layout(location = 2) in vec3 _tangent;
+layout(location = 3) in vec3 _bitangent;
+layout(location = 4) in vec2 _uv;
 
 out vec3 lightColor;
 out vec2 uv;
