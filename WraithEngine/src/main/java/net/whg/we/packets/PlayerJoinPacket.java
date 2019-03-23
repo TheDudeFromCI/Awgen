@@ -7,6 +7,7 @@ import org.joml.Vector3f;
 import net.whg.we.client_logic.connect.ClientPlayer;
 import net.whg.we.client_logic.resources.scene.ModelResource;
 import net.whg.we.client_logic.scene.WindowedGameLoop;
+import net.whg.we.client_logic.utils.PlayerCameraModelSync;
 import net.whg.we.network.multiplayer.ClientPacketHandler;
 import net.whg.we.network.multiplayer.MultiplayerClient;
 import net.whg.we.network.packet.Packet;
@@ -104,14 +105,16 @@ public class PlayerJoinPacket implements PacketType
 		player.getLocation().setRotation((Quaternionf) packet.getData().get("rot"));
 
 		WindowedGameLoop gameLoop = (WindowedGameLoop) handler.getGameState().getGameLoop();
-		{
-			ModelResource terrain = (ModelResource) gameLoop.getResourceManager()
-					.loadResource(gameLoop.getCorePlugin(), "models/human.model");
-			terrain.compile(gameLoop.getGraphicsPipeline().getGraphics());
-			Model model = terrain.getData();
-			model.setLocation(player.getLocation());
-			GameObject go = gameLoop.getScene().getGameObjectManager().createNew();
-			go.addBehaviour(new RenderBehaviour(model));
-		}
+		ModelResource terrain = (ModelResource) gameLoop.getResourceManager()
+				.loadResource(gameLoop.getCorePlugin(), "models/human.model");
+		terrain.compile(gameLoop.getGraphicsPipeline().getGraphics());
+		Model model = terrain.getData();
+		GameObject go = gameLoop.getScene().getGameObjectManager().createNew();
+		go.addBehaviour(new RenderBehaviour(model));
+
+		PlayerCameraModelSync sync =
+				new PlayerCameraModelSync(player.getLocation(), model.getLocation());
+		player.setCameraModelSync(sync);
+		sync.sync();
 	}
 }

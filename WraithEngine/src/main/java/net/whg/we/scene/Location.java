@@ -78,9 +78,22 @@ public class Location
 		updateMatrix();
 	}
 
+	public void setPosition(float x, float y, float z)
+	{
+		_position.set(x, y, z);
+		updateMatrix();
+	}
+
 	public void setRotation(Quaternionf rot)
 	{
 		_rotation.set(rot);
+		updateMatrix();
+	}
+
+	public void setRotation(float yaw, float pitch, float roll)
+	{
+		_rotation.identity();
+		_rotation.rotateXYZ(pitch, yaw, roll);
 		updateMatrix();
 	}
 

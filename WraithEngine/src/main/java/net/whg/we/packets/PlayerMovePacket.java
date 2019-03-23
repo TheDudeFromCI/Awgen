@@ -4,7 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import net.whg.we.network.connect.Player;
+import net.whg.we.client_logic.connect.ClientPlayer;
 import net.whg.we.network.connect.PlayerList;
 import net.whg.we.network.multiplayer.ClientPacketHandler;
 import net.whg.we.network.multiplayer.MultiplayerClient;
@@ -89,13 +89,15 @@ public class PlayerMovePacket implements PacketType
 		if (handler.isClient())
 		{
 			MultiplayerClient client = ((ClientPacketHandler) handler).getClient();
-			Player player = client.getPlayerList().getPlayerByToken(token);
+			ClientPlayer player = (ClientPlayer) client.getPlayerList().getPlayerByToken(token);
 
 			if (player == null)
 				return;
 
 			player.getLocation().setPosition(pos);
 			player.getLocation().setRotation(rot);
+
+			player.getCameraSync().sync();
 		}
 		else
 		{
