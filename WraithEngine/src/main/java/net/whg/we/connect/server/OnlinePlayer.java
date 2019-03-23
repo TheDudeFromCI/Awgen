@@ -1,4 +1,4 @@
-package net.whg.we.network.multiplayer;
+package net.whg.we.connect.server;
 
 import net.whg.we.connect.Player;
 import net.whg.we.network.packet.Packet;

@@ -1,4 +1,4 @@
-package net.whg.we.network.multiplayer;
+package net.whg.we.connect.server;
 
 import net.whg.we.command.CommandConsole;
 import net.whg.we.command.CommandSender;
@@ -8,6 +8,7 @@ import net.whg.we.command.console.ConsoleListener;
 import net.whg.we.command.console.DefaultKeyring;
 import net.whg.we.command.console.LineChangedEvent;
 import net.whg.we.command.console.ScrollPosChanged;
+import net.whg.we.connect.server.OnlinePlayer;
 import net.whg.we.packets.TerminalOutputPacket;
 import net.whg.we.network.packet.Packet;
 
