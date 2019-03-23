@@ -5,4 +5,6 @@ public interface CommandSender
     CommandConsole getConsole();
 
     VariableKeyring getVariableKeyring();
+
+    String getUsername();
 }

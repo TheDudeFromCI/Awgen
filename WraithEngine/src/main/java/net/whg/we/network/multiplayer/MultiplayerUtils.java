@@ -11,5 +11,6 @@ public class MultiplayerUtils
         factory.addPacketType(new HandshakePacket());
         factory.addPacketType(new TerminalCommandPacket());
         factory.addPacketType(new TerminalOutputPacket());
+        factory.addPacketType(new ChatPacket());
     }
 }

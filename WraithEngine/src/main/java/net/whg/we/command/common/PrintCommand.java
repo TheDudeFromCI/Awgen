@@ -32,14 +32,12 @@ public class PrintCommand implements CommandHandler
         CommandConsole console = command.getCommandSender().getConsole();
 
         StringBuilder sb = new StringBuilder();
-
         for (int i = 0; i < args.length; i++)
         {
             if (i > 0)
                 sb.append(' ');
             sb.append(args[i].getValue());
         }
-
         String out = sb.toString();
         console.println(out);
 

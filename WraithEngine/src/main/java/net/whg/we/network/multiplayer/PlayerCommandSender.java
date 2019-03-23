@@ -15,9 +15,11 @@ public class PlayerCommandSender implements CommandSender
 {
     private Console _console;
     private VariableKeyring _variables;
+    private OnlinePlayer _player;
 
     public PlayerCommandSender(OnlinePlayer player)
     {
+        _player = player;
         _console = new Console();
         _variables = new DefaultKeyring();
 
@@ -59,5 +61,11 @@ public class PlayerCommandSender implements CommandSender
     public VariableKeyring getVariableKeyring()
     {
         return _variables;
+    }
+
+    @Override
+    public String getUsername()
+    {
+        return _player.getUsername();
     }
 }

@@ -1,6 +1,7 @@
 package net.whg.we.main;
 
 import net.whg.we.command.CommandManager;
+import net.whg.we.coms.CommandUtils;
 import net.whg.we.event.EventManager;
 import net.whg.we.resources.ResourceManager;
 import net.whg.we.resources.graphics.GLSLShaderLoader;
@@ -18,14 +19,20 @@ public class GameState
     private EventManager _eventManager;
     private GameLoop _gameLoop;
     private CommandManager _commandManager;
+    private boolean _isClient;
 
-    public GameState(ResourceManager resourceManager, GameLoop gameLoop)
+    public GameState(ResourceManager resourceManager, GameLoop gameLoop,
+            boolean isClient)
     {
         _resourceManager = resourceManager;
         _pluginLoader = new PluginLoader();
         _eventManager = new EventManager();
         _commandManager = new CommandManager();
         _gameLoop = gameLoop;
+        _isClient = isClient;
+
+        CommandUtils.addAdvancedCommands(_commandManager.getCommandList(),
+                this);
     }
 
     public void run()
@@ -72,5 +79,10 @@ public class GameState
     public CommandManager getCommandManager()
     {
         return _commandManager;
+    }
+
+    public boolean isClient()
+    {
+        return _isClient;
     }
 }

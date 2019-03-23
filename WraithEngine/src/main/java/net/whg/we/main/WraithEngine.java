@@ -2,6 +2,7 @@ package net.whg.we.main;
 
 import java.io.File;
 import org.lwjgl.Version;
+import net.whg.we.coms.CommandUtils;
 import net.whg.we.network.multiplayer.NetworkManager;
 import net.whg.we.network.multiplayer.ServerGameLoop;
 import net.whg.we.resources.FileDatabase;
@@ -64,7 +65,8 @@ public class WraithEngine
                         new ServerGameLoop(networkManager.getServer(),
                                 resourceManager, networkManager.isLocalHost());
 
-                GameState gameState = new GameState(resourceManager, gameLoop);
+                GameState gameState =
+                        new GameState(resourceManager, gameLoop, false);
                 networkManager.getServer().getPacketHandler()
                         .setGameState(gameState);
 
@@ -84,7 +86,8 @@ public class WraithEngine
                 ResourceManager resourceManager = buildResourceManager();
                 GameLoop gameLoop = new WindowedGameLoop(resourceManager,
                         networkManager.getClient());
-                GameState gameState = new GameState(resourceManager, gameLoop);
+                GameState gameState =
+                        new GameState(resourceManager, gameLoop, true);
                 networkManager.getClient().getPacketHandler()
                         .setGameState(gameState);
 
