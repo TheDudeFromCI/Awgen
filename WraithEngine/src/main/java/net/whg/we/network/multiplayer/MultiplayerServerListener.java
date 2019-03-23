@@ -44,7 +44,8 @@ public class MultiplayerServerListener implements ServerListener
     public void onClientDisconnected(Server server, ClientConnection client)
     {
         _server.getPendingClients().removeClient(client);
-        _server.getPlayerList().removePlayer(client);
+        _server.getPlayerList().removePlayer(_server.getPlayerList()
+                .getPlayerByTCPChannel(client.getTCPChannel()));
     }
 
     @Override

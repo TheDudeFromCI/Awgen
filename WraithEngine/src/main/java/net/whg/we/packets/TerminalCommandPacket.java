@@ -3,9 +3,9 @@ package net.whg.we.packets;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import net.whg.we.command.CommandManager;
+import net.whg.we.connect.server.ServerPlayerList;
 import net.whg.we.main.GameState;
 import net.whg.we.network.multiplayer.OnlinePlayer;
-import net.whg.we.network.multiplayer.PlayerList;
 import net.whg.we.network.multiplayer.ServerPacketHandler;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketHandler;
@@ -63,13 +63,13 @@ public class TerminalCommandPacket implements PacketType
         else
         {
             ServerPacketHandler s_handler = (ServerPacketHandler) handler;
-            PlayerList playerList = s_handler.getServer().getPlayerList();
+            ServerPlayerList playerList = s_handler.getServer().getPlayerList();
             OnlinePlayer player =
                     playerList.getPlayerByTCPChannel(packet.getSender());
 
             Log.infof("Recieved command '%s' from '%s'.", command,
                     player.getUsername());
-            Log.debugf("User token: %s", player.getUserToken());
+            Log.debugf("User token: %s", player.getToken());
 
             GameState gameState = handler.getGameState();
             CommandManager commandManager = gameState.getCommandManager();

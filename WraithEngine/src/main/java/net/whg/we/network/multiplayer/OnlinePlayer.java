@@ -1,5 +1,6 @@
 package net.whg.we.network.multiplayer;
 
+import net.whg.we.connect.Player;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketProtocol;
 import net.whg.we.network.server.ClientConnection;
@@ -32,7 +33,7 @@ public class OnlinePlayer implements Player
     }
 
     @Override
-    public String getUserToken()
+    public String getToken()
     {
         return _token;
     }
@@ -73,7 +74,7 @@ public class OnlinePlayer implements Player
         _client.close();
     }
 
-    ClientConnection getClientConnection()
+    public ClientConnection getClientConnection()
     {
         return _client;
     }

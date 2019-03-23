@@ -1,9 +1,6 @@
 package net.whg.we.network.multiplayer;
 
 import net.whg.we.event.EventCaller;
-import net.whg.we.network.server.ClientConnection;
-import net.whg.we.network.server.Server;
-import net.whg.we.network.server.ServerListener;
 import net.whg.we.resources.ResourceManager;
 import net.whg.we.scene.GameLoop;
 import net.whg.we.scene.UpdateEventCaller;

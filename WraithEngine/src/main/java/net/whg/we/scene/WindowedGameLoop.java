@@ -3,7 +3,6 @@ package net.whg.we.scene;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import net.whg.we.event.EventCaller;
-import net.whg.we.main.Plugin;
 import net.whg.we.network.multiplayer.MultiplayerClient;
 import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.GraphicsPipeline;

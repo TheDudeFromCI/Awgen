@@ -1,6 +1,7 @@
 package net.whg.we.network.multiplayer;
 
 import java.io.IOException;
+import net.whg.we.connect.server.ServerPlayerList;
 import net.whg.we.network.packet.DefaultPacketFactory;
 import net.whg.we.network.packet.PacketFactory;
 import net.whg.we.network.packet.PacketServer;
@@ -12,13 +13,13 @@ public class MultiplayerServer
 
     private PacketServer _server;
     private DefaultPacketFactory _factory;
-    private PlayerList _playerList;
+    private ServerPlayerList _playerList;
     private PendingClients _pendingClients;
     private ServerPacketHandler _packetHandler;
 
     public MultiplayerServer()
     {
-        _playerList = new PlayerList();
+        _playerList = new ServerPlayerList();
         _pendingClients = new PendingClients();
         _packetHandler = new ServerPacketHandler(this);
 
@@ -74,7 +75,7 @@ public class MultiplayerServer
         _server = null;
     }
 
-    public PlayerList getPlayerList()
+    public ServerPlayerList getPlayerList()
     {
         return _playerList;
     }

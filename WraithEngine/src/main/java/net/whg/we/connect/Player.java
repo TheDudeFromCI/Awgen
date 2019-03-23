@@ -1,4 +1,6 @@
-package net.whg.we.network.multiplayer;
+package net.whg.we.connect;
+
+import net.whg.we.utils.Location;
 
 public interface Player
 {
@@ -23,5 +25,7 @@ public interface Player
      * 
      * @return The token for this user account.
      */
-    String getUserToken();
+    String getToken();
+
+    Location getLocation();
 }

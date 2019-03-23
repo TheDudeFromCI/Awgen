@@ -4,7 +4,9 @@ import net.whg.we.command.Command;
 import net.whg.we.command.CommandArgument;
 import net.whg.we.command.CommandConsole;
 import net.whg.we.command.CommandHandler;
-import net.whg.we.network.multiplayer.PlayerList;
+import net.whg.we.connect.PlayerList;
+import net.whg.we.connect.server.ServerPlayerList;
+import net.whg.we.network.multiplayer.OnlinePlayer;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.packets.ChatPacket;
 
@@ -12,9 +14,9 @@ public class ChatCommand implements CommandHandler
 {
     private static String[] ALIAS = {};
 
-    private PlayerList _playerList;
+    private ServerPlayerList _playerList;
 
-    public ChatCommand(PlayerList playerList)
+    public ChatCommand(ServerPlayerList playerList)
     {
         _playerList = playerList;
     }
@@ -76,9 +78,11 @@ public class ChatCommand implements CommandHandler
 
         _playerList.forEach(player ->
         {
-            Packet packet = player.newPacket("common.chat");
+            OnlinePlayer p = (OnlinePlayer) player;
+
+            Packet packet = p.newPacket("common.chat");
             ((ChatPacket) packet.getPacketType()).build(packet, out);
-            player.sendPacket(packet);
+            p.sendPacket(packet);
         });
 
         return "1";
