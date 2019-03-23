@@ -1,12 +1,19 @@
 package net.whg.we.scene;
 
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import net.whg.we.event.EventCaller;
+import net.whg.we.main.Plugin;
 import net.whg.we.network.multiplayer.MultiplayerClient;
 import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.GraphicsPipeline;
 import net.whg.we.rendering.ScreenClearType;
 import net.whg.we.resources.ResourceFetcher;
+import net.whg.we.resources.ResourceLoader;
 import net.whg.we.resources.ResourceManager;
+import net.whg.we.resources.scene.ModelResource;
+import net.whg.we.scene.behaviours.MeshColliderBehaviour;
+import net.whg.we.scene.behaviours.RenderBehaviour;
 import net.whg.we.ui.terminal.Terminal;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.FPSLogger;
@@ -66,6 +73,49 @@ public class WindowedGameLoop implements GameLoop
             long usedPhysicsFrames = 0;
 
             _updateListener.init();
+
+            // TODO Remove this. Loading a resources should occur through
+            // commands and startup files, not pre-loaded.
+            {
+                Plugin plugin = new Plugin()
+                {
+
+                    @Override
+                    public void initPlugin()
+                    {
+                    }
+
+                    @Override
+                    public int getPriority()
+                    {
+                        return 0;
+                    }
+
+                    @Override
+                    public String getPluginName()
+                    {
+                        return "TestPlugin";
+                    }
+
+                    @Override
+                    public void enablePlugin()
+                    {
+                    }
+                };
+
+                ModelResource terrain = (ModelResource) _resourceManager
+                        .loadResource(plugin, "models/terrain.model");
+                terrain.compile(_graphicsPipeline.getGraphics());
+                Model model = terrain.getData();
+                model.getLocation().setScale(new Vector3f(100f, 100f, 100f));
+                model.getLocation().setRotation(new Quaternionf()
+                        .rotateX((float) Math.toRadians(-90f)));
+                GameObject go = _scene.getGameObjectManager().createNew();
+                go.addBehaviour(new RenderBehaviour(model));
+                go.addBehaviour(new MeshColliderBehaviour(
+                        terrain.getMeshResource(0).getVertexData(),
+                        model.getLocation()));
+            }
 
             while (true)
             {
@@ -131,6 +181,7 @@ public class WindowedGameLoop implements GameLoop
         _updateListener.onUpdateFrame();
         _scene.updateFrame();
 
+        // TODO Move first person camera to scene.
         _firstPerson.setMoveSpeed(Input.isKeyHeld("control") ? 70f : 7f);
         _firstPerson.update();
 
@@ -138,6 +189,14 @@ public class WindowedGameLoop implements GameLoop
             Screen.setMouseLocked(!Screen.isMouseLocked());
         if (Input.isKeyDown("escape"))
             requestClose();
+
+        // TODO Ground raycasting should not be done here.
+        Collision col = _scene.getPhysicsWorld().raycast(
+                _firstPerson.getLocation().getPosition(),
+                new Vector3f(0f, -1f, 0f), 10f);
+        if (col != null)
+            _firstPerson.getLocation()
+                    .setPosition(col.getPosition().add(0f, 1.8f, 0f));
     }
 
     @Override

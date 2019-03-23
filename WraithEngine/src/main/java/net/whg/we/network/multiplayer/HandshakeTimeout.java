@@ -4,7 +4,7 @@ import net.whg.we.network.server.ClientConnection;
 
 public class HandshakeTimeout
 {
-    public static final long DEFAULT_CONNECT_TIME = 7000;
+    public static final long DEFAULT_CONNECT_TIME = 60000;
     private long _startTime;
     private long _waitTime;
     private ClientConnection _client;

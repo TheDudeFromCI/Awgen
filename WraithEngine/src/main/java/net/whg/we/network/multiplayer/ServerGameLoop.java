@@ -34,6 +34,9 @@ public class ServerGameLoop implements GameLoop
 
         _updateListener.init();
 
+        // TODO Localhost players will fail to connect if they time out too
+        // quickly. This will cause the client to close, and the server to stay
+        // open in the background.
         boolean clientConnected = false;
         while (_running)
         {

@@ -2,7 +2,6 @@ package net.whg.we.main;
 
 import java.io.File;
 import org.lwjgl.Version;
-import net.whg.we.coms.CommandUtils;
 import net.whg.we.network.multiplayer.NetworkManager;
 import net.whg.we.network.multiplayer.ServerGameLoop;
 import net.whg.we.resources.FileDatabase;
