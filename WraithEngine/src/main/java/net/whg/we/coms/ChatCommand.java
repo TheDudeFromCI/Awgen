@@ -5,8 +5,8 @@ import net.whg.we.command.CommandArgument;
 import net.whg.we.command.CommandConsole;
 import net.whg.we.command.CommandHandler;
 import net.whg.we.connect.PlayerList;
+import net.whg.we.connect.server.OnlinePlayer;
 import net.whg.we.connect.server.ServerPlayerList;
-import net.whg.we.network.multiplayer.OnlinePlayer;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.packets.ChatPacket;
 
