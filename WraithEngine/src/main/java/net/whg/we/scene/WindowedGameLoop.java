@@ -9,7 +9,6 @@ import net.whg.we.rendering.Camera;
 import net.whg.we.rendering.GraphicsPipeline;
 import net.whg.we.rendering.ScreenClearType;
 import net.whg.we.resources.ResourceFetcher;
-import net.whg.we.resources.ResourceLoader;
 import net.whg.we.resources.ResourceManager;
 import net.whg.we.resources.scene.ModelResource;
 import net.whg.we.scene.behaviours.MeshColliderBehaviour;
