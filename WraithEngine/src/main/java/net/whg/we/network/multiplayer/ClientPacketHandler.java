@@ -5,23 +5,34 @@ import net.whg.we.network.packet.PacketHandler;
 
 public class ClientPacketHandler implements PacketHandler
 {
-    private GameState _gameState;
+	private MultiplayerClient _client;
+	private GameState _gameState;
 
-    @Override
-    public boolean isClient()
-    {
-        return true;
-    }
+	public ClientPacketHandler(MultiplayerClient client)
+	{
+		_client = client;
+	}
 
-    @Override
-    public GameState getGameState()
-    {
-        return _gameState;
-    }
+	@Override
+	public boolean isClient()
+	{
+		return true;
+	}
 
-    @Override
-    public void setGameState(GameState gameState)
-    {
-        _gameState = gameState;
-    }
+	@Override
+	public GameState getGameState()
+	{
+		return _gameState;
+	}
+
+	@Override
+	public void setGameState(GameState gameState)
+	{
+		_gameState = gameState;
+	}
+
+	public MultiplayerClient getClient()
+	{
+		return _client;
+	}
 }
