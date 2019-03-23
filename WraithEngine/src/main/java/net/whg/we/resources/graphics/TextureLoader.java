@@ -2,7 +2,7 @@ package net.whg.we.resources.graphics;
 
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-import net.whg.we.rendering.TextureProperties;
+import net.whg.we.client_logic.rendering.TextureProperties;
 import net.whg.we.resources.FileLoader;
 import net.whg.we.resources.ResourceDatabase;
 import net.whg.we.resources.ResourceFile;

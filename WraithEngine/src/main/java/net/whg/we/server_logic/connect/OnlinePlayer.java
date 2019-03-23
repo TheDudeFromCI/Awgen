@@ -1,6 +1,6 @@
 package net.whg.we.server_logic.connect;
 
-import net.whg.we.connect.Player;
+import net.whg.we.network.connect.Player;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketProtocol;
 import net.whg.we.network.server.ClientConnection;

@@ -1,9 +1,9 @@
 package net.whg.we.ui.terminal;
 
 import net.whg.we.main.Plugin;
-import net.whg.we.rendering.Material;
-import net.whg.we.rendering.Mesh;
-import net.whg.we.rendering.Shader;
+import net.whg.we.client_logic.rendering.Material;
+import net.whg.we.client_logic.rendering.Mesh;
+import net.whg.we.client_logic.rendering.Shader;
 import net.whg.we.resources.ResourceFetcher;
 import net.whg.we.scene.WindowedGameLoop;
 import net.whg.we.ui.SimpleContainer;
@@ -13,7 +13,7 @@ import net.whg.we.ui.font.Font;
 import net.whg.we.ui.font.UIString;
 import net.whg.we.utils.AnimatedProperty;
 import net.whg.we.utils.Color;
-import net.whg.we.utils.Input;
+import net.whg.we.client_logic.utils.Input;
 import net.whg.we.utils.Time;
 
 public class Terminal extends SimpleContainer

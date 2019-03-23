@@ -9,7 +9,7 @@ import net.whg.we.ui.TypedKeyInput;
 import net.whg.we.ui.UIComponent;
 import net.whg.we.ui.UIImage;
 import net.whg.we.ui.font.UIString;
-import net.whg.we.utils.Input;
+import net.whg.we.client_logic.utils.Input;
 import net.whg.we.utils.Time;
 import net.whg.we.utils.logging.Log;
 

@@ -1,49 +1,49 @@
 package net.whg.we.scene;
 
-import net.whg.we.rendering.LocationHolder;
-import net.whg.we.rendering.Material;
-import net.whg.we.rendering.Mesh;
+import net.whg.we.client_logic.rendering.LocationHolder;
+import net.whg.we.client_logic.rendering.Material;
+import net.whg.we.client_logic.rendering.Mesh;
 import net.whg.we.utils.Location;
 
 public class Model implements LocationHolder
 {
-	private String _name;
-	private SubMesh[] _submeshes;
-	private Location _location;
+    private String _name;
+    private SubMesh[] _submeshes;
+    private Location _location;
 
-	public Model(String name, Mesh[] meshes, Material[] materials)
-	{
-		if (meshes.length != materials.length)
-			throw new IllegalArgumentException(
-					"Mesh array and Material array must be the same length!");
+    public Model(String name, Mesh[] meshes, Material[] materials)
+    {
+        if (meshes.length != materials.length)
+            throw new IllegalArgumentException(
+                    "Mesh array and Material array must be the same length!");
 
-		_name = name;
+        _name = name;
 
-		_submeshes = new SubMesh[meshes.length];
-		_location = new Location();
+        _submeshes = new SubMesh[meshes.length];
+        _location = new Location();
 
-		for (int i = 0; i < _submeshes.length; i++)
-			_submeshes[i] = new SubMesh(meshes[i], materials[i], this);
-	}
+        for (int i = 0; i < _submeshes.length; i++)
+            _submeshes[i] = new SubMesh(meshes[i], materials[i], this);
+    }
 
-	@Override
-	public Location getLocation()
-	{
-		return _location;
-	}
+    @Override
+    public Location getLocation()
+    {
+        return _location;
+    }
 
-	public int getSubMeshCount()
-	{
-		return _submeshes.length;
-	}
+    public int getSubMeshCount()
+    {
+        return _submeshes.length;
+    }
 
-	public SubMesh getSubMesh(int index)
-	{
-		return _submeshes[index];
-	}
+    public SubMesh getSubMesh(int index)
+    {
+        return _submeshes[index];
+    }
 
-	public String getName()
-	{
-		return _name;
-	}
+    public String getName()
+    {
+        return _name;
+    }
 }

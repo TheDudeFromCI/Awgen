@@ -1,9 +1,9 @@
 package net.whg.we.server_logic.connect;
 
 import java.util.ArrayList;
-import net.whg.we.connect.Player;
-import net.whg.we.connect.PlayerList;
 import net.whg.we.network.TCPChannel;
+import net.whg.we.network.connect.Player;
+import net.whg.we.network.connect.PlayerList;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.server.ClientConnection;
 import net.whg.we.packets.PlayerJoinPacket;
