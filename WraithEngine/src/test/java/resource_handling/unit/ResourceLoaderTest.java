@@ -4,12 +4,12 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+import net.whg.we.client_logic.resources.FileLoader;
+import net.whg.we.client_logic.resources.Resource;
+import net.whg.we.client_logic.resources.ResourceDatabase;
+import net.whg.we.client_logic.resources.ResourceFile;
+import net.whg.we.client_logic.resources.ResourceLoader;
 import net.whg.we.main.Plugin;
-import net.whg.we.resources.FileLoader;
-import net.whg.we.resources.Resource;
-import net.whg.we.resources.ResourceDatabase;
-import net.whg.we.resources.ResourceFile;
-import net.whg.we.resources.ResourceLoader;
 
 public class ResourceLoaderTest
 {

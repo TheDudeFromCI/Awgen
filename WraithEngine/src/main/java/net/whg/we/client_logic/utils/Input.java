@@ -3,10 +3,10 @@ package net.whg.we.client_logic.utils;
 import java.util.HashMap;
 import java.util.LinkedList;
 import org.lwjgl.glfw.GLFW;
-import net.whg.we.ui.TypedKeyInput;
 import net.whg.we.utils.ObjectPool;
 import net.whg.we.utils.SimpleObjectPool;
 import net.whg.we.utils.logging.Log;
+import net.whg.we.client_logic.ui.TypedKeyInput;
 import net.whg.we.client_logic.window.KeyState;
 
 /**

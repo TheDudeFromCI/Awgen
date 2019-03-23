@@ -2,7 +2,7 @@ package resource_handling;
 
 import org.junit.Assert;
 import org.junit.Test;
-import net.whg.we.resources.SimplePathNameValidator;
+import net.whg.we.client_logic.resources.SimplePathNameValidator;
 
 public class PathNameValidatorTest
 {

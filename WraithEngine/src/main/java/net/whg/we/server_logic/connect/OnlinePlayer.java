@@ -4,7 +4,7 @@ import net.whg.we.network.connect.Player;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketProtocol;
 import net.whg.we.network.server.ClientConnection;
-import net.whg.we.utils.Location;
+import net.whg.we.scene.Location;
 import net.whg.we.utils.logging.Log;
 
 public class OnlinePlayer implements Player

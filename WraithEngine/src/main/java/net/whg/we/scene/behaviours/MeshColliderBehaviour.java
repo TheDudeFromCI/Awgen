@@ -2,9 +2,9 @@ package net.whg.we.scene.behaviours;
 
 import net.whg.we.client_logic.rendering.VertexData;
 import net.whg.we.scene.GameObject;
+import net.whg.we.scene.Location;
 import net.whg.we.scene.MeshCollider;
 import net.whg.we.scene.ObjectBehaviour;
-import net.whg.we.utils.Location;
 
 public class MeshColliderBehaviour implements ObjectBehaviour
 {

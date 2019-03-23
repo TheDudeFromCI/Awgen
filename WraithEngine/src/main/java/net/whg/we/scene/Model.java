@@ -3,7 +3,6 @@ package net.whg.we.scene;
 import net.whg.we.client_logic.rendering.LocationHolder;
 import net.whg.we.client_logic.rendering.Material;
 import net.whg.we.client_logic.rendering.Mesh;
-import net.whg.we.utils.Location;
 
 public class Model implements LocationHolder
 {

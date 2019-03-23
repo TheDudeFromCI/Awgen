@@ -4,16 +4,16 @@ import org.joml.Vector2f;
 import org.joml.Vector4f;
 import org.junit.Assert;
 import org.junit.Test;
-import net.whg.we.ui.BasicCursor;
-import net.whg.we.ui.BasicTextHolder;
-import net.whg.we.ui.BasicTextSelection;
-import net.whg.we.ui.TextEditor;
-import net.whg.we.ui.TextHolder;
-import net.whg.we.ui.TypedKeyInput;
-import net.whg.we.ui.font.Cursor;
-import net.whg.we.ui.font.Font;
-import net.whg.we.ui.font.Glyph;
-import net.whg.we.ui.font.TextSelection;
+import net.whg.we.client_logic.ui.BasicCursor;
+import net.whg.we.client_logic.ui.BasicTextHolder;
+import net.whg.we.client_logic.ui.BasicTextSelection;
+import net.whg.we.client_logic.ui.TextEditor;
+import net.whg.we.client_logic.ui.TextHolder;
+import net.whg.we.client_logic.ui.TypedKeyInput;
+import net.whg.we.client_logic.ui.font.Cursor;
+import net.whg.we.client_logic.ui.font.Font;
+import net.whg.we.client_logic.ui.font.Glyph;
+import net.whg.we.client_logic.ui.font.TextSelection;
 
 public class TextEditorTest
 {

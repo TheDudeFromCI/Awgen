@@ -2,11 +2,11 @@ package net.whg.we.packets;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import net.whg.we.client_logic.scene.WindowedGameLoop;
 import net.whg.we.network.multiplayer.MultiplayerClient;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketHandler;
 import net.whg.we.network.packet.PacketType;
-import net.whg.we.scene.WindowedGameLoop;
 import net.whg.we.utils.ByteReader;
 import net.whg.we.utils.ByteWriter;
 import net.whg.we.utils.logging.Log;

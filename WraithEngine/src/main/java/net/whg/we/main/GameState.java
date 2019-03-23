@@ -1,13 +1,13 @@
 package net.whg.we.main;
 
+import net.whg.we.client_logic.resources.ResourceManager;
+import net.whg.we.client_logic.resources.graphics.GLSLShaderLoader;
+import net.whg.we.client_logic.resources.graphics.MeshLoader;
+import net.whg.we.client_logic.resources.graphics.TextureLoader;
+import net.whg.we.client_logic.resources.scene.FontLoader;
+import net.whg.we.client_logic.resources.scene.MaterialLoader;
+import net.whg.we.client_logic.resources.scene.ModelLoader;
 import net.whg.we.event.EventManager;
-import net.whg.we.resources.ResourceManager;
-import net.whg.we.resources.graphics.GLSLShaderLoader;
-import net.whg.we.resources.graphics.MeshLoader;
-import net.whg.we.resources.graphics.TextureLoader;
-import net.whg.we.resources.scene.FontLoader;
-import net.whg.we.resources.scene.MaterialLoader;
-import net.whg.we.resources.scene.ModelLoader;
 import net.whg.we.scene.GameLoop;
 import net.whg.we.server_logic.command.CommandManager;
 import net.whg.we.server_logic.coms.CommandUtils;

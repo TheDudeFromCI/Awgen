@@ -2,15 +2,15 @@ package net.whg.we.main;
 
 import java.io.File;
 import org.lwjgl.Version;
+import net.whg.we.client_logic.resources.FileDatabase;
+import net.whg.we.client_logic.resources.ResourceDatabase;
+import net.whg.we.client_logic.resources.ResourceLoader;
+import net.whg.we.client_logic.resources.ResourceManager;
+import net.whg.we.client_logic.resources.SimpleFileDatabase;
+import net.whg.we.client_logic.scene.WindowedGameLoop;
 import net.whg.we.network.multiplayer.NetworkManager;
 import net.whg.we.network.multiplayer.ServerGameLoop;
-import net.whg.we.resources.FileDatabase;
-import net.whg.we.resources.ResourceDatabase;
-import net.whg.we.resources.ResourceLoader;
-import net.whg.we.resources.ResourceManager;
-import net.whg.we.resources.SimpleFileDatabase;
 import net.whg.we.scene.GameLoop;
-import net.whg.we.scene.WindowedGameLoop;
 import net.whg.we.utils.logging.Log;
 
 /**

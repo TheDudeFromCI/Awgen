@@ -2,7 +2,7 @@ package rendering_handling.mesh;
 
 import org.junit.Assert;
 import org.junit.Test;
-import net.whg.we.rendering.ShaderAttributes;
+import net.whg.we.client_logic.rendering.ShaderAttributes;
 
 public class ShaderAttributesTest
 {

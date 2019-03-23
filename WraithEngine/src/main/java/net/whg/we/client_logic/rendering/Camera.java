@@ -1,8 +1,8 @@
 package net.whg.we.client_logic.rendering;
 
 import org.joml.Matrix4f;
-import net.whg.we.utils.Location;
 import net.whg.we.client_logic.utils.Screen;
+import net.whg.we.scene.Location;
 
 public class Camera
 {

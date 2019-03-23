@@ -4,8 +4,8 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+import net.whg.we.client_logic.resources.ResourceFile;
 import net.whg.we.main.Plugin;
-import net.whg.we.resources.ResourceFile;
 
 public class ResourceFileTest
 {
