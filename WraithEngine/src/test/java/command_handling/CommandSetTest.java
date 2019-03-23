@@ -3,17 +3,17 @@ package command_handling;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
-import net.whg.we.command.Command;
-import net.whg.we.command.CommandArgument;
-import net.whg.we.command.CommandConsole;
-import net.whg.we.command.CommandExecution;
-import net.whg.we.command.CommandHandler;
-import net.whg.we.command.CommandList;
-import net.whg.we.command.CommandParser;
-import net.whg.we.command.CommandSender;
-import net.whg.we.command.CommandSet;
-import net.whg.we.command.VariableKeyring;
-import net.whg.we.command.console.DefaultKeyring;
+import net.whg.we.server_logic.command.Command;
+import net.whg.we.server_logic.command.CommandArgument;
+import net.whg.we.server_logic.command.CommandConsole;
+import net.whg.we.server_logic.command.CommandExecution;
+import net.whg.we.server_logic.command.CommandHandler;
+import net.whg.we.server_logic.command.CommandList;
+import net.whg.we.server_logic.command.CommandParser;
+import net.whg.we.server_logic.command.CommandSender;
+import net.whg.we.server_logic.command.CommandSet;
+import net.whg.we.server_logic.command.VariableKeyring;
+import net.whg.we.server_logic.command.console.DefaultKeyring;
 
 public class CommandSetTest
 {

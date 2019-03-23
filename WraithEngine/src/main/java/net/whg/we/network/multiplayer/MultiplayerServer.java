@@ -1,10 +1,10 @@
 package net.whg.we.network.multiplayer;
 
 import java.io.IOException;
-import net.whg.we.connect.server.ServerPlayerList;
 import net.whg.we.network.packet.DefaultPacketFactory;
 import net.whg.we.network.packet.PacketFactory;
 import net.whg.we.network.packet.PacketServer;
+import net.whg.we.server_logic.connect.ServerPlayerList;
 import net.whg.we.utils.logging.Log;
 
 public class MultiplayerServer

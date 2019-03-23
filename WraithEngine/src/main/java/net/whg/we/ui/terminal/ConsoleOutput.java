@@ -1,10 +1,10 @@
 package net.whg.we.ui.terminal;
 
 import org.joml.Matrix4f;
-import net.whg.we.command.console.Console;
 import net.whg.we.rendering.Graphics;
 import net.whg.we.rendering.Material;
 import net.whg.we.rendering.Mesh;
+import net.whg.we.server_logic.command.console.Console;
 import net.whg.we.ui.Transform2D;
 import net.whg.we.ui.UIComponent;
 import net.whg.we.ui.UIUtils;

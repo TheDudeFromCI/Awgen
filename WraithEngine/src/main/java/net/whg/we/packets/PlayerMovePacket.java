@@ -15,7 +15,6 @@ import net.whg.we.scene.behaviours.RenderBehaviour;
 import net.whg.we.utils.ByteReader;
 import net.whg.we.utils.ByteWriter;
 import net.whg.we.utils.Location;
-import net.whg.we.utils.logging.Log;
 
 /**
  * This packet is sent when a player joins a server to tell the clients to spawn

@@ -2,14 +2,14 @@ package net.whg.we.packets;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import net.whg.we.connect.server.OnlinePlayer;
-import net.whg.we.connect.server.ServerPlayerList;
 import net.whg.we.main.GameState;
 import net.whg.we.network.multiplayer.ServerPacketHandler;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketHandler;
 import net.whg.we.network.packet.PacketType;
 import net.whg.we.scene.WindowedGameLoop;
+import net.whg.we.server_logic.connect.OnlinePlayer;
+import net.whg.we.server_logic.connect.ServerPlayerList;
 import net.whg.we.ui.terminal.ConsoleOutput;
 import net.whg.we.utils.ByteReader;
 import net.whg.we.utils.ByteWriter;

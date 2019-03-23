@@ -1,7 +1,5 @@
 package net.whg.we.main;
 
-import net.whg.we.command.CommandManager;
-import net.whg.we.coms.CommandUtils;
 import net.whg.we.event.EventManager;
 import net.whg.we.resources.ResourceManager;
 import net.whg.we.resources.graphics.GLSLShaderLoader;
@@ -11,6 +9,8 @@ import net.whg.we.resources.scene.FontLoader;
 import net.whg.we.resources.scene.MaterialLoader;
 import net.whg.we.resources.scene.ModelLoader;
 import net.whg.we.scene.GameLoop;
+import net.whg.we.server_logic.command.CommandManager;
+import net.whg.we.server_logic.coms.CommandUtils;
 
 public class GameState
 {
@@ -27,7 +27,9 @@ public class GameState
         _resourceManager = resourceManager;
         _pluginLoader = new PluginLoader();
         _eventManager = new EventManager();
-        _commandManager = new CommandManager();
+        _commandManager = new CommandManager();// TODO Command manager should
+                                               // only exist on the server game
+                                               // state.
         _gameLoop = gameLoop;
         _isClient = isClient;
 
