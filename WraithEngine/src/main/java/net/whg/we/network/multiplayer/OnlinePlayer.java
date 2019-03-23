@@ -3,6 +3,7 @@ package net.whg.we.network.multiplayer;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketProtocol;
 import net.whg.we.network.server.ClientConnection;
+import net.whg.we.utils.Location;
 import net.whg.we.utils.logging.Log;
 
 public class OnlinePlayer implements Player
@@ -12,6 +13,7 @@ public class OnlinePlayer implements Player
     private ClientConnection _client;
     private PacketProtocol _packetProtocol;
     private PlayerCommandSender _commandSender;
+    private Location _location;
 
     public OnlinePlayer(ClientConnection client, String username, String token)
     {
@@ -20,6 +22,7 @@ public class OnlinePlayer implements Player
         _token = token;
         _packetProtocol = (PacketProtocol) _client.getProtocol();
         _commandSender = new PlayerCommandSender(this);
+        _location = new Location();
     }
 
     @Override
@@ -78,5 +81,10 @@ public class OnlinePlayer implements Player
     public PlayerCommandSender getCommandSender()
     {
         return _commandSender;
+    }
+
+    public Location getLocation()
+    {
+        return _location;
     }
 }

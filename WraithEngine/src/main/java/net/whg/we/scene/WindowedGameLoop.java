@@ -33,6 +33,7 @@ public class WindowedGameLoop implements GameLoop
     private Scene _scene;
     private Camera _camera;
     private FirstPersonCamera _firstPerson;
+    private CorePlugin _corePlugin;
 
     public WindowedGameLoop(ResourceManager resourceManager,
             MultiplayerClient client)
@@ -40,6 +41,7 @@ public class WindowedGameLoop implements GameLoop
         _resourceManager = resourceManager;
         _graphicsPipeline = new GraphicsPipeline();
         _client = client;
+        _corePlugin = new CorePlugin();
     }
 
     @Override
@@ -76,34 +78,8 @@ public class WindowedGameLoop implements GameLoop
             // TODO Remove this. Loading a resources should occur through
             // commands and startup files, not pre-loaded.
             {
-                Plugin plugin = new Plugin()
-                {
-
-                    @Override
-                    public void initPlugin()
-                    {
-                    }
-
-                    @Override
-                    public int getPriority()
-                    {
-                        return 0;
-                    }
-
-                    @Override
-                    public String getPluginName()
-                    {
-                        return "TestPlugin";
-                    }
-
-                    @Override
-                    public void enablePlugin()
-                    {
-                    }
-                };
-
                 ModelResource terrain = (ModelResource) _resourceManager
-                        .loadResource(plugin, "models/terrain.model");
+                        .loadResource(_corePlugin, "models/terrain.model");
                 terrain.compile(_graphicsPipeline.getGraphics());
                 Model model = terrain.getData();
                 model.getLocation().setScale(new Vector3f(100f, 100f, 100f));
@@ -228,5 +204,15 @@ public class WindowedGameLoop implements GameLoop
     public Terminal getTerminal()
     {
         return _terminal;
+    }
+
+    public Scene getScene()
+    {
+        return _scene;
+    }
+
+    public CorePlugin getCorePlugin()
+    {
+        return _corePlugin;
     }
 }

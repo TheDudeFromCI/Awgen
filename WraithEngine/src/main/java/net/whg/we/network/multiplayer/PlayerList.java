@@ -1,9 +1,13 @@
 package net.whg.we.network.multiplayer;
 
 import java.util.ArrayList;
+import org.joml.Quaternionf;
 import net.whg.we.network.TCPChannel;
+import net.whg.we.network.packet.Packet;
 import net.whg.we.network.server.ClientConnection;
+import net.whg.we.packets.PlayerJoinPacket;
 import net.whg.we.utils.GenericRunnable;
+import net.whg.we.utils.Location;
 import net.whg.we.utils.logging.Log;
 
 public class PlayerList
@@ -18,6 +22,34 @@ public class PlayerList
         Log.infof("%s has joined the server.", player.getUsername());
         Log.debugf("%s's token is %s'", player.getUsername(),
                 player.getUserToken());
+
+        // Send location to all players
+        {
+            forEach(p ->
+            {
+                if (p == player)
+                    return;
+
+                Packet packet = p.newPacket("common.player.join");
+                ((PlayerJoinPacket) packet.getPacketType()).build(packet,
+                        username, token, player.getLocation());
+                p.sendPacket(packet);
+            });
+        }
+
+        // Get location of all players
+        {
+            forEach(p ->
+            {
+                if (p == player)
+                    return;
+
+                Packet packet = player.newPacket("common.player.join");
+                ((PlayerJoinPacket) packet.getPacketType()).build(packet,
+                        p.getUsername(), p.getUserToken(), p.getLocation());
+                player.sendPacket(packet);
+            });
+        }
     }
 
     void removePlayer(ClientConnection client)

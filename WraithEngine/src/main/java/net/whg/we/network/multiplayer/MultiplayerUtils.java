@@ -12,5 +12,6 @@ public class MultiplayerUtils
         factory.addPacketType(new TerminalCommandPacket());
         factory.addPacketType(new TerminalOutputPacket());
         factory.addPacketType(new ChatPacket());
+        factory.addPacketType(new PlayerJoinPacket());
     }
 }
