@@ -12,64 +12,50 @@ import net.whg.we.utils.logging.Log;
 
 public class TextureLoader implements FileLoader
 {
-	private static final String[] FILE_TYPES =
-	{
-			"png", "jpg", "gif", "bmp", "jpeg"
-	};
+    private static final String[] FILE_TYPES =
+    {
+            "png", "jpg", "gif", "bmp", "jpeg"
+    };
 
-	@Override
-	public String[] getTargetFileTypes()
-	{
-		return FILE_TYPES;
-	}
+    @Override
+    public String[] getTargetFileTypes()
+    {
+        return FILE_TYPES;
+    }
 
-	@Override
-	public TextureResource loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
-			ResourceFile resourceFile)
-	{
-		try
-		{
-			BufferedImage image = ImageIO.read(resourceFile.getFile());
+    @Override
+    public TextureResource loadFile(ResourceLoader resourceLoader,
+            ResourceDatabase database, ResourceFile resourceFile)
+    {
+        try
+        {
+            BufferedImage image = ImageIO.read(resourceFile.getFile());
 
-			TextureProperties properties = new TextureProperties();
-			Color[] pixels = new Color[image.getWidth() * image.getHeight()];
-			int[] rgb = image.getRGB(0, 0, image.getWidth(), image.getHeight(),
-					new int[pixels.length], 0, image.getWidth());
+            TextureProperties properties = new TextureProperties();
 
-			int index;
-			float r, g, b, a;
-			for (int y = 0; y < image.getHeight(); y++)
-			{
-				for (int x = 0; x < image.getWidth(); x++)
-				{
-					index = y * image.getWidth() + x;
+            int[] rgb = image.getRGB(0, 0, image.getWidth(), image.getHeight(),
+                    new int[image.getWidth() * image.getHeight()], 0,
+                    image.getWidth());
 
-					r = (rgb[index] >> 16) / 255f;
-					g = (rgb[index] >> 8) / 255f;
-					b = rgb[index] / 255f;
-					a = (rgb[index] >> 24) / 255f;
-					pixels[index] = new Color(r, g, b, a);
-				}
-			}
+            properties.setPixels(rgb, image.getWidth(), image.getHeight());
+            TextureResource resource = new TextureResource(resourceFile,
+                    resourceFile.getName(), properties);
+            database.addResource(resource);
 
-			properties.setPixels(pixels, image.getWidth(), image.getHeight());
-			TextureResource resource =
-					new TextureResource(resourceFile, resourceFile.getName(), properties);
-			database.addResource(resource);
+            Log.debugf("Successfully loaded texture resource, %s.", resource);
+            return resource;
+        }
+        catch (Exception exception)
+        {
+            Log.errorf("Failed to read image file, %s!", exception,
+                    resourceFile);
+            return null;
+        }
+    }
 
-			Log.debugf("Successfully loaded texture resource, %s.", resource);
-			return resource;
-		}
-		catch (Exception exception)
-		{
-			Log.errorf("Failed to read image file, %s!", exception, resourceFile);
-			return null;
-		}
-	}
-
-	@Override
-	public int getPriority()
-	{
-		return 0;
-	}
+    @Override
+    public int getPriority()
+    {
+        return 0;
+    }
 }
