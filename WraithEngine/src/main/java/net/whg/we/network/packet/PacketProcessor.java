@@ -45,11 +45,6 @@ public class PacketProcessor implements PacketListener
 	}
 
 	@Override
-	public void onPacketSent(Packet packet)
-	{
-	}
-
-	@Override
 	public void onPacketRecieved(Packet packet)
 	{
 		if (Log.getLogLevel() <= Log.TRACE)

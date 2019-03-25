@@ -131,8 +131,6 @@ public class PacketProtocol implements ChannelProtocol
 		{
 			try
 			{
-				_packetListener.onPacketSent(packet);
-
 				byte[] nameBytes =
 						packet.getPacketType().getTypePath().getBytes(StandardCharsets.UTF_8);
 				if (nameBytes.length > 255)
