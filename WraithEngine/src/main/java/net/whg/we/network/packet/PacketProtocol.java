@@ -3,8 +3,6 @@ package net.whg.we.network.packet;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import net.whg.we.network.ChannelProtocol;
 import net.whg.we.network.TCPChannel;
@@ -18,19 +16,17 @@ public class PacketProtocol implements ChannelProtocol
 	private PacketFactory _packetFactory;
 	private PacketListener _packetListener;
 	private TCPChannel _sender;
-	private boolean _closed;
+	private PacketQueue _outgoingPackets;
 
 	/**
 	 * Creates a new instance of the packet protocol.
 	 *
 	 * @param packetPool
-	 *                           - The pool to pull new packet instances from.
+	 *            - The pool to pull new packet instances from.
 	 * @param packetFactory
-	 *                           - A factory for returning packet type encoders
-	 *                           and decoders.
+	 *            - A factory for returning packet type encoders and decoders.
 	 * @param packetListener
-	 *                           - A listener for when packets are sent or
-	 *                           recieved.
+	 *            - A listener for when packets are sent or recieved.
 	 */
 	public PacketProtocol(PacketPool packetPool, PacketFactory packetFactory,
 			PacketListener packetListener)
@@ -38,6 +34,7 @@ public class PacketProtocol implements ChannelProtocol
 		_packetPool = packetPool;
 		_packetFactory = packetFactory;
 		_packetListener = packetListener;
+		_outgoingPackets = new PacketQueue(packetPool);
 	}
 
 	public TCPChannel getSender()
@@ -45,76 +42,35 @@ public class PacketProtocol implements ChannelProtocol
 		return _sender;
 	}
 
-	@Override
-	public void close() throws IOException
+	public void sendPacket(Packet packet)
 	{
-		if (isClosed())
-			return;
-
-		_in.close();
-		_out.close();
-		_closed = true;
-	}
-
-	@Override
-	public boolean isClosed()
-	{
-		return _closed;
-	}
-
-	public void sendPacket(Packet packet) throws IOException
-	{
-		if (_closed)
-			throw new IllegalStateException("Streams already closed!");
-
 		if (packet == null)
 			return;
 
 		if (packet.getPacketType() == null)
 		{
 			Log.warn("Tried to send a packet with no packet type!");
+			_packetPool.put(packet);
 			return;
 		}
 
-		Log.tracef("Attempting to send packet. Type: %s",
-				packet.getPacketType().getTypePath());
+		Log.tracef("Attempting to send packet. Type: %s", packet.getPacketType().getTypePath());
 
-		_packetListener.onPacketSent(packet);
-
-		byte[] nameBytes = packet.getPacketType().getTypePath()
-				.getBytes(StandardCharsets.UTF_8);
-		if (nameBytes.length > 255)
-			throw new IllegalArgumentException(
-					"Packet type name may not exceed 255 bytes!");
-
-		int length = packet.encode();
-
-		synchronized (_out)
-		{
-			_out.write(length >> 8);
-			_out.write(length);
-
-			_out.write(nameBytes.length);
-			_out.write(nameBytes);
-
-			_out.write(packet.getBytes(), 0, length);
-			_out.flush();
-		}
+		_outgoingPackets.addPacket(packet);
 	}
 
 	@Override
-	public void init(InputStream in, OutputStream out, TCPChannel sender)
+	public void init(TCPChannel sender)
 	{
-		_in = new BufferedInputStream(in);
-		_out = new BufferedOutputStream(out);
+		_in = new BufferedInputStream(sender.getInputStream());
+		_out = new BufferedOutputStream(sender.getOutputStream());
 		_sender = sender;
-		_closed = false;
 	}
 
 	@Override
 	public void next() throws IOException
 	{
-		if (_closed)
+		if (_sender.isClosed())
 			throw new IllegalStateException("Streams already closed!");
 
 		Packet packet;
@@ -148,15 +104,9 @@ public class PacketProtocol implements ChannelProtocol
 			_packetListener.onPacketRecieved(packet);
 		else
 		{
-			Log.warnf("Recived unknown packet type '%s', from %s.", name,
-					_sender.getIP());
+			Log.warnf("Recived unknown packet type '%s', from %s.", name, _sender.getIP());
 			_packetPool.put(packet);
 		}
-	}
-
-	@Override
-	public void onDisconnected()
-	{
 	}
 
 	public PacketFactory getPacketFactory()
@@ -172,5 +122,49 @@ public class PacketProtocol implements ChannelProtocol
 	public PacketListener getListener()
 	{
 		return _packetListener;
+	}
+
+	@Override
+	public void update() throws IOException
+	{
+		_outgoingPackets.handlePackets(packet ->
+		{
+			try
+			{
+				_packetListener.onPacketSent(packet);
+
+				byte[] nameBytes =
+						packet.getPacketType().getTypePath().getBytes(StandardCharsets.UTF_8);
+				if (nameBytes.length > 255)
+					throw new IllegalArgumentException(
+							"Packet type name may not exceed 255 bytes!");
+
+				int length = packet.encode();
+
+				synchronized (_out)
+				{
+					try
+					{
+						_out.write(length >> 8);
+						_out.write(length);
+
+						_out.write(nameBytes.length);
+						_out.write(nameBytes);
+
+						_out.write(packet.getBytes(), 0, length);
+						_out.flush();
+					}
+					catch (IOException e)
+					{
+						Log.errorf("Connection has been closed!");
+						_sender.close();
+					}
+				}
+			}
+			finally
+			{
+				_packetPool.put(packet);
+			}
+		});
 	}
 }

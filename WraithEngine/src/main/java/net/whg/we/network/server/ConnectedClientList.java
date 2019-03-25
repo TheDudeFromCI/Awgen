@@ -2,13 +2,14 @@ package net.whg.we.network.server;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.whg.we.network.Connection;
 
 public class ConnectedClientList
 {
 	private Object LOCK = new Object();
-	private List<ClientConnection> _clients = new ArrayList<>();
+	private List<Connection> _clients = new ArrayList<>();
 
-	public void addClient(ClientConnection connection)
+	public void addClient(Connection connection)
 	{
 		if (connection == null)
 			return;
@@ -22,7 +23,7 @@ public class ConnectedClientList
 		}
 	}
 
-	public void removeClient(ClientConnection connection)
+	public void removeClient(Connection connection)
 	{
 		if (connection == null)
 			return;
@@ -41,7 +42,7 @@ public class ConnectedClientList
 		}
 	}
 
-	public ClientConnection getClient(int index)
+	public Connection getClient(int index)
 	{
 		synchronized (LOCK)
 		{

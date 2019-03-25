@@ -1,28 +1,28 @@
 package net.whg.we.network.multiplayer;
 
-import net.whg.we.network.server.ClientConnection;
+import net.whg.we.network.Connection;
 
 public class HandshakeTimeout
 {
-    public static final long DEFAULT_CONNECT_TIME = 60000;
-    private long _startTime;
-    private long _waitTime;
-    private ClientConnection _client;
+	public static final long DEFAULT_CONNECT_TIME = 60000;
+	private long _startTime;
+	private long _waitTime;
+	private Connection _client;
 
-    public HandshakeTimeout(ClientConnection client, long waitTime)
-    {
-        _startTime = System.currentTimeMillis();
-        _waitTime = waitTime;
-        _client = client;
-    }
+	public HandshakeTimeout(Connection client, long waitTime)
+	{
+		_startTime = System.currentTimeMillis();
+		_waitTime = waitTime;
+		_client = client;
+	}
 
-    public boolean isTimeUp()
-    {
-        return System.currentTimeMillis() - _waitTime >= _startTime;
-    }
+	public boolean isTimeUp()
+	{
+		return System.currentTimeMillis() - _waitTime >= _startTime;
+	}
 
-    public ClientConnection getClient()
-    {
-        return _client;
-    }
+	public Connection getClient()
+	{
+		return _client;
+	}
 }

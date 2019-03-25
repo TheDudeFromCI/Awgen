@@ -2,6 +2,7 @@ package net.whg.we.network.server;
 
 import java.io.IOException;
 import java.net.SocketException;
+import net.whg.we.network.Connection;
 import net.whg.we.network.TCPChannel;
 import net.whg.we.utils.logging.Log;
 
@@ -41,9 +42,9 @@ public class DefaultServer implements Server
 
 						Log.infof("A client has connected to the server. IP: %s", socket.getIP());
 
-						ClientConnection client = _protocol.openChannelProtocol(socket);
-						_clientList.addClient(client);
-						_events.onClientConnected(client);
+						Connection connection =
+								new Connection(socket, _protocol.createProtocolInstance(), _events);
+						_clientList.addClient(connection);
 					}
 					catch (SocketException e)
 					{
@@ -136,5 +137,12 @@ public class DefaultServer implements Server
 	public ServerProtocol getProtocol()
 	{
 		return _protocol;
+	}
+
+	@Override
+	public void update()
+	{
+		for (int i = 0; i < _clientList.getClientCount(); i++)
+			_clientList.getClient(i).update();
 	}
 }

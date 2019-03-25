@@ -12,8 +12,7 @@ import java.io.IOException;
 public interface Server
 {
 	/**
-	 * Stops the server. If the server is not currently running, nothing
-	 * happens.
+	 * Stops the server. If the server is not currently running, nothing happens.
 	 */
 	void stopServer() throws IOException;
 
@@ -25,8 +24,8 @@ public interface Server
 	boolean isRunning();
 
 	/*
-	 * Gets the current port the server will be started on. If the server is
-	 * already running, this is the port the server is currently running on.
+	 * Gets the current port the server will be started on. If the server is already
+	 * running, this is the port the server is currently running on.
 	 */
 	int getPort();
 
@@ -38,10 +37,14 @@ public interface Server
 	ConnectedClientList getClientList();
 
 	/**
-	 * Gets the event caller for this server to listen for specific server
-	 * events.
-	 * 
+	 * Gets the event caller for this server to listen for specific server events.
+	 *
 	 * @return The event caller for this server.
 	 */
 	ServerEvent getEvents();
+
+	/**
+	 * Called each frame.
+	 */
+	void update();
 }

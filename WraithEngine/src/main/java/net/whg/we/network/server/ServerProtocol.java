@@ -1,9 +1,8 @@
 package net.whg.we.network.server;
 
-import java.io.IOException;
-import net.whg.we.network.TCPChannel;
+import net.whg.we.network.ChannelProtocol;
 
 public interface ServerProtocol
 {
-	ClientConnection openChannelProtocol(TCPChannel channel) throws IOException;
+	ChannelProtocol createProtocolInstance();
 }

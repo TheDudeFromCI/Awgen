@@ -106,6 +106,16 @@ public class WindowedGameLoop implements GameLoop
 			{
 				try
 				{
+					// TODO A fatal bug is thrown if a the server closes a connection part-way
+					// through the frame, before this method is called.
+					if (!_client.isRunning())
+					{
+						Log.info("Server connection closed! Shutting down.");
+
+						_graphicsPipeline.requestClose();
+						break;
+					}
+
 					long currentTime = System.currentTimeMillis();
 					double passed = (currentTime - startTime) / 1000.0;
 					double physicsFrames = passed * Time.getPhysicsFramerate();

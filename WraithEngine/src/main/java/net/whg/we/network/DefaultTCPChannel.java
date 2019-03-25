@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.BufferOverflowException;
+import net.whg.we.utils.logging.Log;
 
 public class DefaultTCPChannel implements TCPChannel
 {
@@ -19,7 +21,7 @@ public class DefaultTCPChannel implements TCPChannel
 	}
 
 	@Override
-	public void close() throws IOException
+	public void close()
 	{
 		if (isClosed())
 			return;
@@ -28,6 +30,10 @@ public class DefaultTCPChannel implements TCPChannel
 		{
 			_socket.close();
 		}
+		catch (IOException | BufferOverflowException e)
+		{
+			Log.errorf("An error has occured while attempting to close this socket!", e);
+		}
 		finally
 		{
 			_socket = null;
@@ -35,21 +41,35 @@ public class DefaultTCPChannel implements TCPChannel
 	}
 
 	@Override
-	public OutputStream getOutputStream() throws IOException
+	public OutputStream getOutputStream()
 	{
 		if (isClosed())
 			return null;
 
-		return _socket.getOutputStream();
+		try
+		{
+			return _socket.getOutputStream();
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
 	}
 
 	@Override
-	public InputStream getInputStream() throws IOException
+	public InputStream getInputStream()
 	{
 		if (isClosed())
 			return null;
 
-		return _socket.getInputStream();
+		try
+		{
+			return _socket.getInputStream();
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
 	}
 
 	@Override
@@ -67,6 +87,9 @@ public class DefaultTCPChannel implements TCPChannel
 	@Override
 	public boolean isClosed()
 	{
-		return _socket == null || _socket.isClosed();
+		if (_socket != null && _socket.isClosed())
+			_socket = null;
+
+		return _socket == null;
 	}
 }

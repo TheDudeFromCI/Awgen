@@ -1,7 +1,5 @@
 package net.whg.we.network;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -11,7 +9,7 @@ import java.io.OutputStream;
  *
  * @author TheDudeFromCI
  */
-public interface TCPChannel extends Closeable
+public interface TCPChannel
 {
 	/**
 	 * Gets the IP address of the client or server on the other end of this channel.
@@ -24,21 +22,19 @@ public interface TCPChannel extends Closeable
 	 * Gets the output stream for sending out information to other side of the
 	 * connection.
 	 *
-	 * @return The open outut stream for sending out information.
-	 * @throws IOException
-	 *             If an error occurs while attempting to send out information.
+	 * @return The open outut stream for sending out information, or null if the
+	 *         channel is closed.
 	 */
-	OutputStream getOutputStream() throws IOException;
+	OutputStream getOutputStream();
 
 	/**
 	 * Gets the input stream for reading information being recived from the other
 	 * side of the connection.
 	 *
-	 * @return The open input stream for reading incoming information.
-	 * @throws IOException
-	 *             If an error occurs while waiting for information to be received.
+	 * @return The open input stream for reading incoming information, or null if
+	 *         the channel is closed.
 	 */
-	InputStream getInputStream() throws IOException;
+	InputStream getInputStream();
 
 	/**
 	 * Checks if the computer running this software represents the client side of
@@ -49,6 +45,11 @@ public interface TCPChannel extends Closeable
 	 *         connection from a client.
 	 */
 	boolean isClient();
+
+	/**
+	 * Closes this socket connection.
+	 */
+	void close();
 
 	/**
 	 * Checks if the channel has been closed.

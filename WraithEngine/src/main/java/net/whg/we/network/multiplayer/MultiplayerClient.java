@@ -72,17 +72,7 @@ public class MultiplayerClient
 			return;
 
 		Log.info("Closing multiplayer client.");
-
-		try
-		{
-			_client.close();
-		}
-		catch (IOException e)
-		{
-			Log.errorf("There has been an error while trying to close the client!", e);
-		}
-
-		_client = null;
+		_client.close();
 	}
 
 	public void updatePhysics()
@@ -92,6 +82,7 @@ public class MultiplayerClient
 
 		_client.getEvents().handlePendingEvents();
 		_client.handlePackets();
+		_client.update();
 	}
 
 	public Packet newPacket(String type)

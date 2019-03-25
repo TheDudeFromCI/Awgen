@@ -1,8 +1,6 @@
 package net.whg.we.network.packet;
 
-import java.io.IOException;
-import net.whg.we.network.TCPChannel;
-import net.whg.we.network.server.ClientConnection;
+import net.whg.we.network.ChannelProtocol;
 import net.whg.we.network.server.Server;
 import net.whg.we.network.server.ServerProtocol;
 
@@ -33,11 +31,9 @@ public class PacketServerProtocol implements ServerProtocol
 	}
 
 	@Override
-	public ClientConnection openChannelProtocol(TCPChannel channel)
-			throws IOException
+	public ChannelProtocol createProtocolInstance()
 	{
-		return new ClientConnection(_server, channel, new PacketProtocol(
-				_packetPool, _packetFactory, _packetProcessor));
+		return new PacketProtocol(_packetPool, _packetFactory, _packetProcessor);
 	}
 
 	public PacketPool getPacketPool()
