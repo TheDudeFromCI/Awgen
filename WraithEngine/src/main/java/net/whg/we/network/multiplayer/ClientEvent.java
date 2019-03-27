@@ -1,9 +1,8 @@
 package net.whg.we.network.multiplayer;
 
 import net.whg.we.event.EventCallerBase;
-import net.whg.we.network.netty.UserConnection;
 
-public class ClientEvent extends EventCallerBase<ClientListener> implements ConnectionEvent
+public class ClientEvent extends EventCallerBase<ClientListener>
 {
 	private static final int CONNECT_TO_SERVER_EVENT = 0;
 	private static final int DISCONNECTED_FROM_SERVER_EVENT = 1;
@@ -15,16 +14,14 @@ public class ClientEvent extends EventCallerBase<ClientListener> implements Conn
 		_client = client;
 	}
 
-	@Override
-	public void onConnect(UserConnection con)
+	public void onConnect()
 	{
-		callEvent(CONNECT_TO_SERVER_EVENT, con);
+		callEvent(CONNECT_TO_SERVER_EVENT);
 	}
 
-	@Override
-	public void onDisconnect(UserConnection con)
+	public void onDisconnect()
 	{
-		callEvent(DISCONNECTED_FROM_SERVER_EVENT, con);
+		callEvent(DISCONNECTED_FROM_SERVER_EVENT);
 	}
 
 	@Override
@@ -33,11 +30,11 @@ public class ClientEvent extends EventCallerBase<ClientListener> implements Conn
 		switch (index)
 		{
 			case CONNECT_TO_SERVER_EVENT:
-				listener.onConnectToServer(_client, (UserConnection) arg);
+				listener.onConnectToServer(_client);
 				return;
 
 			case DISCONNECTED_FROM_SERVER_EVENT:
-				listener.onDisconnectedFromServer(_client, (UserConnection) arg);
+				listener.onDisconnectedFromServer(_client);
 				return;
 
 			default:

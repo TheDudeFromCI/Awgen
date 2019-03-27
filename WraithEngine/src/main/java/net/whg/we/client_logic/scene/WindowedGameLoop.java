@@ -176,7 +176,7 @@ public class WindowedGameLoop implements GameLoop
 
 		Location loc = _firstPerson.getLocation();
 		if (_lastMovePacketPos.distanceSquared(loc.getPosition()) > 0.1f
-				|| _lastMovePacketRot.dot(loc.getRotation()) > 0.1f)
+				|| _lastMovePacketRot.dot(loc.getRotation()) <= 0.9f)
 		{
 			_lastMovePacketPos.set(loc.getPosition());
 			_lastMovePacketRot.set(loc.getRotation());

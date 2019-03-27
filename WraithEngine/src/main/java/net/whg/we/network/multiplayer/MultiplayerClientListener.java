@@ -1,6 +1,5 @@
 package net.whg.we.network.multiplayer;
 
-import net.whg.we.network.netty.UserConnection;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.utils.logging.Log;
 
@@ -13,7 +12,7 @@ public class MultiplayerClientListener implements ClientListener
 	}
 
 	@Override
-	public void onConnectToServer(MultiplayerClient client, UserConnection server)
+	public void onConnectToServer(MultiplayerClient client)
 	{
 		String username = client.getPlayer().getUsername();
 		String token = client.getPlayer().getToken();
@@ -28,7 +27,7 @@ public class MultiplayerClientListener implements ClientListener
 	}
 
 	@Override
-	public void onDisconnectedFromServer(MultiplayerClient client, UserConnection server)
+	public void onDisconnectedFromServer(MultiplayerClient client)
 	{
 		Log.infof("Disconnected from server.");
 	}

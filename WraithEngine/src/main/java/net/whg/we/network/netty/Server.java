@@ -8,11 +8,10 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
+import net.whg.we.network.multiplayer.ServerEvent;
 import net.whg.we.network.packet.PacketManagerHandler;
 import net.whg.we.utils.logging.Log;
 
@@ -22,11 +21,13 @@ public class Server
 	private boolean _running = true;
 
 	private PacketManagerHandler _packetManager;
+	private ServerEvent _event;
 
-	public Server(int port, PacketManagerHandler packetManager)
+	public Server(int port, PacketManagerHandler packetManager, ServerEvent event)
 	{
 		_port = port;
 		_packetManager = packetManager;
+		_event = event;
 	}
 
 	public void start()
@@ -47,15 +48,16 @@ public class Server
 				ServerBootstrap b = new ServerBootstrap();
 				b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
 						.option(ChannelOption.SO_BACKLOG, 128)
-						.handler(new LoggingHandler(LogLevel.INFO))
-						.childHandler(new ServerChannelInitializer(sslCtx, _packetManager))
+						.childHandler(new ServerChannelInitializer(sslCtx, _packetManager, _event))
 						.childOption(ChannelOption.SO_KEEPALIVE, true);
 
 				Channel ch = b.bind(_port).sync().channel();
+				_event.onServerStarted();
 
 				while (_running)
 					sleepSlient();
 
+				_event.onServerStopped();
 				ch.closeFuture().sync();
 			}
 			catch (InterruptedException e)
@@ -65,6 +67,7 @@ public class Server
 			catch (CertificateException | SSLException e)
 			{
 				Log.errorf("Failed to build SSL context!", e);
+				_event.onServerFailedToStart(_port);
 			}
 			finally
 			{

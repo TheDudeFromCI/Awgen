@@ -13,9 +13,13 @@ public class MultiplayerServer
 	private PacketManagerHandler _packetManager;
 	private ServerPlayerList _playerList;
 	private ServerPacketHandler _packetHandler;
+	private ServerEvent _event;
 
 	public MultiplayerServer()
 	{
+		_event = new ServerEvent(this);
+		_event.addListener(new MultiplayerServerListener());
+
 		_packetHandler = new ServerPacketHandler(this);
 		_packetManager = PacketManagerHandler
 				.createPacketManagerHandler(new ServerPacketHandler(this), true);
@@ -43,7 +47,7 @@ public class MultiplayerServer
 			throw new IllegalStateException("Server is already running!");
 
 		Log.infof("Opening multiplayer server on port %d.", port);
-		_server = new Server(port, _packetManager);
+		_server = new Server(port, _packetManager, _event);
 		_server.start();
 	}
 
@@ -61,11 +65,17 @@ public class MultiplayerServer
 
 	public void updatePhysics()
 	{
+		_event.handlePendingEvents();
 		_packetManager.processor().handlePackets();
 	}
 
 	public ServerPacketHandler getPacketHandler()
 	{
 		return _packetHandler;
+	}
+
+	public ServerEvent getEvent()
+	{
+		return _event;
 	}
 }

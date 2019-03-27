@@ -17,6 +17,13 @@ public class UserConnection
 		_state = new UserState(isClient);
 	}
 
+	/**
+	 * Sends a packet message through this connection. This does not return the
+	 * packet to any pools, and that must be done manually.
+	 *
+	 * @param packet
+	 *            - The packet to send through this connection.
+	 */
 	public void sendPacket(Packet packet)
 	{
 		_channel.writeAndFlush(packet);

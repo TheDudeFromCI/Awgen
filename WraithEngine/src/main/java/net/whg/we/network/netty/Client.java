@@ -10,6 +10,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import net.whg.we.network.multiplayer.ClientEvent;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketManagerHandler;
 import net.whg.we.utils.logging.Log;
@@ -25,12 +26,14 @@ public class Client
 	private Object _lock = new Object();
 
 	private PacketManagerHandler _packetManager;
+	private ClientEvent _event;
 
-	public Client(String ip, int port, PacketManagerHandler packetManager)
+	public Client(String ip, int port, PacketManagerHandler packetManager, ClientEvent event)
 	{
 		_ip = ip;
 		_port = port;
 		_packetManager = packetManager;
+		_event = event;
 	}
 
 	public void start()
@@ -72,8 +75,12 @@ public class Client
 					_channelFuture = null;
 				}
 
+				_event.onConnect();
+
 				while (_running)
 					sleepSlient();
+
+				_event.onDisconnect();
 
 				synchronized (_lock)
 				{
@@ -140,6 +147,10 @@ public class Client
 		{
 			_channelFuture = _channel.writeAndFlush(msg);
 		}
+
+		// TODO Sending packets stores a local copy and can't be added back to the pool.
+		// Huge memory leak here.
+		// _packetManager.pool().put(msg);
 	}
 
 	public boolean isClosed()

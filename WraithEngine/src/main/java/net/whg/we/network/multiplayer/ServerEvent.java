@@ -3,7 +3,7 @@ package net.whg.we.network.multiplayer;
 import net.whg.we.event.EventCallerBase;
 import net.whg.we.network.netty.UserConnection;
 
-public class ServerEvent extends EventCallerBase<ServerListener> implements ConnectionEvent
+public class ServerEvent extends EventCallerBase<ServerListener>
 {
 	private static final int SERVER_STARTED_EVENT = 0;
 	private static final int SERVER_FAILED_TO_START_EVENT = 1;
@@ -33,14 +33,12 @@ public class ServerEvent extends EventCallerBase<ServerListener> implements Conn
 		callEvent(SERVER_STOPPED_EVENT);
 	}
 
-	@Override
-	public void onConnect(UserConnection connection)
+	public void onUserConnected(UserConnection connection)
 	{
 		callEvent(CLIENT_CONNECTED_EVENT, connection);
 	}
 
-	@Override
-	public void onDisconnect(UserConnection connection)
+	public void onUserDisconnected(UserConnection connection)
 	{
 		callEvent(CLIENT_DISCONNECTED_EVENT, connection);
 	}

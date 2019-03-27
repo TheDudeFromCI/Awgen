@@ -14,11 +14,15 @@ public class MultiplayerClient
 	private ClientPacketHandler _handler;
 	private ClientPlayerList _playerList;
 	private ClientPlayer _player;
+	private ClientEvent _event;
 
 	public MultiplayerClient(String username, String token)
 	{
 		_handler = new ClientPacketHandler(this);
 		_playerList = new ClientPlayerList();
+
+		_event = new ClientEvent(this);
+		_event.addListener(new MultiplayerClientListener());
 
 		_player = new ClientPlayer(username, token);
 		_playerList.addPlayer(_player);
@@ -43,7 +47,7 @@ public class MultiplayerClient
 			throw new IllegalStateException("Server is already running!");
 
 		Log.infof("Opening multiplayer client on ip %s, port %d.", ip, port);
-		_client = new Client(ip, port, _packetManager);
+		_client = new Client(ip, port, _packetManager, _event);
 		_client.start();
 	}
 
@@ -63,6 +67,7 @@ public class MultiplayerClient
 
 	public void updatePhysics()
 	{
+		_event.handlePendingEvents();
 		_packetManager.processor().handlePackets();
 	}
 
@@ -92,5 +97,10 @@ public class MultiplayerClient
 	public ClientPlayer getPlayer()
 	{
 		return _player;
+	}
+
+	public ClientEvent getEvent()
+	{
+		return _event;
 	}
 }

@@ -18,6 +18,7 @@ public class OnlinePlayer implements Player
 		if (!client.getUserState().isAuthenticated())
 			throw new IllegalArgumentException("User Connection not authenticated!");
 
+		_userConnection = client;
 		_commandSender = new PlayerCommandSender(this);
 		_location = new Location();
 		_packetManager = packetManager;
@@ -44,6 +45,11 @@ public class OnlinePlayer implements Player
 	public void sendPacket(Packet packet)
 	{
 		_userConnection.sendPacket(packet);
+
+		// TODO When sending a packet, Netty keeps the copy locally while waiting
+		// to write. This means we can't add the packet back into the pool. This may
+		// cause a large memory leak.
+		// _packetManager.pool().put(packet);
 	}
 
 	public Packet newPacket(String type)

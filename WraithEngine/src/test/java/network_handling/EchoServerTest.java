@@ -6,6 +6,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 import net.whg.we.main.GameState;
+import net.whg.we.network.multiplayer.ClientEvent;
+import net.whg.we.network.multiplayer.ServerEvent;
 import net.whg.we.network.netty.Client;
 import net.whg.we.network.netty.Server;
 import net.whg.we.network.netty.UserConnection;
@@ -92,8 +94,10 @@ public class EchoServerTest
 		}).when(echoPacket).process(Mockito.any(), Mockito.any());
 
 		// Build and start server and client
-		Server server = new Server(port, packetManagerServer);
-		Client client = new Client("localhost", port, packetManagerClient);
+		ServerEvent serverEvent = Mockito.mock(ServerEvent.class);
+		ClientEvent clientEvent = Mockito.mock(ClientEvent.class);
+		Server server = new Server(port, packetManagerServer, serverEvent);
+		Client client = new Client("localhost", port, packetManagerClient, clientEvent);
 		server.start();
 		client.start();
 

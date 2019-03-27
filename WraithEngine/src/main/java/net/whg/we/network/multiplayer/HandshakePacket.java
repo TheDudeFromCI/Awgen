@@ -40,8 +40,6 @@ public class HandshakePacket implements PacketType
 	@Override
 	public void decode(byte[] bytes, int length, Map<String, Object> packetData)
 	{
-		// TODO Omg, sanity check. Seriously. O_O
-
 		ByteReader reader = new ByteReader(bytes);
 
 		String username = reader.getString(StandardCharsets.UTF_8);
