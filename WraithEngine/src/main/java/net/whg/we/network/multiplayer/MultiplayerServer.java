@@ -1,9 +1,7 @@
 package net.whg.we.network.multiplayer;
 
-import java.io.IOException;
-import net.whg.we.network.packet.DefaultPacketFactory;
-import net.whg.we.network.packet.PacketFactory;
-import net.whg.we.network.packet.PacketServer;
+import net.whg.we.network.netty.Server;
+import net.whg.we.network.packet.PacketManagerHandler;
 import net.whg.we.server_logic.connect.ServerPlayerList;
 import net.whg.we.utils.logging.Log;
 
@@ -11,35 +9,27 @@ public class MultiplayerServer
 {
 	public static final int DEFAULT_PORT = 23423;
 
-	private PacketServer _server;
-	private DefaultPacketFactory _factory;
+	private Server _server;
+	private PacketManagerHandler _packetManager;
 	private ServerPlayerList _playerList;
-	private PendingClients _pendingClients;
 	private ServerPacketHandler _packetHandler;
 
 	public MultiplayerServer()
 	{
-		_playerList = new ServerPlayerList();
-		_pendingClients = new PendingClients();
 		_packetHandler = new ServerPacketHandler(this);
-
-		_factory = new DefaultPacketFactory();
-		MultiplayerUtils.addDefaultPackets(_factory);
+		_packetManager = PacketManagerHandler
+				.createPacketManagerHandler(new ServerPacketHandler(this), true);
+		_playerList = new ServerPlayerList(_packetManager);
 	}
 
 	public boolean isRunning()
 	{
-		return _server != null && _server.isRunning();
+		return _server != null && !_server.isClosed();
 	}
 
-	public PacketServer getServer()
+	public PacketManagerHandler getPacketManager()
 	{
-		return _server;
-	}
-
-	public PacketFactory getPacketFactory()
-	{
-		return _factory;
+		return _packetManager;
 	}
 
 	public void startServer()
@@ -52,23 +42,15 @@ public class MultiplayerServer
 		if (isRunning())
 			throw new IllegalStateException("Server is already running!");
 
-		try
-		{
-			Log.infof("Opening multiplayer server on port %d.", port);
-			_server = new PacketServer(_factory, _packetHandler, port);
-			_server.getEvents().addListener(new MultiplayerServerListener(this));
-		}
-		catch (IOException e)
-		{
-			Log.errorf("There has been an error while trying to start this server!", e);
-			_server = null;
-		}
+		Log.infof("Opening multiplayer server on port %d.", port);
+		_server = new Server(port, _packetManager);
+		_server.start();
 	}
 
 	public void stopServer()
 	{
 		Log.info("Closing multiplayer server.");
-		_server.stopServer();
+		_server.stop();
 		_server = null;
 	}
 
@@ -79,18 +61,7 @@ public class MultiplayerServer
 
 	public void updatePhysics()
 	{
-		if (!isRunning())
-			return;
-
-		_server.getEvents().handlePendingEvents();
-		_pendingClients.update();
-		_server.handlePackets();
-		_server.update();
-	}
-
-	PendingClients getPendingClients()
-	{
-		return _pendingClients;
+		_packetManager.processor().handlePackets();
 	}
 
 	public ServerPacketHandler getPacketHandler()

@@ -11,38 +11,46 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import net.whg.we.network.packet.Packet;
-import net.whg.we.network.packet.PacketFactory;
-import net.whg.we.network.packet.PacketListener;
-import net.whg.we.network.packet.PacketPool;
+import net.whg.we.network.packet.PacketManagerHandler;
 import net.whg.we.utils.logging.Log;
 
 public class Client
 {
 	private final String _ip;
 	private final int _port;
-	private boolean _running = true;
+	private boolean _running;
 
 	private Channel _channel;
 	private ChannelFuture _channelFuture;
 	private Object _lock = new Object();
 
-	private PacketPool _packetPool;
-	private PacketFactory _packetFactory;
-	private PacketListener _packetListener;
+	private PacketManagerHandler _packetManager;
 
-	public Client(String ip, int port, PacketPool packetPool, PacketFactory packetFactory,
-			PacketListener packetListener)
+	public Client(String ip, int port, PacketManagerHandler packetManager)
 	{
 		_ip = ip;
 		_port = port;
-
-		_packetPool = packetPool;
-		_packetFactory = packetFactory;
-		_packetListener = packetListener;
+		_packetManager = packetManager;
 	}
 
 	public void start()
 	{
+		if (_running)
+			throw new IllegalStateException("Socket already running!");
+
+		while (true)
+		{
+			synchronized (_lock)
+			{
+				if (_channel == null)
+					break;
+			}
+
+			sleepSlient();
+		}
+
+		_running = true;
+
 		Thread thread = new Thread(() ->
 		{
 			Log.info("Starting client thread.");
@@ -55,8 +63,8 @@ public class Client
 						.trustManager(InsecureTrustManagerFactory.INSTANCE).build();
 
 				Bootstrap b = new Bootstrap();
-				b.group(group).channel(NioSocketChannel.class).handler(new ClientChannelInitializer(
-						sslCtx, Client.this, _packetPool, _packetFactory, _packetListener));
+				b.group(group).channel(NioSocketChannel.class)
+						.handler(new ClientChannelInitializer(sslCtx, Client.this, _packetManager));
 
 				synchronized (_lock)
 				{
@@ -132,5 +140,10 @@ public class Client
 		{
 			_channelFuture = _channel.writeAndFlush(msg);
 		}
+	}
+
+	public boolean isClosed()
+	{
+		return !_running;
 	}
 }

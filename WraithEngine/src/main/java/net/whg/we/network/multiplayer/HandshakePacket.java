@@ -2,7 +2,6 @@ package net.whg.we.network.multiplayer;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import net.whg.we.network.Connection;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketHandler;
 import net.whg.we.network.packet.PacketType;
@@ -55,18 +54,19 @@ public class HandshakePacket implements PacketType
 	@Override
 	public void process(Packet packet, PacketHandler handler)
 	{
-		// TODO Shouldn't we assert this is being called on the server?
-		// Hoping for a class cast exception, well...
-
-		MultiplayerServer server = ((ServerPacketHandler) handler).getServer();
-		Connection client = server.getPendingClients().getClient(packet.getSender().getIP());
-		server.getPendingClients().removeClient(client);
+		if (handler.isClient())
+		{
+			Log.warn("Hanshake packed sent from server!");
+			return;
+		}
 
 		String username = (String) packet.getData().get("username");
 		String token = (String) packet.getData().get("token");
-
 		Log.debugf("Recieved handshake packet. Username: %s, Token: %s", username, token);
 
-		server.getPlayerList().addPlayer(client, username, token);
+		packet.getSender().getUserState().authenticate(username, token);
+
+		MultiplayerServer server = ((ServerPacketHandler) handler).getServer();
+		server.getPlayerList().addPlayer(packet.getSender());
 	}
 }

@@ -1,41 +1,38 @@
 package net.whg.we.server_logic.connect;
 
-import net.whg.we.network.Connection;
 import net.whg.we.network.connect.Player;
+import net.whg.we.network.netty.UserConnection;
 import net.whg.we.network.packet.Packet;
-import net.whg.we.network.packet.PacketProtocol;
+import net.whg.we.network.packet.PacketManager;
 import net.whg.we.scene.Location;
-import net.whg.we.utils.logging.Log;
 
 public class OnlinePlayer implements Player
 {
-	private String _username;
-	private String _token;
-	private Connection _client;
-	private PacketProtocol _packetProtocol;
+	private UserConnection _userConnection;
 	private PlayerCommandSender _commandSender;
 	private Location _location;
+	private PacketManager _packetManager;
 
-	public OnlinePlayer(Connection client, String username, String token)
+	public OnlinePlayer(UserConnection client, PacketManager packetManager)
 	{
-		_client = client;
-		_username = username;
-		_token = token;
-		_packetProtocol = (PacketProtocol) _client.getProtocol();
+		if (!client.getUserState().isAuthenticated())
+			throw new IllegalArgumentException("User Connection not authenticated!");
+
 		_commandSender = new PlayerCommandSender(this);
 		_location = new Location();
+		_packetManager = packetManager;
 	}
 
 	@Override
 	public String getUsername()
 	{
-		return _username;
+		return _userConnection.getUserState().getUsername();
 	}
 
 	@Override
 	public String getToken()
 	{
-		return _token;
+		return _userConnection.getUserState().getToken();
 	}
 
 	/**
@@ -46,22 +43,12 @@ public class OnlinePlayer implements Player
 	 */
 	public void sendPacket(Packet packet)
 	{
-		try
-		{
-			_packetProtocol.sendPacket(packet);
-		}
-		catch (Exception exception)
-		{
-			Log.errorf("There has been an error while attempt to send a packet to a player!",
-					exception);
-		}
+		_userConnection.sendPacket(packet);
 	}
 
 	public Packet newPacket(String type)
 	{
-		Packet packet = _packetProtocol.getPacketPool().get();
-		packet.setPacketType(_packetProtocol.getPacketFactory().findPacketType(type));
-		return packet;
+		return _packetManager.newPacket(type);
 	}
 
 	/**
@@ -69,12 +56,7 @@ public class OnlinePlayer implements Player
 	 */
 	public void kick()
 	{
-		_client.close();
-	}
-
-	public Connection getClientConnection()
-	{
-		return _client;
+		_userConnection.close();
 	}
 
 	public PlayerCommandSender getCommandSender()

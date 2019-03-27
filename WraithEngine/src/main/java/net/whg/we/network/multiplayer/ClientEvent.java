@@ -1,32 +1,30 @@
-package net.whg.we.network.client;
+package net.whg.we.network.multiplayer;
 
 import net.whg.we.event.EventCallerBase;
-import net.whg.we.network.Connection;
-import net.whg.we.network.ConnectionEvent;
-import net.whg.we.network.TCPChannel;
+import net.whg.we.network.netty.UserConnection;
 
 public class ClientEvent extends EventCallerBase<ClientListener> implements ConnectionEvent
 {
 	private static final int CONNECT_TO_SERVER_EVENT = 0;
 	private static final int DISCONNECTED_FROM_SERVER_EVENT = 1;
 
-	private DefaultClient _client;
+	private MultiplayerClient _client;
 
-	public ClientEvent(DefaultClient client)
+	public ClientEvent(MultiplayerClient client)
 	{
 		_client = client;
 	}
 
 	@Override
-	public void onConnect(Connection con)
+	public void onConnect(UserConnection con)
 	{
-		callEvent(CONNECT_TO_SERVER_EVENT, con.getChannel());
+		callEvent(CONNECT_TO_SERVER_EVENT, con);
 	}
 
 	@Override
-	public void onDisconnect(Connection con)
+	public void onDisconnect(UserConnection con)
 	{
-		callEvent(DISCONNECTED_FROM_SERVER_EVENT, con.getChannel());
+		callEvent(DISCONNECTED_FROM_SERVER_EVENT, con);
 	}
 
 	@Override
@@ -35,11 +33,11 @@ public class ClientEvent extends EventCallerBase<ClientListener> implements Conn
 		switch (index)
 		{
 			case CONNECT_TO_SERVER_EVENT:
-				listener.onConnectToServer(_client, (TCPChannel) arg);
+				listener.onConnectToServer(_client, (UserConnection) arg);
 				return;
 
 			case DISCONNECTED_FROM_SERVER_EVENT:
-				listener.onDisconnectedFromServer(_client, (TCPChannel) arg);
+				listener.onDisconnectedFromServer(_client, (UserConnection) arg);
 				return;
 
 			default:

@@ -3,7 +3,7 @@ package net.whg.we.network.packet;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import net.whg.we.network.TCPChannel;
+import net.whg.we.network.netty.UserConnection;
 import net.whg.we.utils.Poolable;
 
 public class Packet implements Poolable
@@ -13,7 +13,7 @@ public class Packet implements Poolable
 	private byte[] _bytes = new byte[MAX_PACKET_SIZE];
 	private PacketType _packetType;
 	private Map<String, Object> _packetData = new HashMap<>();
-	private TCPChannel _sender;
+	private UserConnection _sender;
 	private int _packetSize;
 
 	@Override
@@ -69,12 +69,12 @@ public class Packet implements Poolable
 			_packetType.process(this, handler);
 	}
 
-	public TCPChannel getSender()
+	public UserConnection getSender()
 	{
 		return _sender;
 	}
 
-	public void setSender(TCPChannel sender)
+	public void setSender(UserConnection sender)
 	{
 		_sender = sender;
 	}

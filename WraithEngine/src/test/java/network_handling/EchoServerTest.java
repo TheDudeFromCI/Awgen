@@ -12,8 +12,7 @@ import net.whg.we.network.netty.UserConnection;
 import net.whg.we.network.packet.DefaultPacketFactory;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketHandler;
-import net.whg.we.network.packet.PacketPool;
-import net.whg.we.network.packet.PacketProcessor;
+import net.whg.we.network.packet.PacketManagerHandler;
 import net.whg.we.network.packet.PacketType;
 import net.whg.we.utils.ByteReader;
 import net.whg.we.utils.ByteWriter;
@@ -29,19 +28,18 @@ public class EchoServerTest
 		final int port = 8123;
 
 		// Build packet handles
-		PacketPool pool = new PacketPool();
-		DefaultPacketFactory factory = new DefaultPacketFactory();
-
 		StoreMessagePacketHandler serverHandler = new StoreMessagePacketHandler();
 		StoreMessagePacketHandler clientHandler = new StoreMessagePacketHandler();
-
-		PacketProcessor listenerServer = new PacketProcessor(pool, serverHandler);
-		PacketProcessor listenerClient = new PacketProcessor(pool, clientHandler);
+		PacketManagerHandler packetManagerServer =
+				PacketManagerHandler.createPacketManagerHandler(serverHandler, false);
+		PacketManagerHandler packetManagerClient =
+				PacketManagerHandler.createPacketManagerHandler(clientHandler, false);
 
 		// Build dummy echo packet
 		PacketType echoPacket = Mockito.mock(PacketType.class);
 		Mockito.when(echoPacket.getTypePath()).thenReturn("test.echo");
-		factory.addPacketType(echoPacket);
+		((DefaultPacketFactory) packetManagerServer.factory()).addPacketType(echoPacket);
+		((DefaultPacketFactory) packetManagerClient.factory()).addPacketType(echoPacket);
 
 		Mockito.doAnswer(a ->
 		{
@@ -81,12 +79,12 @@ public class EchoServerTest
 			if ((boolean) packet.getData().get("client"))
 			{
 				// Send packet from server to client
-				Packet p2 = pool.get();
-				p2.setPacketType(factory.findPacketType("test.echo"));
+				Packet p2 = packetManagerServer.pool().get();
+				p2.setPacketType(packetManagerServer.factory().findPacketType("test.echo"));
 				p2.getData().put("message", "Hello Client!");
 				p2.getData().put("client", false);
 
-				UserConnection con = (UserConnection) packet.getSender();
+				UserConnection con = packet.getSender();
 				con.sendPacket(p2);
 			}
 
@@ -94,8 +92,8 @@ public class EchoServerTest
 		}).when(echoPacket).process(Mockito.any(), Mockito.any());
 
 		// Build and start server and client
-		Server server = new Server(port, pool, factory, listenerServer);
-		Client client = new Client("localhost", port, pool, factory, listenerClient);
+		Server server = new Server(port, packetManagerServer);
+		Client client = new Client("localhost", port, packetManagerClient);
 		server.start();
 		client.start();
 
@@ -104,19 +102,19 @@ public class EchoServerTest
 		Assert.assertNull(clientHandler.message);
 
 		// Send packet from client to server
-		Packet packet = pool.get();
-		packet.setPacketType(factory.findPacketType("test.echo"));
+		Packet packet = packetManagerClient.pool().get();
+		packet.setPacketType(packetManagerClient.factory().findPacketType("test.echo"));
 		packet.getData().put("message", "Hello Server!");
 		packet.getData().put("client", true);
 		client.send(packet);
 
 		// Let server process packets
 		Thread.sleep(1000);
-		listenerServer.handlePackets();
+		packetManagerServer.processor().handlePackets();
 
 		// Let clientr process packets
 		Thread.sleep(1000);
-		listenerClient.handlePackets();
+		packetManagerClient.processor().handlePackets();
 
 		// Test if information passed through
 		Assert.assertEquals("Hello Server!", serverHandler.message);

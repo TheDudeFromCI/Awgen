@@ -1,8 +1,7 @@
-package net.whg.we.network.server;
+package net.whg.we.network.multiplayer;
 
 import net.whg.we.event.EventCallerBase;
-import net.whg.we.network.Connection;
-import net.whg.we.network.ConnectionEvent;
+import net.whg.we.network.netty.UserConnection;
 
 public class ServerEvent extends EventCallerBase<ServerListener> implements ConnectionEvent
 {
@@ -12,9 +11,9 @@ public class ServerEvent extends EventCallerBase<ServerListener> implements Conn
 	private static final int CLIENT_DISCONNECTED_EVENT = 3;
 	private static final int SERVER_STOPPED_EVENT = 4;
 
-	private Server _server;
+	private MultiplayerServer _server;
 
-	public ServerEvent(Server server)
+	public ServerEvent(MultiplayerServer server)
 	{
 		_server = server;
 	}
@@ -35,13 +34,13 @@ public class ServerEvent extends EventCallerBase<ServerListener> implements Conn
 	}
 
 	@Override
-	public void onConnect(Connection connection)
+	public void onConnect(UserConnection connection)
 	{
 		callEvent(CLIENT_CONNECTED_EVENT, connection);
 	}
 
 	@Override
-	public void onDisconnect(Connection connection)
+	public void onDisconnect(UserConnection connection)
 	{
 		callEvent(CLIENT_DISCONNECTED_EVENT, connection);
 	}
@@ -60,11 +59,11 @@ public class ServerEvent extends EventCallerBase<ServerListener> implements Conn
 				return;
 
 			case CLIENT_CONNECTED_EVENT:
-				listener.onClientConnected(_server, (Connection) arg);
+				listener.onClientConnected(_server, (UserConnection) arg);
 				return;
 
 			case CLIENT_DISCONNECTED_EVENT:
-				listener.onClientDisconnected(_server, (Connection) arg);
+				listener.onClientDisconnected(_server, (UserConnection) arg);
 				return;
 
 			case SERVER_STOPPED_EVENT:
