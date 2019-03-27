@@ -30,8 +30,11 @@ public class ServerChannelInitializer extends ChannelInitializer<SocketChannel>
 	{
 		ChannelPipeline pipeline = ch.pipeline();
 
+		UserConnection userConnection = new UserConnection(ch, false);
+
 		pipeline.addLast(_sslCtx.newHandler(ch.alloc()));
-		pipeline.addLast(new PacketDecoder(_packetPool, _packetFactory, _packetListener));
+		pipeline.addLast(
+				new PacketDecoder(_packetPool, _packetFactory, _packetListener, userConnection));
 		pipeline.addLast(new PacketEncoder());
 	}
 }

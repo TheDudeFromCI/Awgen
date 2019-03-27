@@ -16,13 +16,15 @@ public class PacketDecoder extends ChannelInboundHandlerAdapter
 	private PacketFactory _packetFactory;
 	private PacketListener _packetListener;
 	private PacketBuffer _packetBuffer;
+	private UserConnection _userConnection;
 
 	public PacketDecoder(PacketPool packetPool, PacketFactory packetFactory,
-			PacketListener packetListener)
+			PacketListener packetListener, UserConnection userConnection)
 	{
 		_packetPool = packetPool;
 		_packetFactory = packetFactory;
 		_packetListener = packetListener;
+		_userConnection = userConnection;
 	}
 
 	@Override
@@ -54,7 +56,7 @@ public class PacketDecoder extends ChannelInboundHandlerAdapter
 			Packet packet = _packetPool.get();
 			_packetBuffer.getByteBuffer().readBytes(packet.getBytes(), 0, packetSize);
 			packet.setPacketType(type);
-			packet.setSender(null); // TODO Make a sender
+			packet.setSender(_userConnection);
 
 			if (packet.decode(packetSize))
 				_packetListener.onPacketRecieved(packet);

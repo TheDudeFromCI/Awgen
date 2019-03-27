@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 import net.whg.we.main.GameState;
 import net.whg.we.network.netty.Client;
 import net.whg.we.network.netty.Server;
+import net.whg.we.network.netty.UserConnection;
 import net.whg.we.network.packet.DefaultPacketFactory;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketHandler;
@@ -20,7 +21,8 @@ import net.whg.we.utils.logging.Log;
 
 public class EchoServerTest
 {
-	@Test
+
+	@Test(timeout = 5000)
 	public void echoServer() throws InterruptedException
 	{
 		Log.setLogLevel(Log.TRACE);
@@ -45,23 +47,49 @@ public class EchoServerTest
 		{
 			ByteWriter out = new ByteWriter(a.getArgument(0));
 			Map<String, Object> data = a.getArgument(1);
+
 			String message = (String) data.get("message");
+			boolean client = (boolean) data.get("client");
+
 			out.writeString(message, StandardCharsets.UTF_8);
+			out.writeByte(client ? 1 : 0);
+
 			return out.getPos();
 		}).when(echoPacket).encode(Mockito.any(), Mockito.any());
+
 		Mockito.doAnswer(a ->
 		{
 			ByteReader in = new ByteReader(a.getArgument(0));
-			String message = in.getString(StandardCharsets.UTF_8);
 			Map<String, Object> data = a.getArgument(2);
+
+			String message = in.getString(StandardCharsets.UTF_8);
+			boolean client = in.getByte() != 0;
+
 			data.put("message", message);
+			data.put("client", client);
+
 			return null;
 		}).when(echoPacket).decode(Mockito.any(), Mockito.anyInt(), Mockito.any());
+
 		Mockito.doAnswer(a ->
 		{
 			Packet packet = a.getArgument(0);
 			StoreMessagePacketHandler handler = a.getArgument(1);
+
 			handler.message = (String) packet.getData().get("message");
+
+			if ((boolean) packet.getData().get("client"))
+			{
+				// Send packet from server to client
+				Packet p2 = pool.get();
+				p2.setPacketType(factory.findPacketType("test.echo"));
+				p2.getData().put("message", "Hello Client!");
+				p2.getData().put("client", false);
+
+				UserConnection con = (UserConnection) packet.getSender();
+				con.sendPacket(p2);
+			}
+
 			return null;
 		}).when(echoPacket).process(Mockito.any(), Mockito.any());
 
@@ -79,6 +107,7 @@ public class EchoServerTest
 		Packet packet = pool.get();
 		packet.setPacketType(factory.findPacketType("test.echo"));
 		packet.getData().put("message", "Hello Server!");
+		packet.getData().put("client", true);
 		client.send(packet);
 
 		// Let server process packets
