@@ -1,11 +1,11 @@
 package net.whg.we.server_logic.connect;
 
 import java.util.ArrayList;
-import net.whg.we.network.Connection;
-import net.whg.we.network.TCPChannel;
 import net.whg.we.network.connect.Player;
 import net.whg.we.network.connect.PlayerList;
+import net.whg.we.network.netty.UserConnection;
 import net.whg.we.network.packet.Packet;
+import net.whg.we.network.packet.PacketManager;
 import net.whg.we.packets.PlayerJoinPacket;
 import net.whg.we.utils.GenericRunnable;
 import net.whg.we.utils.logging.Log;
@@ -13,10 +13,16 @@ import net.whg.we.utils.logging.Log;
 public class ServerPlayerList implements PlayerList
 {
 	private ArrayList<Player> _players = new ArrayList<>();
+	private PacketManager _packetManager;
 
-	public void addPlayer(Connection client, String username, String token)
+	public ServerPlayerList(PacketManager packetManager)
 	{
-		OnlinePlayer player = new OnlinePlayer(client, username, token);
+		_packetManager = packetManager;
+	}
+
+	public void addPlayer(UserConnection client)
+	{
+		OnlinePlayer player = new OnlinePlayer(client, _packetManager);
 		addPlayer(player);
 
 		Log.infof("%s has joined the server.", player.getUsername());
@@ -31,7 +37,8 @@ public class ServerPlayerList implements PlayerList
 
 				OnlinePlayer p2 = (OnlinePlayer) p;
 				Packet packet = p2.newPacket("common.player.join");
-				((PlayerJoinPacket) packet.getPacketType()).build(packet, username, token,
+				((PlayerJoinPacket) packet.getPacketType()).build(packet,
+						client.getUserState().getUsername(), client.getUserState().getToken(),
 						player.getLocation());
 				p2.sendPacket(packet);
 			});
@@ -50,15 +57,6 @@ public class ServerPlayerList implements PlayerList
 				player.sendPacket(packet);
 			});
 		}
-	}
-
-	public OnlinePlayer getPlayerByTCPChannel(TCPChannel channel)
-	{
-		for (Player player : _players)
-			if (((OnlinePlayer) player).getClientConnection().getChannel() == channel)
-				return (OnlinePlayer) player;
-
-		return null;
 	}
 
 	@Override

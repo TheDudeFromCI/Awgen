@@ -4,9 +4,9 @@ import net.whg.we.main.GameState;
 
 public interface PacketHandler
 {
-    boolean isClient();
+	boolean isClient();
 
-    GameState getGameState();
+	GameState getGameState();
 
-    void setGameState(GameState gameState);
+	void setGameState(GameState gameState);
 }
