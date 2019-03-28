@@ -102,10 +102,19 @@ public class WindowedGameLoop implements GameLoop
 						terrain.getMeshResource(0).getVertexData(), model.getLocation()));
 			}
 
+			_client.login();
+
 			while (true)
 			{
 				try
 				{
+					if (!_client.isRunning())
+					{
+						Log.info("Server connection closed! Shutting down.");
+						_graphicsPipeline.requestClose();
+						break;
+					}
+
 					long currentTime = System.currentTimeMillis();
 					double passed = (currentTime - startTime) / 1000.0;
 					double physicsFrames = passed * Time.getPhysicsFramerate();
@@ -166,7 +175,7 @@ public class WindowedGameLoop implements GameLoop
 
 		Location loc = _firstPerson.getLocation();
 		if (_lastMovePacketPos.distanceSquared(loc.getPosition()) > 0.1f
-				|| _lastMovePacketRot.dot(loc.getRotation()) > 0.1f)
+				|| _lastMovePacketRot.dot(loc.getRotation()) <= 0.95f)
 		{
 			_lastMovePacketPos.set(loc.getPosition());
 			_lastMovePacketRot.set(loc.getRotation());

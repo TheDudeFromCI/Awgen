@@ -1,102 +1,90 @@
 package net.whg.we.network.multiplayer;
 
-import java.io.IOException;
-import net.whg.we.network.packet.DefaultPacketFactory;
-import net.whg.we.network.packet.PacketFactory;
-import net.whg.we.network.packet.PacketServer;
+import net.whg.we.network.netty.Server;
+import net.whg.we.network.packet.PacketManagerHandler;
 import net.whg.we.server_logic.connect.ServerPlayerList;
 import net.whg.we.utils.logging.Log;
 
 public class MultiplayerServer
 {
-    public static final int DEFAULT_PORT = 23423;
+	public static final int DEFAULT_PORT = 23423;
 
-    private PacketServer _server;
-    private DefaultPacketFactory _factory;
-    private ServerPlayerList _playerList;
-    private PendingClients _pendingClients;
-    private ServerPacketHandler _packetHandler;
+	private Server _server;
+	private PacketManagerHandler _packetManager;
+	private ServerPlayerList _playerList;
+	private ServerPacketHandler _packetHandler;
+	private ServerEvent _event;
 
-    public MultiplayerServer()
-    {
-        _playerList = new ServerPlayerList();
-        _pendingClients = new PendingClients();
-        _packetHandler = new ServerPacketHandler(this);
+	public MultiplayerServer()
+	{
+		_event = new ServerEvent(this);
+		_event.addListener(new MultiplayerServerListener());
 
-        _factory = new DefaultPacketFactory();
-        MultiplayerUtils.addDefaultPackets(_factory);
-    }
+		_packetHandler = new ServerPacketHandler(this);
+		_packetManager = PacketManagerHandler
+				.createPacketManagerHandler(new ServerPacketHandler(this), true);
+		_playerList = new ServerPlayerList(_packetManager);
+	}
 
-    public boolean isRunning()
-    {
-        return _server != null && _server.isRunning();
-    }
+	public boolean isRunning()
+	{
+		return _server != null && !_server.isClosed();
+	}
 
-    public PacketServer getServer()
-    {
-        return _server;
-    }
+	public PacketManagerHandler getPacketManager()
+	{
+		return _packetManager;
+	}
 
-    public PacketFactory getPacketFactory()
-    {
-        return _factory;
-    }
+	public void startServer()
+	{
+		startServer(DEFAULT_PORT);
+	}
 
-    public void startServer()
-    {
-        startServer(DEFAULT_PORT);
-    }
+	public void startServer(int port)
+	{
+		if (isRunning())
+			throw new IllegalStateException("Server is already running!");
 
-    public void startServer(int port)
-    {
-        if (isRunning())
-            throw new IllegalStateException("Server is already running!");
+		Log.infof("Opening multiplayer server on port %d.", port);
+		_server = new Server(port, _packetManager, _event);
+		_server.start();
+	}
 
-        try
-        {
-            Log.infof("Opening multiplayer server on port %d.", port);
-            _server = new PacketServer(_factory, _packetHandler, port);
-            _server.getEvents()
-                    .addListener(new MultiplayerServerListener(this));
-        }
-        catch (IOException e)
-        {
-            Log.errorf(
-                    "There has been an error while trying to start this server!",
-                    e);
-            _server = null;
-        }
-    }
+	public void stopServer()
+	{
+		Log.info("Closing multiplayer server.");
 
-    public void stopServer()
-    {
-        Log.info("Closing multiplayer server.");
-        _server.stopServer();
-        _server = null;
-    }
+		if (!isRunning())
+		{
+			Log.indent();
+			Log.debug("Socket already closed!");
+			Log.unindent();
+			return;
+		}
 
-    public ServerPlayerList getPlayerList()
-    {
-        return _playerList;
-    }
+		_server.stop();
+		_server = null;
+	}
 
-    public void updatePhysics()
-    {
-        if (!isRunning())
-            return;
+	public ServerPlayerList getPlayerList()
+	{
+		return _playerList;
+	}
 
-        _server.getEvents().handlePendingEvents();
-        _pendingClients.update();
-        _server.handlePackets();
-    }
+	public void updatePhysics()
+	{
+		_event.handlePendingEvents();
+		_packetManager.processor().handlePackets();
+	}
 
-    PendingClients getPendingClients()
-    {
-        return _pendingClients;
-    }
+	public ServerPacketHandler getPacketHandler()
+	{
+		return _packetHandler;
+	}
 
-    public ServerPacketHandler getPacketHandler()
-    {
-        return _packetHandler;
-    }
+	public ServerEvent getEvent()
+	{
+		return _event;
+	}
 }
