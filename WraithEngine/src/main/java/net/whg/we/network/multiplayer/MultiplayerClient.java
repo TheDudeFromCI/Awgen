@@ -15,6 +15,7 @@ public class MultiplayerClient
 	private ClientPlayerList _playerList;
 	private ClientPlayer _player;
 	private ClientEvent _event;
+	private boolean _loggedIn;
 
 	public MultiplayerClient(String username, String token)
 	{
@@ -27,8 +28,7 @@ public class MultiplayerClient
 		_player = new ClientPlayer(username, token);
 		_playerList.addPlayer(_player);
 
-		_packetManager = PacketManagerHandler
-				.createPacketManagerHandler(new ClientPacketHandler(this), true);
+		_packetManager = PacketManagerHandler.createPacketManagerHandler(_handler, true);
 	}
 
 	public boolean isRunning()
@@ -47,8 +47,32 @@ public class MultiplayerClient
 			throw new IllegalStateException("Server is already running!");
 
 		Log.infof("Opening multiplayer client on ip %s, port %d.", ip, port);
+		_loggedIn = false;
 		_client = new Client(ip, port, _packetManager, _event);
 		_client.start();
+	}
+
+	public boolean isLoggedIn()
+	{
+		return _loggedIn;
+	}
+
+	public void login()
+	{
+		if (_loggedIn)
+			throw new IllegalStateException("Already logged in!");
+		_loggedIn = false;
+
+		String username = _player.getUsername();
+		String token = _player.getToken();
+
+		Log.infof(
+				"Successfully connected to server. Sending handshake packet now. Username: %s, Token: %s",
+				username, token);
+
+		Packet packet = newPacket("auth.handshake");
+		((HandshakePacket) packet.getPacketType()).build(packet, username, token);
+		sendPacket(packet);
 	}
 
 	public PacketManagerHandler getPacketManager()
@@ -63,6 +87,7 @@ public class MultiplayerClient
 
 		_client.stop();
 		_client = null;
+		_loggedIn = false;
 	}
 
 	public void updatePhysics()
