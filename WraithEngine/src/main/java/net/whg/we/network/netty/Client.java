@@ -3,7 +3,6 @@ package net.whg.we.network.netty;
 import javax.net.ssl.SSLException;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -19,11 +18,8 @@ public class Client
 {
 	private final String _ip;
 	private final int _port;
-	private boolean _running;
 
 	private Channel _channel;
-	private ChannelFuture _channelFuture;
-	private Object _lock = new Object();
 
 	private PacketManagerHandler _packetManager;
 	private ClientEvent _event;
@@ -38,28 +34,8 @@ public class Client
 
 	public void start()
 	{
-		if (_running)
+		if (!isClosed())
 			throw new IllegalStateException("Socket already running!");
-
-		boolean alreadyMadeLog = false;
-		while (true)
-		{
-			synchronized (_lock)
-			{
-				if (_channel == null)
-					break;
-			}
-
-			if (!alreadyMadeLog)
-			{
-				alreadyMadeLog = true;
-				Log.trace("Waiting for previous client socket to finish shutting down...");
-			}
-
-			sleepSlient();
-		}
-
-		_running = true;
 
 		Thread thread = new Thread(() ->
 		{
@@ -76,30 +52,11 @@ public class Client
 				b.group(group).channel(NioSocketChannel.class)
 						.handler(new ClientChannelInitializer(sslCtx, Client.this, _packetManager));
 
-				synchronized (_lock)
-				{
-					_channel = b.connect(_ip, _port).sync().channel();
-					_channelFuture = null;
-				}
-
+				_channel = b.connect(_ip, _port).sync().channel();
 				_event.onConnect();
 
-				while (_running)
+				while (_channel.isOpen())
 					sleepSlient();
-
-				Log.trace("Shutting down socket channels.");
-				_event.onDisconnect();
-
-				synchronized (_lock)
-				{
-					_channel.closeFuture().sync();
-
-					if (_channelFuture != null)
-						_channelFuture.sync();
-
-					_channel = null;
-					_channelFuture = null;
-				}
 			}
 			catch (InterruptedException e)
 			{
@@ -112,11 +69,14 @@ public class Client
 			finally
 			{
 				Log.info("Shutting down client thread.");
+				_event.onDisconnect();
 				group.shutdownGracefully();
+
+				_channel = null;
 			}
 		});
 		thread.setDaemon(true);
-		thread.setName("client_main");
+		thread.setName("client_channel");
 		thread.start();
 
 		while (_channel == null)
@@ -151,20 +111,16 @@ public class Client
 		if (isClosed())
 			return;
 
-		_running = false;
 		_channel.close();
 	}
 
 	public void send(Packet msg)
 	{
-		synchronized (_lock)
-		{
-			_channelFuture = _channel.writeAndFlush(msg);
-		}
+		_channel.writeAndFlush(msg);
 	}
 
 	public boolean isClosed()
 	{
-		return !_running;
+		return _channel == null || !_channel.isOpen();
 	}
 }

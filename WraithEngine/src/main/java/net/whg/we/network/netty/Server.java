@@ -18,10 +18,11 @@ import net.whg.we.utils.logging.Log;
 public class Server
 {
 	private final int _port;
-	private boolean _running = true;
 
 	private PacketManagerHandler _packetManager;
 	private ServerEvent _event;
+
+	private Channel _channel;
 
 	public Server(int port, PacketManagerHandler packetManager, ServerEvent event)
 	{
@@ -51,15 +52,11 @@ public class Server
 						.childHandler(new ServerChannelInitializer(sslCtx, _packetManager, _event))
 						.childOption(ChannelOption.SO_KEEPALIVE, true);
 
-				Channel ch = b.bind(_port).sync().channel();
+				_channel = b.bind(_port).sync().channel();
 				_event.onServerStarted();
 
-				while (_running)
+				while (_channel.isOpen())
 					sleepSlient();
-
-				Log.trace("Shutting down socket channels.");
-				_event.onServerStopped();
-				ch.closeFuture().sync();
 			}
 			catch (InterruptedException e)
 			{
@@ -73,13 +70,16 @@ public class Server
 			finally
 			{
 				Log.info("Shutting down server thread.");
+				_event.onServerStopped();
 				bossGroup.shutdownGracefully();
 				workerGroup.shutdownGracefully();
+
+				_channel = null;
 			}
 		});
 
 		thread.setDaemon(true);
-		thread.setName("server_main");
+		thread.setName("server_channel");
 		thread.start();
 	}
 
@@ -101,11 +101,11 @@ public class Server
 		if (isClosed())
 			return;
 
-		_running = false;
+		_channel.close();
 	}
 
 	public boolean isClosed()
 	{
-		return !_running;
+		return _channel == null || !_channel.isOpen();
 	}
 }
