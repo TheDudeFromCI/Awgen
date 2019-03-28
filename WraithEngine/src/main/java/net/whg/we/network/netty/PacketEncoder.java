@@ -46,11 +46,4 @@ public class PacketEncoder extends MessageToByteEncoder<Packet>
 			_packetPool.put(msg);
 		}
 	}
-
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception
-	{
-		Log.errorf("An error has occured while encoding packet!", cause);
-		ctx.close();
-	}
 }
