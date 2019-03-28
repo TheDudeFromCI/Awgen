@@ -1,7 +1,6 @@
 package net.whg.we.packets;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import net.whg.we.client_logic.scene.WindowedGameLoop;
 import net.whg.we.client_logic.ui.terminal.ConsoleOutput;
 import net.whg.we.main.GameState;
@@ -37,24 +36,24 @@ public class TerminalOutputPacket implements PacketType
 	}
 
 	@Override
-	public int encode(byte[] bytes, Map<String, Object> packetData)
+	public int encode(Packet packet)
 	{
-		ByteWriter out = new ByteWriter(bytes);
+		ByteWriter out = packet.getByteWriter();
 
-		int type = (int) packetData.get("type");
+		int type = (int) packet.getData().get("type");
 		out.writeByte(type);
 
 		if (type == SET_LINE_TYPE)
 		{
-			int lineIndex = (int) packetData.get("line_index");
-			String text = (String) packetData.get("text");
+			int lineIndex = (int) packet.getData().get("line_index");
+			String text = (String) packet.getData().get("text");
 
 			out.writeInt(lineIndex);
 			out.writeString(text, StandardCharsets.UTF_16);
 		}
 		else
 		{
-			int scrollPos = (int) packetData.get("pos");
+			int scrollPos = (int) packet.getData().get("pos");
 			out.writeInt(scrollPos);
 		}
 
@@ -62,25 +61,25 @@ public class TerminalOutputPacket implements PacketType
 	}
 
 	@Override
-	public void decode(byte[] bytes, int length, Map<String, Object> packetData)
+	public void decode(Packet packet)
 	{
-		ByteReader in = new ByteReader(bytes);
+		ByteReader in = packet.getByteReader();
 
 		int type = in.getByte();
-		packetData.put("type", type);
+		packet.getData().put("type", type);
 
 		if (type == SET_LINE_TYPE)
 		{
 			int lineIndex = in.getInt();
 			String text = in.getString(StandardCharsets.UTF_16);
 
-			packetData.put("line_index", lineIndex);
-			packetData.put("text", text);
+			packet.getData().put("line_index", lineIndex);
+			packet.getData().put("text", text);
 		}
 		else
 		{
 			int scrollPos = in.getInt();
-			packetData.put("pos", scrollPos);
+			packet.getData().put("pos", scrollPos);
 		}
 	}
 

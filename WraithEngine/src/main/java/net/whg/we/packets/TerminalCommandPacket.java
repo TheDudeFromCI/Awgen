@@ -1,7 +1,6 @@
 package net.whg.we.packets;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import net.whg.we.main.GameState;
 import net.whg.we.network.multiplayer.ServerPacketHandler;
 import net.whg.we.network.netty.UserConnection;
@@ -29,24 +28,24 @@ public class TerminalCommandPacket implements PacketType
 	}
 
 	@Override
-	public int encode(byte[] bytes, Map<String, Object> packetData)
+	public int encode(Packet packet)
 	{
-		ByteWriter out = new ByteWriter(bytes);
+		ByteWriter out = packet.getByteWriter();
 
-		String command = (String) packetData.get("command");
+		String command = (String) packet.getData().get("command");
 		out.writeString(command, StandardCharsets.UTF_16);
 
 		return out.getPos();
 	}
 
 	@Override
-	public void decode(byte[] bytes, int length, Map<String, Object> packetData)
+	public void decode(Packet packet)
 	{
-		ByteReader in = new ByteReader(bytes);
+		ByteReader in = packet.getByteReader();
 
 		String command = in.getString(StandardCharsets.UTF_16);
 
-		packetData.put("command", command);
+		packet.getData().put("command", command);
 	}
 
 	@Override

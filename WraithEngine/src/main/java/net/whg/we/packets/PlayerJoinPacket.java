@@ -1,7 +1,6 @@
 package net.whg.we.packets;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import net.whg.we.client_logic.connect.ClientPlayer;
@@ -42,19 +41,19 @@ public class PlayerJoinPacket implements PacketType
 	}
 
 	@Override
-	public int encode(byte[] bytes, Map<String, Object> packetData)
+	public int encode(Packet packet)
 	{
-		ByteWriter out = new ByteWriter(bytes);
+		ByteWriter out = packet.getByteWriter();
 
-		out.writeString((String) packetData.get("username"), StandardCharsets.UTF_8);
-		out.writeString((String) packetData.get("token"), StandardCharsets.UTF_8);
+		out.writeString((String) packet.getData().get("username"), StandardCharsets.UTF_8);
+		out.writeString((String) packet.getData().get("token"), StandardCharsets.UTF_8);
 
-		Vector3f pos = (Vector3f) packetData.get("pos");
+		Vector3f pos = (Vector3f) packet.getData().get("pos");
 		out.writeFloat(pos.x);
 		out.writeFloat(pos.y);
 		out.writeFloat(pos.z);
 
-		Quaternionf quat = (Quaternionf) packetData.get("rot");
+		Quaternionf quat = (Quaternionf) packet.getData().get("rot");
 		out.writeFloat(quat.x);
 		out.writeFloat(quat.y);
 		out.writeFloat(quat.z);
@@ -64,25 +63,25 @@ public class PlayerJoinPacket implements PacketType
 	}
 
 	@Override
-	public void decode(byte[] bytes, int length, Map<String, Object> packetData)
+	public void decode(Packet packet)
 	{
-		ByteReader in = new ByteReader(bytes);
+		ByteReader in = packet.getByteReader();
 
-		packetData.put("username", in.getString(StandardCharsets.UTF_8));
-		packetData.put("token", in.getString(StandardCharsets.UTF_8));
+		packet.getData().put("username", in.getString(StandardCharsets.UTF_8));
+		packet.getData().put("token", in.getString(StandardCharsets.UTF_8));
 
 		Vector3f pos = new Vector3f();
 		pos.x = in.getFloat();
 		pos.y = in.getFloat();
 		pos.z = in.getFloat();
-		packetData.put("pos", pos);
+		packet.getData().put("pos", pos);
 
 		Quaternionf quat = new Quaternionf();
 		quat.x = in.getFloat();
 		quat.y = in.getFloat();
 		quat.z = in.getFloat();
 		quat.w = in.getFloat();
-		packetData.put("rot", quat);
+		packet.getData().put("rot", quat);
 	}
 
 	@Override

@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import net.whg.we.network.netty.UserConnection;
+import net.whg.we.utils.ByteReader;
+import net.whg.we.utils.ByteWriter;
 import net.whg.we.utils.Poolable;
 
 public class Packet implements Poolable
@@ -15,6 +17,8 @@ public class Packet implements Poolable
 	private Map<String, Object> _packetData = new HashMap<>();
 	private UserConnection _sender;
 	private int _packetSize;
+	private ByteReader _byteReader = new ByteReader(_bytes);
+	private ByteWriter _byteWriter = new ByteWriter(_bytes);
 
 	@Override
 	public void init()
@@ -50,7 +54,7 @@ public class Packet implements Poolable
 		if (_packetType == null)
 			return _packetSize = -1;
 
-		return _packetSize = _packetType.encode(_bytes, _packetData);
+		return _packetSize = _packetType.encode(this);
 	}
 
 	public boolean decode(int length)
@@ -59,7 +63,7 @@ public class Packet implements Poolable
 			return false;
 
 		_packetData.clear();
-		_packetType.decode(_bytes, length, _packetData);
+		_packetType.decode(this);
 		return true;
 	}
 
@@ -92,5 +96,17 @@ public class Packet implements Poolable
 	public void setPacketSize(int packetSize)
 	{
 		_packetSize = packetSize;
+	}
+
+	public ByteReader getByteReader()
+	{
+		_byteReader.setPos(0);
+		return _byteReader;
+	}
+
+	public ByteWriter getByteWriter()
+	{
+		_byteWriter.setPos(0);
+		return _byteWriter;
 	}
 }

@@ -1,7 +1,6 @@
 package network_handling;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -45,31 +44,31 @@ public class EchoServerTest
 
 		Mockito.doAnswer(a ->
 		{
-			ByteWriter out = new ByteWriter(a.getArgument(0));
-			Map<String, Object> data = a.getArgument(1);
+			Packet packet = a.getArgument(0);
+			ByteWriter out = packet.getByteWriter();
 
-			String message = (String) data.get("message");
-			boolean client = (boolean) data.get("client");
+			String message = (String) packet.getData().get("message");
+			boolean client = (boolean) packet.getData().get("client");
 
 			out.writeString(message, StandardCharsets.UTF_8);
 			out.writeByte(client ? 1 : 0);
 
 			return out.getPos();
-		}).when(echoPacket).encode(Mockito.any(), Mockito.any());
+		}).when(echoPacket).encode(Mockito.any());
 
 		Mockito.doAnswer(a ->
 		{
-			ByteReader in = new ByteReader(a.getArgument(0));
-			Map<String, Object> data = a.getArgument(2);
+			Packet packet = a.getArgument(0);
+			ByteReader in = packet.getByteReader();
 
 			String message = in.getString(StandardCharsets.UTF_8);
 			boolean client = in.getByte() != 0;
 
-			data.put("message", message);
-			data.put("client", client);
+			packet.getData().put("message", message);
+			packet.getData().put("client", client);
 
 			return null;
-		}).when(echoPacket).decode(Mockito.any(), Mockito.anyInt(), Mockito.any());
+		}).when(echoPacket).decode(Mockito.any());
 
 		Mockito.doAnswer(a ->
 		{

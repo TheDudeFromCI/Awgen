@@ -1,7 +1,6 @@
 package net.whg.we.network.multiplayer;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketHandler;
 import net.whg.we.network.packet.PacketType;
@@ -24,12 +23,12 @@ public class HandshakePacket implements PacketType
 	}
 
 	@Override
-	public int encode(byte[] bytes, Map<String, Object> packetData)
+	public int encode(Packet packet)
 	{
-		String username = (String) packetData.get("username");
-		String token = (String) packetData.get("token");
+		String username = (String) packet.getData().get("username");
+		String token = (String) packet.getData().get("token");
 
-		ByteWriter writer = new ByteWriter(bytes);
+		ByteWriter writer = packet.getByteWriter();
 
 		writer.writeString(username, StandardCharsets.UTF_8);
 		writer.writeString(token, StandardCharsets.UTF_8);
@@ -38,15 +37,15 @@ public class HandshakePacket implements PacketType
 	}
 
 	@Override
-	public void decode(byte[] bytes, int length, Map<String, Object> packetData)
+	public void decode(Packet packet)
 	{
-		ByteReader reader = new ByteReader(bytes);
+		ByteReader reader = packet.getByteReader();
 
 		String username = reader.getString(StandardCharsets.UTF_8);
 		String token = reader.getString(StandardCharsets.UTF_8);
 
-		packetData.put("username", username);
-		packetData.put("token", token);
+		packet.getData().put("username", username);
+		packet.getData().put("token", token);
 	}
 
 	@Override
