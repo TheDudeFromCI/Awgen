@@ -82,8 +82,15 @@ public class MultiplayerClient
 
 	public void stopClient()
 	{
+		Log.debug("Closing client socket.");
+
 		if (!isRunning())
+		{
+			Log.indent();
+			Log.debug("Socket already closed!");
+			Log.unindent();
 			return;
+		}
 
 		_client.stop();
 		_client = null;

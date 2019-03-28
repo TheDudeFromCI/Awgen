@@ -57,6 +57,7 @@ public class Server
 				while (_running)
 					sleepSlient();
 
+				Log.trace("Shutting down socket channels.");
 				_event.onServerStopped();
 				ch.closeFuture().sync();
 			}
@@ -95,6 +96,11 @@ public class Server
 
 	public void stop()
 	{
+		Log.trace("Shutting down socket channels.");
+
+		if (isClosed())
+			return;
+
 		_running = false;
 	}
 

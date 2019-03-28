@@ -59,14 +59,21 @@ public class WraithEngine
 
 			Thread thread = new Thread(() ->
 			{
-				ResourceManager resourceManager = buildResourceManager();
-				GameLoop gameLoop = new ServerGameLoop(networkManager.getServer(), resourceManager,
-						networkManager.isLocalHost());
+				try
+				{
+					ResourceManager resourceManager = buildResourceManager();
+					GameLoop gameLoop = new ServerGameLoop(networkManager.getServer(),
+							resourceManager, networkManager.isLocalHost());
 
-				GameState gameState = new GameState(resourceManager, gameLoop, false);
-				networkManager.getServer().getPacketHandler().setGameState(gameState);
+					GameState gameState = new GameState(resourceManager, gameLoop, false);
+					networkManager.getServer().getPacketHandler().setGameState(gameState);
 
-				gameState.run();
+					gameState.run();
+				}
+				finally
+				{
+					networkManager.getServer().stopServer();
+				}
 			});
 			thread.setDaemon(false);
 			thread.setName("server_main");
@@ -79,13 +86,20 @@ public class WraithEngine
 
 			Thread thread = new Thread(() ->
 			{
-				ResourceManager resourceManager = buildResourceManager();
-				GameLoop gameLoop =
-						new WindowedGameLoop(resourceManager, networkManager.getClient());
-				GameState gameState = new GameState(resourceManager, gameLoop, true);
-				networkManager.getClient().getPacketHandler().setGameState(gameState);
+				try
+				{
+					ResourceManager resourceManager = buildResourceManager();
+					GameLoop gameLoop =
+							new WindowedGameLoop(resourceManager, networkManager.getClient());
+					GameState gameState = new GameState(resourceManager, gameLoop, true);
+					networkManager.getClient().getPacketHandler().setGameState(gameState);
 
-				gameState.run();
+					gameState.run();
+				}
+				finally
+				{
+					networkManager.getClient().stopClient();
+				}
 			});
 			thread.setDaemon(false);
 			thread.setName("client_main");

@@ -41,12 +41,19 @@ public class Client
 		if (_running)
 			throw new IllegalStateException("Socket already running!");
 
+		boolean alreadyMadeLog = false;
 		while (true)
 		{
 			synchronized (_lock)
 			{
 				if (_channel == null)
 					break;
+			}
+
+			if (!alreadyMadeLog)
+			{
+				alreadyMadeLog = true;
+				Log.trace("Waiting for previous client socket to finish shutting down...");
 			}
 
 			sleepSlient();
@@ -80,6 +87,7 @@ public class Client
 				while (_running)
 					sleepSlient();
 
+				Log.trace("Shutting down socket channels.");
 				_event.onDisconnect();
 
 				synchronized (_lock)
@@ -138,7 +146,13 @@ public class Client
 
 	public void stop()
 	{
+		Log.trace("Shutting down socket channels.");
+
+		if (isClosed())
+			return;
+
 		_running = false;
+		_channel.close();
 	}
 
 	public void send(Packet msg)

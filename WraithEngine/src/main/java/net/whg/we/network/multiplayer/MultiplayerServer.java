@@ -54,6 +54,15 @@ public class MultiplayerServer
 	public void stopServer()
 	{
 		Log.info("Closing multiplayer server.");
+
+		if (!isRunning())
+		{
+			Log.indent();
+			Log.debug("Socket already closed!");
+			Log.unindent();
+			return;
+		}
+
 		_server.stop();
 		_server = null;
 	}
