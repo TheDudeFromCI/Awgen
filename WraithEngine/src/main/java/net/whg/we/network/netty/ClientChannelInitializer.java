@@ -29,6 +29,6 @@ public class ClientChannelInitializer extends ChannelInitializer<SocketChannel>
 
 		pipeline.addLast(_sslCtx.newHandler(ch.alloc(), _client.getHostIP(), _client.getPort()));
 		pipeline.addLast(new PacketDecoder(userConnection, _packetManager));
-		pipeline.addLast(new PacketEncoder());
+		pipeline.addLast(new PacketEncoder(_packetManager.pool()));
 	}
 }

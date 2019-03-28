@@ -147,10 +147,6 @@ public class Client
 		{
 			_channelFuture = _channel.writeAndFlush(msg);
 		}
-
-		// TODO Sending packets stores a local copy and can't be added back to the pool.
-		// Huge memory leak here.
-		// _packetManager.pool().put(msg);
 	}
 
 	public boolean isClosed()
