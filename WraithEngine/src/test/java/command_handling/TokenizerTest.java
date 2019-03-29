@@ -2,10 +2,10 @@ package command_handling;
 
 import org.junit.Assert;
 import org.junit.Test;
-import net.whg.we.server_logic.command.CommandParseException;
-import net.whg.we.server_logic.command.Token;
-import net.whg.we.server_logic.command.TokenTemplate;
-import net.whg.we.server_logic.command.Tokenizer;
+import net.whg.we.command.CommandParseException;
+import net.whg.we.command.Token;
+import net.whg.we.command.TokenTemplate;
+import net.whg.we.command.Tokenizer;
 
 public class TokenizerTest
 {

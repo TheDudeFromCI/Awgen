@@ -2,7 +2,7 @@ package net.whg.we.network.multiplayer;
 
 import net.whg.we.network.netty.Server;
 import net.whg.we.network.packet.PacketManagerHandler;
-import net.whg.we.server_logic.connect.ServerPlayerList;
+import net.whg.we.network.server.ServerPlayerList;
 import net.whg.we.utils.logging.Log;
 
 public class MultiplayerServer

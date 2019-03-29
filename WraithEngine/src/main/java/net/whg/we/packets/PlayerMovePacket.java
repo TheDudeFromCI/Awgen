@@ -12,8 +12,8 @@ import net.whg.we.network.multiplayer.ServerPacketHandler;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketHandler;
 import net.whg.we.network.packet.PacketType;
+import net.whg.we.network.server.OnlinePlayer;
 import net.whg.we.scene.Location;
-import net.whg.we.server_logic.connect.OnlinePlayer;
 import net.whg.we.utils.ByteReader;
 import net.whg.we.utils.ByteWriter;
 

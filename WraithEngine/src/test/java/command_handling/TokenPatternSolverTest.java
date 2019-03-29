@@ -4,9 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
-import net.whg.we.server_logic.command.Token;
-import net.whg.we.server_logic.command.TokenPatternSolver;
-import net.whg.we.server_logic.command.TokenTemplate;
+import net.whg.we.command.Token;
+import net.whg.we.command.TokenPatternSolver;
+import net.whg.we.command.TokenTemplate;
 
 public class TokenPatternSolverTest
 {
