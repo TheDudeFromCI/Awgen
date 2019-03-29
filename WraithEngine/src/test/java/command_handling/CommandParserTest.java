@@ -4,13 +4,13 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
-import net.whg.we.server_logic.command.CommandExecution;
-import net.whg.we.server_logic.command.CommandParser;
-import net.whg.we.server_logic.command.CommandSender;
-import net.whg.we.server_logic.command.CommandSet;
-import net.whg.we.server_logic.command.CommandVariable;
-import net.whg.we.server_logic.command.VariableKeyring;
-import net.whg.we.server_logic.command.console.DefaultKeyring;
+import net.whg.we.command.CommandExecution;
+import net.whg.we.command.CommandParser;
+import net.whg.we.command.CommandSender;
+import net.whg.we.command.CommandSet;
+import net.whg.we.command.CommandVariable;
+import net.whg.we.command.VariableKeyring;
+import net.whg.we.command.console.DefaultKeyring;
 
 public class CommandParserTest
 {

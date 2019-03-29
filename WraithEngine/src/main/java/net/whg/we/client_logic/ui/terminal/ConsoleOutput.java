@@ -8,7 +8,7 @@ import net.whg.we.client_logic.ui.Transform2D;
 import net.whg.we.client_logic.ui.UIComponent;
 import net.whg.we.client_logic.ui.UIUtils;
 import net.whg.we.client_logic.ui.font.Font;
-import net.whg.we.server_logic.command.console.Console;
+import net.whg.we.command.console.Console;
 
 public class ConsoleOutput implements UIComponent
 {
