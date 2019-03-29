@@ -1,65 +1,70 @@
-package net.whg.we.client_logic.ui;
+package net.whg.we.scene;
 
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
-import net.whg.we.utils.Transform;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
-public class Transform2D implements Transform
+public class Transform3D implements Transform
 {
 	private Transform _parent;
-	private Vector2f _position = new Vector2f(0f, 0f);
-	private Vector2f _size = new Vector2f(1f, 1f);
-	private float _rotation;
+	private Vector3f _position = new Vector3f();
+	private Quaternionf _rotation = new Quaternionf();
+	private Vector3f _size = new Vector3f(1f, 1f, 1f);
 	private Matrix4f _localMatrix = new Matrix4f();
 	private Matrix4f _fullMatrix = new Matrix4f();
 
-	public Vector2f getPosition()
+	public Vector3f getPosition()
 	{
 		return _position;
 	}
 
-	public void setPosition(Vector2f position)
+	public void setPosition(Vector3f position)
 	{
 		_position.set(position);
 	}
 
-	public void setPosition(float x, float y)
+	public void setPosition(float x, float y, float z)
 	{
-		_position.set(x, y);
+		_position.set(x, y, z);
 	}
 
-	public Vector2f getSize()
+	public Vector3f getSize()
 	{
 		return _size;
 	}
 
-	public void setSize(Vector2f size)
+	public void setSize(Vector3f size)
 	{
 		_size.set(size);
 	}
 
-	public void setSize(float x, float y)
+	public void setSize(float size)
 	{
-		_size.set(x, y);
+		_size.set(size, size, size);
 	}
 
-	public float getRotation()
+	public void setSize(float x, float y, float z)
+	{
+		_size.set(x, y, z);
+	}
+
+	public Quaternionf getRotation()
 	{
 		return _rotation;
 	}
 
-	public void setRotation(float r)
+	public void setRotation(Quaternionf rot)
 	{
-		_rotation = r;
+		_rotation.set(rot);
 	}
 
 	@Override
 	public Matrix4f getLocalMatrix()
 	{
 		_localMatrix.identity();
-		_localMatrix.translate(_position.x, _position.y, 0f);
-		_localMatrix.rotateZ(_rotation);
-		_localMatrix.scale(_size.x, _size.y, 1f);
+		_localMatrix.translate(_position);
+		_localMatrix.rotate(_rotation);
+		_localMatrix.scale(_size);
 
 		return _localMatrix;
 	}

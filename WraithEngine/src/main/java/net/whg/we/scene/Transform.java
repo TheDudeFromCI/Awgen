@@ -1,4 +1,4 @@
-package net.whg.we.utils;
+package net.whg.we.scene;
 
 import org.joml.Matrix4f;
 

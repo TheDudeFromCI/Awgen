@@ -2,9 +2,9 @@ package net.whg.we.client_logic.ui.terminal;
 
 import net.whg.we.network.multiplayer.MultiplayerClient;
 import net.whg.we.packets.TerminalCommandPacket;
+import net.whg.we.scene.Transform2D;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.client_logic.ui.TextEditor;
-import net.whg.we.client_logic.ui.Transform2D;
 import net.whg.we.client_logic.ui.TypedKeyInput;
 import net.whg.we.client_logic.ui.UIComponent;
 import net.whg.we.client_logic.ui.UIImage;

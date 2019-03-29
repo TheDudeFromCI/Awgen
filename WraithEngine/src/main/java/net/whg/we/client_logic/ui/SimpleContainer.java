@@ -1,5 +1,6 @@
 package net.whg.we.client_logic.ui;
 
+import net.whg.we.scene.Transform2D;
 import net.whg.we.utils.ComponentList;
 
 public abstract class SimpleContainer implements UIContainer

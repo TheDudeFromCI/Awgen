@@ -2,6 +2,7 @@ package net.whg.we.client_logic.ui;
 
 import net.whg.we.client_logic.rendering.Material;
 import net.whg.we.client_logic.rendering.Mesh;
+import net.whg.we.scene.Transform2D;
 
 public class UIImage implements UIComponent
 {
