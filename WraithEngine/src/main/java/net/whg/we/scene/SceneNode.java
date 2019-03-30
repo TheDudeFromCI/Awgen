@@ -30,6 +30,9 @@ public class SceneNode
 
 	public void setName(String name)
 	{
+		if (name == null)
+			name = "";
+
 		_name = name;
 	}
 
@@ -89,5 +92,13 @@ public class SceneNode
 
 		if (_parent != null)
 			_parent._children.add(this);
+	}
+
+	public boolean isEnabledInHierarchy()
+	{
+		if (_parent == null)
+			return _enabled;
+
+		return _enabled && _parent.isEnabledInHierarchy();
 	}
 }

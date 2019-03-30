@@ -161,4 +161,23 @@ public class Transform3DTest
 
 		Assert.assertEquals(mat2, mat);
 	}
+
+	@Test
+	public void getFullMatrix_NullParent()
+	{
+		Transform3D t = new Transform3D();
+		t.setPosition(10f, 30f, 50f);
+		t.getRotation().rotateLocalX((float) Math.toRadians(90f));
+		t.setSize(4f);
+
+		Matrix4f mat = new Matrix4f();
+		t.getFullMatrix(null, mat);
+
+		Matrix4f mat2 = new Matrix4f();
+		mat2.translate(10f, 30f, 50f);
+		mat2.rotate(new Quaternionf().rotateLocalX((float) Math.toRadians(90f)));
+		mat2.scale(4f);
+
+		Assert.assertEquals(mat2, mat);
+	}
 }
