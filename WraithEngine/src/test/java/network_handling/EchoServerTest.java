@@ -17,7 +17,6 @@ import net.whg.we.network.packet.PacketManagerHandler;
 import net.whg.we.network.packet.PacketType;
 import net.whg.we.utils.ByteReader;
 import net.whg.we.utils.ByteWriter;
-import net.whg.we.utils.logging.Log;
 
 public class EchoServerTest
 {
@@ -25,7 +24,6 @@ public class EchoServerTest
 	@Test(timeout = 5000)
 	public void echoServer() throws InterruptedException
 	{
-		Log.setLogLevel(Log.TRACE);
 		final int port = 8123;
 
 		// Build packet handles

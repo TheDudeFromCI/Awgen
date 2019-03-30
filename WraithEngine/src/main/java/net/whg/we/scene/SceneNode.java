@@ -1,27 +1,21 @@
 package net.whg.we.scene;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SceneNode
 {
-	private Transform _transform;
 	private String _name;
 	private boolean _enabled;
-	private NodeType _type;
+	private Transform _transform;
 
-	public SceneNode(boolean is2D)
+	private SceneNode _parent;
+	private List<SceneNode> _children = new ArrayList<>();
+
+	public SceneNode()
 	{
-		if (is2D)
-			_transform = new Transform2D();
-		else
-			_transform = new Transform3D();
-
 		_name = "Empty Node";
 		_enabled = true;
-		_type = NodeType.BLANK;
-	}
-
-	public Transform getTransform()
-	{
-		return _transform;
 	}
 
 	public String getName()
@@ -34,11 +28,6 @@ public class SceneNode
 		return _enabled;
 	}
 
-	public NodeType getNodeType()
-	{
-		return _type;
-	}
-
 	public void setName(String name)
 	{
 		_name = name;
@@ -49,8 +38,56 @@ public class SceneNode
 		_enabled = enabled;
 	}
 
-	public void setType(NodeType type)
+	public Transform getTransform()
 	{
-		_type = type;
+		return _transform;
+	}
+
+	public SceneNode getParent()
+	{
+		return _parent;
+	}
+
+	public int getChildCount()
+	{
+		return _children.size();
+	}
+
+	public SceneNode getChild(int index)
+	{
+		return _children.get(index);
+	}
+
+	private boolean isValidParent(SceneNode node)
+	{
+		SceneNode p = node;
+		while (p != null)
+		{
+			if (p == this)
+				return false;
+
+			p = p.getParent();
+		}
+
+		return true;
+	}
+
+	public void setParent(SceneNode node)
+	{
+		if (_parent == node)
+			return;
+
+		// Check if we can set parent
+		if (!isValidParent(node))
+			throw new IllegalArgumentException("Circular heirarchy detected!");
+
+		// Clear current parent if present
+		if (_parent != null)
+			_parent._children.remove(this);
+
+		_parent = node;
+
+		if (_parent != null)
+			_parent._children.add(this);
 	}
 }

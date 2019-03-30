@@ -6,12 +6,11 @@ import org.joml.Vector3f;
 
 public class Transform3D implements Transform
 {
-	private Transform _parent;
 	private Vector3f _position = new Vector3f();
 	private Quaternionf _rotation = new Quaternionf();
 	private Vector3f _size = new Vector3f(1f, 1f, 1f);
-	private Matrix4f _localMatrix = new Matrix4f();
-	private Matrix4f _fullMatrix = new Matrix4f();
+
+	private Matrix4f _matrixBuffer = new Matrix4f();
 
 	public Vector3f getPosition()
 	{
@@ -59,47 +58,25 @@ public class Transform3D implements Transform
 	}
 
 	@Override
-	public Matrix4f getLocalMatrix()
+	public void getLocalMatrix(Matrix4f out)
 	{
-		_localMatrix.identity();
-		_localMatrix.translate(_position);
-		_localMatrix.rotate(_rotation);
-		_localMatrix.scale(_size);
-
-		return _localMatrix;
+		out.identity();
+		out.translate(_position);
+		out.rotate(_rotation);
+		out.scale(_size);
 	}
 
 	@Override
-	public Matrix4f getFullMatrix()
+	public void getFullMatrix(Matrix4f parent, Matrix4f out)
 	{
-		if (_parent == null)
-			_fullMatrix.identity();
-		else
-			_fullMatrix.set(_parent.getFullMatrix());
-		_fullMatrix.mul(getLocalMatrix());
-		return _fullMatrix;
-	}
-
-	@Override
-	public Transform getParent()
-	{
-		return _parent;
-	}
-
-	@Override
-	public void setParent(Transform transform)
-	{
-		// Validate parent
+		if (parent == null)
 		{
-			Transform p = transform;
-			while (p != null)
-			{
-				if (p == this)
-					throw new IllegalArgumentException("Circular heirarchy detected!");
-				p = p.getParent();
-			}
+			getLocalMatrix(out);
+			return;
 		}
 
-		_parent = transform;
+		out.set(parent);
+		getLocalMatrix(_matrixBuffer);
+		out.mul(_matrixBuffer);
 	}
 }

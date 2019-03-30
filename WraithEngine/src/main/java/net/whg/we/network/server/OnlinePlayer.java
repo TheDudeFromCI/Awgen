@@ -5,6 +5,7 @@ import net.whg.we.network.netty.UserConnection;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketManager;
 import net.whg.we.scene.Location;
+import net.whg.we.scene.Scene;
 
 public class OnlinePlayer implements Player
 {
@@ -12,6 +13,7 @@ public class OnlinePlayer implements Player
 	private PlayerCommandSender _commandSender;
 	private Location _location;
 	private PacketManager _packetManager;
+	private Scene _scene;
 
 	public OnlinePlayer(UserConnection client, PacketManager packetManager)
 	{
@@ -22,6 +24,9 @@ public class OnlinePlayer implements Player
 		_commandSender = new PlayerCommandSender(this);
 		_location = new Location();
 		_packetManager = packetManager;
+
+		// TODO Load scene from default location
+		_scene = new Scene();
 	}
 
 	@Override
@@ -34,6 +39,17 @@ public class OnlinePlayer implements Player
 	public String getToken()
 	{
 		return _userConnection.getUserState().getToken();
+	}
+
+	public Scene getScene()
+	{
+		return _scene;
+	}
+
+	public void setScene(Scene scene)
+	{
+		// TODO Send scene change to player
+		_scene = scene;
 	}
 
 	/**

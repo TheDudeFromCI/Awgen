@@ -2,9 +2,11 @@ package net.whg.we.command;
 
 public interface CommandSender
 {
-    CommandConsole getConsole();
+	CommandConsole getConsole();
 
-    VariableKeyring getVariableKeyring();
+	VariableKeyring getVariableKeyring();
 
-    String getUsername();
+	String getUsername();
+
+	void println(String message);
 }

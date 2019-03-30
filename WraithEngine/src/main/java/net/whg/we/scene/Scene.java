@@ -6,6 +6,8 @@ import net.whg.we.client_logic.ui.UIStack;
 
 public class Scene
 {
+	private SceneNode _sceneNode;
+
 	private GameObjectManager _gameObjectManager;
 	private LogicPass _logicPass;
 	private RenderPass _renderPass;
@@ -19,6 +21,18 @@ public class Scene
 		_renderPass = new RenderPass();
 		_uiStack = new UIStack();
 		_physics = new PhysicsWorld();
+
+		_sceneNode = new SceneNode();
+	}
+
+	public SceneNode getSceneNode()
+	{
+		return _sceneNode;
+	}
+
+	public void setSceneNode(SceneNode sceneNode)
+	{
+		_sceneNode = sceneNode;
 	}
 
 	public GameObjectManager getGameObjectManager()

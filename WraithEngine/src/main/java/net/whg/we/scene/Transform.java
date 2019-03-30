@@ -4,11 +4,7 @@ import org.joml.Matrix4f;
 
 public interface Transform
 {
-	Transform getParent();
+	void getLocalMatrix(Matrix4f out);
 
-	void setParent(Transform transform);
-
-	Matrix4f getLocalMatrix();
-
-	Matrix4f getFullMatrix();
+	void getFullMatrix(Matrix4f parent, Matrix4f out);
 }
