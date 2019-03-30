@@ -11,7 +11,6 @@ public class Scene
 	public Scene()
 	{
 		_uiStack = new UIStack();
-
 		_sceneNode = new SceneNode();
 	}
 

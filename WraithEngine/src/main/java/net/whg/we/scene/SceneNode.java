@@ -8,18 +8,18 @@ public class SceneNode
 {
 	private String _name;
 	private boolean _enabled;
-	private Transform _transform;
+	private Transform3D _transform;
 
 	private SceneNode _parent;
 	private List<SceneNode> _children = new ArrayList<>();
 
-	private Matrix4f _localMatrix = new Matrix4f();
-	private Matrix4f _fullMatrix = new Matrix4f();
+	private Matrix4f _matrixBuffer = new Matrix4f();
 
 	public SceneNode()
 	{
 		_name = "Empty Node";
 		_enabled = true;
+		_transform = new Transform3D();
 	}
 
 	public String getName()
@@ -45,7 +45,7 @@ public class SceneNode
 		_enabled = enabled;
 	}
 
-	public Transform getTransform()
+	public Transform3D getTransform()
 	{
 		return _transform;
 	}
@@ -114,11 +114,8 @@ public class SceneNode
 			return;
 		}
 
-		_parent.getFullMatrix(_fullMatrix);
-		out.set(_fullMatrix);
-
-		_transform.getLocalMatrix(_localMatrix);
-		out.mul(_localMatrix);
+		_parent.getFullMatrix(_matrixBuffer);
+		_transform.getFullMatrix(_matrixBuffer, out);
 	}
 
 	public void addChild(SceneNode node)

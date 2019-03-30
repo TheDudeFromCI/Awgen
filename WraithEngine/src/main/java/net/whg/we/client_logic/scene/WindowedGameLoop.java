@@ -23,6 +23,7 @@ import net.whg.we.scene.Location;
 import net.whg.we.scene.Model;
 import net.whg.we.scene.ModelNode;
 import net.whg.we.scene.Scene;
+import net.whg.we.scene.SubMesh;
 import net.whg.we.scene.UpdateEventCaller;
 import net.whg.we.scene.UpdateListener;
 import net.whg.we.utils.Color;
@@ -99,9 +100,16 @@ public class WindowedGameLoop implements GameLoop
 				// go.addBehaviour(new MeshColliderBehaviour(
 				// terrain.getMeshResource(0).getVertexData(), model.getLocation()));
 
-				ModelNode terrainModel = new ModelNode(model.getSubMesh(0).getMesh(),
-						model.getSubMesh(0).getMaterial(), _camera);
-				_scene.getSceneNode().addChild(terrainModel);
+				for (int i = 0; i < model.getSubMeshCount(); i++)
+				{
+					SubMesh sm = model.getSubMesh(i);
+					ModelNode node = new ModelNode(sm.getMesh(), sm.getMaterial(), _camera);
+
+					node.getTransform().setSize(100f);
+					node.getTransform().getRotation().rotateX((float) Math.toRadians(-90f));
+
+					_scene.getSceneNode().addChild(node);
+				}
 			}
 
 			_client.login();

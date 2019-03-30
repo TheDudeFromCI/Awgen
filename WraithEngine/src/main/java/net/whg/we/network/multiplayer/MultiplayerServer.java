@@ -21,8 +21,7 @@ public class MultiplayerServer
 		_event.addListener(new MultiplayerServerListener());
 
 		_packetHandler = new ServerPacketHandler(this);
-		_packetManager = PacketManagerHandler
-				.createPacketManagerHandler(new ServerPacketHandler(this), true);
+		_packetManager = PacketManagerHandler.createPacketManagerHandler(_packetHandler, true);
 		_playerList = new ServerPlayerList(_packetManager);
 	}
 

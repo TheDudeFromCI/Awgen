@@ -1,5 +1,7 @@
 package scene_handling;
 
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.junit.Assert;
 import org.junit.Test;
 import net.whg.we.scene.SceneNode;
@@ -113,5 +115,36 @@ public class SceneNodeTest
 		Assert.assertFalse(node.isEnabledInHierarchy());
 		Assert.assertFalse(parent1.isEnabledInHierarchy());
 		Assert.assertTrue(parent2.isEnabledInHierarchy());
+	}
+
+	@Test
+	public void getFullMatrix()
+	{
+		Matrix4f base = new Matrix4f();
+		base.translate(10f, 30f, 50f);
+		base.rotate(new Quaternionf().rotateLocalX((float) Math.toRadians(90f)));
+		base.scale(4f);
+
+		Matrix4f mat2 = new Matrix4f();
+		mat2.translate(-5f, -17f, -5f);
+		mat2.rotate(new Quaternionf().rotateLocalX((float) Math.toRadians(45f)));
+		mat2.scale(0.5f);
+		mat2 = new Matrix4f(base).mul(mat2);
+
+		SceneNode top = new SceneNode();
+		top.getTransform().setPosition(10f, 30f, 50f);
+		top.getTransform().getRotation().rotateLocalX((float) Math.toRadians(90f));
+		top.getTransform().setSize(4f);
+
+		SceneNode child = new SceneNode();
+		child.setParent(top);
+		child.getTransform().setPosition(-5f, -17f, -5f);
+		child.getTransform().getRotation().rotateLocalX((float) Math.toRadians(45f));
+		child.getTransform().setSize(0.5f);
+
+		Matrix4f mat = new Matrix4f();
+		child.getFullMatrix(mat);
+
+		Assert.assertEquals(mat2, mat);
 	}
 }
