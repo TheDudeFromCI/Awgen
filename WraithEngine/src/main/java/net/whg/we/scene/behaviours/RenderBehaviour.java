@@ -18,13 +18,13 @@ public class RenderBehaviour implements ObjectBehaviour
 	public void init(GameObject owner)
 	{
 		_owner = owner;
-		_owner.getManager().getScene().getRenderPass().addModel(_model);
+		// _owner.getManager().getScene().getRenderPass().addModel(_model);
 	}
 
 	@Override
 	public void dispose()
 	{
-		_owner.getManager().getScene().getRenderPass().removeModel(_model);
+		// _owner.getManager().getScene().getRenderPass().removeModel(_model);
 
 		_owner = null;
 		_model = null;

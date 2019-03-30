@@ -120,4 +120,9 @@ public class SceneNode
 		_transform.getLocalMatrix(_localMatrix);
 		out.mul(_localMatrix);
 	}
+
+	public void addChild(SceneNode node)
+	{
+		node.setParent(this);
+	}
 }

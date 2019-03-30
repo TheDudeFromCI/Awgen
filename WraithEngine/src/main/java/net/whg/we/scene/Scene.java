@@ -1,26 +1,16 @@
 package net.whg.we.scene;
 
 import org.lwjgl.opengl.GL11;
-import net.whg.we.client_logic.scene.RenderPass;
 import net.whg.we.client_logic.ui.UIStack;
 
 public class Scene
 {
 	private SceneNode _sceneNode;
-
-	private GameObjectManager _gameObjectManager;
-	private LogicPass _logicPass;
-	private RenderPass _renderPass;
 	private UIStack _uiStack;
-	private PhysicsWorld _physics;
 
 	public Scene()
 	{
-		_gameObjectManager = new GameObjectManager(this);
-		_logicPass = new LogicPass();
-		_renderPass = new RenderPass();
 		_uiStack = new UIStack();
-		_physics = new PhysicsWorld();
 
 		_sceneNode = new SceneNode();
 	}
@@ -35,26 +25,6 @@ public class Scene
 		_sceneNode = sceneNode;
 	}
 
-	public GameObjectManager getGameObjectManager()
-	{
-		return _gameObjectManager;
-	}
-
-	public PhysicsWorld getPhysicsWorld()
-	{
-		return _physics;
-	}
-
-	public LogicPass getLogicPass()
-	{
-		return _logicPass;
-	}
-
-	public RenderPass getRenderPass()
-	{
-		return _renderPass;
-	}
-
 	public UIStack getUIStack()
 	{
 		return _uiStack;
@@ -62,20 +32,27 @@ public class Scene
 
 	public void update()
 	{
-		_logicPass.update();
 		_uiStack.update();
 	}
 
 	public void updateFrame()
 	{
-		_logicPass.updateFrame();
 		_uiStack.updateFrame();
+	}
+
+	private void renderScene(SceneNode node)
+	{
+		if (node instanceof RenderableNode)
+			((RenderableNode) node).renderNode();
+
+		for (int i = 0; i < node.getChildCount(); i++)
+			renderScene(node.getChild(i));
 	}
 
 	public void render()
 	{
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		_renderPass.render();
+		renderScene(_sceneNode);
 
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		_uiStack.render();
@@ -83,7 +60,6 @@ public class Scene
 
 	public void dispose()
 	{
-		_logicPass.dispose();
 		_uiStack.dispose();
 	}
 }

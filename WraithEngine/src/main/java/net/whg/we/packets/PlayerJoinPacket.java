@@ -4,18 +4,12 @@ import java.nio.charset.StandardCharsets;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import net.whg.we.client_logic.connect.ClientPlayer;
-import net.whg.we.client_logic.resources.scene.ModelResource;
-import net.whg.we.client_logic.scene.WindowedGameLoop;
-import net.whg.we.client_logic.utils.PlayerCameraModelSync;
 import net.whg.we.network.multiplayer.ClientPacketHandler;
 import net.whg.we.network.multiplayer.MultiplayerClient;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketHandler;
 import net.whg.we.network.packet.PacketType;
-import net.whg.we.scene.GameObject;
 import net.whg.we.scene.Location;
-import net.whg.we.scene.Model;
-import net.whg.we.scene.behaviours.RenderBehaviour;
 import net.whg.we.utils.ByteReader;
 import net.whg.we.utils.ByteWriter;
 import net.whg.we.utils.logging.Log;
@@ -103,17 +97,18 @@ public class PlayerJoinPacket implements PacketType
 		player.getLocation().setPosition((Vector3f) packet.getData().get("pos"));
 		player.getLocation().setRotation((Quaternionf) packet.getData().get("rot"));
 
-		WindowedGameLoop gameLoop = (WindowedGameLoop) handler.getGameState().getGameLoop();
-		ModelResource terrain = (ModelResource) gameLoop.getResourceManager()
-				.loadResource(gameLoop.getCorePlugin(), "models/human.model");
-		terrain.compile(gameLoop.getGraphicsPipeline().getGraphics());
-		Model model = terrain.getData();
-		GameObject go = gameLoop.getScene().getGameObjectManager().createNew();
-		go.addBehaviour(new RenderBehaviour(model));
+		// WindowedGameLoop gameLoop = (WindowedGameLoop)
+		// handler.getGameState().getGameLoop();
+		// ModelResource terrain = (ModelResource) gameLoop.getResourceManager()
+		// .loadResource(gameLoop.getCorePlugin(), "models/human.model");
+		// terrain.compile(gameLoop.getGraphicsPipeline().getGraphics());
+		// Model model = terrain.getData();
+		// GameObject go = gameLoop.getScene().getGameObjectManager().createNew();
+		// go.addBehaviour(new RenderBehaviour(model));
 
-		PlayerCameraModelSync sync =
-				new PlayerCameraModelSync(player.getLocation(), model.getLocation());
-		player.setCameraModelSync(sync);
-		sync.sync();
+		// PlayerCameraModelSync sync =
+		// new PlayerCameraModelSync(player.getLocation(), model.getLocation());
+		// player.setCameraModelSync(sync);
+		// sync.sync();
 	}
 }

@@ -17,17 +17,14 @@ import net.whg.we.event.EventCaller;
 import net.whg.we.network.multiplayer.MultiplayerClient;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.packets.PlayerMovePacket;
-import net.whg.we.scene.Collision;
 import net.whg.we.scene.CorePlugin;
 import net.whg.we.scene.GameLoop;
-import net.whg.we.scene.GameObject;
 import net.whg.we.scene.Location;
 import net.whg.we.scene.Model;
+import net.whg.we.scene.ModelNode;
 import net.whg.we.scene.Scene;
 import net.whg.we.scene.UpdateEventCaller;
 import net.whg.we.scene.UpdateListener;
-import net.whg.we.scene.behaviours.MeshColliderBehaviour;
-import net.whg.we.scene.behaviours.RenderBehaviour;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.Time;
 import net.whg.we.utils.logging.Log;
@@ -76,7 +73,7 @@ public class WindowedGameLoop implements GameLoop
 			_scene.getUIStack().addComponent(_terminal);
 
 			_camera = new Camera();
-			_scene.getRenderPass().setCamera(_camera);
+			// _scene.getRenderPass().setCamera(_camera);
 			_firstPerson = new FirstPersonCamera(_camera);
 
 			_graphicsPipeline.getGraphics().setClearScreenColor(new Color(0.2f, 0.4f, 0.8f));
@@ -93,13 +90,18 @@ public class WindowedGameLoop implements GameLoop
 						"models/terrain.model");
 				terrain.compile(_graphicsPipeline.getGraphics());
 				Model model = terrain.getData();
-				model.getLocation().setScale(new Vector3f(100f, 100f, 100f));
-				model.getLocation()
-						.setRotation(new Quaternionf().rotateX((float) Math.toRadians(-90f)));
-				GameObject go = _scene.getGameObjectManager().createNew();
-				go.addBehaviour(new RenderBehaviour(model));
-				go.addBehaviour(new MeshColliderBehaviour(
-						terrain.getMeshResource(0).getVertexData(), model.getLocation()));
+
+				// model.getLocation().setScale(new Vector3f(100f, 100f, 100f));
+				// model.getLocation()
+				// .setRotation(new Quaternionf().rotateX((float) Math.toRadians(-90f)));
+				// GameObject go = _scene.getGameObjectManager().createNew();
+				// go.addBehaviour(new RenderBehaviour(model));
+				// go.addBehaviour(new MeshColliderBehaviour(
+				// terrain.getMeshResource(0).getVertexData(), model.getLocation()));
+
+				ModelNode terrainModel = new ModelNode(model.getSubMesh(0).getMesh(),
+						model.getSubMesh(0).getMaterial(), _camera);
+				_scene.getSceneNode().addChild(terrainModel);
 			}
 
 			_client.login();
@@ -202,10 +204,11 @@ public class WindowedGameLoop implements GameLoop
 			requestClose();
 
 		// TODO Ground raycasting should not be done here.
-		Collision col = _scene.getPhysicsWorld().raycast(_firstPerson.getLocation().getPosition(),
-				new Vector3f(0f, -1f, 0f), 10f);
-		if (col != null)
-			_firstPerson.getLocation().setPosition(col.getPosition().add(0f, 1.8f, 0f));
+		// Collision col =
+		// _scene.getPhysicsWorld().raycast(_firstPerson.getLocation().getPosition(),
+		// new Vector3f(0f, -1f, 0f), 10f);
+		// if (col != null)
+		// _firstPerson.getLocation().setPosition(col.getPosition().add(0f, 1.8f, 0f));
 	}
 
 	@Override
