@@ -1,7 +1,11 @@
-package net.whg.we.client_logic.utils;
+package net.whg.we.client_logic.scene;
 
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import net.whg.we.client_logic.rendering.Camera;
+import net.whg.we.client_logic.utils.Input;
+import net.whg.we.client_logic.utils.Screen;
+import net.whg.we.scene.Location;
 import net.whg.we.utils.MathUtils;
 import net.whg.we.utils.Time;
 
@@ -9,16 +13,29 @@ import net.whg.we.utils.Time;
  * An instance of a PersonCamera. In this case the camera is first person and
  * the updating methods are constructed given this.
  */
-public class FirstPersonCamera extends PersonCamera
+public class FirstPersonCamera implements PlayerController
 {
-	public FirstPersonCamera(Camera camera)
+	private static final float MAX_ANGLE = (float) Math.toRadians(89);
+	private static final float TAU = (float) Math.PI * 2f;
+
+	private Camera _camera;
+	private Vector3f _baseRotation;
+	private Vector3f _extraRotation;
+	private float _mouseSensitivity = .4f;
+	private float _moveSpeed = 7f;
+	private WindowedGameLoop _gameLoop;
+
+	private Vector3f _rotationBuffer = new Vector3f();
+	private Quaternionf _rotationStorageBuffer = new Quaternionf();
+
+	public FirstPersonCamera(WindowedGameLoop gameLoop)
 	{
-		_camera = camera;
+		_camera = new Camera();
 		_baseRotation = new Vector3f();
 		_extraRotation = new Vector3f();
+		_gameLoop = gameLoop;
 	}
 
-	@Override
 	public void updateCameraRotation()
 	{
 		if (!Screen.isMouseLocked())
@@ -44,7 +61,6 @@ public class FirstPersonCamera extends PersonCamera
 		_camera.getLocation().setRotation(_rotationStorageBuffer);
 	}
 
-	@Override
 	public void updateCameraPosition()
 	{
 		if (!Screen.isMouseLocked())
@@ -75,5 +91,72 @@ public class FirstPersonCamera extends PersonCamera
 			pos.sub(up);
 
 		_camera.getLocation().setPosition(pos);
+	}
+
+	@Override
+	public void updateFrame()
+	{
+		setMoveSpeed(Input.isKeyHeld("control") ? 70f : 7f);
+
+		if (Input.isKeyDown("q"))
+			Screen.setMouseLocked(!Screen.isMouseLocked());
+		if (Input.isKeyDown("escape"))
+			_gameLoop.requestClose();
+
+		updateCameraPosition();
+		updateCameraRotation();
+	}
+
+	public void setMoveSpeed(float moveSpeed)
+	{
+		_moveSpeed = moveSpeed;
+	}
+
+	public float getMoveSpeed()
+	{
+		return _moveSpeed;
+	}
+
+	public void setMouseSensitivity(float mouseSensitivity)
+	{
+		_mouseSensitivity = mouseSensitivity;
+	}
+
+	public float getMouseSensitivity()
+	{
+		return _mouseSensitivity;
+	}
+
+	public Vector3f getBaseRotation(Vector3f buffer)
+	{
+		buffer.set(_baseRotation);
+		return buffer;
+	}
+
+	public Vector3f getBaseRotation()
+	{
+		return getBaseRotation(new Vector3f());
+	}
+
+	public Vector3f getExtraRotation(Vector3f buffer)
+	{
+		buffer.set(_extraRotation);
+		return buffer;
+	}
+
+	public Vector3f getExtraRotation()
+	{
+		return getExtraRotation(new Vector3f());
+	}
+
+	public Location getLocation()
+	{
+		return _camera.getLocation();
+	}
+
+	@Override
+	public Camera getCamera()
+	{
+		return _camera;
 	}
 }

@@ -1,7 +1,6 @@
 package net.whg.we.packets;
 
 import java.nio.charset.StandardCharsets;
-import net.whg.we.client_logic.scene.WindowedGameLoop;
 import net.whg.we.network.multiplayer.MultiplayerClient;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketHandler;
@@ -54,7 +53,7 @@ public class ChatPacket implements PacketType
 			// TODO Once a chat window is implemented, send it there instead
 
 			MultiplayerClient client =
-					((WindowedGameLoop) handler.getGameState().getGameLoop()).getClient();
+					(MultiplayerClient) handler.getGameState().getNetworkHandler();
 			Packet p2 = client.newPacket("common.terminal.out");
 			((TerminalCommandPacket) p2.getPacketType()).build(p2,
 					String.format("print \"%s\"", message));

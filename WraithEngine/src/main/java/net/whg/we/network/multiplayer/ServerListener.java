@@ -2,16 +2,17 @@ package net.whg.we.network.multiplayer;
 
 import net.whg.we.event.Listener;
 import net.whg.we.network.netty.UserConnection;
+import net.whg.we.scene.ServerGameState;
 
 public interface ServerListener extends Listener
 {
-	void onServerStarted(MultiplayerServer server);
+	void onServerStarted(ServerGameState gameState);
 
-	void onServerFailedToStart(MultiplayerServer server, int port);
+	void onServerFailedToStart(ServerGameState gameState, int port);
 
-	void onClientConnected(MultiplayerServer server, UserConnection client);
+	void onClientConnected(ServerGameState gameState, UserConnection client);
 
-	void onClientDisconnected(MultiplayerServer server, UserConnection client);
+	void onClientDisconnected(ServerGameState gameState, UserConnection client);
 
-	void onServerStopped(MultiplayerServer server);
+	void onServerStopped(ServerGameState gameState);
 }

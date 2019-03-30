@@ -5,8 +5,9 @@ import static org.junit.Assert.assertTrue;
 import org.joml.Vector3f;
 import org.junit.Before;
 import org.junit.Test;
-import net.whg.we.client_logic.rendering.Camera;
-import net.whg.we.client_logic.utils.FirstPersonCamera;
+import org.mockito.Mockito;
+import net.whg.we.client_logic.scene.FirstPersonCamera;
+import net.whg.we.client_logic.scene.WindowedGameLoop;
 import net.whg.we.client_logic.utils.Input;
 import net.whg.we.client_logic.utils.Screen;
 import net.whg.we.client_logic.window.KeyState;
@@ -22,7 +23,8 @@ public class FirstPersonCameraTest
 	 */
 	public void testInstantiation()
 	{
-		FirstPersonCamera fpc = new FirstPersonCamera(new Camera());
+		WindowedGameLoop gameLoop = Mockito.mock(WindowedGameLoop.class);
+		FirstPersonCamera fpc = new FirstPersonCamera(gameLoop);
 		fpc.setMouseSensitivity(5f);
 		fpc.setMoveSpeed(8f);
 		assertTrue(fpc.getMouseSensitivity() == 5f);
@@ -64,7 +66,8 @@ public class FirstPersonCameraTest
 	public void testUpdateCameraRotation()
 	{
 		float delta = 0.0001f;
-		FirstPersonCamera fpc = new FirstPersonCamera(new Camera());
+		WindowedGameLoop gameLoop = Mockito.mock(WindowedGameLoop.class);
+		FirstPersonCamera fpc = new FirstPersonCamera(gameLoop);
 
 		Vector3f pre_base = fpc.getBaseRotation();
 		Vector3f pre_extra = fpc.getExtraRotation();
@@ -91,7 +94,8 @@ public class FirstPersonCameraTest
 	public void testUpdateCameraPosition()
 	{
 		float delta = 0.0001f;
-		FirstPersonCamera fpc = new FirstPersonCamera(new Camera());
+		WindowedGameLoop gameLoop = Mockito.mock(WindowedGameLoop.class);
+		FirstPersonCamera fpc = new FirstPersonCamera(gameLoop);
 		Vector3f pre = fpc.getLocation().getPosition();
 
 		fpc.updateCameraPosition();

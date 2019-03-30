@@ -2,6 +2,7 @@ package net.whg.we.network.multiplayer;
 
 import net.whg.we.event.EventCallerBase;
 import net.whg.we.network.netty.UserConnection;
+import net.whg.we.scene.ServerGameState;
 
 public class ServerEvent extends EventCallerBase<ServerListener>
 {
@@ -11,11 +12,16 @@ public class ServerEvent extends EventCallerBase<ServerListener>
 	private static final int CLIENT_DISCONNECTED_EVENT = 3;
 	private static final int SERVER_STOPPED_EVENT = 4;
 
-	private MultiplayerServer _server;
+	private ServerGameState _gameState;
 
-	public ServerEvent(MultiplayerServer server)
+	public void setGameState(ServerGameState gameState)
 	{
-		_server = server;
+		_gameState = gameState;
+	}
+
+	public ServerGameState getGameState()
+	{
+		return _gameState;
 	}
 
 	public void onServerStarted()
@@ -49,23 +55,23 @@ public class ServerEvent extends EventCallerBase<ServerListener>
 		switch (e)
 		{
 			case SERVER_STARTED_EVENT:
-				listener.onServerStarted(_server);
+				listener.onServerStarted(_gameState);
 				return;
 
 			case SERVER_FAILED_TO_START_EVENT:
-				listener.onServerFailedToStart(_server, (int) arg);
+				listener.onServerFailedToStart(_gameState, (int) arg);
 				return;
 
 			case CLIENT_CONNECTED_EVENT:
-				listener.onClientConnected(_server, (UserConnection) arg);
+				listener.onClientConnected(_gameState, (UserConnection) arg);
 				return;
 
 			case CLIENT_DISCONNECTED_EVENT:
-				listener.onClientDisconnected(_server, (UserConnection) arg);
+				listener.onClientDisconnected(_gameState, (UserConnection) arg);
 				return;
 
 			case SERVER_STOPPED_EVENT:
-				listener.onServerStopped(_server);
+				listener.onServerStopped(_gameState);
 				return;
 
 			default:

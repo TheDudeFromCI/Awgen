@@ -1,6 +1,6 @@
 package net.whg.we.network.packet;
 
-import net.whg.we.main.GameState;
+import net.whg.we.scene.GameState;
 
 public interface PacketHandler
 {

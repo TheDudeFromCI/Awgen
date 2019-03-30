@@ -4,8 +4,7 @@ import java.nio.charset.StandardCharsets;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import net.whg.we.client_logic.connect.ClientPlayer;
-import net.whg.we.network.multiplayer.ClientPacketHandler;
-import net.whg.we.network.multiplayer.MultiplayerClient;
+import net.whg.we.client_logic.connect.ClientPlayerList;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketHandler;
 import net.whg.we.network.packet.PacketType;
@@ -90,25 +89,13 @@ public class PlayerJoinPacket implements PacketType
 		String username = (String) packet.getData().get("username");
 		String token = (String) packet.getData().get("token");
 
-		MultiplayerClient multiplayer = ((ClientPacketHandler) handler).getClient();
+		ClientPlayerList playerList = (ClientPlayerList) handler.getGameState().getPlayerList();
 		ClientPlayer player = new ClientPlayer(username, token);
-		multiplayer.getPlayerList().addPlayer(player);
+		playerList.addPlayer(player);
 
 		player.getLocation().setPosition((Vector3f) packet.getData().get("pos"));
 		player.getLocation().setRotation((Quaternionf) packet.getData().get("rot"));
 
-		// WindowedGameLoop gameLoop = (WindowedGameLoop)
-		// handler.getGameState().getGameLoop();
-		// ModelResource terrain = (ModelResource) gameLoop.getResourceManager()
-		// .loadResource(gameLoop.getCorePlugin(), "models/human.model");
-		// terrain.compile(gameLoop.getGraphicsPipeline().getGraphics());
-		// Model model = terrain.getData();
-		// GameObject go = gameLoop.getScene().getGameObjectManager().createNew();
-		// go.addBehaviour(new RenderBehaviour(model));
-
-		// PlayerCameraModelSync sync =
-		// new PlayerCameraModelSync(player.getLocation(), model.getLocation());
-		// player.setCameraModelSync(sync);
-		// sync.sync();
+		// TODO Build model for player
 	}
 }

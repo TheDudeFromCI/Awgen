@@ -1,9 +1,6 @@
 package net.whg.we.packets;
 
 import java.nio.charset.StandardCharsets;
-import net.whg.we.client_logic.connect.ClientPlayer;
-import net.whg.we.network.multiplayer.ClientPacketHandler;
-import net.whg.we.network.multiplayer.MultiplayerClient;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketHandler;
 import net.whg.we.network.packet.PacketType;
@@ -55,10 +52,9 @@ public class PlayerLeavePacket implements PacketType
 		}
 
 		String token = (String) packet.getData().get("token");
+		handler.getGameState().getPlayerList()
+				.removePlayer(handler.getGameState().getPlayerList().getPlayerByToken(token));
 
-		MultiplayerClient multiplayer = ((ClientPacketHandler) handler).getClient();
-
-		ClientPlayer player = (ClientPlayer) multiplayer.getPlayerList().getPlayerByToken(token);
-		multiplayer.getPlayerList().removePlayer(player);
+		// TODO Remove player model from scene
 	}
 }

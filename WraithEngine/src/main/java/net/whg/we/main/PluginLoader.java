@@ -38,7 +38,7 @@ public class PluginLoader
 		return null;
 	}
 
-	void loadPluginsFromFile(FileDatabase fileDatabase)
+	public void loadPluginsFromFile(FileDatabase fileDatabase)
 	{
 		for (File file : fileDatabase.getJarLibraries())
 		{
@@ -136,7 +136,7 @@ public class PluginLoader
 		Log.unindent();
 	}
 
-	void enableAllPlugins()
+	public void enableAllPlugins()
 	{
 		Log.debug("Enabling plugins...");
 		Log.indent();

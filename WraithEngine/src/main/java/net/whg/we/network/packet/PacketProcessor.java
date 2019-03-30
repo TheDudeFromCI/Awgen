@@ -67,4 +67,9 @@ public class PacketProcessor implements PacketListener
 			return _packets.size();
 		}
 	}
+
+	public PacketHandler getPacketHandler()
+	{
+		return _handler;
+	}
 }

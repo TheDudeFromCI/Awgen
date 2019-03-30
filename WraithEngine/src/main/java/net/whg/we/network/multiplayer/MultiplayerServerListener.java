@@ -1,6 +1,7 @@
 package net.whg.we.network.multiplayer;
 
 import net.whg.we.network.netty.UserConnection;
+import net.whg.we.scene.ServerGameState;
 import net.whg.we.utils.logging.Log;
 
 public class MultiplayerServerListener implements ServerListener
@@ -12,36 +13,36 @@ public class MultiplayerServerListener implements ServerListener
 	}
 
 	@Override
-	public void onServerStarted(MultiplayerServer server)
+	public void onServerStarted(ServerGameState gameState)
 	{
 		Log.info("Server successfully started.");
 	}
 
 	@Override
-	public void onServerFailedToStart(MultiplayerServer server, int port)
+	public void onServerFailedToStart(ServerGameState gameState, int port)
 	{
 		Log.warnf("Failed to start server on port %d!", port);
 	}
 
 	@Override
-	public void onClientConnected(MultiplayerServer server, UserConnection client)
+	public void onClientConnected(ServerGameState gameState, UserConnection client)
 	{
 		Log.debugf("Adding client to pending connection list. IP: %s", client.getIP());
 	}
 
 	@Override
-	public void onClientDisconnected(MultiplayerServer server, UserConnection client)
+	public void onClientDisconnected(ServerGameState gameState, UserConnection client)
 	{
 		Log.debugf("Client %s has disconnected.", client.getIP());
 
 		if (client.getUserState().isAuthenticated())
-			server.getPlayerList().removePlayer(
-					server.getPlayerList().getPlayerByToken(client.getUserState().getToken()));
+			gameState.getPlayerList().removePlayer(
+					gameState.getPlayerList().getPlayerByToken(client.getUserState().getToken()));
 	}
 
 	@Override
-	public void onServerStopped(MultiplayerServer server)
+	public void onServerStopped(ServerGameState gameState)
 	{
-		server.getPlayerList().clear();
+		gameState.getPlayerList().clear();
 	}
 }

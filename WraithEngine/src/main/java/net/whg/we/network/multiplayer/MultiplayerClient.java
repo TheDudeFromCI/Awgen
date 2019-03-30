@@ -1,36 +1,35 @@
 package net.whg.we.network.multiplayer;
 
-import net.whg.we.client_logic.connect.ClientPlayer;
-import net.whg.we.client_logic.connect.ClientPlayerList;
 import net.whg.we.network.netty.Client;
 import net.whg.we.network.packet.Packet;
+import net.whg.we.network.packet.PacketHandler;
 import net.whg.we.network.packet.PacketManagerHandler;
+import net.whg.we.scene.GameState;
 import net.whg.we.utils.logging.Log;
 
-public class MultiplayerClient
+public class MultiplayerClient implements NetworkHandler
 {
+	private String _username;
+	private String _token;
+
 	private Client _client;
 	private PacketManagerHandler _packetManager;
-	private ClientPacketHandler _handler;
-	private ClientPlayerList _playerList;
-	private ClientPlayer _player;
 	private ClientEvent _event;
 	private boolean _loggedIn;
 
 	public MultiplayerClient(String username, String token)
 	{
-		_handler = new ClientPacketHandler(this);
-		_playerList = new ClientPlayerList();
-
 		_event = new ClientEvent(this);
 		_event.addListener(new MultiplayerClientListener());
 
-		_player = new ClientPlayer(username, token);
-		_playerList.addPlayer(_player);
+		_username = username;
+		_token = token;
 
-		_packetManager = PacketManagerHandler.createPacketManagerHandler(_handler, true);
+		PacketHandler handler = new DefaultPacketHandler(true);
+		_packetManager = PacketManagerHandler.createPacketManagerHandler(handler, true);
 	}
 
+	@Override
 	public boolean isRunning()
 	{
 		return _client != null && !_client.isClosed();
@@ -63,15 +62,12 @@ public class MultiplayerClient
 			throw new IllegalStateException("Already logged in!");
 		_loggedIn = false;
 
-		String username = _player.getUsername();
-		String token = _player.getToken();
-
 		Log.infof(
 				"Successfully connected to server. Sending handshake packet now. Username: %s, Token: %s",
-				username, token);
+				_username, _token);
 
 		Packet packet = newPacket("auth.handshake");
-		((HandshakePacket) packet.getPacketType()).build(packet, username, token);
+		((HandshakePacket) packet.getPacketType()).build(packet, _username, _token);
 		sendPacket(packet);
 	}
 
@@ -97,12 +93,6 @@ public class MultiplayerClient
 		_loggedIn = false;
 	}
 
-	public void updatePhysics()
-	{
-		_event.handlePendingEvents();
-		_packetManager.processor().handlePackets();
-	}
-
 	public Packet newPacket(String type)
 	{
 		return _packetManager.newPacket(type);
@@ -116,23 +106,28 @@ public class MultiplayerClient
 		_client.send(packet);
 	}
 
-	public ClientPacketHandler getPacketHandler()
-	{
-		return _handler;
-	}
-
-	public ClientPlayerList getPlayerList()
-	{
-		return _playerList;
-	}
-
-	public ClientPlayer getPlayer()
-	{
-		return _player;
-	}
-
 	public ClientEvent getEvent()
 	{
 		return _event;
+	}
+
+	public String getUsername()
+	{
+		return _username;
+	}
+
+	public String getToken()
+	{
+		return _token;
+	}
+
+	@Override
+	public void processPackets(GameState gameState)
+	{
+		if (_packetManager.processor().getPacketHandler().getGameState() == null)
+			_packetManager.processor().getPacketHandler().setGameState(gameState);
+
+		_event.handlePendingEvents();
+		_packetManager.processor().handlePackets();
 	}
 }

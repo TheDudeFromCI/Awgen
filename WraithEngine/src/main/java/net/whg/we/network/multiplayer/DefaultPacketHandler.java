@@ -1,22 +1,22 @@
 package net.whg.we.network.multiplayer;
 
-import net.whg.we.main.GameState;
 import net.whg.we.network.packet.PacketHandler;
+import net.whg.we.scene.GameState;
 
-public class ClientPacketHandler implements PacketHandler
+public class DefaultPacketHandler implements PacketHandler
 {
-	private MultiplayerClient _client;
 	private GameState _gameState;
+	private boolean _client;
 
-	public ClientPacketHandler(MultiplayerClient client)
+	public DefaultPacketHandler(boolean isClient)
 	{
-		_client = client;
+		_client = isClient;
 	}
 
 	@Override
 	public boolean isClient()
 	{
-		return true;
+		return _client;
 	}
 
 	@Override
@@ -29,10 +29,5 @@ public class ClientPacketHandler implements PacketHandler
 	public void setGameState(GameState gameState)
 	{
 		_gameState = gameState;
-	}
-
-	public MultiplayerClient getClient()
-	{
-		return _client;
 	}
 }
