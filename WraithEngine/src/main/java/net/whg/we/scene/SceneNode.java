@@ -2,6 +2,7 @@ package net.whg.we.scene;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.joml.Matrix4f;
 
 public class SceneNode
 {
@@ -11,6 +12,9 @@ public class SceneNode
 
 	private SceneNode _parent;
 	private List<SceneNode> _children = new ArrayList<>();
+
+	private Matrix4f _localMatrix = new Matrix4f();
+	private Matrix4f _fullMatrix = new Matrix4f();
 
 	public SceneNode()
 	{
@@ -100,5 +104,20 @@ public class SceneNode
 			return _enabled;
 
 		return _enabled && _parent.isEnabledInHierarchy();
+	}
+
+	public void getFullMatrix(Matrix4f out)
+	{
+		if (_parent == null)
+		{
+			_transform.getLocalMatrix(out);
+			return;
+		}
+
+		_parent.getFullMatrix(_fullMatrix);
+		out.set(_fullMatrix);
+
+		_transform.getLocalMatrix(_localMatrix);
+		out.mul(_localMatrix);
 	}
 }
