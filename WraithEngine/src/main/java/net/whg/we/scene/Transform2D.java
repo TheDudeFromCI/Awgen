@@ -2,9 +2,9 @@ package net.whg.we.scene;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
-import net.whg.frameworks.scene.Transform;
+import net.whg.frameworks.scene.ITransform;
 
-public class Transform2D implements Transform
+public class Transform2D implements ITransform
 {
 	private Transform2D _parent;
 	private Vector2f _position = new Vector2f(0f, 0f);
