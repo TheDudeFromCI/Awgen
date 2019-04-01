@@ -1,6 +1,7 @@
 package net.whg.we.scene;
 
 import org.lwjgl.opengl.GL11;
+import net.whg.frameworks.scene.SceneNode;
 import net.whg.we.client_logic.ui.UIStack;
 
 public class Scene

@@ -2,6 +2,7 @@ package net.whg.we.scene;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
+import net.whg.frameworks.scene.Transform;
 
 public class Transform2D implements Transform
 {

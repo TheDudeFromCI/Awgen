@@ -1,12 +1,12 @@
 package net.whg.we.commands;
 
+import net.whg.frameworks.scene.SceneNode;
 import net.whg.we.command.Command;
 import net.whg.we.command.CommandHandler;
 import net.whg.we.command.CommandSender;
 import net.whg.we.network.server.OnlinePlayer;
 import net.whg.we.network.server.PlayerCommandSender;
 import net.whg.we.scene.Scene;
-import net.whg.we.scene.SceneNode;
 
 public class SceneHierarchyCommand implements CommandHandler
 {

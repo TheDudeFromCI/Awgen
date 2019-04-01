@@ -5,7 +5,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.junit.Assert;
 import org.junit.Test;
-import net.whg.we.scene.Transform3D;
+import net.whg.frameworks.scene.Transform3D;
 
 public class Transform3DTest
 {

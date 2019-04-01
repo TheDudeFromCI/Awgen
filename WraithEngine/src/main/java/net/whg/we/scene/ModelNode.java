@@ -1,6 +1,7 @@
 package net.whg.we.scene;
 
 import org.joml.Matrix4f;
+import net.whg.frameworks.scene.SceneNode;
 import net.whg.we.client_logic.rendering.Camera;
 import net.whg.we.client_logic.rendering.Material;
 import net.whg.we.client_logic.rendering.Mesh;

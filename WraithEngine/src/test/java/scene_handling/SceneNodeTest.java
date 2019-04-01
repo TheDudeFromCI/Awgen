@@ -4,7 +4,7 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.junit.Assert;
 import org.junit.Test;
-import net.whg.we.scene.SceneNode;
+import net.whg.frameworks.scene.SceneNode;
 
 public class SceneNodeTest
 {
