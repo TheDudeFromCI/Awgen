@@ -3,15 +3,15 @@ package command_handling;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
-import net.whg.we.command.Command;
-import net.whg.we.command.CommandConsole;
-import net.whg.we.command.CommandHandler;
-import net.whg.we.command.CommandList;
-import net.whg.we.command.CommandParser;
-import net.whg.we.command.CommandSender;
-import net.whg.we.command.CommandSet;
-import net.whg.we.command.VariableKeyring;
-import net.whg.we.command.console.DefaultKeyring;
+import net.whg.frameworks.command.Command;
+import net.whg.frameworks.command.CommandConsole;
+import net.whg.frameworks.command.CommandHandler;
+import net.whg.frameworks.command.CommandList;
+import net.whg.frameworks.command.CommandParser;
+import net.whg.frameworks.command.CommandSender;
+import net.whg.frameworks.command.CommandSet;
+import net.whg.frameworks.command.DefaultKeyring;
+import net.whg.frameworks.command.VariableKeyring;
 import net.whg.we.utils.logging.Log;
 
 public class CommandListTest

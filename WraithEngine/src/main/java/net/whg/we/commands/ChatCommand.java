@@ -1,9 +1,9 @@
 package net.whg.we.commands;
 
-import net.whg.we.command.Command;
-import net.whg.we.command.CommandArgument;
-import net.whg.we.command.CommandConsole;
-import net.whg.we.command.CommandHandler;
+import net.whg.frameworks.command.Command;
+import net.whg.frameworks.command.CommandArgument;
+import net.whg.frameworks.command.CommandConsole;
+import net.whg.frameworks.command.CommandHandler;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.server.OnlinePlayer;
 import net.whg.we.network.server.ServerPlayerList;

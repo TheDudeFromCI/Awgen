@@ -1,9 +1,9 @@
 package net.whg.we.commands;
 
+import net.whg.frameworks.command.Command;
+import net.whg.frameworks.command.CommandHandler;
+import net.whg.frameworks.command.CommandSender;
 import net.whg.frameworks.scene.SceneNode;
-import net.whg.we.command.Command;
-import net.whg.we.command.CommandHandler;
-import net.whg.we.command.CommandSender;
 import net.whg.we.network.server.OnlinePlayer;
 import net.whg.we.network.server.PlayerCommandSender;
 import net.whg.we.scene.Scene;

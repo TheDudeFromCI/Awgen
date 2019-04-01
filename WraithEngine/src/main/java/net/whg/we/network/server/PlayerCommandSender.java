@@ -1,13 +1,13 @@
 package net.whg.we.network.server;
 
-import net.whg.we.command.CommandConsole;
-import net.whg.we.command.CommandSender;
-import net.whg.we.command.VariableKeyring;
-import net.whg.we.command.console.Console;
-import net.whg.we.command.console.ConsoleListener;
-import net.whg.we.command.console.DefaultKeyring;
-import net.whg.we.command.console.LineChangedEvent;
-import net.whg.we.command.console.ScrollPosChanged;
+import net.whg.frameworks.command.CommandConsole;
+import net.whg.frameworks.command.CommandSender;
+import net.whg.frameworks.command.Console;
+import net.whg.frameworks.command.ConsoleListener;
+import net.whg.frameworks.command.DefaultKeyring;
+import net.whg.frameworks.command.LineChangedEvent;
+import net.whg.frameworks.command.ScrollPosChanged;
+import net.whg.frameworks.command.VariableKeyring;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.packets.TerminalOutputPacket;
 

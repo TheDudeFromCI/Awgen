@@ -1,7 +1,7 @@
 package net.whg.we.packets;
 
 import java.nio.charset.StandardCharsets;
-import net.whg.we.command.CommandManager;
+import net.whg.frameworks.command.CommandManager;
 import net.whg.we.network.connect.Player;
 import net.whg.we.network.connect.PlayerList;
 import net.whg.we.network.netty.UserConnection;

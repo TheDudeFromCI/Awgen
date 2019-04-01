@@ -1,13 +1,13 @@
 package net.whg.we.client_logic.ui.terminal;
 
 import org.joml.Matrix4f;
+import net.whg.frameworks.command.Console;
 import net.whg.we.client_logic.rendering.Graphics;
 import net.whg.we.client_logic.rendering.Material;
 import net.whg.we.client_logic.rendering.Mesh;
 import net.whg.we.client_logic.ui.UIComponent;
 import net.whg.we.client_logic.ui.UIUtils;
 import net.whg.we.client_logic.ui.font.Font;
-import net.whg.we.command.console.Console;
 import net.whg.we.scene.Transform2D;
 
 public class ConsoleOutput implements UIComponent
