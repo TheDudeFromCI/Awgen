@@ -1,5 +1,6 @@
 package net.whg.we.client_logic.scene;
 
+import net.whg.frameworks.scene.Transform3D;
 import net.whg.we.client_logic.rendering.Graphics;
 import net.whg.we.client_logic.rendering.ScreenClearType;
 import net.whg.we.client_logic.resources.ResourceFetcher;
@@ -72,8 +73,9 @@ public class WindowedGameLoop implements GameLoop
 					ModelNode node = new ModelNode(sm.getMesh(), sm.getMaterial(),
 							_gameState.getPlayerController().getCamera());
 
-					node.getTransform().setSize(100f);
-					node.getTransform().getRotation().rotateX((float) Math.toRadians(-90f));
+					((Transform3D) node.getTransform()).setSize(100f);
+					((Transform3D) node.getTransform()).getRotation()
+							.rotateX((float) Math.toRadians(-90f));
 
 					scene.getSceneNode().addChild(node);
 				}

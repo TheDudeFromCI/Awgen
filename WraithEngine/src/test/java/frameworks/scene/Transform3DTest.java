@@ -1,4 +1,4 @@
-package scene_handling;
+package frameworks.scene;
 
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
