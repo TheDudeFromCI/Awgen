@@ -88,13 +88,17 @@ public class SceneNode
 	}
 
 	/**
-	 * Sets a new transform object for this scene node.
+	 * Sets a new transform object for this scene node. If input parameter is null,
+	 * nothing happens.
 	 *
 	 * @param transform
 	 *            - The new scene transform object.
 	 */
 	public void setTransform(ITransform transform)
 	{
+		if (transform == null)
+			return;
+
 		_transform = transform;
 	}
 
@@ -229,6 +233,9 @@ public class SceneNode
 	 */
 	public void addChild(SceneNode node)
 	{
+		if (node == null)
+			return;
+
 		node.setParent(this);
 	}
 }

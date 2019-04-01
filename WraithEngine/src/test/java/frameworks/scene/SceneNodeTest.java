@@ -150,4 +150,83 @@ public class SceneNodeTest
 
 		Assert.assertEquals(mat2, mat);
 	}
+
+	@Test
+	public void addChild()
+	{
+		SceneNode node = new SceneNode();
+		SceneNode child = new SceneNode();
+
+		node.addChild(child);
+
+		Assert.assertEquals(node, child.getParent());
+		Assert.assertEquals(1, node.getChildCount());
+		Assert.assertEquals(child, node.getChild(0));
+		Assert.assertEquals(0, child.getChildCount());
+	}
+
+	@Test
+	public void setParent_Null()
+	{
+		SceneNode node = new SceneNode();
+		node.setParent(null);
+
+		Assert.assertNull(node.getParent());
+	}
+
+	@Test
+	public void setParent_Clear()
+	{
+		SceneNode node = new SceneNode();
+		node.setParent(new SceneNode());
+
+		node.setParent(null);
+
+		Assert.assertNull(node.getParent());
+	}
+
+	@Test
+	public void addChild_Null()
+	{
+		SceneNode node = new SceneNode();
+		node.addChild(null);
+
+		Assert.assertEquals(0, node.getChildCount());
+	}
+
+	@Test
+	public void setTransform()
+	{
+		SceneNode node = new SceneNode();
+		Transform3D t = new Transform3D();
+
+		node.setTransform(t);
+
+		Assert.assertEquals(t, node.getTransform());
+	}
+
+	@Test
+	public void setTransform_Null()
+	{
+		SceneNode node = new SceneNode();
+		node.setTransform(null);
+
+		Assert.assertNotNull(node.getTransform());
+	}
+
+	@Test
+	public void getLocalMatrix()
+	{
+		SceneNode node = new SceneNode();
+		Transform3D t = (Transform3D) node.getTransform();
+		t.setPosition(1, 2, 3);
+
+		Matrix4f mat1 = new Matrix4f();
+		t.getLocalMatrix(mat1);
+
+		Matrix4f mat2 = new Matrix4f();
+		node.getLocalMatrix(mat2);
+
+		Assert.assertEquals(mat1, mat2);
+	}
 }
