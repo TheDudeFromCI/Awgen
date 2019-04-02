@@ -4,6 +4,8 @@ import java.nio.charset.StandardCharsets;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+import net.whg.frameworks.util.ByteReader;
+import net.whg.frameworks.util.ByteWriter;
 import net.whg.we.network.multiplayer.ClientEvent;
 import net.whg.we.network.multiplayer.DefaultPacketHandler;
 import net.whg.we.network.multiplayer.ServerEvent;
@@ -14,8 +16,6 @@ import net.whg.we.network.packet.DefaultPacketFactory;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketManagerHandler;
 import net.whg.we.network.packet.PacketType;
-import net.whg.we.utils.ByteReader;
-import net.whg.we.utils.ByteWriter;
 
 public class EchoServerTest
 {

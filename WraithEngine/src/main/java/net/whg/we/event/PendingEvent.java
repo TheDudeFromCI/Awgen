@@ -1,6 +1,6 @@
 package net.whg.we.event;
 
-import net.whg.we.utils.Poolable;
+import net.whg.frameworks.util.Poolable;
 
 public class PendingEvent implements Poolable
 {

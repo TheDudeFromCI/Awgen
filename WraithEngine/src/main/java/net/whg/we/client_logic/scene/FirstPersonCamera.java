@@ -2,11 +2,11 @@ package net.whg.we.client_logic.scene;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import net.whg.frameworks.util.MathUtils;
 import net.whg.we.client_logic.rendering.Camera;
 import net.whg.we.client_logic.utils.Input;
 import net.whg.we.client_logic.utils.Screen;
 import net.whg.we.scene.Location;
-import net.whg.we.utils.MathUtils;
 import net.whg.we.utils.Time;
 
 /**

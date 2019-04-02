@@ -1,10 +1,10 @@
-package util_handling;
+package frameworks.util;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
-import net.whg.we.utils.ComponentList;
+import net.whg.frameworks.util.ComponentList;
 
 public class ComponentListTest
 {

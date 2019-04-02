@@ -1,8 +1,8 @@
 package net.whg.we.client_logic.ui;
 
-import net.whg.we.utils.ComponentList;
-import net.whg.we.utils.ObjectPool;
-import net.whg.we.utils.Poolable;
+import net.whg.frameworks.util.ComponentList;
+import net.whg.frameworks.util.ObjectPool;
+import net.whg.frameworks.util.Poolable;
 
 public class UIStack
 {

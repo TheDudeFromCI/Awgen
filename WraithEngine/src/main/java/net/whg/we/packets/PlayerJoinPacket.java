@@ -3,14 +3,14 @@ package net.whg.we.packets;
 import java.nio.charset.StandardCharsets;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import net.whg.frameworks.util.ByteReader;
+import net.whg.frameworks.util.ByteWriter;
 import net.whg.we.client_logic.connect.ClientPlayer;
 import net.whg.we.client_logic.connect.ClientPlayerList;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketHandler;
 import net.whg.we.network.packet.PacketType;
 import net.whg.we.scene.Location;
-import net.whg.we.utils.ByteReader;
-import net.whg.we.utils.ByteWriter;
 import net.whg.we.utils.logging.Log;
 
 /**

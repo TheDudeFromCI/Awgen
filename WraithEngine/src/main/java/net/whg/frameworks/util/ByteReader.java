@@ -1,4 +1,4 @@
-package net.whg.we.utils;
+package net.whg.frameworks.util;
 
 import java.nio.charset.Charset;
 

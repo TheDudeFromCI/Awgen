@@ -1,5 +1,7 @@
 package net.whg.we.utils;
 
+import net.whg.frameworks.util.Poolable;
+
 class PoolableStringBuilder implements Poolable
 {
 	private StringBuilder sb = new StringBuilder();

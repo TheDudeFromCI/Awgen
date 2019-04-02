@@ -2,7 +2,7 @@ package net.whg.frameworks.scene;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.whg.we.utils.GenericRunnable;
+import net.whg.frameworks.util.GenericRunnable;
 
 /**
  * Stores a list of scenes.

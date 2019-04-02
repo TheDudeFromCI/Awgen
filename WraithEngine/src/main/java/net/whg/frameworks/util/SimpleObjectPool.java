@@ -1,4 +1,4 @@
-package net.whg.we.utils;
+package net.whg.frameworks.util;
 
 public class SimpleObjectPool<T extends Poolable> extends ObjectPool<T>
 {

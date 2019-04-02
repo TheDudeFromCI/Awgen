@@ -2,9 +2,9 @@ package net.whg.we.event;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import net.whg.frameworks.util.ObjectPool;
+import net.whg.frameworks.util.SimpleObjectPool;
 import net.whg.we.main.Plugin;
-import net.whg.we.utils.ObjectPool;
-import net.whg.we.utils.SimpleObjectPool;
 import net.whg.we.utils.logging.Log;
 
 /**

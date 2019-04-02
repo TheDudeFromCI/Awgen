@@ -1,8 +1,8 @@
 package net.whg.we.client_logic.resources;
 
 import java.io.File;
+import net.whg.frameworks.util.FileUtils;
 import net.whg.we.main.Plugin;
-import net.whg.we.utils.FileUtils;
 
 /**
  * Represents a resource file on the disk.

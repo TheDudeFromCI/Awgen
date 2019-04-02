@@ -1,6 +1,6 @@
 package net.whg.frameworks.command;
 
-import net.whg.we.utils.Poolable;
+import net.whg.frameworks.util.Poolable;
 
 public class LineChangedEvent implements Poolable
 {

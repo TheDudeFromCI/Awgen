@@ -3,7 +3,7 @@ package net.whg.we.utils.logging;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
-import net.whg.we.utils.Poolable;
+import net.whg.frameworks.util.Poolable;
 
 /**
  * This class represents a single log statement that is sent to the logger,

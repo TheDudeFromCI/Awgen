@@ -1,6 +1,7 @@
 package net.whg.we.network.server;
 
 import java.util.ArrayList;
+import net.whg.frameworks.util.GenericRunnable;
 import net.whg.we.network.connect.Player;
 import net.whg.we.network.connect.PlayerList;
 import net.whg.we.network.netty.UserConnection;
@@ -8,7 +9,6 @@ import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketManager;
 import net.whg.we.packets.PlayerJoinPacket;
 import net.whg.we.packets.PlayerLeavePacket;
-import net.whg.we.utils.GenericRunnable;
 import net.whg.we.utils.logging.Log;
 
 public class ServerPlayerList implements PlayerList

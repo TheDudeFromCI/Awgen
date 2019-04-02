@@ -2,7 +2,7 @@ package net.whg.we.utils.logging;
 
 import java.io.PrintWriter;
 import java.util.HashMap;
-import net.whg.we.utils.ObjectPool;
+import net.whg.frameworks.util.ObjectPool;
 
 /**
  * Logs events to file and to console. Events are ignored if below the intended

@@ -3,10 +3,10 @@ package net.whg.we.network.packet;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import net.whg.frameworks.util.ByteReader;
+import net.whg.frameworks.util.ByteWriter;
+import net.whg.frameworks.util.Poolable;
 import net.whg.we.network.netty.UserConnection;
-import net.whg.we.utils.ByteReader;
-import net.whg.we.utils.ByteWriter;
-import net.whg.we.utils.Poolable;
 
 public class Packet implements Poolable
 {

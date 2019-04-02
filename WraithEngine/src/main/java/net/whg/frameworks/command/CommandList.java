@@ -1,6 +1,6 @@
 package net.whg.frameworks.command;
 
-import net.whg.we.utils.ComponentList;
+import net.whg.frameworks.util.ComponentList;
 import net.whg.we.utils.logging.Log;
 
 public class CommandList

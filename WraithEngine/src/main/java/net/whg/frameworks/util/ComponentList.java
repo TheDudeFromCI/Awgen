@@ -1,4 +1,4 @@
-package net.whg.we.utils;
+package net.whg.frameworks.util;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -6,11 +6,11 @@ import java.util.List;
 
 /**
  * This object represents a list where objects are not added or removed until
- * the end of a frame. This object also prevents an object to be put in twice.
- * Note: because objects are not added or removed from this list until the end
- * of a frame (by calling #{@link #endFrame()}), the size of the list will
- * appear unchanged, as well as all other normal operations such as iteration
- * and sublists. Only some methods are specifically overriden, namely
+ * the end of a frame/execution. This object also prevents an object to be put
+ * in twice. Note: because objects are not added or removed from this list until
+ * the end of a frame (by calling #{@link #endFrame()}), the size of the list
+ * will appear unchanged, as well as all other normal operations such as
+ * iteration and sublists. Only some methods are specifically overriden, namely
  * {@link #add(Object)} and {@link #remove(Object)}.
  *
  * @author TheDudeFromCI

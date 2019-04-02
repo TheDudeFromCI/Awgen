@@ -3,14 +3,14 @@ package net.whg.we.packets;
 import java.nio.charset.StandardCharsets;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import net.whg.frameworks.util.ByteReader;
+import net.whg.frameworks.util.ByteWriter;
 import net.whg.we.network.connect.PlayerList;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketHandler;
 import net.whg.we.network.packet.PacketType;
 import net.whg.we.network.server.OnlinePlayer;
 import net.whg.we.scene.Location;
-import net.whg.we.utils.ByteReader;
-import net.whg.we.utils.ByteWriter;
 
 /**
  * This packet is sent when a player joins a server to tell the clients to spawn

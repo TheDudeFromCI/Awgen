@@ -1,6 +1,6 @@
 package net.whg.we.network.connect;
 
-import net.whg.we.utils.GenericRunnable;
+import net.whg.frameworks.util.GenericRunnable;
 
 public interface PlayerList
 {

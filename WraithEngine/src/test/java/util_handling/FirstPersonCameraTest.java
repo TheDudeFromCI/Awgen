@@ -6,12 +6,12 @@ import org.joml.Vector3f;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import net.whg.frameworks.util.MathUtils;
 import net.whg.we.client_logic.scene.FirstPersonCamera;
 import net.whg.we.client_logic.scene.WindowedGameLoop;
 import net.whg.we.client_logic.utils.Input;
 import net.whg.we.client_logic.utils.Screen;
 import net.whg.we.client_logic.window.KeyState;
-import net.whg.we.utils.MathUtils;
 import net.whg.we.utils.Time;
 
 public class FirstPersonCameraTest

@@ -1,6 +1,6 @@
 package net.whg.we.network.packet;
 
-import net.whg.we.utils.ObjectPool;
+import net.whg.frameworks.util.ObjectPool;
 
 public class PacketPool extends ObjectPool<Packet>
 {
