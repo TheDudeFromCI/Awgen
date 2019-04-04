@@ -1,4 +1,4 @@
-package net.whg.we.event;
+package net.whg.frameworks.event;
 
 public interface Listener
 {

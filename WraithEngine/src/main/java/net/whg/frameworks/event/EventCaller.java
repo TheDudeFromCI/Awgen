@@ -1,4 +1,4 @@
-package net.whg.we.event;
+package net.whg.frameworks.event;
 
 import net.whg.we.main.Plugin;
 
@@ -23,7 +23,7 @@ public interface EventCaller<T extends Listener>
 
 	/**
 	 * Gets the plugin which owns this event caller. This should be the plugin which
-	 * created the event caller, and should never change.
+	 * created the event caller, and should never change. May be null.
 	 *
 	 * @return The plugin that owns this event caller.
 	 */

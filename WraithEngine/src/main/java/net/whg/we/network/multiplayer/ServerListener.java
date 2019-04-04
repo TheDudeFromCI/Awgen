@@ -1,6 +1,6 @@
 package net.whg.we.network.multiplayer;
 
-import net.whg.we.event.Listener;
+import net.whg.frameworks.event.Listener;
 import net.whg.we.network.netty.UserConnection;
 import net.whg.we.scene.ServerGameState;
 

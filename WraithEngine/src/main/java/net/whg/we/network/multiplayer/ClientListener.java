@@ -1,6 +1,6 @@
 package net.whg.we.network.multiplayer;
 
-import net.whg.we.event.Listener;
+import net.whg.frameworks.event.Listener;
 
 public interface ClientListener extends Listener
 {

@@ -1,6 +1,6 @@
 package net.whg.we.network.multiplayer;
 
-import net.whg.we.event.EventCallerBase;
+import net.whg.frameworks.event.EventCallerBase;
 
 public class ClientEvent extends EventCallerBase<ClientListener>
 {

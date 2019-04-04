@@ -3,8 +3,8 @@ package event_handling;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
-import net.whg.we.event.EventCallerBase;
-import net.whg.we.event.Listener;
+import net.whg.frameworks.event.EventCallerBase;
+import net.whg.frameworks.event.Listener;
 import net.whg.we.main.Plugin;
 import net.whg.we.utils.logging.Log;
 

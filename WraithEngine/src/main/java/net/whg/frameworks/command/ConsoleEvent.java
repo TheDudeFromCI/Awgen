@@ -1,8 +1,8 @@
 package net.whg.frameworks.command;
 
+import net.whg.frameworks.event.EventCallerBase;
 import net.whg.frameworks.util.ObjectPool;
 import net.whg.frameworks.util.SimpleObjectPool;
-import net.whg.we.event.EventCallerBase;
 
 public class ConsoleEvent extends EventCallerBase<ConsoleListener>
 {

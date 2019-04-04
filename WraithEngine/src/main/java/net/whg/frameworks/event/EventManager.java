@@ -1,4 +1,4 @@
-package net.whg.we.event;
+package net.whg.frameworks.event;
 
 import java.util.ArrayList;
 import java.util.List;

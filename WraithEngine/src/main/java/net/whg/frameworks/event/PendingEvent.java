@@ -1,4 +1,4 @@
-package net.whg.we.event;
+package net.whg.frameworks.event;
 
 import net.whg.frameworks.util.Poolable;
 

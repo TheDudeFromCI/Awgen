@@ -1,6 +1,6 @@
 package net.whg.frameworks.command;
 
-import net.whg.we.event.Listener;
+import net.whg.frameworks.event.Listener;
 
 public interface ConsoleListener extends Listener
 {
