@@ -18,6 +18,11 @@ public class ByteReader
 		return _bytes[_pos++];
 	}
 
+	public boolean getBool()
+	{
+		return getByte() != 0;
+	}
+
 	public short getShort()
 	{
 		int value = 0;

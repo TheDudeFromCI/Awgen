@@ -238,4 +238,19 @@ public class SceneNode
 
 		node.setParent(this);
 	}
+
+	/***
+	 * Gets the name of this node for serialization purposes. This name should be
+	 * unquie to each node type and should be unchanging. All subclasses should
+	 * override this method.<br>
+	 * <br>
+	 * Names of a node are stored in a dot path format.<br>
+	 * <code>"path.to.node.type"</code>
+	 *
+	 * @return The name of this node type.
+	 */
+	public String getNodeType()
+	{
+		return "empty";
+	}
 }

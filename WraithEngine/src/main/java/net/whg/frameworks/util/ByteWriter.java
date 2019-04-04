@@ -20,6 +20,13 @@ public class ByteWriter
 		return this;
 	}
 
+	public ByteWriter writeBool(boolean value)
+	{
+		writeByte(value ? 1 : 0);
+
+		return this;
+	}
+
 	public ByteWriter writeShort(int value)
 	{
 		_bytes[_pos++] = (byte) (value >> 8 & 0xFF);
