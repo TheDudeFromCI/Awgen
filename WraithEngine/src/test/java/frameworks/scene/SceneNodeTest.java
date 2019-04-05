@@ -4,6 +4,10 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
+import net.whg.frameworks.scene.ISceneListener;
+import net.whg.frameworks.scene.Scene;
+import net.whg.frameworks.scene.SceneHierarchyChangedEvent;
 import net.whg.frameworks.scene.SceneNode;
 import net.whg.frameworks.scene.Transform3D;
 
@@ -100,22 +104,30 @@ public class SceneNodeTest
 	@Test
 	public void isEnabledInHierarchy()
 	{
-		SceneNode node = new SceneNode();
-		SceneNode parent1 = new SceneNode();
-		SceneNode parent2 = new SceneNode();
+		SceneNode a = new SceneNode();
+		SceneNode b = new SceneNode();
+		SceneNode c = new SceneNode();
+		SceneNode d = new SceneNode();
+		SceneNode e = new SceneNode();
 
-		node.setParent(parent1);
-		parent1.setParent(parent2);
+		a.addChild(b);
+		b.addChild(c);
+		c.addChild(d);
+		d.addChild(e);
 
-		parent1.setEnabled(false);
+		c.setEnabled(false);
 
-		Assert.assertTrue(node.isEnabled());
-		Assert.assertFalse(parent1.isEnabled());
-		Assert.assertTrue(parent2.isEnabled());
+		Assert.assertTrue(a.isEnabled());
+		Assert.assertTrue(b.isEnabled());
+		Assert.assertFalse(c.isEnabled());
+		Assert.assertTrue(d.isEnabled());
+		Assert.assertTrue(e.isEnabled());
 
-		Assert.assertFalse(node.isEnabledInHierarchy());
-		Assert.assertFalse(parent1.isEnabledInHierarchy());
-		Assert.assertTrue(parent2.isEnabledInHierarchy());
+		Assert.assertTrue(a.isEnabledInHierarchy());
+		Assert.assertTrue(b.isEnabledInHierarchy());
+		Assert.assertFalse(c.isEnabledInHierarchy());
+		Assert.assertFalse(d.isEnabledInHierarchy());
+		Assert.assertFalse(e.isEnabledInHierarchy());
 	}
 
 	@Test
@@ -228,5 +240,160 @@ public class SceneNodeTest
 		node.getLocalMatrix(mat2);
 
 		Assert.assertEquals(mat1, mat2);
+	}
+
+	@Test
+	public void sceneHierarchyChangedEvent()
+	{
+		Scene scene = new Scene();
+		ISceneListener listener = Mockito.mock(ISceneListener.class);
+		scene.getEvent().addListener(listener);
+
+		SceneNode node = new SceneNode();
+
+		Mockito.doAnswer(a ->
+		{
+			SceneHierarchyChangedEvent e = a.getArgument(0);
+
+			Assert.assertEquals(scene, e.getScene());
+			Assert.assertEquals(node, e.getNode());
+			Assert.assertEquals(scene.getRoot(), e.getNewParent());
+
+			return null;
+		}).when(listener).onSceneHierarchyChanged(Mockito.any());
+
+		node.setParent(scene.getRoot());
+
+		Mockito.verify(listener).onSceneHierarchyChanged(Mockito.any());
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void setParentOfRootNode()
+	{
+		Scene scene = new Scene();
+
+		SceneNode node = new SceneNode();
+		scene.getRoot().setParent(node);
+	}
+
+	@Test
+	public void getScene_Hierarchy()
+	{
+		Scene scene = new Scene();
+
+		SceneNode node1 = new SceneNode();
+		node1.setParent(scene.getRoot());
+
+		SceneNode node2 = new SceneNode();
+		node2.setParent(node1);
+
+		SceneNode node3 = new SceneNode();
+
+		Assert.assertEquals(scene, scene.getRoot().getScene());
+		Assert.assertEquals(scene, node1.getScene());
+		Assert.assertEquals(scene, node2.getScene());
+		Assert.assertNull(node3.getScene());
+	}
+
+	@Test
+	public void changeSceneHierarchy_TwoScenes()
+	{
+		Scene scene1 = new Scene();
+		SceneNode node1 = new SceneNode();
+		scene1.getRoot().addChild(node1);
+
+		Scene scene2 = new Scene();
+		SceneNode node2 = new SceneNode();
+		scene2.getRoot().addChild(node2);
+
+		ISceneListener listener1 = Mockito.mock(ISceneListener.class);
+		scene1.getEvent().addListener(listener1);
+
+		ISceneListener listener2 = Mockito.mock(ISceneListener.class);
+		scene2.getEvent().addListener(listener2);
+
+		node1.setParent(node2);
+
+		Mockito.verify(listener1).onSceneHierarchyChanged(Mockito.any());
+		Mockito.verify(listener2).onSceneHierarchyChanged(Mockito.any());
+
+		Assert.assertEquals(scene2, node1.getScene());
+		Assert.assertEquals(scene2, node2.getScene());
+	}
+
+	@Test
+	public void changeSceneHierarchy_cancel()
+	{
+		Scene scene = new Scene();
+		ISceneListener listener = Mockito.mock(ISceneListener.class);
+		scene.getEvent().addListener(listener);
+
+		Mockito.doAnswer(a ->
+		{
+			SceneHierarchyChangedEvent e = a.getArgument(0);
+			e.setCanceled(true);
+			return null;
+		}).when(listener).onSceneHierarchyChanged(Mockito.any());
+
+		SceneNode node = new SceneNode();
+		boolean worked = node.setParent(scene.getRoot());
+
+		Assert.assertFalse(worked);
+		Assert.assertNull(node.getParent());
+	}
+
+	@Test
+	public void changeSceneHierarchy_cancel_otherScene()
+	{
+		Scene scene = new Scene();
+		SceneNode node1 = new SceneNode();
+		scene.getRoot().addChild(node1);
+
+		ISceneListener listener = Mockito.mock(ISceneListener.class);
+		scene.getEvent().addListener(listener);
+
+		Mockito.doAnswer(a ->
+		{
+			SceneHierarchyChangedEvent e = a.getArgument(0);
+			e.setCanceled(true);
+			return null;
+		}).when(listener).onSceneHierarchyChanged(Mockito.any());
+
+		Scene scene2 = new Scene();
+		node1.setParent(scene2.getRoot());
+
+		boolean worked = node1.setParent(scene.getRoot());
+
+		Assert.assertFalse(worked);
+		Assert.assertNotEquals(scene2.getRoot(), node1.getParent());
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void setScene_NonRootNode()
+	{
+		SceneNode a = new SceneNode();
+		SceneNode b = new SceneNode();
+		a.addChild(b);
+
+		Scene scene = new Scene();
+		scene.setRoot(b);
+	}
+
+	@Test
+	public void isRoot()
+	{
+		SceneNode a = new SceneNode();
+		SceneNode b = new SceneNode();
+		SceneNode c = new SceneNode();
+		a.addChild(b);
+		b.addChild(c);
+
+		Assert.assertTrue(a.isRoot());
+		Assert.assertFalse(b.isRoot());
+		Assert.assertFalse(c.isRoot());
+
+		Assert.assertEquals(a, a.getRootNode());
+		Assert.assertEquals(a, b.getRootNode());
+		Assert.assertEquals(a, c.getRootNode());
 	}
 }

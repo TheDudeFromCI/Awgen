@@ -158,6 +158,9 @@ public class SceneNode
 	 *
 	 * @param node
 	 *            - The scene node to assign as the parent of this scene node.
+	 * @return True if the parent for this node has been updated. False if the event
+	 *         has been canceled, or if the new parent is already equal to the
+	 *         current parent for this node.
 	 * @throws IllegalArgumentException
 	 *             If circular parent dependency is detected.
 	 * @throws IllegalStateException
@@ -165,10 +168,10 @@ public class SceneNode
 	 *             attached to it. This node must be removed from the scene before
 	 *             attempting to give it a parent.
 	 */
-	public void setParent(SceneNode node)
+	public boolean setParent(SceneNode node)
 	{
 		if (_parent == node)
-			return;
+			return false;
 
 		// Check if we can set parent
 		if (!isValidParent(node))
@@ -177,14 +180,29 @@ public class SceneNode
 		if (_parent == null && _scene != null)
 			throw new IllegalStateException("Cannot set a parent to a root attached to a scene!");
 
-		if (_scene != null)
+		// Check if this scene allows it
+		Scene scene = getScene();
+		if (scene != null)
 		{
-			SceneHierarchyChangedEvent e =
-					new SceneHierarchyChangedEvent(_scene, this, _parent, node);
-			_scene.getEvent().onSceneHierarchyChanged(e);
+			SceneHierarchyChangedEvent e = new SceneHierarchyChangedEvent(scene, this, node);
+			scene.getEvent().onSceneHierarchyChanged(e);
 
 			if (e.isCanceled())
-				return;
+				return false;
+		}
+
+		// Check is other scene allows it
+		if (node != null)
+		{
+			scene = node.getScene();
+			if (scene != null)
+			{
+				SceneHierarchyChangedEvent e = new SceneHierarchyChangedEvent(scene, this, node);
+				scene.getEvent().onSceneHierarchyChanged(e);
+
+				if (e.isCanceled())
+					return false;
+			}
 		}
 
 		// Clear current parent if present
@@ -195,6 +213,8 @@ public class SceneNode
 
 		if (_parent != null)
 			_parent._children.add(this);
+
+		return true;
 	}
 
 	/**
@@ -249,13 +269,16 @@ public class SceneNode
 	 *
 	 * @param node
 	 *            - The node to add as a child to this node.
+	 * @return True if the node was succesfully able to be added as a child. False
+	 *         if the event was canceled by a listener, or if the input node is
+	 *         null.
 	 */
-	public void addChild(SceneNode node)
+	public boolean addChild(SceneNode node)
 	{
 		if (node == null)
-			return;
+			return false;
 
-		node.setParent(this);
+		return node.setParent(this);
 	}
 
 	/**
@@ -290,17 +313,42 @@ public class SceneNode
 	}
 
 	/**
-	 * Sets the scene that this scene node belongs to. If this scene node has a
-	 * parent, then this function is passed up the tree to the top level node.
+	 * Sets the scene that this scene node belongs to. This must be called on the
+	 * root node of the tree.
 	 *
 	 * @param scene
 	 *            - The scene that this scene node belongs to.
+	 * @throws IllegalStateException
+	 *             If this node is not the root node of a scene hierarchy.
 	 */
 	void setScene(Scene scene)
 	{
 		if (_parent == null)
 			_scene = scene;
 		else
-			_parent.setScene(scene);
+			throw new IllegalStateException("Cannot set the scene of a non-root node!");
+	}
+
+	/**
+	 * Checks if this node is currently the root node of a scene hierarchy.
+	 *
+	 * @return True if this node has no parent node. False otherwise.
+	 */
+	public boolean isRoot()
+	{
+		return _parent == null;
+	}
+
+	/**
+	 * Gets the root node of this scene hierarchy.
+	 *
+	 * @return The root node of this scene hierarchy.
+	 */
+	public SceneNode getRootNode()
+	{
+		if (_parent == null)
+			return this;
+
+		return _parent.getRootNode();
 	}
 }

@@ -10,11 +10,6 @@ public class UnsupportedNodeType extends RuntimeException
 {
 	private static final long serialVersionUID = 7269034357921543482L;
 
-	public UnsupportedNodeType()
-	{
-		super();
-	}
-
 	public UnsupportedNodeType(String message)
 	{
 		super(message);

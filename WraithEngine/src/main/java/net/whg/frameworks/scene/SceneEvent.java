@@ -17,6 +17,7 @@ public class SceneEvent extends EventCallerBase<ISceneListener>
 		switch (index)
 		{
 			case SCENE_HIERARCHY_CHANGED:
+				listener.onSceneHierarchyChanged((SceneHierarchyChangedEvent) arg);
 				return;
 
 			default:
