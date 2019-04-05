@@ -2,6 +2,7 @@ package net.whg.we.legacy;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.whg.frameworks.scene.Scene;
 
 public class SceneList
 {

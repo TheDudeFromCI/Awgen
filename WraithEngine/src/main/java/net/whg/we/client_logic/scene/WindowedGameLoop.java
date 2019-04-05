@@ -1,5 +1,6 @@
 package net.whg.we.client_logic.scene;
 
+import org.lwjgl.opengl.GL11;
 import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.scene.Transform3D;
 import net.whg.we.client_logic.rendering.Graphics;
@@ -7,12 +8,12 @@ import net.whg.we.client_logic.rendering.ScreenClearType;
 import net.whg.we.client_logic.resources.ResourceFetcher;
 import net.whg.we.client_logic.resources.ResourceManager;
 import net.whg.we.client_logic.resources.scene.ModelResource;
+import net.whg.we.client_logic.ui.UIStack;
 import net.whg.we.client_logic.ui.terminal.Terminal;
 import net.whg.we.client_logic.utils.FPSLogger;
 import net.whg.we.client_logic.utils.Input;
 import net.whg.we.legacy.Color;
 import net.whg.we.legacy.Model;
-import net.whg.we.legacy.Scene;
 import net.whg.we.legacy.SubMesh;
 import net.whg.we.legacy.Time;
 import net.whg.we.scene.CorePlugin;
@@ -25,6 +26,7 @@ public class WindowedGameLoop implements GameLoop
 	private ClientGameState _gameState;
 	private Terminal _terminal;
 	private CorePlugin _corePlugin;
+	private UIStack _uiStack;
 
 	public WindowedGameLoop(ClientGameState gameState)
 	{
@@ -50,9 +52,9 @@ public class WindowedGameLoop implements GameLoop
 
 			ResourceFetcher fetch = new ResourceFetcher(resourceManager, graphics);
 
-			Scene scene = _gameState.getSceneManager().getScene();
+			_uiStack = new UIStack();
 			_terminal = new Terminal(fetch, _gameState);
-			scene.getUIStack().addComponent(_terminal);
+			_uiStack.addComponent(_terminal);
 
 			graphics.setClearScreenColor(new Color(0.2f, 0.4f, 0.8f));
 
@@ -77,7 +79,8 @@ public class WindowedGameLoop implements GameLoop
 					((Transform3D) node.getTransform()).getRotation()
 							.rotateX((float) Math.toRadians(-90f));
 
-					scene.getSceneNode().addChild(node);
+					_gameState.getSceneManager().getSceneList().getLoadedScene(0).getRoot()
+							.addChild(node);
 				}
 			}
 
@@ -107,6 +110,7 @@ public class WindowedGameLoop implements GameLoop
 
 						_gameState.getNetworkHandler().processPackets(_gameState);
 						_gameState.getSceneManager().updateFrame();
+						_uiStack.update();
 					}
 
 					// Calculate frame data
@@ -115,11 +119,15 @@ public class WindowedGameLoop implements GameLoop
 
 					_gameState.getPlayerController().updateFrame();
 					_gameState.getSceneManager().updateFrame();
+					_uiStack.updateFrame();
 
 					_gameState.getGraphicsPipeline().getGraphics()
 							.clearScreenPass(ScreenClearType.CLEAR_COLOR_AND_DEPTH);
 
+					GL11.glEnable(GL11.GL_DEPTH_TEST);
 					_gameState.getSceneManager().render();
+					GL11.glDisable(GL11.GL_DEPTH_TEST);
+					_uiStack.render();
 
 					// End frame
 					Input.endFrame();

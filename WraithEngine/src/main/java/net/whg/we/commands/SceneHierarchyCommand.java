@@ -5,8 +5,8 @@ import net.whg.frameworks.command.CommandHandler;
 import net.whg.frameworks.command.CommandSender;
 import net.whg.frameworks.network.server.OnlinePlayer;
 import net.whg.frameworks.network.server.PlayerCommandSender;
+import net.whg.frameworks.scene.Scene;
 import net.whg.frameworks.scene.SceneNode;
-import net.whg.we.legacy.Scene;
 
 public class SceneHierarchyCommand implements CommandHandler
 {
@@ -62,7 +62,7 @@ public class SceneHierarchyCommand implements CommandHandler
 		Scene scene = player.getScene();
 
 		StringBuilder sb = new StringBuilder();
-		buildTree(sb, scene.getSceneNode(), 0);
+		buildTree(sb, scene.getRoot(), 0);
 
 		return sb.toString();
 	}

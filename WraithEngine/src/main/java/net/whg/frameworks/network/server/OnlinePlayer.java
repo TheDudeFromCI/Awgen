@@ -4,8 +4,8 @@ import net.whg.frameworks.network.connect.Player;
 import net.whg.frameworks.network.netty.UserConnection;
 import net.whg.frameworks.network.packet.Packet;
 import net.whg.frameworks.network.packet.PacketManager;
+import net.whg.frameworks.scene.Scene;
 import net.whg.we.legacy.Location;
-import net.whg.we.legacy.Scene;
 
 public class OnlinePlayer implements Player
 {

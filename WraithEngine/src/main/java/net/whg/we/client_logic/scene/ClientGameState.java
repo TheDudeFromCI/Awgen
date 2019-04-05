@@ -16,6 +16,7 @@ import net.whg.we.client_logic.resources.scene.FontLoader;
 import net.whg.we.client_logic.resources.scene.MaterialLoader;
 import net.whg.we.client_logic.resources.scene.ModelLoader;
 import net.whg.we.scene.GameState;
+import net.whg.we.scene.SceneListManager;
 
 public class ClientGameState implements GameState
 {
@@ -38,7 +39,7 @@ public class ClientGameState implements GameState
 
 	private ResourceManager _resourceManager;
 	private WindowedGameLoop _gameLoop;
-	private ClientSceneManger _sceneManager;
+	private SceneListManager _sceneManager;
 	private ClientPlayerList _playerList;
 	private GraphicsPipeline _graphicsPipeline;
 	private MultiplayerClient _networkHandler;
@@ -48,7 +49,7 @@ public class ClientGameState implements GameState
 	{
 		_resourceManager = buildResourceManager();
 		_gameLoop = new WindowedGameLoop(this);
-		_sceneManager = new ClientSceneManger();
+		_sceneManager = new SceneListManager();
 		_playerList = new ClientPlayerList(client.getUsername(), client.getToken());
 		_graphicsPipeline = new GraphicsPipeline();
 		_networkHandler = client;
@@ -62,7 +63,7 @@ public class ClientGameState implements GameState
 	}
 
 	@Override
-	public ClientSceneManger getSceneManager()
+	public SceneListManager getSceneManager()
 	{
 		return _sceneManager;
 	}

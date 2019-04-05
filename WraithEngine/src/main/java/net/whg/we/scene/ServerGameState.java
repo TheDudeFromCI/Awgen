@@ -63,7 +63,7 @@ public class ServerGameState implements GameState
 	private ResourceManager _resourceManager;
 	private PluginLoader _pluginLoader;
 	private ServerGameLoop _gameLoop;
-	private ServerSceneManager _sceneManager;
+	private SceneListManager _sceneManager;
 	private ServerPlayerList _playerList;
 	private CommandManager _commandManager;
 	private MultiplayerServer _networkHandler;
@@ -73,7 +73,7 @@ public class ServerGameState implements GameState
 		_resourceManager = buildResourceManager();
 		_pluginLoader = buildPluginLoader(_resourceManager);
 		_gameLoop = new ServerGameLoop(this, localhost);
-		_sceneManager = new ServerSceneManager();
+		_sceneManager = new SceneListManager();
 		_playerList = buildPlayerList(server);
 		_commandManager = buildCommandManager(this);
 		_networkHandler = server;
@@ -86,7 +86,7 @@ public class ServerGameState implements GameState
 	}
 
 	@Override
-	public ServerSceneManager getSceneManager()
+	public SceneListManager getSceneManager()
 	{
 		return _sceneManager;
 	}
