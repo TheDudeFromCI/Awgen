@@ -11,9 +11,9 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
+import net.whg.frameworks.logging.Log;
 import net.whg.we.network.multiplayer.ServerEvent;
 import net.whg.we.network.packet.PacketManagerHandler;
-import net.whg.we.utils.logging.Log;
 
 public class Server
 {

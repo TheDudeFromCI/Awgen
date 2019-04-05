@@ -3,9 +3,9 @@ package net.whg.we.client_logic.resources.graphics;
 import org.lwjgl.assimp.AIFace;
 import org.lwjgl.assimp.AIMesh;
 import org.lwjgl.assimp.AIVector3D;
+import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.rendering.ShaderAttributes;
 import net.whg.we.client_logic.rendering.VertexData;
-import net.whg.we.utils.logging.Log;
 
 class AssimpMeshParser
 {

@@ -1,7 +1,7 @@
 package net.whg.we.client_logic.utils;
 
+import net.whg.frameworks.logging.Log;
 import net.whg.we.utils.Time;
-import net.whg.we.utils.logging.Log;
 
 /**
  * A quick and simple utility class that calculates the current rendering

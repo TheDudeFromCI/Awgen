@@ -3,8 +3,8 @@ package util_handling;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import net.whg.frameworks.logging.LogProperty;
 import net.whg.frameworks.util.ObjectPool;
-import net.whg.we.utils.logging.LogProperty;
 
 public class ObjectPoolTest {
     /**

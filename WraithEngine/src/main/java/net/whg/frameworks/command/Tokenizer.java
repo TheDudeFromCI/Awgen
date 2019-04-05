@@ -1,7 +1,7 @@
 package net.whg.frameworks.command;
 
 import java.util.regex.Matcher;
-import net.whg.we.utils.logging.Log;
+import net.whg.frameworks.logging.Log;
 
 public class Tokenizer
 {

@@ -1,13 +1,13 @@
 package net.whg.we.network.multiplayer;
 
 import java.nio.charset.StandardCharsets;
+import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.util.ByteReader;
 import net.whg.frameworks.util.ByteWriter;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketHandler;
 import net.whg.we.network.packet.PacketType;
 import net.whg.we.network.server.ServerPlayerList;
-import net.whg.we.utils.logging.Log;
 
 public class HandshakePacket implements PacketType
 {

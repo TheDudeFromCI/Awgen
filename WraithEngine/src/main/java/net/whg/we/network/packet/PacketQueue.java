@@ -1,8 +1,8 @@
 package net.whg.we.network.packet;
 
 import java.util.LinkedList;
+import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.util.GenericRunnable;
-import net.whg.we.utils.logging.Log;
 
 public class PacketQueue
 {

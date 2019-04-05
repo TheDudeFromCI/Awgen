@@ -2,6 +2,7 @@ package net.whg.we.packets;
 
 import java.nio.charset.StandardCharsets;
 import net.whg.frameworks.command.CommandManager;
+import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.util.ByteReader;
 import net.whg.frameworks.util.ByteWriter;
 import net.whg.we.network.connect.Player;
@@ -13,7 +14,6 @@ import net.whg.we.network.packet.PacketType;
 import net.whg.we.network.server.OnlinePlayer;
 import net.whg.we.scene.GameState;
 import net.whg.we.scene.ServerGameState;
-import net.whg.we.utils.logging.Log;
 
 public class TerminalCommandPacket implements PacketType
 {

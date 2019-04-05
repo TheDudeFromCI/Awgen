@@ -3,13 +3,13 @@ package net.whg.we.client_logic.resources.graphics;
 import org.lwjgl.assimp.AIMesh;
 import org.lwjgl.assimp.AIScene;
 import org.lwjgl.assimp.Assimp;
+import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.rendering.Skeleton;
 import net.whg.we.client_logic.rendering.VertexData;
 import net.whg.we.client_logic.resources.FileLoader;
 import net.whg.we.client_logic.resources.ResourceDatabase;
 import net.whg.we.client_logic.resources.ResourceFile;
 import net.whg.we.client_logic.resources.ResourceLoader;
-import net.whg.we.utils.logging.Log;
 
 /**
  * Loads a mesh scene file. These can contain either a single mesh, or multiple

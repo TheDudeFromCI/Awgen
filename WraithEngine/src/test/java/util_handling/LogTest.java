@@ -5,10 +5,10 @@ import java.time.LocalTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
-import net.whg.we.utils.logging.Log;
-import net.whg.we.utils.logging.LogOutput;
-import net.whg.we.utils.logging.LogPrintWriterOut;
-import net.whg.we.utils.logging.LogProperty;
+import net.whg.frameworks.logging.Log;
+import net.whg.frameworks.logging.LogOutput;
+import net.whg.frameworks.logging.LogPrintWriterOut;
+import net.whg.frameworks.logging.LogProperty;
 
 public class LogTest
 {

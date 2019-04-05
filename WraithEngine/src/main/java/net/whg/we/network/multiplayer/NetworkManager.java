@@ -2,7 +2,7 @@ package net.whg.we.network.multiplayer;
 
 import java.io.IOException;
 import java.util.UUID;
-import net.whg.we.utils.logging.Log;
+import net.whg.frameworks.logging.Log;
 
 public class NetworkManager
 {

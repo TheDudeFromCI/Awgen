@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import net.whg.frameworks.event.EventCallerBase;
 import net.whg.frameworks.event.Listener;
+import net.whg.frameworks.logging.Log;
 import net.whg.we.main.Plugin;
-import net.whg.we.utils.logging.Log;
 
 public class EventCallerBaseTest
 {

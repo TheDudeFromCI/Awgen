@@ -1,6 +1,6 @@
 package net.whg.we.client_logic.utils;
 
-import net.whg.we.utils.logging.Log;
+import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.window.QueuedWindow;
 
 /**

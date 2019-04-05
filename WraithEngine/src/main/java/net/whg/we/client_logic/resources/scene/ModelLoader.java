@@ -1,6 +1,7 @@
 package net.whg.we.client_logic.resources.scene;
 
 import java.util.Set;
+import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.resources.FileDatabase;
 import net.whg.we.client_logic.resources.FileLoader;
 import net.whg.we.client_logic.resources.ResourceDatabase;
@@ -8,7 +9,6 @@ import net.whg.we.client_logic.resources.ResourceFile;
 import net.whg.we.client_logic.resources.ResourceLoader;
 import net.whg.we.client_logic.resources.YamlFile;
 import net.whg.we.client_logic.resources.graphics.MeshResource;
-import net.whg.we.utils.logging.Log;
 
 public class ModelLoader implements FileLoader
 {

@@ -2,12 +2,12 @@ package net.whg.we.client_logic.resources.graphics;
 
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.rendering.TextureProperties;
 import net.whg.we.client_logic.resources.FileLoader;
 import net.whg.we.client_logic.resources.ResourceDatabase;
 import net.whg.we.client_logic.resources.ResourceFile;
 import net.whg.we.client_logic.resources.ResourceLoader;
-import net.whg.we.utils.logging.Log;
 
 public class TextureLoader implements FileLoader
 {

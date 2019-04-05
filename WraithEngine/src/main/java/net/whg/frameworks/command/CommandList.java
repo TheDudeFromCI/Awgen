@@ -1,7 +1,7 @@
 package net.whg.frameworks.command;
 
+import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.util.ComponentList;
-import net.whg.we.utils.logging.Log;
 
 public class CommandList
 {

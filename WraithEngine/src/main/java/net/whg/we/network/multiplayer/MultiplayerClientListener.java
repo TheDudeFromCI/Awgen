@@ -1,6 +1,6 @@
 package net.whg.we.network.multiplayer;
 
-import net.whg.we.utils.logging.Log;
+import net.whg.frameworks.logging.Log;
 
 public class MultiplayerClientListener implements ClientListener
 {

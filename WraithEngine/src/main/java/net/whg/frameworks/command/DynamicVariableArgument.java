@@ -1,6 +1,6 @@
 package net.whg.frameworks.command;
 
-import net.whg.we.utils.logging.Log;
+import net.whg.frameworks.logging.Log;
 
 public class DynamicVariableArgument implements CommandArgument
 {

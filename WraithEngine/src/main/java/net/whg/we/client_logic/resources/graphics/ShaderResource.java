@@ -1,10 +1,10 @@
 package net.whg.we.client_logic.resources.graphics;
 
+import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.rendering.Graphics;
 import net.whg.we.client_logic.rendering.Shader;
 import net.whg.we.client_logic.resources.CompilableResource;
 import net.whg.we.client_logic.resources.ResourceFile;
-import net.whg.we.utils.logging.Log;
 
 /**
  * A wrapper for a loaded shader resource.

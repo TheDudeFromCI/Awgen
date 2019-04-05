@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.Map;
 import java.util.Set;
 import org.yaml.snakeyaml.Yaml;
-import net.whg.we.utils.logging.Log;
+import net.whg.frameworks.logging.Log;
 
 /**
  * Represents a Yaml based resource which can read and write data from

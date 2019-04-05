@@ -1,11 +1,11 @@
 package net.whg.we.network.multiplayer;
 
+import net.whg.frameworks.logging.Log;
 import net.whg.we.network.netty.Server;
 import net.whg.we.network.packet.PacketHandler;
 import net.whg.we.network.packet.PacketManagerHandler;
 import net.whg.we.scene.GameState;
 import net.whg.we.scene.ServerGameState;
-import net.whg.we.utils.logging.Log;
 
 public class MultiplayerServer implements NetworkHandler
 {

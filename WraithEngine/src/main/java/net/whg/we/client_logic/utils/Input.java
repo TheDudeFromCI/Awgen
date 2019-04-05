@@ -3,7 +3,7 @@ package net.whg.we.client_logic.utils;
 import java.util.HashMap;
 import java.util.LinkedList;
 import org.lwjgl.glfw.GLFW;
-import net.whg.we.utils.logging.Log;
+import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.util.ObjectPool;
 import net.whg.frameworks.util.SimpleObjectPool;
 import net.whg.we.client_logic.ui.TypedKeyInput;

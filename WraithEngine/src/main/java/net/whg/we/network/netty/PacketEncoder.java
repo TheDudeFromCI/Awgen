@@ -4,9 +4,9 @@ import java.nio.charset.StandardCharsets;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
+import net.whg.frameworks.logging.Log;
 import net.whg.we.network.packet.Packet;
 import net.whg.we.network.packet.PacketPool;
-import net.whg.we.utils.logging.Log;
 
 public class PacketEncoder extends MessageToByteEncoder<Packet>
 {

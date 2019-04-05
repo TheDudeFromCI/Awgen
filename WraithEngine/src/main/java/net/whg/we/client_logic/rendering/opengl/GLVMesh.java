@@ -7,10 +7,10 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.rendering.ShaderAttributes;
 import net.whg.we.client_logic.rendering.VMesh;
 import net.whg.we.client_logic.rendering.VertexData;
-import net.whg.we.utils.logging.Log;
 
 public class GLVMesh implements VMesh
 {

@@ -3,7 +3,7 @@ package net.whg.we.network.netty;
 import java.io.IOException;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import net.whg.we.utils.logging.Log;
+import net.whg.frameworks.logging.Log;
 
 public class AllowCrashedConnections extends ChannelInboundHandlerAdapter
 {

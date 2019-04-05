@@ -12,7 +12,7 @@ import net.whg.frameworks.command.CommandSender;
 import net.whg.frameworks.command.CommandSet;
 import net.whg.frameworks.command.DefaultKeyring;
 import net.whg.frameworks.command.VariableKeyring;
-import net.whg.we.utils.logging.Log;
+import net.whg.frameworks.logging.Log;
 
 public class CommandListTest
 {

@@ -6,11 +6,11 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
+import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.rendering.TextureProperties;
 import net.whg.we.client_logic.rendering.TextureSampleMode;
 import net.whg.we.client_logic.rendering.VTexture;
 import net.whg.we.utils.Color;
-import net.whg.we.utils.logging.Log;
 
 public class GLVTexture implements VTexture
 {

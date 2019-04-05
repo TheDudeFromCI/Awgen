@@ -2,7 +2,7 @@ package net.whg.we.network.netty;
 
 import java.nio.charset.StandardCharsets;
 import io.netty.buffer.ByteBuf;
-import net.whg.we.utils.logging.Log;
+import net.whg.frameworks.logging.Log;
 
 public class PacketBuffer
 {

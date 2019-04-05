@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
+import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.resources.FileLoader;
 import net.whg.we.client_logic.resources.Resource;
 import net.whg.we.client_logic.resources.ResourceDatabase;
@@ -11,7 +12,6 @@ import net.whg.we.client_logic.resources.ResourceFile;
 import net.whg.we.client_logic.resources.ResourceLoader;
 import net.whg.we.client_logic.ui.font.Font;
 import net.whg.we.client_logic.ui.font.Glyph;
-import net.whg.we.utils.logging.Log;
 
 public class FontLoader implements FileLoader
 {

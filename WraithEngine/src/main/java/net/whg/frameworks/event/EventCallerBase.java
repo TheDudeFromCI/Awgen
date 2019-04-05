@@ -2,10 +2,10 @@ package net.whg.frameworks.event;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.util.ObjectPool;
 import net.whg.frameworks.util.SimpleObjectPool;
 import net.whg.we.main.Plugin;
-import net.whg.we.utils.logging.Log;
 
 /**
  * A default setup for an event caller, which handles most common functions for

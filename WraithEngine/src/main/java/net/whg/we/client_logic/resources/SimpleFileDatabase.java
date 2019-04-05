@@ -3,9 +3,9 @@ package net.whg.we.client_logic.resources;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.util.FileUtils;
 import net.whg.we.main.Plugin;
-import net.whg.we.utils.logging.Log;
 
 public class SimpleFileDatabase implements FileDatabase
 {

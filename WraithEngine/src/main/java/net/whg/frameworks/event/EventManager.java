@@ -2,8 +2,8 @@ package net.whg.frameworks.event;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.whg.frameworks.logging.Log;
 import net.whg.we.main.Plugin;
-import net.whg.we.utils.logging.Log;
 
 /**
  * The global event manager for adding all events to a singular location.

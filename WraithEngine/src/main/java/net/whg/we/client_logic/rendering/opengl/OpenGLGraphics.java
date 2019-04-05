@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL45;
+import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.rendering.Graphics;
 import net.whg.we.client_logic.rendering.ScreenClearType;
 import net.whg.we.client_logic.rendering.TextureProperties;
@@ -12,7 +13,6 @@ import net.whg.we.client_logic.rendering.VShader;
 import net.whg.we.client_logic.rendering.VTexture;
 import net.whg.we.client_logic.rendering.VertexData;
 import net.whg.we.utils.Color;
-import net.whg.we.utils.logging.Log;
 
 public class OpenGLGraphics implements Graphics
 {

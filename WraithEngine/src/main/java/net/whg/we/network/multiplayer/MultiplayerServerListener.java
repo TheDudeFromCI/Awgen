@@ -1,8 +1,8 @@
 package net.whg.we.network.multiplayer;
 
+import net.whg.frameworks.logging.Log;
 import net.whg.we.network.netty.UserConnection;
 import net.whg.we.scene.ServerGameState;
-import net.whg.we.utils.logging.Log;
 
 public class MultiplayerServerListener implements ServerListener
 {

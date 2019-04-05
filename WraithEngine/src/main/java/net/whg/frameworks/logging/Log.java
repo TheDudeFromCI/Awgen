@@ -1,4 +1,4 @@
-package net.whg.we.utils.logging;
+package net.whg.frameworks.logging;
 
 import java.io.PrintWriter;
 import java.util.HashMap;

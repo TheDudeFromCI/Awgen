@@ -1,12 +1,12 @@
 package net.whg.we.main;
 
 import org.lwjgl.Version;
+import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.scene.ClientGameState;
 import net.whg.we.network.multiplayer.MultiplayerClient;
 import net.whg.we.network.multiplayer.MultiplayerServer;
 import net.whg.we.network.multiplayer.NetworkManager;
 import net.whg.we.scene.ServerGameState;
-import net.whg.we.utils.logging.Log;
 
 /**
  * The program entry class. This class is used for the purpose of initializing

@@ -1,5 +1,6 @@
 package net.whg.we.client_logic.scene;
 
+import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.scene.Transform3D;
 import net.whg.we.client_logic.rendering.Graphics;
 import net.whg.we.client_logic.rendering.ScreenClearType;
@@ -17,7 +18,6 @@ import net.whg.we.scene.Scene;
 import net.whg.we.scene.SubMesh;
 import net.whg.we.utils.Color;
 import net.whg.we.utils.Time;
-import net.whg.we.utils.logging.Log;
 
 public class WindowedGameLoop implements GameLoop
 {

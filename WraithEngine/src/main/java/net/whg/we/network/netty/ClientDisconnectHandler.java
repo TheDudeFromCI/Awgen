@@ -2,8 +2,8 @@ package net.whg.we.network.netty;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import net.whg.frameworks.logging.Log;
 import net.whg.we.network.multiplayer.ServerEvent;
-import net.whg.we.utils.logging.Log;
 
 public class ClientDisconnectHandler extends ChannelInboundHandlerAdapter
 {
