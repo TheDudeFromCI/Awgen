@@ -1,4 +1,4 @@
-package net.whg.we.scene;
+package net.whg.frameworks.physics;
 
 import org.joml.Vector3f;
 
