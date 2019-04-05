@@ -14,7 +14,7 @@ public class Scene
 	{
 		/*
 		 * Because java.util.Random only uses 48 bits of precision, there's only 2^48
-		 * posible outputs. Which is still fairly random, but I feel safey with a full
+		 * posible outputs. Which is still fairly random, but I feel safer with a full
 		 * 2^64, tbh.
 		 */
 		// return new Random().nextLong()
@@ -22,11 +22,12 @@ public class Scene
 		// Here I build two RNGs to ensure that the number is sufficently random.
 		int a = new Random().nextInt();
 		int b = new Random().nextInt();
-		return (a << 16) + b;
+		return (a << 32L) + b;
 	}
 
 	private long _sceneId;
 	private SceneNode _root;
+	private SceneEvent _event;
 
 	/**
 	 * Creates a new scene with a default empty scene node as a root. This scene is
@@ -46,8 +47,9 @@ public class Scene
 	 */
 	public Scene(long sceneId)
 	{
-		_root = new SceneNode();
 		_sceneId = sceneId;
+		setRoot(new SceneNode());
+		_event = new SceneEvent();
 	}
 
 	/**
@@ -71,7 +73,11 @@ public class Scene
 		if (root == null)
 			return;
 
+		if (_root != null)
+			_root.setScene(null);
+
 		_root = root;
+		_root.setScene(this);
 	}
 
 	/**
@@ -82,5 +88,15 @@ public class Scene
 	public long getSceneId()
 	{
 		return _sceneId;
+	}
+
+	/**
+	 * Gets the event caller for this scene.
+	 * 
+	 * @return The event caller for this scene.
+	 */
+	public SceneEvent getEvent()
+	{
+		return _event;
 	}
 }

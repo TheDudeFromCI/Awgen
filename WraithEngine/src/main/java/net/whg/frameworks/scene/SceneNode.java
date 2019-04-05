@@ -16,6 +16,8 @@ public class SceneNode
 	private boolean _enabled;
 	private ITransform _transform;
 
+	// Hierarchy Fields
+	private Scene _scene;
 	private SceneNode _parent;
 	private List<SceneNode> _children = new ArrayList<>();
 
@@ -158,6 +160,10 @@ public class SceneNode
 	 *            - The scene node to assign as the parent of this scene node.
 	 * @throws IllegalArgumentException
 	 *             If circular parent dependency is detected.
+	 * @throws IllegalStateException
+	 *             If this scene node is the root node in a tree and has a scene
+	 *             attached to it. This node must be removed from the scene before
+	 *             attempting to give it a parent.
 	 */
 	public void setParent(SceneNode node)
 	{
@@ -167,6 +173,19 @@ public class SceneNode
 		// Check if we can set parent
 		if (!isValidParent(node))
 			throw new IllegalArgumentException("Circular heirarchy detected!");
+
+		if (_parent == null && _scene != null)
+			throw new IllegalStateException("Cannot set a parent to a root attached to a scene!");
+
+		if (_scene != null)
+		{
+			SceneHierarchyChangedEvent e =
+					new SceneHierarchyChangedEvent(_scene, this, _parent, node);
+			_scene.getEvent().onSceneHierarchyChanged(e);
+
+			if (e.isCanceled())
+				return;
+		}
 
 		// Clear current parent if present
 		if (_parent != null)
@@ -239,7 +258,7 @@ public class SceneNode
 		node.setParent(this);
 	}
 
-	/***
+	/**
 	 * Gets the name of this node for serialization purposes. This name should be
 	 * unquie to each node type and should be unchanging. All subclasses should
 	 * override this method.<br>
@@ -252,5 +271,36 @@ public class SceneNode
 	public String getNodeType()
 	{
 		return "empty";
+	}
+
+	/**
+	 * Gets the scene this node currently belongs to. If this node is not the root
+	 * node in a scene, this function returns the scene belonging to the node at the
+	 * top of the hierarchy.
+	 *
+	 * @return The scene this scene node tree belongs to, or null if this scene node
+	 *         does not belong to a scene.
+	 */
+	public Scene getScene()
+	{
+		if (_parent != null)
+			return _parent.getScene();
+
+		return _scene;
+	}
+
+	/**
+	 * Sets the scene that this scene node belongs to. If this scene node has a
+	 * parent, then this function is passed up the tree to the top level node.
+	 *
+	 * @param scene
+	 *            - The scene that this scene node belongs to.
+	 */
+	void setScene(Scene scene)
+	{
+		if (_parent == null)
+			_scene = scene;
+		else
+			_parent.setScene(scene);
 	}
 }

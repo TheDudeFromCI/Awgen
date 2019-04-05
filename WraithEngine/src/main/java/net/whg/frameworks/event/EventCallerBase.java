@@ -16,10 +16,9 @@ import net.whg.we.utils.logging.Log;
  * {@link #getPlugin()} methods as well.
  *
  * @param <T>
- *                - The type of listener this event calls to.
+ *            - The type of listener this event calls to.
  */
-public abstract class EventCallerBase<T extends Listener>
-		implements EventCaller<T>
+public abstract class EventCallerBase<T extends Listener> implements EventCaller<T>
 {
 	protected ArrayList<T> _listeners = new ArrayList<>();
 	protected LinkedList<PendingEvent> _pendingEvents = new LinkedList<>();
@@ -28,8 +27,7 @@ public abstract class EventCallerBase<T extends Listener>
 	private boolean _isInEvent;
 	private boolean _disposeOnFinish;
 	private String _defaultName;
-	private ObjectPool<PendingEvent> _eventPool =
-			new SimpleObjectPool<>(PendingEvent.class);
+	private ObjectPool<PendingEvent> _eventPool = new SimpleObjectPool<>(PendingEvent.class);
 	private Thread _mainThread;
 
 	/**
@@ -43,14 +41,14 @@ public abstract class EventCallerBase<T extends Listener>
 
 	/**
 	 * Creates a new EventCallerBase. The thread provided will be used as the
-	 * execution thread for events. All events will be handled on that thread,
-	 * and events called from other threads will be added to an internally queue
-	 * to be processed on the main thread. If no thread is provided, all events
-	 * be be handled instantly on the thread where the events are called from.
-	 * 
+	 * execution thread for events. All events will be handled on that thread, and
+	 * events called from other threads will be added to an internally queue to be
+	 * processed on the main thread. If no thread is provided, all events be be
+	 * handled instantly on the thread where the events are called from.
+	 *
 	 * @param mainThread
-	 *                       - The thread that all events will be handled on, or
-	 *                       null to disable thread synchronization.
+	 *            - The thread that all events will be handled on, or null to
+	 *            disable thread synchronization.
 	 */
 	public EventCallerBase(Thread mainThread)
 	{
@@ -68,10 +66,8 @@ public abstract class EventCallerBase<T extends Listener>
 			Log.debugf("Adding a listener %s, to the event caller %s.",
 					listener.getClass().getName(), getName());
 		else
-			Log.debugf(
-					"Adding a listener %s, to the event caller %s from the plugin %s.",
-					listener.getClass().getName(), getName(),
-					getPlugin().getPluginName());
+			Log.debugf("Adding a listener %s, to the event caller %s from the plugin %s.",
+					listener.getClass().getName(), getName(), getPlugin().getPluginName());
 
 		synchronized (_listeners)
 		{
@@ -88,8 +84,7 @@ public abstract class EventCallerBase<T extends Listener>
 			}
 
 			_listeners.add(listener);
-			_listeners.sort((o1, o2) -> Integer.compare(o1.getPriority(),
-					o2.getPriority()));
+			_listeners.sort((o1, o2) -> Integer.compare(o1.getPriority(), o2.getPriority()));
 		}
 	}
 
@@ -103,10 +98,8 @@ public abstract class EventCallerBase<T extends Listener>
 			Log.debugf("Removed a listener %s, from the event caller %s.",
 					listener.getClass().getName(), getName());
 		else
-			Log.debugf(
-					"Removed a listener %s, from the event caller %s from the plugin %s.",
-					listener.getClass().getName(), getName(),
-					getPlugin().getPluginName());
+			Log.debugf("Removed a listener %s, from the event caller %s from the plugin %s.",
+					listener.getClass().getName(), getName(), getPlugin().getPluginName());
 
 		synchronized (_listeners)
 		{
@@ -126,8 +119,8 @@ public abstract class EventCallerBase<T extends Listener>
 		if (getPlugin() == null)
 			Log.debugf("Disposed the event caller %s", getName());
 		else
-			Log.debugf("Disposed the event caller %s from the plugin %s",
-					getName(), getPlugin().getPluginName());
+			Log.debugf("Disposed the event caller %s from the plugin %s", getName(),
+					getPlugin().getPluginName());
 
 		synchronized (_listeners)
 		{
@@ -170,9 +163,9 @@ public abstract class EventCallerBase<T extends Listener>
 	}
 
 	/**
-	 * Gets a specific listener based on it's index (or current call order) in
-	 * the listener stack. Listeners can change indices whenever new listeners
-	 * are added or removed,
+	 * Gets a specific listener based on it's index (or current call order) in the
+	 * listener stack. Listeners can change indices whenever new listeners are added
+	 * or removed,
 	 *
 	 * @return The listener at the specified index in the listener list.
 	 */
@@ -185,14 +178,13 @@ public abstract class EventCallerBase<T extends Listener>
 	}
 
 	/**
-	 * Gets the current index of the specified listener. Listeners are called
-	 * based on their index, where the index is equal to the number of other
-	 * listeners that will be called before this one. A listener's index can
-	 * change at any time as listeners are added or removed from this event
-	 * caller.
+	 * Gets the current index of the specified listener. Listeners are called based
+	 * on their index, where the index is equal to the number of other listeners
+	 * that will be called before this one. A listener's index can change at any
+	 * time as listeners are added or removed from this event caller.
 	 *
-	 * @return The index of this listener, or -1 if it is not currently attached
-	 *         to this event caller.
+	 * @return The index of this listener, or -1 if it is not currently attached to
+	 *         this event caller.
 	 */
 	public int getListenerIndex(T listener)
 	{
@@ -207,10 +199,9 @@ public abstract class EventCallerBase<T extends Listener>
 
 	/**
 	 * When this method is called, all currently pending events are sent to the
-	 * currently listeners from this thread. This method should be called from
-	 * the main thread to ensure that thread syncrhonization is occuring
-	 * correctly. If this event caller has no currently pending events, nothing
-	 * happens.
+	 * currently listeners from this thread. This method should be called from the
+	 * main thread to ensure that thread syncrhonization is occuring correctly. If
+	 * this event caller has no currently pending events, nothing happens.
 	 */
 	public void handlePendingEvents()
 	{
@@ -245,8 +236,7 @@ public abstract class EventCallerBase<T extends Listener>
 				}
 				catch (Exception exception)
 				{
-					Log.errorf("Uncaught exception thrown from event listener!",
-							exception);
+					Log.errorf("Uncaught exception thrown from event listener!", exception);
 				}
 			}
 
@@ -265,8 +255,7 @@ public abstract class EventCallerBase<T extends Listener>
 				_listeners.remove(t);
 
 			if (!_pendingAdd.isEmpty())
-				_listeners.sort((o1, o2) -> Integer.compare(o1.getPriority(),
-						o2.getPriority()));
+				_listeners.sort((o1, o2) -> Integer.compare(o1.getPriority(), o2.getPriority()));
 
 			_pendingAdd.clear();
 			_pendingRemove.clear();
@@ -286,23 +275,22 @@ public abstract class EventCallerBase<T extends Listener>
 	/**
 	 * Calls an event based on an index. This method will simply call
 	 * {@link #runEvent(Listener, int, Object[])} for each listener currently
-	 * attached to this event caller. This method handles common event caller
-	 * issues such as error catching, concurrent modification, and disposal
-	 * after event finished. It is recommended to use this wrapper method
-	 * instead of calling listeners directly. <br>
+	 * attached to this event caller. This method handles common event caller issues
+	 * such as error catching, concurrent modification, and disposal after event
+	 * finished. It is recommended to use this wrapper method instead of calling
+	 * listeners directly.<br>
 	 * <br>
-	 * If this EventCaller is handling event synchronization, events are added
-	 * to an event queue internally which will be executed on the main thread.
-	 * If the current thread is the main thread, all events in the queue are
-	 * executed instantly.
-	 * 
+	 * If this EventCaller is handling event synchronization, events are added to an
+	 * event queue internally which will be executed on the main thread. If the
+	 * current thread is the main thread, all events in the queue are executed
+	 * instantly.
+	 *
 	 * @param index
-	 *                  - The index of the evebt, This value is not used, and is
-	 *                  mereley the event index passed to each call of
-	 *                  {@link #runEvent(Listener, int, Object)}.
+	 *            - The index of the evebt, This value is not used, and is mereley
+	 *            the event index passed to each call of
+	 *            {@link #runEvent(Listener, int, Object)}.
 	 * @param arg
-	 *                  - The argument list of parameters to pass to the
-	 *                  runEvent method.
+	 *            - The argument list of parameters to pass to the runEvent method.
 	 */
 	protected void callEvent(int index, Object arg)
 	{
@@ -324,20 +312,47 @@ public abstract class EventCallerBase<T extends Listener>
 	}
 
 	/**
-	 * This method is called by @{@link #callEvent(int, Object)} for each
-	 * listener attached to this event caller. This method should be used for
-	 * the purpose of physically calling events on the given listener based on
-	 * the event index.
+	 * Calls an event based on an index. This method will simply call
+	 * {@link #runEvent(Listener, int, Object[])} for each listener currently
+	 * attached to this event caller. This method handles common event caller issues
+	 * such as error catching, concurrent modification, and disposal after event
+	 * finished. It is recommended to use this wrapper method instead of calling
+	 * listeners directly.<br>
+	 * <br>
+	 * If this EventCaller is handling event synchronization, events are added to an
+	 * event queue internally which will be executed on the main thread. If the
+	 * current thread is the main thread, all events in the queue are executed
+	 * instantly.
+	 *
+	 * @param index
+	 *            - The index of the evebt, This value is not used, and is mereley
+	 *            the event index passed to each call of
+	 *            {@link #runEvent(Listener, int, Object)}.
+	 * @param arg
+	 *            - The argument list of parameters to pass to the runEvent method.
+	 * @param block
+	 *            - If true, this method will block on all non-main threads until
+	 *            the event is handled. (NOT YET IMPLEMENTED!)
+	 */
+	protected void callEvent(int index, Object arg, boolean block)
+	{
+		// TODO Allow events to block until they are handled.
+
+		callEvent(index, arg);
+	}
+
+	/**
+	 * This method is called by @{@link #callEvent(int, Object)} for each listener
+	 * attached to this event caller. This method should be used for the purpose of
+	 * physically calling events on the given listener based on the event index.
 	 *
 	 * @param listener
-	 *                     - The listener to call the event method for.
+	 *            - The listener to call the event method for.
 	 * @param index
-	 *                     - The event index, provided
-	 *                     by @{@link #callEvent(int, Object)}, as to indicate
-	 *                     which event should be called.
+	 *            - The event index, provided by @{@link #callEvent(int, Object)},
+	 *            as to indicate which event should be called.
 	 * @param arg
-	 *                     - The argument parameters to pass along to the
-	 *                     listener.
+	 *            - The argument parameters to pass along to the listener.
 	 */
 	protected abstract void runEvent(T listener, int index, Object arg);
 }
