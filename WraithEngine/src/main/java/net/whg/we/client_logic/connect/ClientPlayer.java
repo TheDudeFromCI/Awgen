@@ -1,6 +1,6 @@
 package net.whg.we.client_logic.connect;
 
-import net.whg.we.network.connect.Player;
+import net.whg.frameworks.network.connect.Player;
 import net.whg.we.scene.Location;
 
 /**

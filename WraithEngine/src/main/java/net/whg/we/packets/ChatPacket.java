@@ -2,12 +2,12 @@ package net.whg.we.packets;
 
 import java.nio.charset.StandardCharsets;
 import net.whg.frameworks.logging.Log;
+import net.whg.frameworks.network.multiplayer.MultiplayerClient;
+import net.whg.frameworks.network.packet.Packet;
+import net.whg.frameworks.network.packet.PacketHandler;
+import net.whg.frameworks.network.packet.PacketType;
 import net.whg.frameworks.util.ByteReader;
 import net.whg.frameworks.util.ByteWriter;
-import net.whg.we.network.multiplayer.MultiplayerClient;
-import net.whg.we.network.packet.Packet;
-import net.whg.we.network.packet.PacketHandler;
-import net.whg.we.network.packet.PacketType;
 
 public class ChatPacket implements PacketType
 {

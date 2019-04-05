@@ -1,9 +1,9 @@
 package net.whg.we.client_logic.connect;
 
 import java.util.ArrayList;
+import net.whg.frameworks.network.connect.Player;
+import net.whg.frameworks.network.connect.PlayerList;
 import net.whg.frameworks.util.GenericRunnable;
-import net.whg.we.network.connect.Player;
-import net.whg.we.network.connect.PlayerList;
 
 public class ClientPlayerList implements PlayerList
 {

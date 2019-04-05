@@ -1,6 +1,7 @@
 package net.whg.we.client_logic.scene;
 
 import java.io.File;
+import net.whg.frameworks.network.multiplayer.MultiplayerClient;
 import net.whg.we.client_logic.connect.ClientPlayerList;
 import net.whg.we.client_logic.rendering.GraphicsPipeline;
 import net.whg.we.client_logic.resources.FileDatabase;
@@ -14,7 +15,6 @@ import net.whg.we.client_logic.resources.graphics.TextureLoader;
 import net.whg.we.client_logic.resources.scene.FontLoader;
 import net.whg.we.client_logic.resources.scene.MaterialLoader;
 import net.whg.we.client_logic.resources.scene.ModelLoader;
-import net.whg.we.network.multiplayer.MultiplayerClient;
 import net.whg.we.scene.GameState;
 
 public class ClientGameState implements GameState

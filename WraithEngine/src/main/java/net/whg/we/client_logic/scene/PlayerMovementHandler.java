@@ -2,8 +2,8 @@ package net.whg.we.client_logic.scene;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import net.whg.we.network.multiplayer.MultiplayerClient;
-import net.whg.we.network.packet.Packet;
+import net.whg.frameworks.network.multiplayer.MultiplayerClient;
+import net.whg.frameworks.network.packet.Packet;
 import net.whg.we.packets.PlayerMovePacket;
 import net.whg.we.scene.GameState;
 import net.whg.we.scene.Location;

@@ -4,9 +4,9 @@ import net.whg.frameworks.command.Command;
 import net.whg.frameworks.command.CommandArgument;
 import net.whg.frameworks.command.CommandConsole;
 import net.whg.frameworks.command.CommandHandler;
-import net.whg.we.network.packet.Packet;
-import net.whg.we.network.server.OnlinePlayer;
-import net.whg.we.network.server.ServerPlayerList;
+import net.whg.frameworks.network.packet.Packet;
+import net.whg.frameworks.network.server.OnlinePlayer;
+import net.whg.frameworks.network.server.ServerPlayerList;
 import net.whg.we.packets.ChatPacket;
 
 public class ChatCommand implements CommandHandler

@@ -2,11 +2,11 @@ package net.whg.we.packets;
 
 import java.nio.charset.StandardCharsets;
 import net.whg.frameworks.logging.Log;
+import net.whg.frameworks.network.packet.Packet;
+import net.whg.frameworks.network.packet.PacketHandler;
+import net.whg.frameworks.network.packet.PacketType;
 import net.whg.frameworks.util.ByteReader;
 import net.whg.frameworks.util.ByteWriter;
-import net.whg.we.network.packet.Packet;
-import net.whg.we.network.packet.PacketHandler;
-import net.whg.we.network.packet.PacketType;
 
 /**
  * This packet is sent when a player joins a server to tell the clients to spawn

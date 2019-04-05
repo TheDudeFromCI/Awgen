@@ -2,6 +2,8 @@ package net.whg.we.scene;
 
 import java.io.File;
 import net.whg.frameworks.command.CommandManager;
+import net.whg.frameworks.network.multiplayer.MultiplayerServer;
+import net.whg.frameworks.network.server.ServerPlayerList;
 import net.whg.we.client_logic.resources.FileDatabase;
 import net.whg.we.client_logic.resources.ResourceDatabase;
 import net.whg.we.client_logic.resources.ResourceLoader;
@@ -15,8 +17,6 @@ import net.whg.we.client_logic.resources.scene.MaterialLoader;
 import net.whg.we.client_logic.resources.scene.ModelLoader;
 import net.whg.we.commands.CommandUtils;
 import net.whg.we.main.PluginLoader;
-import net.whg.we.network.multiplayer.MultiplayerServer;
-import net.whg.we.network.server.ServerPlayerList;
 
 public class ServerGameState implements GameState
 {

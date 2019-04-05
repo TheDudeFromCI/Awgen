@@ -4,18 +4,18 @@ import java.nio.charset.StandardCharsets;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+import net.whg.frameworks.network.multiplayer.ClientEvent;
+import net.whg.frameworks.network.multiplayer.DefaultPacketHandler;
+import net.whg.frameworks.network.multiplayer.ServerEvent;
+import net.whg.frameworks.network.netty.Client;
+import net.whg.frameworks.network.netty.Server;
+import net.whg.frameworks.network.netty.UserConnection;
+import net.whg.frameworks.network.packet.DefaultPacketFactory;
+import net.whg.frameworks.network.packet.Packet;
+import net.whg.frameworks.network.packet.PacketManagerHandler;
+import net.whg.frameworks.network.packet.PacketType;
 import net.whg.frameworks.util.ByteReader;
 import net.whg.frameworks.util.ByteWriter;
-import net.whg.we.network.multiplayer.ClientEvent;
-import net.whg.we.network.multiplayer.DefaultPacketHandler;
-import net.whg.we.network.multiplayer.ServerEvent;
-import net.whg.we.network.netty.Client;
-import net.whg.we.network.netty.Server;
-import net.whg.we.network.netty.UserConnection;
-import net.whg.we.network.packet.DefaultPacketFactory;
-import net.whg.we.network.packet.Packet;
-import net.whg.we.network.packet.PacketManagerHandler;
-import net.whg.we.network.packet.PacketType;
 
 public class EchoServerTest
 {
