@@ -1,6 +1,6 @@
 package net.whg.frameworks.network.connect;
 
-import net.whg.we.scene.Location;
+import net.whg.we.legacy.Location;
 
 public interface Player
 {

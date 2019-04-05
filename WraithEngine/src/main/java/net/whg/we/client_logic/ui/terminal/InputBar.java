@@ -10,9 +10,9 @@ import net.whg.we.client_logic.ui.UIComponent;
 import net.whg.we.client_logic.ui.UIImage;
 import net.whg.we.client_logic.ui.font.UIString;
 import net.whg.we.client_logic.utils.Input;
+import net.whg.we.legacy.Time;
+import net.whg.we.legacy.Transform2D;
 import net.whg.we.packets.TerminalCommandPacket;
-import net.whg.we.scene.Transform2D;
-import net.whg.we.utils.Time;
 
 public class InputBar implements UIComponent
 {

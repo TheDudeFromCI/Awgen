@@ -1,7 +1,7 @@
 package net.whg.we.client_logic.connect;
 
 import net.whg.frameworks.network.connect.Player;
-import net.whg.we.scene.Location;
+import net.whg.we.legacy.Location;
 
 /**
  * Represents an online player, from a client's perspective.

@@ -1,4 +1,4 @@
-package net.whg.we.utils;
+package net.whg.we.legacy;
 
 import org.lwjgl.opengl.GL11;
 import net.whg.we.client_logic.utils.Input;

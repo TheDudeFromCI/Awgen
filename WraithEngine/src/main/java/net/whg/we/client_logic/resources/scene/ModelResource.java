@@ -6,7 +6,7 @@ import net.whg.we.client_logic.rendering.Mesh;
 import net.whg.we.client_logic.resources.CompilableResource;
 import net.whg.we.client_logic.resources.ResourceFile;
 import net.whg.we.client_logic.resources.graphics.MeshResource;
-import net.whg.we.scene.Model;
+import net.whg.we.legacy.Model;
 
 public class ModelResource implements CompilableResource
 {

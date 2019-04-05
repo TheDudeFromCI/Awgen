@@ -4,7 +4,7 @@ import java.nio.FloatBuffer;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 import net.whg.we.client_logic.utils.Screen;
-import net.whg.we.utils.Color;
+import net.whg.we.legacy.Color;
 
 public class Material
 {

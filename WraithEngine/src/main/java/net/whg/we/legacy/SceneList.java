@@ -1,4 +1,4 @@
-package net.whg.we.scene;
+package net.whg.we.legacy;
 
 import java.util.ArrayList;
 import java.util.List;

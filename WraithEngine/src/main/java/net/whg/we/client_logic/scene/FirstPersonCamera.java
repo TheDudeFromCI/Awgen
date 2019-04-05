@@ -6,8 +6,8 @@ import net.whg.frameworks.util.MathUtils;
 import net.whg.we.client_logic.rendering.Camera;
 import net.whg.we.client_logic.utils.Input;
 import net.whg.we.client_logic.utils.Screen;
-import net.whg.we.scene.Location;
-import net.whg.we.utils.Time;
+import net.whg.we.legacy.Location;
+import net.whg.we.legacy.Time;
 
 /**
  * An instance of a PersonCamera. In this case the camera is first person and

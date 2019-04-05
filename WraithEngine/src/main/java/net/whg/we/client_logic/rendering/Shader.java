@@ -4,7 +4,7 @@ import java.nio.FloatBuffer;
 import java.util.HashMap;
 import org.joml.Vector4f;
 import net.whg.frameworks.logging.Log;
-import net.whg.we.utils.Color;
+import net.whg.we.legacy.Color;
 
 public class Shader
 {

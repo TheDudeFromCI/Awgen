@@ -1,4 +1,4 @@
-package net.whg.we.scene;
+package net.whg.we.legacy;
 
 import net.whg.we.client_logic.rendering.LocationHolder;
 import net.whg.we.client_logic.rendering.Material;

@@ -1,5 +1,8 @@
 package net.whg.we.scene;
 
+import net.whg.we.legacy.SceneList;
+import net.whg.we.legacy.SceneManager;
+
 public class ServerSceneManager implements SceneManager
 {
 	private SceneList _sceneList;

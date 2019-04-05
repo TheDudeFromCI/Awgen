@@ -13,7 +13,7 @@ import net.whg.we.client_logic.resources.scene.FontResource;
 import net.whg.we.client_logic.resources.scene.MaterialResource;
 import net.whg.we.client_logic.resources.scene.ModelResource;
 import net.whg.we.client_logic.ui.font.Font;
-import net.whg.we.scene.Model;
+import net.whg.we.legacy.Model;
 
 public class ResourceFetcher
 {

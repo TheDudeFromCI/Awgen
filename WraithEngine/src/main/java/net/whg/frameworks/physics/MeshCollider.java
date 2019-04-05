@@ -3,7 +3,7 @@ package net.whg.frameworks.physics;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import net.whg.we.client_logic.rendering.VertexData;
-import net.whg.we.scene.Location;
+import net.whg.we.legacy.Location;
 
 public class MeshCollider implements Collider
 {

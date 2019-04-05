@@ -1,6 +1,6 @@
 package net.whg.we.client_logic.ui;
 
-import net.whg.we.scene.Transform2D;
+import net.whg.we.legacy.Transform2D;
 
 public interface UIComponent
 {

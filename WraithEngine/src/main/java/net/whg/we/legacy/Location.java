@@ -1,4 +1,4 @@
-package net.whg.we.scene;
+package net.whg.we.legacy;
 
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;

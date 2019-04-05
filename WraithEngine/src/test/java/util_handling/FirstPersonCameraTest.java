@@ -12,7 +12,7 @@ import net.whg.we.client_logic.scene.WindowedGameLoop;
 import net.whg.we.client_logic.utils.Input;
 import net.whg.we.client_logic.utils.Screen;
 import net.whg.we.client_logic.window.KeyState;
-import net.whg.we.utils.Time;
+import net.whg.we.legacy.Time;
 
 public class FirstPersonCameraTest
 {

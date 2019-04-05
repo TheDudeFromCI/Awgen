@@ -1,8 +1,9 @@
-package net.whg.we.scene;
+package net.whg.we.legacy;
 
 import org.lwjgl.opengl.GL11;
 import net.whg.frameworks.scene.SceneNode;
 import net.whg.we.client_logic.ui.UIStack;
+import net.whg.we.scene.RenderableNode;
 
 public class Scene
 {

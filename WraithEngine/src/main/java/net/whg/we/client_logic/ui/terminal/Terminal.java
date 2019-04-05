@@ -12,10 +12,10 @@ import net.whg.we.client_logic.ui.font.Font;
 import net.whg.we.client_logic.ui.font.UIString;
 import net.whg.we.client_logic.utils.Input;
 import net.whg.we.client_logic.utils.Screen;
+import net.whg.we.legacy.AnimatedProperty;
+import net.whg.we.legacy.Color;
+import net.whg.we.legacy.Time;
 import net.whg.we.main.Plugin;
-import net.whg.we.utils.AnimatedProperty;
-import net.whg.we.utils.Color;
-import net.whg.we.utils.Time;
 
 public class Terminal extends SimpleContainer
 {

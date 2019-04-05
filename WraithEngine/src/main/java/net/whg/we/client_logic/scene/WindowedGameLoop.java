@@ -10,14 +10,14 @@ import net.whg.we.client_logic.resources.scene.ModelResource;
 import net.whg.we.client_logic.ui.terminal.Terminal;
 import net.whg.we.client_logic.utils.FPSLogger;
 import net.whg.we.client_logic.utils.Input;
+import net.whg.we.legacy.Color;
+import net.whg.we.legacy.Model;
+import net.whg.we.legacy.Scene;
+import net.whg.we.legacy.SubMesh;
+import net.whg.we.legacy.Time;
 import net.whg.we.scene.CorePlugin;
 import net.whg.we.scene.GameLoop;
-import net.whg.we.scene.Model;
 import net.whg.we.scene.ModelNode;
-import net.whg.we.scene.Scene;
-import net.whg.we.scene.SubMesh;
-import net.whg.we.utils.Color;
-import net.whg.we.utils.Time;
 
 public class WindowedGameLoop implements GameLoop
 {

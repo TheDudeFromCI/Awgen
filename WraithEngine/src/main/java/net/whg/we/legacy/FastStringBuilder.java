@@ -1,4 +1,4 @@
-package net.whg.we.utils;
+package net.whg.we.legacy;
 
 import net.whg.frameworks.util.Poolable;
 

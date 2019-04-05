@@ -4,9 +4,9 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import net.whg.frameworks.network.multiplayer.MultiplayerClient;
 import net.whg.frameworks.network.packet.Packet;
+import net.whg.we.legacy.Location;
 import net.whg.we.packets.PlayerMovePacket;
 import net.whg.we.scene.GameState;
-import net.whg.we.scene.Location;
 
 public class PlayerMovementHandler
 {

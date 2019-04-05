@@ -6,7 +6,7 @@ import net.whg.frameworks.command.CommandSender;
 import net.whg.frameworks.network.server.OnlinePlayer;
 import net.whg.frameworks.network.server.PlayerCommandSender;
 import net.whg.frameworks.scene.SceneNode;
-import net.whg.we.scene.Scene;
+import net.whg.we.legacy.Scene;
 
 public class SceneHierarchyCommand implements CommandHandler
 {

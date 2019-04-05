@@ -1,4 +1,4 @@
-package net.whg.we.utils;
+package net.whg.we.legacy;
 
 /**
  * A utility class for measure game time. Time is based of the system clock, and

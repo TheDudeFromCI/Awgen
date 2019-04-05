@@ -11,7 +11,7 @@ import net.whg.frameworks.util.ByteReader;
 import net.whg.frameworks.util.ByteWriter;
 import net.whg.we.client_logic.connect.ClientPlayer;
 import net.whg.we.client_logic.connect.ClientPlayerList;
-import net.whg.we.scene.Location;
+import net.whg.we.legacy.Location;
 
 /**
  * This packet is sent when a player joins a server to tell the clients to spawn
