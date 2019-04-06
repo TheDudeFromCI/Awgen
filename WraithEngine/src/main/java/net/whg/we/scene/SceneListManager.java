@@ -22,7 +22,11 @@ public class SceneListManager implements SceneManager
 
 	private void updatePhysicsNodes(SceneNode node)
 	{
-		// TODO If node instanceof updateable
+		if (node instanceof UpdateableNode)
+			((UpdateableNode) node).update();
+
+		for (int i = 0; i < node.getChildCount(); i++)
+			updatePhysicsNodes(node.getChild(i));
 	}
 
 	@Override
@@ -34,7 +38,11 @@ public class SceneListManager implements SceneManager
 
 	private void updateNodes(SceneNode node)
 	{
-		// TODO If node instanceof updateable
+		if (node instanceof UpdateableNode)
+			((UpdateableNode) node).updateFrame();
+
+		for (int i = 0; i < node.getChildCount(); i++)
+			updateNodes(node.getChild(i));
 	}
 
 	@Override

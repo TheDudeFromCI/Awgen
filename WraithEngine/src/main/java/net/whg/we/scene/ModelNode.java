@@ -2,7 +2,6 @@ package net.whg.we.scene;
 
 import org.joml.Matrix4f;
 import net.whg.frameworks.scene.SceneNode;
-import net.whg.we.client_logic.rendering.Camera;
 import net.whg.we.client_logic.rendering.Material;
 import net.whg.we.client_logic.rendering.Mesh;
 
@@ -10,11 +9,11 @@ public class ModelNode extends SceneNode implements RenderableNode
 {
 	private Mesh _mesh;
 	private Material _material;
-	private Camera _camera;
+	private CameraNode _camera;
 
 	private Matrix4f _matrixBuffer = new Matrix4f();
 
-	public ModelNode(Mesh mesh, Material material, Camera camera)
+	public ModelNode(Mesh mesh, Material material, CameraNode camera)
 	{
 		_mesh = mesh;
 		_material = material;
@@ -31,7 +30,7 @@ public class ModelNode extends SceneNode implements RenderableNode
 		return _material;
 	}
 
-	public Camera getCamera()
+	public CameraNode getCamera()
 	{
 		return _camera;
 	}

@@ -5,6 +5,7 @@ import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 import net.whg.we.legacy.Color;
 import net.whg.we.legacy.Screen;
+import net.whg.we.scene.CameraNode;
 
 public class Material
 {
@@ -88,10 +89,12 @@ public class Material
 			_shader.setUniformVec4("_color", _color);
 	}
 
-	public void setMVPUniform(Camera camera, Matrix4f matrix)
+	public void setMVPUniform(CameraNode camera, Matrix4f matrix)
 	{
-		camera.getProjectionMatrix(_projectionMatrix);
-		camera.getViewMatrix(_viewMatrix);
+		_projectionMatrix.set(camera.getProjectionMatrix());
+
+		camera.getFullMatrix(_viewMatrix);
+		_viewMatrix.invert();
 
 		if (_shader.hasUniform("_mMat"))
 		{

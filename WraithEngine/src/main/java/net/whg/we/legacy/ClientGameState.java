@@ -15,7 +15,6 @@ import net.whg.we.client_logic.resources.graphics.TextureLoader;
 import net.whg.we.client_logic.resources.scene.FontLoader;
 import net.whg.we.client_logic.resources.scene.MaterialLoader;
 import net.whg.we.client_logic.resources.scene.ModelLoader;
-import net.whg.we.client_logic.utils.FirstPersonCamera;
 import net.whg.we.main.GameState;
 import net.whg.we.scene.SceneListManager;
 
@@ -44,7 +43,6 @@ public class ClientGameState implements GameState
 	private ClientPlayerList _playerList;
 	private GraphicsPipeline _graphicsPipeline;
 	private MultiplayerClient _networkHandler;
-	private PlayerController _playerController;
 
 	public ClientGameState(MultiplayerClient client)
 	{
@@ -54,7 +52,6 @@ public class ClientGameState implements GameState
 		_playerList = new ClientPlayerList(client.getUsername(), client.getToken());
 		_graphicsPipeline = new GraphicsPipeline();
 		_networkHandler = client;
-		_playerController = new FirstPersonCamera(_gameLoop);
 	}
 
 	@Override
@@ -90,10 +87,5 @@ public class ClientGameState implements GameState
 	public MultiplayerClient getNetworkHandler()
 	{
 		return _networkHandler;
-	}
-
-	public PlayerController getPlayerController()
-	{
-		return _playerController;
 	}
 }

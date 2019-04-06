@@ -2,6 +2,7 @@ package net.whg.we.legacy;
 
 import org.lwjgl.opengl.GL11;
 import net.whg.frameworks.logging.Log;
+import net.whg.frameworks.scene.SceneNode;
 import net.whg.frameworks.scene.Transform3D;
 import net.whg.we.client_logic.rendering.Graphics;
 import net.whg.we.client_logic.rendering.ScreenClearType;
@@ -13,6 +14,8 @@ import net.whg.we.client_logic.ui.terminal.Terminal;
 import net.whg.we.client_logic.utils.FPSLogger;
 import net.whg.we.main.CorePlugin;
 import net.whg.we.main.GameLoop;
+import net.whg.we.scene.CameraNode;
+import net.whg.we.scene.FirstPersonNode;
 import net.whg.we.scene.ModelNode;
 
 public class WindowedGameLoop implements GameLoop
@@ -56,6 +59,15 @@ public class WindowedGameLoop implements GameLoop
 			long startTime = System.currentTimeMillis();
 			long usedPhysicsFrames = 0;
 
+			SceneNode sceneRoot =
+					_gameState.getSceneManager().getSceneList().getLoadedScene(0).getRoot();
+
+			// Setup First Person Camera Nodes
+			CameraNode camera = new CameraNode();
+			FirstPersonNode firstPerson = new FirstPersonNode();
+			camera.setParent(firstPerson);
+			firstPerson.setParent(sceneRoot);
+
 			// TODO Remove this. Loading a resources should occur through
 			// commands and startup files, not pre-loaded.
 			{
@@ -67,15 +79,13 @@ public class WindowedGameLoop implements GameLoop
 				for (int i = 0; i < model.getSubMeshCount(); i++)
 				{
 					SubMesh sm = model.getSubMesh(i);
-					ModelNode node = new ModelNode(sm.getMesh(), sm.getMaterial(),
-							_gameState.getPlayerController().getCamera());
+					ModelNode node = new ModelNode(sm.getMesh(), sm.getMaterial(), camera);
 
 					((Transform3D) node.getTransform()).setSize(100f);
 					((Transform3D) node.getTransform()).getRotation()
 							.rotateX((float) Math.toRadians(-90f));
 
-					_gameState.getSceneManager().getSceneList().getLoadedScene(0).getRoot()
-							.addChild(node);
+					sceneRoot.addChild(node);
 				}
 			}
 
@@ -112,7 +122,6 @@ public class WindowedGameLoop implements GameLoop
 					Time.updateTime();
 					FPSLogger.logFramerate();
 
-					_gameState.getPlayerController().updateFrame();
 					_gameState.getSceneManager().updateFrame();
 					_uiStack.updateFrame();
 
