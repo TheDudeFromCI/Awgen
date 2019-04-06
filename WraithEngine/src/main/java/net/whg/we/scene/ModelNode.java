@@ -45,4 +45,10 @@ public class ModelNode extends SceneNode implements RenderableNode
 
 		_mesh.render();
 	}
+
+	@Override
+	public String getNodeType()
+	{
+		return "render.model";
+	}
 }
