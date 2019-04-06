@@ -2,7 +2,7 @@ package net.whg.we.main;
 
 import net.whg.frameworks.network.connect.PlayerList;
 import net.whg.frameworks.network.multiplayer.NetworkHandler;
-import net.whg.we.client_logic.resources.ResourceManager;
+import net.whg.frameworks.resource.ResourceManager;
 import net.whg.we.legacy.SceneManager;
 
 /**

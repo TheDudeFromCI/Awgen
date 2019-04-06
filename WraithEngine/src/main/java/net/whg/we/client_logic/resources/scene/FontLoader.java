@@ -5,11 +5,11 @@ import java.io.FileReader;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 import net.whg.frameworks.logging.Log;
-import net.whg.we.client_logic.resources.FileLoader;
-import net.whg.we.client_logic.resources.Resource;
-import net.whg.we.client_logic.resources.ResourceDatabase;
-import net.whg.we.client_logic.resources.ResourceFile;
-import net.whg.we.client_logic.resources.ResourceLoader;
+import net.whg.frameworks.resource.FileLoader;
+import net.whg.frameworks.resource.Resource;
+import net.whg.frameworks.resource.ResourceDatabase;
+import net.whg.frameworks.resource.ResourceFile;
+import net.whg.frameworks.resource.ResourceLoader;
 import net.whg.we.client_logic.ui.font.Font;
 import net.whg.we.client_logic.ui.font.Glyph;
 

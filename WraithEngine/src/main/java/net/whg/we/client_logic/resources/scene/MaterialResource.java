@@ -1,10 +1,10 @@
 package net.whg.we.client_logic.resources.scene;
 
+import net.whg.frameworks.resource.CompilableResource;
+import net.whg.frameworks.resource.ResourceFile;
 import net.whg.we.client_logic.rendering.Graphics;
 import net.whg.we.client_logic.rendering.Material;
 import net.whg.we.client_logic.rendering.Texture;
-import net.whg.we.client_logic.resources.CompilableResource;
-import net.whg.we.client_logic.resources.ResourceFile;
 import net.whg.we.client_logic.resources.graphics.ShaderResource;
 import net.whg.we.client_logic.resources.graphics.TextureResource;
 

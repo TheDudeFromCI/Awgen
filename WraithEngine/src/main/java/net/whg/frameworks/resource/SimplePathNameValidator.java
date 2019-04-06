@@ -1,4 +1,4 @@
-package net.whg.we.client_logic.resources;
+package net.whg.frameworks.resource;
 
 /**
  * Considers a pathname to follow the specification of simple folder names

@@ -2,12 +2,11 @@ package net.whg.we.legacy;
 
 import org.lwjgl.opengl.GL11;
 import net.whg.frameworks.logging.Log;
+import net.whg.frameworks.resource.ResourceManager;
 import net.whg.frameworks.scene.SceneNode;
 import net.whg.frameworks.scene.Transform3D;
 import net.whg.we.client_logic.rendering.Graphics;
 import net.whg.we.client_logic.rendering.ScreenClearType;
-import net.whg.we.client_logic.resources.ResourceFetcher;
-import net.whg.we.client_logic.resources.ResourceManager;
 import net.whg.we.client_logic.resources.scene.ModelResource;
 import net.whg.we.client_logic.ui.UIStack;
 import net.whg.we.client_logic.ui.terminal.Terminal;

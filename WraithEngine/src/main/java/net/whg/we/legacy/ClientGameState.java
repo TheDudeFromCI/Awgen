@@ -2,13 +2,13 @@ package net.whg.we.legacy;
 
 import java.io.File;
 import net.whg.frameworks.network.multiplayer.MultiplayerClient;
+import net.whg.frameworks.resource.FileDatabase;
+import net.whg.frameworks.resource.ResourceDatabase;
+import net.whg.frameworks.resource.ResourceLoader;
+import net.whg.frameworks.resource.ResourceManager;
+import net.whg.frameworks.resource.SimpleFileDatabase;
 import net.whg.we.client_logic.connect.ClientPlayerList;
 import net.whg.we.client_logic.rendering.GraphicsPipeline;
-import net.whg.we.client_logic.resources.FileDatabase;
-import net.whg.we.client_logic.resources.ResourceDatabase;
-import net.whg.we.client_logic.resources.ResourceLoader;
-import net.whg.we.client_logic.resources.ResourceManager;
-import net.whg.we.client_logic.resources.SimpleFileDatabase;
 import net.whg.we.client_logic.resources.graphics.GLSLShaderLoader;
 import net.whg.we.client_logic.resources.graphics.MeshLoader;
 import net.whg.we.client_logic.resources.graphics.TextureLoader;

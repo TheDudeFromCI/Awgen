@@ -4,12 +4,12 @@ import org.lwjgl.assimp.AIMesh;
 import org.lwjgl.assimp.AIScene;
 import org.lwjgl.assimp.Assimp;
 import net.whg.frameworks.logging.Log;
+import net.whg.frameworks.resource.FileLoader;
+import net.whg.frameworks.resource.ResourceDatabase;
+import net.whg.frameworks.resource.ResourceFile;
+import net.whg.frameworks.resource.ResourceLoader;
 import net.whg.we.client_logic.rendering.Skeleton;
 import net.whg.we.client_logic.rendering.VertexData;
-import net.whg.we.client_logic.resources.FileLoader;
-import net.whg.we.client_logic.resources.ResourceDatabase;
-import net.whg.we.client_logic.resources.ResourceFile;
-import net.whg.we.client_logic.resources.ResourceLoader;
 
 /**
  * Loads a mesh scene file. These can contain either a single mesh, or multiple

@@ -1,10 +1,10 @@
 package net.whg.we.client_logic.resources.graphics;
 
+import net.whg.frameworks.resource.CompilableResource;
+import net.whg.frameworks.resource.ResourceFile;
 import net.whg.we.client_logic.rendering.Graphics;
 import net.whg.we.client_logic.rendering.Texture;
 import net.whg.we.client_logic.rendering.TextureProperties;
-import net.whg.we.client_logic.resources.CompilableResource;
-import net.whg.we.client_logic.resources.ResourceFile;
 
 public class TextureResource implements CompilableResource
 {

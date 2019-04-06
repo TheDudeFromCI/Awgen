@@ -1,4 +1,4 @@
-package net.whg.we.client_logic.resources;
+package net.whg.frameworks.resource;
 
 import java.util.ArrayList;
 import net.whg.frameworks.logging.Log;

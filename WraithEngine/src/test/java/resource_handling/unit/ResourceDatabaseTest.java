@@ -3,8 +3,8 @@ package resource_handling.unit;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
-import net.whg.we.client_logic.resources.Resource;
-import net.whg.we.client_logic.resources.ResourceDatabase;
+import net.whg.frameworks.resource.Resource;
+import net.whg.frameworks.resource.ResourceDatabase;
 
 public class ResourceDatabaseTest
 {

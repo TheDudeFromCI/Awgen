@@ -1,4 +1,4 @@
-package net.whg.we.client_logic.resources;
+package net.whg.frameworks.resource;
 
 /**
  * Represents a resource that can be reloaded at runtime. This is useful for

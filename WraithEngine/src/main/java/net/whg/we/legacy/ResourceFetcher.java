@@ -1,6 +1,8 @@
-package net.whg.we.client_logic.resources;
+package net.whg.we.legacy;
 
 import net.whg.we.main.Plugin;
+import net.whg.frameworks.resource.ResourceFile;
+import net.whg.frameworks.resource.ResourceManager;
 import net.whg.we.client_logic.rendering.Graphics;
 import net.whg.we.client_logic.rendering.Material;
 import net.whg.we.client_logic.rendering.Mesh;
@@ -13,7 +15,6 @@ import net.whg.we.client_logic.resources.scene.FontResource;
 import net.whg.we.client_logic.resources.scene.MaterialResource;
 import net.whg.we.client_logic.resources.scene.ModelResource;
 import net.whg.we.client_logic.ui.font.Font;
-import net.whg.we.legacy.Model;
 
 public class ResourceFetcher
 {

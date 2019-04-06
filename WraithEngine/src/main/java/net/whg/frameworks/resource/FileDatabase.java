@@ -1,4 +1,4 @@
-package net.whg.we.client_logic.resources;
+package net.whg.frameworks.resource;
 
 import java.io.File;
 import java.util.List;

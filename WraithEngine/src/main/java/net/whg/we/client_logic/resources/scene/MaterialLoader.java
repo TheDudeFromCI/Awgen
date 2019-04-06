@@ -2,12 +2,12 @@ package net.whg.we.client_logic.resources.scene;
 
 import java.util.Set;
 import net.whg.frameworks.logging.Log;
-import net.whg.we.client_logic.resources.FileDatabase;
-import net.whg.we.client_logic.resources.FileLoader;
-import net.whg.we.client_logic.resources.ResourceDatabase;
-import net.whg.we.client_logic.resources.ResourceFile;
-import net.whg.we.client_logic.resources.ResourceLoader;
-import net.whg.we.client_logic.resources.YamlFile;
+import net.whg.frameworks.resource.FileDatabase;
+import net.whg.frameworks.resource.FileLoader;
+import net.whg.frameworks.resource.ResourceDatabase;
+import net.whg.frameworks.resource.ResourceFile;
+import net.whg.frameworks.resource.ResourceLoader;
+import net.whg.frameworks.resource.YamlFile;
 import net.whg.we.client_logic.resources.graphics.ShaderResource;
 import net.whg.we.client_logic.resources.graphics.TextureResource;
 

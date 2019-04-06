@@ -10,7 +10,7 @@ import java.util.Comparator;
 import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 import net.whg.frameworks.logging.Log;
-import net.whg.we.client_logic.resources.FileDatabase;
+import net.whg.frameworks.resource.FileDatabase;
 
 public class PluginLoader
 {

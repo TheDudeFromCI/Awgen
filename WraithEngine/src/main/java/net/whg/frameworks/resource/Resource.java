@@ -1,4 +1,4 @@
-package net.whg.we.client_logic.resources;
+package net.whg.frameworks.resource;
 
 /**
  * Represents an asset resource that is loaded from file or downloaded. This is
