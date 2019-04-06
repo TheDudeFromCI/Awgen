@@ -58,4 +58,10 @@ public class CameraNode extends SceneNode
 
 		rebuildProjectionMatrix();
 	}
+
+	@Override
+	public String getNodeType()
+	{
+		return "player.camera";
+	}
 }

@@ -15,7 +15,6 @@ public class SceneNode
 	private String _name;
 	private boolean _enabled;
 	private ITransform _transform;
-	private String _type;
 
 	// Hierarchy Fields
 	private Scene _scene;
@@ -26,28 +25,10 @@ public class SceneNode
 	private Matrix4f _matrixBuffer = new Matrix4f();
 
 	/**
-	 * Creates a new blank scene node with default settings.<br>
-	 * <br>
-	 * When creating subclasses of SceneNode, this constructor should not be used.
-	 * {@link #SceneNode(String)} should be used instead.
+	 * Creates a new blank scene node with default settings.
 	 */
 	public SceneNode()
 	{
-		this("empty");
-	}
-
-	/**
-	 * The default scene node constructor, for the given type. This should be a
-	 * static value implemented for all classes. For examples:<br>
-	 * <br>
-	 * <code> public FooNode() { super("example.foo"); } </code>
-	 *
-	 * @param type
-	 *            - The type name for this node.
-	 */
-	protected SceneNode(String type)
-	{
-		_type = type;
 		_name = "Empty Node";
 		_enabled = true;
 		_transform = new Transform3D();
@@ -312,7 +293,7 @@ public class SceneNode
 	 */
 	public String getNodeType()
 	{
-		return _type;
+		return "empty";
 	}
 
 	/**

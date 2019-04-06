@@ -155,4 +155,10 @@ public class FirstPersonNode extends SceneNode implements UpdateableNode
 		if (Input.isKeyHeld("shift"))
 			pos.sub(_upBuffer);
 	}
+
+	@Override
+	public String getNodeType()
+	{
+		return "player.firstperson";
+	}
 }

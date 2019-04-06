@@ -11,6 +11,12 @@ public class CommonNodeFactory extends BaseNodeFactory
 {
 	private List<INodeSerializer> _nodeSerializers = new ArrayList<>();
 
+	public CommonNodeFactory()
+	{
+		addNodeSerializer(new FirstPersonNodeSerializer());
+		addNodeSerializer(new CameraNodeSerializer());
+	}
+
 	public void addNodeSerializer(INodeSerializer serializer)
 	{
 		if (serializer == null)
