@@ -2,7 +2,7 @@ package net.whg.frameworks.network.multiplayer;
 
 import net.whg.frameworks.event.EventCallerBase;
 import net.whg.frameworks.network.netty.UserConnection;
-import net.whg.we.scene.ServerGameState;
+import net.whg.we.legacy.ServerGameState;
 
 public class ServerEvent extends EventCallerBase<ServerListener>
 {

@@ -1,4 +1,4 @@
-package net.whg.we.client_logic.utils;
+package net.whg.we.legacy;
 
 import java.util.HashMap;
 import java.util.LinkedList;

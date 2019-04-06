@@ -1,7 +1,7 @@
-package net.whg.we.scene;
+package net.whg.we.legacy;
 
 import net.whg.frameworks.logging.Log;
-import net.whg.we.legacy.Time;
+import net.whg.we.main.GameLoop;
 
 public class ServerGameLoop implements GameLoop
 {

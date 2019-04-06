@@ -3,8 +3,8 @@ package net.whg.we.client_logic.rendering;
 import java.nio.FloatBuffer;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
-import net.whg.we.client_logic.utils.Screen;
 import net.whg.we.legacy.Color;
+import net.whg.we.legacy.Screen;
 
 public class Material
 {

@@ -1,4 +1,4 @@
-package net.whg.we.client_logic.scene;
+package net.whg.we.legacy;
 
 import org.lwjgl.opengl.GL11;
 import net.whg.frameworks.logging.Log;
@@ -11,13 +11,8 @@ import net.whg.we.client_logic.resources.scene.ModelResource;
 import net.whg.we.client_logic.ui.UIStack;
 import net.whg.we.client_logic.ui.terminal.Terminal;
 import net.whg.we.client_logic.utils.FPSLogger;
-import net.whg.we.client_logic.utils.Input;
-import net.whg.we.legacy.Color;
-import net.whg.we.legacy.Model;
-import net.whg.we.legacy.SubMesh;
-import net.whg.we.legacy.Time;
-import net.whg.we.scene.CorePlugin;
-import net.whg.we.scene.GameLoop;
+import net.whg.we.main.CorePlugin;
+import net.whg.we.main.GameLoop;
 import net.whg.we.scene.ModelNode;
 
 public class WindowedGameLoop implements GameLoop

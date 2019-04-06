@@ -5,8 +5,8 @@ import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.network.multiplayer.MultiplayerClient;
 import net.whg.frameworks.network.multiplayer.MultiplayerServer;
 import net.whg.frameworks.network.multiplayer.NetworkManager;
-import net.whg.we.client_logic.scene.ClientGameState;
-import net.whg.we.scene.ServerGameState;
+import net.whg.we.legacy.ClientGameState;
+import net.whg.we.legacy.ServerGameState;
 
 /**
  * The program entry class. This class is used for the purpose of initializing

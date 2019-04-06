@@ -1,6 +1,4 @@
-package net.whg.we.scene;
-
-import net.whg.we.main.Plugin;
+package net.whg.we.main;
 
 public class CorePlugin implements Plugin
 {

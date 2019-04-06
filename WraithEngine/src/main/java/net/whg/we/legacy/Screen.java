@@ -1,4 +1,4 @@
-package net.whg.we.client_logic.utils;
+package net.whg.we.legacy;
 
 import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.window.QueuedWindow;

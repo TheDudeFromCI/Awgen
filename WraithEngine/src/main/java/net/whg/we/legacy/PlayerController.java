@@ -1,4 +1,4 @@
-package net.whg.we.client_logic.scene;
+package net.whg.we.legacy;
 
 import net.whg.we.client_logic.rendering.Camera;
 

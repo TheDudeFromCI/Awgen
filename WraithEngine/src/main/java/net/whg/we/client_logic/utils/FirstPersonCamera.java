@@ -1,13 +1,15 @@
-package net.whg.we.client_logic.scene;
+package net.whg.we.client_logic.utils;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import net.whg.frameworks.util.MathUtils;
 import net.whg.we.client_logic.rendering.Camera;
-import net.whg.we.client_logic.utils.Input;
-import net.whg.we.client_logic.utils.Screen;
+import net.whg.we.legacy.Input;
 import net.whg.we.legacy.Location;
+import net.whg.we.legacy.PlayerController;
+import net.whg.we.legacy.Screen;
 import net.whg.we.legacy.Time;
+import net.whg.we.legacy.WindowedGameLoop;
 
 /**
  * An instance of a PersonCamera. In this case the camera is first person and

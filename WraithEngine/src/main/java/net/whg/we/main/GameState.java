@@ -1,4 +1,4 @@
-package net.whg.we.scene;
+package net.whg.we.main;
 
 import net.whg.frameworks.network.connect.PlayerList;
 import net.whg.frameworks.network.multiplayer.NetworkHandler;

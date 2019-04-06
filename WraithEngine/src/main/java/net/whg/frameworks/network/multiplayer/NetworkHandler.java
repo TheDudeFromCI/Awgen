@@ -1,6 +1,6 @@
 package net.whg.frameworks.network.multiplayer;
 
-import net.whg.we.scene.GameState;
+import net.whg.we.main.GameState;
 
 public interface NetworkHandler
 {

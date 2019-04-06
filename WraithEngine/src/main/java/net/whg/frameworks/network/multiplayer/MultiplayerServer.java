@@ -4,8 +4,8 @@ import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.network.netty.Server;
 import net.whg.frameworks.network.packet.PacketHandler;
 import net.whg.frameworks.network.packet.PacketManagerHandler;
-import net.whg.we.scene.GameState;
-import net.whg.we.scene.ServerGameState;
+import net.whg.we.legacy.ServerGameState;
+import net.whg.we.main.GameState;
 
 public class MultiplayerServer implements NetworkHandler
 {

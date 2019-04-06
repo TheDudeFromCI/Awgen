@@ -5,7 +5,7 @@ import net.whg.frameworks.network.netty.Client;
 import net.whg.frameworks.network.packet.Packet;
 import net.whg.frameworks.network.packet.PacketHandler;
 import net.whg.frameworks.network.packet.PacketManagerHandler;
-import net.whg.we.scene.GameState;
+import net.whg.we.main.GameState;
 
 public class MultiplayerClient implements NetworkHandler
 {

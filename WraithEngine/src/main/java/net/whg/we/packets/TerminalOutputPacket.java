@@ -7,9 +7,9 @@ import net.whg.frameworks.network.packet.PacketHandler;
 import net.whg.frameworks.network.packet.PacketType;
 import net.whg.frameworks.util.ByteReader;
 import net.whg.frameworks.util.ByteWriter;
-import net.whg.we.client_logic.scene.WindowedGameLoop;
 import net.whg.we.client_logic.ui.terminal.ConsoleOutput;
-import net.whg.we.scene.GameState;
+import net.whg.we.legacy.WindowedGameLoop;
+import net.whg.we.main.GameState;
 
 public class TerminalOutputPacket implements PacketType
 {

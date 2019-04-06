@@ -1,4 +1,4 @@
-package net.whg.we.scene;
+package net.whg.we.legacy;
 
 import java.io.File;
 import net.whg.frameworks.command.CommandManager;
@@ -16,7 +16,9 @@ import net.whg.we.client_logic.resources.scene.FontLoader;
 import net.whg.we.client_logic.resources.scene.MaterialLoader;
 import net.whg.we.client_logic.resources.scene.ModelLoader;
 import net.whg.we.commands.CommandUtils;
+import net.whg.we.main.GameState;
 import net.whg.we.main.PluginLoader;
+import net.whg.we.scene.SceneListManager;
 
 public class ServerGameState implements GameState
 {

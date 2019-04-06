@@ -1,7 +1,7 @@
 package net.whg.we.commands;
 
 import net.whg.frameworks.command.CommandList;
-import net.whg.we.scene.ServerGameState;
+import net.whg.we.legacy.ServerGameState;
 
 public class CommandUtils
 {

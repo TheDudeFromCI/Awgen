@@ -1,8 +1,6 @@
 package net.whg.we.legacy;
 
 import org.lwjgl.opengl.GL11;
-import net.whg.we.client_logic.utils.Input;
-import net.whg.we.client_logic.utils.Screen;
 import net.whg.we.client_logic.window.KeyState;
 import net.whg.we.client_logic.window.WindowListener;
 

@@ -12,8 +12,8 @@ import net.whg.frameworks.network.packet.PacketType;
 import net.whg.frameworks.network.server.OnlinePlayer;
 import net.whg.frameworks.util.ByteReader;
 import net.whg.frameworks.util.ByteWriter;
-import net.whg.we.scene.GameState;
-import net.whg.we.scene.ServerGameState;
+import net.whg.we.legacy.ServerGameState;
+import net.whg.we.main.GameState;
 
 public class TerminalCommandPacket implements PacketType
 {

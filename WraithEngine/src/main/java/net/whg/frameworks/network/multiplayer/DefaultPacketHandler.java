@@ -1,7 +1,7 @@
 package net.whg.frameworks.network.multiplayer;
 
 import net.whg.frameworks.network.packet.PacketHandler;
-import net.whg.we.scene.GameState;
+import net.whg.we.main.GameState;
 
 public class DefaultPacketHandler implements PacketHandler
 {
