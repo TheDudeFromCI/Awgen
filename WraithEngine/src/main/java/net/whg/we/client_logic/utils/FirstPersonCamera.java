@@ -1,11 +1,12 @@
 package net.whg.we.client_logic.utils;
 
+import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import net.whg.frameworks.scene.Transform3D;
 import net.whg.frameworks.util.MathUtils;
 import net.whg.we.client_logic.rendering.Camera;
 import net.whg.we.legacy.Input;
-import net.whg.we.legacy.Location;
 import net.whg.we.legacy.PlayerController;
 import net.whg.we.legacy.Screen;
 import net.whg.we.legacy.Time;
@@ -27,6 +28,7 @@ public class FirstPersonCamera implements PlayerController
 	private float _moveSpeed = 7f;
 	private WindowedGameLoop _gameLoop;
 
+	private Matrix4f _matrixBuffer = new Matrix4f();
 	private Vector3f _rotationBuffer = new Vector3f();
 	private Quaternionf _rotationStorageBuffer = new Quaternionf();
 
@@ -70,8 +72,10 @@ public class FirstPersonCamera implements PlayerController
 
 		float move = Time.deltaTime() * getMoveSpeed();
 		Vector3f pos = _camera.getLocation().getPosition();
-		Vector3f backward = _camera.getLocation().getInverseMatrix().positiveZ(new Vector3f());
-		Vector3f right = _camera.getLocation().getInverseMatrix().positiveX(new Vector3f());
+
+		_camera.getLocation().getInverseMatrix(_matrixBuffer);
+		Vector3f backward = _matrixBuffer.positiveZ(new Vector3f());
+		Vector3f right = _matrixBuffer.positiveX(new Vector3f());
 		Vector3f up = new Vector3f(0f, move, 0f);
 
 		backward.y = 0f;
@@ -151,7 +155,7 @@ public class FirstPersonCamera implements PlayerController
 		return getExtraRotation(new Vector3f());
 	}
 
-	public Location getLocation()
+	public Transform3D getLocation()
 	{
 		return _camera.getLocation();
 	}

@@ -1,7 +1,7 @@
 package net.whg.we.client_logic.connect;
 
 import net.whg.frameworks.network.connect.Player;
-import net.whg.we.legacy.Location;
+import net.whg.frameworks.scene.Transform3D;
 
 /**
  * Represents an online player, from a client's perspective.
@@ -10,13 +10,13 @@ public class ClientPlayer implements Player
 {
 	private String _username;
 	private String _token;
-	private Location _location;
+	private Transform3D _location;
 
 	public ClientPlayer(String username, String token)
 	{
 		_username = username;
 		_token = token;
-		_location = new Location();
+		_location = new Transform3D();
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class ClientPlayer implements Player
 	}
 
 	@Override
-	public Location getLocation()
+	public Transform3D getLocation()
 	{
 		return _location;
 	}

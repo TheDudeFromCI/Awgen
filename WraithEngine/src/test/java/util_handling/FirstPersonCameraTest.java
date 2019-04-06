@@ -96,7 +96,7 @@ public class FirstPersonCameraTest
 		float delta = 0.0001f;
 		WindowedGameLoop gameLoop = Mockito.mock(WindowedGameLoop.class);
 		FirstPersonCamera fpc = new FirstPersonCamera(gameLoop);
-		Vector3f pre = fpc.getLocation().getPosition();
+		Vector3f pre = new Vector3f(fpc.getLocation().getPosition());
 
 		fpc.updateCameraPosition();
 

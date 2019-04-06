@@ -1,14 +1,14 @@
 package net.whg.we.legacy;
 
-import net.whg.we.client_logic.rendering.LocationHolder;
+import net.whg.frameworks.scene.Transform3D;
 import net.whg.we.client_logic.rendering.Material;
 import net.whg.we.client_logic.rendering.Mesh;
 
-public class Model implements LocationHolder
+public class Model
 {
 	private String _name;
 	private SubMesh[] _submeshes;
-	private Location _location;
+	private Transform3D _location;
 
 	public Model(String name, Mesh[] meshes, Material[] materials)
 	{
@@ -19,14 +19,13 @@ public class Model implements LocationHolder
 		_name = name;
 
 		_submeshes = new SubMesh[meshes.length];
-		_location = new Location();
+		_location = new Transform3D();
 
 		for (int i = 0; i < _submeshes.length; i++)
 			_submeshes[i] = new SubMesh(meshes[i], materials[i], this);
 	}
 
-	@Override
-	public Location getLocation()
+	public Transform3D getLocation()
 	{
 		return _location;
 	}
@@ -46,7 +45,7 @@ public class Model implements LocationHolder
 		return _name;
 	}
 
-	public void setLocation(Location location)
+	public void setLocation(Transform3D location)
 	{
 		_location = location;
 	}

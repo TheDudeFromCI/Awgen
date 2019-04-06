@@ -7,11 +7,11 @@ import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.network.packet.Packet;
 import net.whg.frameworks.network.packet.PacketHandler;
 import net.whg.frameworks.network.packet.PacketType;
+import net.whg.frameworks.scene.Transform3D;
 import net.whg.frameworks.util.ByteReader;
 import net.whg.frameworks.util.ByteWriter;
 import net.whg.we.client_logic.connect.ClientPlayer;
 import net.whg.we.client_logic.connect.ClientPlayerList;
-import net.whg.we.legacy.Location;
 
 /**
  * This packet is sent when a player joins a server to tell the clients to spawn
@@ -19,7 +19,7 @@ import net.whg.we.legacy.Location;
  */
 public class PlayerJoinPacket implements PacketType
 {
-	public void build(Packet packet, String username, String token, Location location)
+	public void build(Packet packet, String username, String token, Transform3D location)
 	{
 		packet.getData().put("username", username);
 		packet.getData().put("token", token);

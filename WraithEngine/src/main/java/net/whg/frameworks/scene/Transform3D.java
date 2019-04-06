@@ -18,6 +18,8 @@ public class Transform3D implements ITransform
 
 	// Temp
 	private Matrix4f _matrixBuffer = new Matrix4f();
+	private Vector3f _vectorBuffer = new Vector3f();
+	private Quaternionf _quaternionBuffer = new Quaternionf();
 
 	/**
 	 * Gets the position of this transform in 3D space.
@@ -104,7 +106,7 @@ public class Transform3D implements ITransform
 
 	/**
 	 * Gets the current rotation of this transform.
-	 * 
+	 *
 	 * @return The rotation of this transform.
 	 */
 	public Quaternionf getRotation()
@@ -114,7 +116,7 @@ public class Transform3D implements ITransform
 
 	/**
 	 * Sets the rotation of this transform.
-	 * 
+	 *
 	 * @param rot
 	 *            - The quaternion to copy the rotation from.
 	 */
@@ -144,5 +146,19 @@ public class Transform3D implements ITransform
 		out.set(parent);
 		getLocalMatrix(_matrixBuffer);
 		out.mul(_matrixBuffer);
+	}
+
+	/**
+	 * Calculates the inverse of this local matrix.
+	 *
+	 * @param out
+	 *            - The matrix to write the output to.
+	 */
+	public void getInverseMatrix(Matrix4f out)
+	{
+		out.identity();
+		out.rotate(_rotation.invert(_quaternionBuffer));
+		out.translate(_position.negate(_vectorBuffer));
+		out.scale(_size.negate(_vectorBuffer));
 	}
 }

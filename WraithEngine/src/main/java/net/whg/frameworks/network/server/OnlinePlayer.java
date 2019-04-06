@@ -5,13 +5,13 @@ import net.whg.frameworks.network.netty.UserConnection;
 import net.whg.frameworks.network.packet.Packet;
 import net.whg.frameworks.network.packet.PacketManager;
 import net.whg.frameworks.scene.Scene;
-import net.whg.we.legacy.Location;
+import net.whg.frameworks.scene.Transform3D;
 
 public class OnlinePlayer implements Player
 {
 	private UserConnection _userConnection;
 	private PlayerCommandSender _commandSender;
-	private Location _location;
+	private Transform3D _location;
 	private PacketManager _packetManager;
 	private Scene _scene;
 
@@ -22,7 +22,7 @@ public class OnlinePlayer implements Player
 
 		_userConnection = client;
 		_commandSender = new PlayerCommandSender(this);
-		_location = new Location();
+		_location = new Transform3D();
 		_packetManager = packetManager;
 
 		// TODO Load scene from default location
@@ -82,7 +82,7 @@ public class OnlinePlayer implements Player
 	}
 
 	@Override
-	public Location getLocation()
+	public Transform3D getLocation()
 	{
 		return _location;
 	}
