@@ -3,6 +3,13 @@
 
 ---
 
+### Come Join Us!
+
+WraithEngine has an official Discord server! Come check it out and get to know the community. Have an awesome feature request? Maybe a few questions about getting started? How can we help? We have lots of game developers and hobbyist who would love to hear from you. Feel free to stop in at anytime.<br><br>
+[Click Here to Join!](https://discord.gg/CREBDQV)
+
+---
+
 # WraithEngine
 
 WraithEngine is a Java-based game engine, developed by Wraithaven Games. The engine is built around the concept of mixing various plugins to make games through a realtime multiplayer environment.
