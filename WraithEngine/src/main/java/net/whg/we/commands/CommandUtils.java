@@ -9,5 +9,6 @@ public class CommandUtils
 	{
 		commandList.addCommand(new ChatCommand(gameState.getPlayerList()));
 		commandList.addCommand(new SceneHierarchyCommand());
+		commandList.addCommand(new ImportCommand());
 	}
 }
