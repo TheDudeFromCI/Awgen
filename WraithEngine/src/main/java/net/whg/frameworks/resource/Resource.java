@@ -14,7 +14,7 @@ public interface Resource
 	 *
 	 * @return The data for this resource.
 	 */
-	public Object getData();
+	Object getData();
 
 	/**
 	 * Gets the resource file this resource represents. This can be used for
@@ -22,12 +22,12 @@ public interface Resource
 	 *
 	 * @return The resource file this resource represents.
 	 */
-	public ResourceFile getResourceFile();
+	ResourceFile getResourceFile();
 
 	/**
 	 * Disposes this resource.
 	 */
-	public void dispose();
+	void dispose();
 
 	/**
 	 * Gets the name of this resource. This should be unquie within the ResourceFile
@@ -35,5 +35,21 @@ public interface Resource
 	 *
 	 * @return The name of this resource.
 	 */
-	public String getName();
+	String getName();
+
+	/**
+	 * Attempts to reload the data in this resource if a reload is required. If a
+	 * reload is not currently required, nothing happens.
+	 *
+	 * @return True if the data this resource contains has been updated, false if
+	 *         nothing has changed.
+	 */
+	boolean reload();
+
+	/**
+	 * Gets the current state of this resource.
+	 * 
+	 * @return The current state of this resource.
+	 */
+	ResourceState getResourceState();
 }
