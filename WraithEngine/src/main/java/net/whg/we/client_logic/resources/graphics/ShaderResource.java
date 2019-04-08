@@ -1,7 +1,7 @@
 package net.whg.we.client_logic.resources.graphics;
 
 import net.whg.frameworks.logging.Log;
-import net.whg.frameworks.resource.CompilableResource;
+import net.whg.frameworks.resource.Resource;
 import net.whg.frameworks.resource.ResourceFile;
 import net.whg.frameworks.resource.ResourceState;
 import net.whg.we.client_logic.rendering.Graphics;
@@ -12,7 +12,7 @@ import net.whg.we.client_logic.rendering.Shader;
  *
  * @author TheDudeFromCI
  */
-public class ShaderResource implements CompilableResource
+public class ShaderResource implements Resource
 {
 	private ShaderProperties _properties;
 	private String _vertShader;
@@ -40,13 +40,11 @@ public class ShaderResource implements CompilableResource
 		return _shader;
 	}
 
-	@Override
 	public boolean isCompiled()
 	{
 		return _shader != null;
 	}
 
-	@Override
 	public void compile(Graphics graphics)
 	{
 		if (_shader != null)

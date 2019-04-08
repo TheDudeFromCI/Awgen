@@ -1,6 +1,6 @@
 package net.whg.we.client_logic.resources.graphics;
 
-import net.whg.frameworks.resource.CompilableResource;
+import net.whg.frameworks.resource.Resource;
 import net.whg.frameworks.resource.ResourceFile;
 import net.whg.frameworks.resource.ResourceState;
 import net.whg.we.client_logic.rendering.Graphics;
@@ -9,7 +9,7 @@ import net.whg.we.client_logic.rendering.Skeleton;
 import net.whg.we.client_logic.rendering.SkinnedMesh;
 import net.whg.we.client_logic.rendering.VertexData;
 
-public class MeshResource implements CompilableResource
+public class MeshResource implements Resource
 {
 	private Mesh _mesh;
 	private String _name;
@@ -58,7 +58,6 @@ public class MeshResource implements CompilableResource
 		_skeleton = null;
 	}
 
-	@Override
 	public void compile(Graphics graphics)
 	{
 		if (_mesh != null)
@@ -76,7 +75,6 @@ public class MeshResource implements CompilableResource
 		return _name;
 	}
 
-	@Override
 	public boolean isCompiled()
 	{
 		return _mesh != null;

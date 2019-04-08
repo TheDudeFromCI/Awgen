@@ -1,13 +1,13 @@
 package net.whg.we.client_logic.resources.graphics;
 
-import net.whg.frameworks.resource.CompilableResource;
+import net.whg.frameworks.resource.Resource;
 import net.whg.frameworks.resource.ResourceFile;
 import net.whg.frameworks.resource.ResourceState;
 import net.whg.we.client_logic.rendering.Graphics;
 import net.whg.we.client_logic.rendering.Texture;
 import net.whg.we.client_logic.rendering.TextureProperties;
 
-public class TextureResource implements CompilableResource
+public class TextureResource implements Resource
 {
 	private String _name;
 	private Texture _texture;
@@ -27,13 +27,11 @@ public class TextureResource implements CompilableResource
 		return _texture;
 	}
 
-	@Override
 	public boolean isCompiled()
 	{
 		return _texture != null;
 	}
 
-	@Override
 	public void compile(Graphics graphics)
 	{
 		if (_texture != null)

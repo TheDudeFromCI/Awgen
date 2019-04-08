@@ -1,6 +1,6 @@
 package net.whg.we.client_logic.resources.scene;
 
-import net.whg.frameworks.resource.CompilableResource;
+import net.whg.frameworks.resource.Resource;
 import net.whg.frameworks.resource.ResourceFile;
 import net.whg.frameworks.resource.ResourceState;
 import net.whg.we.client_logic.rendering.Graphics;
@@ -9,7 +9,7 @@ import net.whg.we.client_logic.rendering.Texture;
 import net.whg.we.client_logic.resources.graphics.ShaderResource;
 import net.whg.we.client_logic.resources.graphics.TextureResource;
 
-public class MaterialResource implements CompilableResource
+public class MaterialResource implements Resource
 {
 	private Material _material;
 	private String _name;
@@ -48,7 +48,6 @@ public class MaterialResource implements CompilableResource
 		_textures = null;
 	}
 
-	@Override
 	public void compile(Graphics graphics)
 	{
 		if (_material != null)
@@ -79,7 +78,6 @@ public class MaterialResource implements CompilableResource
 		return _name;
 	}
 
-	@Override
 	public boolean isCompiled()
 	{
 		return _material != null;
