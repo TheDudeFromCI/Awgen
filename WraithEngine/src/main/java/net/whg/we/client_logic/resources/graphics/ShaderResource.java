@@ -79,7 +79,6 @@ public class ShaderResource implements Resource
 		}
 	}
 
-	@Override
 	public String getName()
 	{
 		return _properties.getName();

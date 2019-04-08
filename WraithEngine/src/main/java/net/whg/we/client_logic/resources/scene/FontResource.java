@@ -36,7 +36,6 @@ public class FontResource implements Resource
 		_font = null;
 	}
 
-	@Override
 	public String getName()
 	{
 		return _name;

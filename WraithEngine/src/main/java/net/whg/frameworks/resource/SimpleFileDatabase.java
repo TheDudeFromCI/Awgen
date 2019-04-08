@@ -43,15 +43,10 @@ public class SimpleFileDatabase implements FileDatabase
 		return files;
 	}
 
-	public File getBaseFolder()
-	{
-		return _baseFolder;
-	}
-
 	@Override
 	public File getFile(ResourceFile file)
 	{
-		File folder = new File(getBaseFolder(), RESOURCE_FOLDER_NAME);
+		File folder = new File(_baseFolder, RESOURCE_FOLDER_NAME);
 		return new File(folder, file.getPathname());
 	}
 }

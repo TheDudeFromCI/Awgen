@@ -30,14 +30,6 @@ public interface Resource
 	void dispose();
 
 	/**
-	 * Gets the name of this resource. This should be unquie within the ResourceFile
-	 * that is is loaded from.
-	 *
-	 * @return The name of this resource.
-	 */
-	String getName();
-
-	/**
 	 * Attempts to reload the data in this resource if a reload is required. If a
 	 * reload is not currently required, nothing happens.
 	 *
@@ -48,7 +40,7 @@ public interface Resource
 
 	/**
 	 * Gets the current state of this resource.
-	 * 
+	 *
 	 * @return The current state of this resource.
 	 */
 	ResourceState getResourceState();

@@ -72,7 +72,6 @@ public class MaterialResource implements Resource
 		_textures = null;
 	}
 
-	@Override
 	public String getName()
 	{
 		return _name;

@@ -69,7 +69,6 @@ public class MeshResource implements Resource
 			_mesh = new SkinnedMesh(_name, _vertexData, graphics, _skeleton);
 	}
 
-	@Override
 	public String getName()
 	{
 		return _name;

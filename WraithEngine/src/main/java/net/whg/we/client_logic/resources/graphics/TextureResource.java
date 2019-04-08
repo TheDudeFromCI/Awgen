@@ -60,7 +60,6 @@ public class TextureResource implements Resource
 		}
 	}
 
-	@Override
 	public String getName()
 	{
 		return _name;

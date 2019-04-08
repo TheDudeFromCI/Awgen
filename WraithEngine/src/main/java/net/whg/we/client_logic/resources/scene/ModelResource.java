@@ -56,7 +56,6 @@ public class ModelResource implements Resource
 		_materialResources = null;
 	}
 
-	@Override
 	public String getName()
 	{
 		return _name;
