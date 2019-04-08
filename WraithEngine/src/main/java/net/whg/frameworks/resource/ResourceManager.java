@@ -1,6 +1,6 @@
 package net.whg.frameworks.resource;
 
-import net.whg.we.main.Plugin;
+import java.io.File;
 
 /**
  * This class handles all high level API for resource management.
@@ -71,38 +71,7 @@ public class ResourceManager
 	 */
 	public Resource loadResource(ResourceFile resourceFile)
 	{
-		return _resourceLoader.loadResource(resourceFile, _resourceDatabase);
-	}
-
-	/**
-	 * Creates a resource file instance for the given plugin and resource pathname.
-	 *
-	 * @param plugin
-	 *            - The plugin which owns this resource.
-	 * @param pathname
-	 *            - The pathname of the resource.
-	 * @return A resource file instance for the give plugin and pathname.
-	 */
-	public ResourceFile getResourceFile(Plugin plugin, String pathname)
-	{
-		return _fileDatabase.getResourceFile(plugin, pathname);
-	}
-
-	/**
-	 * Loads a resource from a plugin and pathname. This method is a shorthand for
-	 * calling<br>
-	 * <code>loadResource(getResourceFile(plugin, pathname));</code><br>
-	 *
-	 * @param plugin
-	 *            - The plugin that owns the resource to load.
-	 * @param pathname
-	 *            - The pathname of the resource to load.
-	 * @return The resource at the given pathname, owned by the give plugin, or null
-	 *         if the resource could not be loaded.
-	 */
-	public Resource loadResource(Plugin plugin, String pathname)
-	{
-		return loadResource(getResourceFile(plugin, pathname));
+		return _resourceLoader.loadResource(resourceFile, this);
 	}
 
 	/**
@@ -111,5 +80,18 @@ public class ResourceManager
 	public void disposeAllResources()
 	{
 		_resourceDatabase.dispose();
+	}
+
+	/**
+	 * Gets the file that a resource file points to.
+	 * 
+	 * @param file
+	 *            - The resource file that points to a certain file resource.
+	 * @return The file that this resource file points to, or null if the file could
+	 *         not be found.
+	 */
+	public File getFile(ResourceFile file)
+	{
+		return _fileDatabase.getFile(file);
 	}
 }

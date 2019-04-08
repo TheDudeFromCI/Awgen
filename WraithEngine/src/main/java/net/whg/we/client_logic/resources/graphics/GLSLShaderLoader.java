@@ -4,9 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.resource.FileLoader;
-import net.whg.frameworks.resource.ResourceDatabase;
 import net.whg.frameworks.resource.ResourceFile;
-import net.whg.frameworks.resource.ResourceLoader;
+import net.whg.frameworks.resource.ResourceManager;
 
 public class GLSLShaderLoader implements FileLoader
 {
@@ -22,10 +21,10 @@ public class GLSLShaderLoader implements FileLoader
 	}
 
 	@Override
-	public ShaderResource loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
-			ResourceFile resourceFile)
+	public ShaderResource loadFile(ResourceManager resourceManager, ResourceFile resourceFile)
 	{
-		try (BufferedReader in = new BufferedReader(new FileReader(resourceFile.getFile())))
+		try (BufferedReader in =
+				new BufferedReader(new FileReader(resourceManager.getFile(resourceFile))))
 		{
 			ShaderProperties properties = new ShaderProperties();
 			StringBuilder vertShader = new StringBuilder();
@@ -62,7 +61,7 @@ public class GLSLShaderLoader implements FileLoader
 
 			ShaderResource shader = new ShaderResource(resourceFile, properties,
 					vertShader.toString(), geoShader.toString(), fragShader.toString());
-			database.addResource(shader);
+			resourceManager.getResourceDatabase().addResource(shader);
 
 			Log.debugf("Successfully loaded shader resource, %s.", shader);
 			return shader;

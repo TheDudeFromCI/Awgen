@@ -2,11 +2,9 @@ package net.whg.we.client_logic.resources.scene;
 
 import java.util.Set;
 import net.whg.frameworks.logging.Log;
-import net.whg.frameworks.resource.FileDatabase;
 import net.whg.frameworks.resource.FileLoader;
-import net.whg.frameworks.resource.ResourceDatabase;
 import net.whg.frameworks.resource.ResourceFile;
-import net.whg.frameworks.resource.ResourceLoader;
+import net.whg.frameworks.resource.ResourceManager;
 import net.whg.frameworks.resource.YamlFile;
 import net.whg.we.client_logic.resources.graphics.MeshResource;
 
@@ -17,13 +15,6 @@ public class ModelLoader implements FileLoader
 			"model"
 	};
 
-	private FileDatabase _fileDatabase;
-
-	public ModelLoader(FileDatabase fileDatabase)
-	{
-		_fileDatabase = fileDatabase;
-	}
-
 	@Override
 	public String[] getTargetFileTypes()
 	{
@@ -31,13 +22,12 @@ public class ModelLoader implements FileLoader
 	}
 
 	@Override
-	public ModelResource loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
-			ResourceFile resourceFile)
+	public ModelResource loadFile(ResourceManager resourceManager, ResourceFile resourceFile)
 	{
 		try
 		{
 			YamlFile yaml = new YamlFile();
-			yaml.load(resourceFile.getFile());
+			yaml.load(resourceManager.getFile(resourceFile));
 
 			String name = yaml.getString("name");
 			MeshResource[] meshes;
@@ -55,24 +45,18 @@ public class ModelLoader implements FileLoader
 							resourceFile, yaml.getString("submeshes", submesh, "mesh"),
 							yaml.getString("submeshes", submesh, "material"));
 
-					meshes[i] =
-							(MeshResource) resourceLoader.loadResource(
-									_fileDatabase.getResourceFile(resourceFile.getPlugin(),
-											yaml.getString("submeshes", submesh, "mesh")),
-									database);
+					meshes[i] = (MeshResource) resourceManager.loadResource(
+							new ResourceFile(yaml.getString("submeshes", submesh, "mesh")));
 
-					materials[i] =
-							(MaterialResource) resourceLoader.loadResource(
-									_fileDatabase.getResourceFile(resourceFile.getPlugin(),
-											yaml.getString("submeshes", submesh, "material")),
-									database);
+					materials[i] = (MaterialResource) resourceManager.loadResource(
+							new ResourceFile(yaml.getString("submeshes", submesh, "material")));
 
 					i++;
 				}
 			}
 
 			ModelResource model = new ModelResource(resourceFile, name, meshes, materials);
-			database.addResource(model);
+			resourceManager.getResourceDatabase().addResource(model);
 
 			Log.debugf("Successfully loaded model resource, %s.", model);
 			return model;

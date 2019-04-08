@@ -1,12 +1,11 @@
-package resource_handling;
+package frameworks.resource;
 
 import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
+import net.whg.frameworks.resource.ResourceFile;
 import net.whg.frameworks.resource.SimpleFileDatabase;
 import net.whg.frameworks.resource.YamlFile;
-import net.whg.we.main.Plugin;
 
 public class YamlFileTest
 {
@@ -15,11 +14,9 @@ public class YamlFileTest
 	{
 		File workingDir = new File(System.getProperty("user.dir"));
 		SimpleFileDatabase db = new SimpleFileDatabase(workingDir);
-		Plugin plugin = Mockito.mock(Plugin.class);
-		Mockito.when(plugin.getPluginName()).thenReturn("TestPlugin");
 		YamlFile yaml = new YamlFile();
 
-		yaml.load(db.getResourceFile(plugin, "Unit Tests/simple.yml").getFile());
+		yaml.load(db.getFile(new ResourceFile("Unit Tests/simple.yml")));
 
 		Assert.assertFalse(yaml.getRoots().isEmpty());
 	}
@@ -29,11 +26,9 @@ public class YamlFileTest
 	{
 		File workingDir = new File(System.getProperty("user.dir"));
 		SimpleFileDatabase db = new SimpleFileDatabase(workingDir);
-		Plugin plugin = Mockito.mock(Plugin.class);
-		Mockito.when(plugin.getPluginName()).thenReturn("TestPlugin");
 		YamlFile yaml = new YamlFile();
 
-		yaml.load(db.getResourceFile(plugin, "Unit Tests/simple.yml").getFile());
+		yaml.load(db.getFile(new ResourceFile("Unit Tests/simple.yml")));
 
 		Assert.assertTrue(yaml.getRoots().size() == 2);
 		Assert.assertTrue(yaml.getRoots().containsKey("root1"));
@@ -45,11 +40,9 @@ public class YamlFileTest
 	{
 		File workingDir = new File(System.getProperty("user.dir"));
 		SimpleFileDatabase db = new SimpleFileDatabase(workingDir);
-		Plugin plugin = Mockito.mock(Plugin.class);
-		Mockito.when(plugin.getPluginName()).thenReturn("TestPlugin");
 		YamlFile yaml = new YamlFile();
 
-		yaml.load(db.getResourceFile(plugin, "Unit Tests/simple.yml").getFile());
+		yaml.load(db.getFile(new ResourceFile("Unit Tests/simple.yml")));
 
 		Assert.assertEquals(yaml.getInt("root1", "some_data", "really_nested_data"), 2);
 	}
@@ -59,11 +52,9 @@ public class YamlFileTest
 	{
 		File workingDir = new File(System.getProperty("user.dir"));
 		SimpleFileDatabase db = new SimpleFileDatabase(workingDir);
-		Plugin plugin = Mockito.mock(Plugin.class);
-		Mockito.when(plugin.getPluginName()).thenReturn("TestPlugin");
 		YamlFile yaml = new YamlFile();
 
-		yaml.load(db.getResourceFile(plugin, "Unit Tests/simple.yml").getFile());
+		yaml.load(db.getFile(new ResourceFile("Unit Tests/simple.yml")));
 
 		Assert.assertEquals(yaml.getInt("root1.some_data.really_nested_data"), 2);
 	}
@@ -73,11 +64,9 @@ public class YamlFileTest
 	{
 		File workingDir = new File(System.getProperty("user.dir"));
 		SimpleFileDatabase db = new SimpleFileDatabase(workingDir);
-		Plugin plugin = Mockito.mock(Plugin.class);
-		Mockito.when(plugin.getPluginName()).thenReturn("TestPlugin");
 		YamlFile yaml = new YamlFile();
 
-		yaml.load(db.getResourceFile(plugin, "Unit Tests/simple.yml").getFile());
+		yaml.load(db.getFile(new ResourceFile("Unit Tests/simple.yml")));
 
 		Assert.assertEquals(yaml.getInt("root2.1"), 12);
 	}
@@ -87,11 +76,9 @@ public class YamlFileTest
 	{
 		File workingDir = new File(System.getProperty("user.dir"));
 		SimpleFileDatabase db = new SimpleFileDatabase(workingDir);
-		Plugin plugin = Mockito.mock(Plugin.class);
-		Mockito.when(plugin.getPluginName()).thenReturn("TestPlugin");
 		YamlFile yaml = new YamlFile();
 
-		yaml.load(db.getResourceFile(plugin, "Unit Tests/simple.yml").getFile());
+		yaml.load(db.getFile(new ResourceFile("Unit Tests/simple.yml")));
 
 		Assert.assertEquals(yaml.getString("root4.4234.123"), null);
 	}

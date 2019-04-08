@@ -7,9 +7,8 @@ import org.joml.Vector4f;
 import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.resource.FileLoader;
 import net.whg.frameworks.resource.Resource;
-import net.whg.frameworks.resource.ResourceDatabase;
 import net.whg.frameworks.resource.ResourceFile;
-import net.whg.frameworks.resource.ResourceLoader;
+import net.whg.frameworks.resource.ResourceManager;
 import net.whg.we.client_logic.ui.font.Font;
 import net.whg.we.client_logic.ui.font.Glyph;
 
@@ -27,10 +26,10 @@ public class FontLoader implements FileLoader
 	}
 
 	@Override
-	public Resource loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
-			ResourceFile resourceFile)
+	public Resource loadFile(ResourceManager resourceManager, ResourceFile resourceFile)
 	{
-		try (BufferedReader in = new BufferedReader(new FileReader(resourceFile.getFile())))
+		try (BufferedReader in =
+				new BufferedReader(new FileReader(resourceManager.getFile(resourceFile))))
 		{
 			String fontName = null;
 			float imageWidth = 0f;

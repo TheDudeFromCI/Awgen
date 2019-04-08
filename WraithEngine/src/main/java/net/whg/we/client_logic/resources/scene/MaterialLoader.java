@@ -2,11 +2,9 @@ package net.whg.we.client_logic.resources.scene;
 
 import java.util.Set;
 import net.whg.frameworks.logging.Log;
-import net.whg.frameworks.resource.FileDatabase;
 import net.whg.frameworks.resource.FileLoader;
-import net.whg.frameworks.resource.ResourceDatabase;
 import net.whg.frameworks.resource.ResourceFile;
-import net.whg.frameworks.resource.ResourceLoader;
+import net.whg.frameworks.resource.ResourceManager;
 import net.whg.frameworks.resource.YamlFile;
 import net.whg.we.client_logic.resources.graphics.ShaderResource;
 import net.whg.we.client_logic.resources.graphics.TextureResource;
@@ -18,13 +16,6 @@ public class MaterialLoader implements FileLoader
 			"material"
 	};
 
-	private FileDatabase _fileDatabase;
-
-	public MaterialLoader(FileDatabase fileDatabase)
-	{
-		_fileDatabase = fileDatabase;
-	}
-
 	@Override
 	public String[] getTargetFileTypes()
 	{
@@ -32,18 +23,17 @@ public class MaterialLoader implements FileLoader
 	}
 
 	@Override
-	public MaterialResource loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
-			ResourceFile resourceFile)
+	public MaterialResource loadFile(ResourceManager resourceManager, ResourceFile resourceFile)
 	{
 		try
 		{
 			YamlFile yaml = new YamlFile();
-			yaml.load(resourceFile.getFile());
+			yaml.load(resourceManager.getFile(resourceFile));
 
 			String name = yaml.getString("name");
 
-			ShaderResource shader = (ShaderResource) resourceLoader.loadResource(_fileDatabase
-					.getResourceFile(resourceFile.getPlugin(), yaml.getString("shader")), database);
+			ShaderResource shader = (ShaderResource) resourceManager
+					.loadResource(new ResourceFile(yaml.getString("shader")));
 
 			String[] textureParamNames;
 			TextureResource[] textures;
@@ -56,18 +46,14 @@ public class MaterialLoader implements FileLoader
 				for (String textureName : textureNames)
 				{
 					textureParamNames[i] = textureName;
-					textures[i++] =
-							(TextureResource) resourceLoader
-									.loadResource(
-											_fileDatabase.getResourceFile(resourceFile.getPlugin(),
-													yaml.getString("textures", textureName)),
-											database);
+					textures[i++] = (TextureResource) resourceManager.loadResource(
+							new ResourceFile(yaml.getString("textures", textureName)));
 				}
 			}
 
 			MaterialResource material =
 					new MaterialResource(resourceFile, name, shader, textureParamNames, textures);
-			database.addResource(material);
+			resourceManager.getResourceDatabase().addResource(material);
 
 			Log.debugf("Successfully loaded material resource, %s.", material);
 			return material;

@@ -19,9 +19,9 @@ public class ResourceLoader
 	 *            - The database to load the resource from.
 	 * @return
 	 */
-	public Resource loadResource(ResourceFile resourceFile, ResourceDatabase database)
+	public Resource loadResource(ResourceFile resourceFile, ResourceManager resourceManager)
 	{
-		Resource resource = database.getResource(resourceFile);
+		Resource resource = resourceManager.getResourceDatabase().getResource(resourceFile);
 		if (resource != null)
 			return resource;
 
@@ -47,7 +47,7 @@ public class ResourceLoader
 			throw new IllegalStateException(
 					String.format("Not a supported file type! (%s)", resourceFile));
 
-		return loader.loadFile(this, database, resourceFile);
+		return loader.loadFile(resourceManager, resourceFile);
 	}
 
 	/**

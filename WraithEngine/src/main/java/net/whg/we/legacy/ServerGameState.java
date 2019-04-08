@@ -32,8 +32,8 @@ public class ServerGameState implements GameState
 		resourceLoader.addFileLoader(new GLSLShaderLoader());
 		resourceLoader.addFileLoader(new MeshLoader());
 		resourceLoader.addFileLoader(new TextureLoader());
-		resourceLoader.addFileLoader(new MaterialLoader(fileDatabase));
-		resourceLoader.addFileLoader(new ModelLoader(fileDatabase));
+		resourceLoader.addFileLoader(new MaterialLoader());
+		resourceLoader.addFileLoader(new ModelLoader());
 		resourceLoader.addFileLoader(new FontLoader());
 
 		return new ResourceManager(resourceDatabase, resourceLoader, fileDatabase);

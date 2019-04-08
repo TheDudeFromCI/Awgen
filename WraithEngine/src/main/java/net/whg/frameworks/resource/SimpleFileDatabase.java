@@ -3,9 +3,7 @@ package net.whg.frameworks.resource;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.util.FileUtils;
-import net.whg.we.main.Plugin;
 
 public class SimpleFileDatabase implements FileDatabase
 {
@@ -13,12 +11,10 @@ public class SimpleFileDatabase implements FileDatabase
 	public static final String RESOURCE_FOLDER_NAME = "res";
 
 	private File _baseFolder;
-	private SimplePathNameValidator _validator;
 
 	public SimpleFileDatabase(File baseFolder)
 	{
 		_baseFolder = baseFolder;
-		_validator = new SimplePathNameValidator();
 	}
 
 	@Override
@@ -47,37 +43,15 @@ public class SimpleFileDatabase implements FileDatabase
 		return files;
 	}
 
-	@Override
-	public ResourceFile getResourceFile(Plugin plugin, String pathName)
-	{
-		if (plugin == null)
-		{
-			Log.warnf("Plugin not defined! Cannot retrieve ResourceFile %s!", pathName);
-			return null;
-		}
-
-		if (!_validator.isValidPathName(pathName))
-		{
-			Log.warnf("Path name could not be validated! Cannot retrieve ResourceFile %s!",
-					pathName);
-			return null;
-		}
-
-		File resourceFolder = new File(_baseFolder, RESOURCE_FOLDER_NAME);
-		File pluginFolder = new File(resourceFolder, plugin.getPluginName());
-		File file = new File(pluginFolder, FileUtils.pathnameToFile(pathName));
-
-		return new ResourceFile(plugin, pathName, file);
-	}
-
 	public File getBaseFolder()
 	{
 		return _baseFolder;
 	}
 
 	@Override
-	public PathNameValidator getPathNameValidator()
+	public File getFile(ResourceFile file)
 	{
-		return _validator;
+		File folder = new File(getBaseFolder(), RESOURCE_FOLDER_NAME);
+		return new File(folder, file.getPathname());
 	}
 }

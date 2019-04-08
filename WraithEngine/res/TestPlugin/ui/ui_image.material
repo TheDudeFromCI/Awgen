@@ -1,4 +1,0 @@
-name: UI
-shader: shaders/ui.glsl
-textures:
-  _texture: ui/happychicken.png

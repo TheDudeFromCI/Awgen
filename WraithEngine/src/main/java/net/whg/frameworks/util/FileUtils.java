@@ -100,7 +100,7 @@ public class FileUtils
 		int colon = pathname.lastIndexOf(":");
 
 		if (colon == -1)
-			return getSimpleFileName(pathname);
+			return "default";
 
 		return pathname.substring(colon + 1);
 	}

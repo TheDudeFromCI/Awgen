@@ -1,15 +1,15 @@
-package resource_handling.unit;
+package frameworks.resource;
 
-import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+import net.whg.frameworks.resource.FileDatabase;
 import net.whg.frameworks.resource.FileLoader;
 import net.whg.frameworks.resource.Resource;
 import net.whg.frameworks.resource.ResourceDatabase;
 import net.whg.frameworks.resource.ResourceFile;
 import net.whg.frameworks.resource.ResourceLoader;
-import net.whg.we.main.Plugin;
+import net.whg.frameworks.resource.ResourceManager;
 
 public class ResourceLoaderTest
 {
@@ -62,10 +62,11 @@ public class ResourceLoaderTest
 		ResourceLoader resourceLoader = new ResourceLoader();
 		ResourceDatabase database = new ResourceDatabase();
 		FileLoader fileLoader = Mockito.mock(FileLoader.class);
-		Plugin plugin = Mockito.mock(Plugin.class);
-		File file = new File(".");
-		ResourceFile resourceFile = new ResourceFile(plugin, "file.txt", file);
+		ResourceFile resourceFile = new ResourceFile("file.txt");
 		Resource resource = Mockito.mock(Resource.class);
+		FileDatabase fileDatabase = Mockito.mock(FileDatabase.class);
+
+		ResourceManager manager = new ResourceManager(database, resourceLoader, fileDatabase);
 
 		resourceLoader.addFileLoader(fileLoader);
 
@@ -73,10 +74,9 @@ public class ResourceLoaderTest
 		{
 				"txt"
 		}).when(fileLoader).getTargetFileTypes();
-		Mockito.doReturn(resource).when(fileLoader).loadFile(resourceLoader, database,
-				resourceFile);
+		Mockito.doReturn(resource).when(fileLoader).loadFile(manager, resourceFile);
 
-		Assert.assertEquals(resource, resourceLoader.loadResource(resourceFile, database));
+		Assert.assertEquals(resource, resourceLoader.loadResource(resourceFile, manager));
 	}
 
 	@Test
@@ -85,17 +85,17 @@ public class ResourceLoaderTest
 		ResourceLoader resourceLoader = new ResourceLoader();
 		ResourceDatabase database = new ResourceDatabase();
 		FileLoader fileLoader = Mockito.mock(FileLoader.class);
-		Plugin plugin = Mockito.mock(Plugin.class);
-		File file = new File(".");
-		ResourceFile resourceFile = new ResourceFile(plugin, "file.txt", file);
+		ResourceFile resourceFile = new ResourceFile("file.txt");
 		Resource resource = Mockito.mock(Resource.class);
 		Mockito.doReturn(resourceFile).when(resource).getResourceFile();
 		database.addResource(resource);
+		FileDatabase fileDatabase = Mockito.mock(FileDatabase.class);
+
+		ResourceManager manager = new ResourceManager(database, resourceLoader, fileDatabase);
 
 		resourceLoader.addFileLoader(fileLoader);
 
-		Assert.assertEquals(resource, resourceLoader.loadResource(resourceFile, database));
-		Mockito.verify(fileLoader, Mockito.never()).loadFile(resourceLoader, database,
-				resourceFile);
+		Assert.assertEquals(resource, resourceLoader.loadResource(resourceFile, manager));
+		Mockito.verify(fileLoader, Mockito.never()).loadFile(manager, resourceFile);
 	}
 }

@@ -1,4 +1,4 @@
-package resource_handling.unit;
+package frameworks.resource;
 
 import org.junit.Assert;
 import org.junit.Test;

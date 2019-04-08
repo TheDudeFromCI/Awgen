@@ -21,15 +21,12 @@ public interface FileLoader
 	 * after it is loaded. All resources in the give file are loaded to the
 	 * database, but only the file with the given name is returned.
 	 *
-	 * @param resourceLoader
-	 *            - The resource loader currently in charge of loading this file.
-	 * @param database
-	 *            - The resource database currently being used.
+	 * @param resourceManager
+	 *            - The resource manager currently in charge of loading this file.
 	 * @param resourceFile
 	 *            - The resource to load.
 	 */
-	public Resource loadFile(ResourceLoader resourceLoader, ResourceDatabase database,
-			ResourceFile resourceFile);
+	public Resource loadFile(ResourceManager resourceManager, ResourceFile resourceFile);
 
 	/**
 	 * Gets the priority level for this file loader. When loading a file, the file

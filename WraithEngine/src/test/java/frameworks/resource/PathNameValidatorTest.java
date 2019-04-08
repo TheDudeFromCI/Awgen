@@ -1,15 +1,15 @@
-package resource_handling;
+package frameworks.resource;
 
 import org.junit.Assert;
 import org.junit.Test;
-import net.whg.frameworks.resource.SimplePathNameValidator;
+import net.whg.frameworks.resource.PathNameValidator;
 
 public class PathNameValidatorTest
 {
 	@Test
 	public void pathName()
 	{
-		SimplePathNameValidator val = new SimplePathNameValidator();
+		PathNameValidator val = new PathNameValidator();
 
 		Assert.assertTrue(val.isValidPathName("abd.bat"));
 		Assert.assertTrue(val.isValidPathName("1230.bat"));
@@ -28,13 +28,13 @@ public class PathNameValidatorTest
 		Assert.assertTrue(val.isValidPathName("123 asd/a_1/abasdd.baast123"));
 		Assert.assertTrue(val.isValidPathName("123 asd/a_1/abasd"));
 		Assert.assertFalse(val.isValidPathName("a%basd"));
-		Assert.assertTrue(val.isValidPathName("abd/a/b/cd")); //you should be able to have a path that doesn't end in a file?
+		Assert.assertTrue(val.isValidPathName("abd/a/b/cd"));
 	}
 
 	@Test
 	public void pathNameWithName()
 	{
-		SimplePathNameValidator val = new SimplePathNameValidator();
+		PathNameValidator val = new PathNameValidator();
 
 		Assert.assertTrue(val.isValidPathName("abd.bat:234"));
 		Assert.assertTrue(val.isValidPathName("abd.bat:23 4"));

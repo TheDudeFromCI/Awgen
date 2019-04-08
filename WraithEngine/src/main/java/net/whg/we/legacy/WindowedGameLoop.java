@@ -2,6 +2,7 @@ package net.whg.we.legacy;
 
 import org.lwjgl.opengl.GL11;
 import net.whg.frameworks.logging.Log;
+import net.whg.frameworks.resource.ResourceFile;
 import net.whg.frameworks.resource.ResourceManager;
 import net.whg.frameworks.scene.SceneNode;
 import net.whg.frameworks.scene.Transform3D;
@@ -70,8 +71,8 @@ public class WindowedGameLoop implements GameLoop
 			// TODO Remove this. Loading a resources should occur through
 			// commands and startup files, not pre-loaded.
 			{
-				ModelResource terrain = (ModelResource) resourceManager.loadResource(_corePlugin,
-						"models/terrain.model");
+				ModelResource terrain = (ModelResource) resourceManager
+						.loadResource(new ResourceFile("models/terrain.model"));
 				terrain.compile(graphics);
 				Model model = terrain.getData();
 
