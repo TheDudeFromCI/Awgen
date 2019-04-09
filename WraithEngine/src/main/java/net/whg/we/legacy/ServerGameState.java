@@ -8,10 +8,11 @@ import net.whg.frameworks.resource.FileDatabase;
 import net.whg.frameworks.resource.ResourceDatabase;
 import net.whg.frameworks.resource.ResourceLoader;
 import net.whg.frameworks.resource.ResourceManager;
-import net.whg.frameworks.resource.SimpleFileDatabase;
 import net.whg.we.commands.CommandUtils;
 import net.whg.we.main.GameState;
 import net.whg.we.main.PluginLoader;
+import net.whg.we.resource.ServerFileDatabase;
+import net.whg.we.resource.SimpleFileDatabase;
 import net.whg.we.scene.SceneListManager;
 
 public class ServerGameState implements GameState
@@ -42,7 +43,7 @@ public class ServerGameState implements GameState
 	{
 		PluginLoader pluginLoader = new PluginLoader();
 
-		pluginLoader.loadPluginsFromFile(resourceManager.getFileDatabase());
+		pluginLoader.loadPluginsFromFile((ServerFileDatabase) resourceManager.getFileDatabase());
 		pluginLoader.enableAllPlugins();
 
 		return pluginLoader;

@@ -6,10 +6,10 @@ import net.whg.frameworks.resource.FileDatabase;
 import net.whg.frameworks.resource.ResourceDatabase;
 import net.whg.frameworks.resource.ResourceLoader;
 import net.whg.frameworks.resource.ResourceManager;
-import net.whg.frameworks.resource.SimpleFileDatabase;
 import net.whg.we.client_logic.connect.ClientPlayerList;
 import net.whg.we.client_logic.rendering.GraphicsPipeline;
 import net.whg.we.main.GameState;
+import net.whg.we.resource.SimpleFileDatabase;
 import net.whg.we.scene.SceneListManager;
 
 public class ClientGameState implements GameState

@@ -10,7 +10,7 @@ import java.util.Comparator;
 import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 import net.whg.frameworks.logging.Log;
-import net.whg.frameworks.resource.FileDatabase;
+import net.whg.we.resource.ServerFileDatabase;
 
 public class PluginLoader
 {
@@ -38,7 +38,7 @@ public class PluginLoader
 		return null;
 	}
 
-	public void loadPluginsFromFile(FileDatabase fileDatabase)
+	public void loadPluginsFromFile(ServerFileDatabase fileDatabase)
 	{
 		for (File file : fileDatabase.getJarLibraries())
 		{

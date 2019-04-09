@@ -1,10 +1,12 @@
-package net.whg.frameworks.resource;
+package net.whg.we.resource;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import net.whg.frameworks.resource.FileUtils;
+import net.whg.frameworks.resource.ResourceFile;
 
-public class SimpleFileDatabase implements FileDatabase
+public class SimpleFileDatabase implements ServerFileDatabase
 {
 	public static final String PLUGIN_FOLDER_NAME = "plugins";
 	public static final String RESOURCE_FOLDER_NAME = "res";
