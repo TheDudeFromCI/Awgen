@@ -14,19 +14,19 @@ public interface FileLoader
 	 *
 	 * @return A String array of supported file types.
 	 */
-	public String[] getTargetFileTypes();
+	String[] getTargetFileTypes();
 
 	/**
-	 * Loads a specfic file as a resource. The resource is added to the database
-	 * after it is loaded. All resources in the give file are loaded to the
-	 * database, but only the file with the given name is returned.
+	 * Creates a new ResourceFuture instance to load the given resource file with.
 	 *
 	 * @param resourceManager
 	 *            - The resource manager currently in charge of loading this file.
 	 * @param resourceFile
 	 *            - The resource to load.
+	 * @return The newly created resource future instance which will be used to load
+	 *         the file.
 	 */
-	public Resource loadFile(ResourceManager resourceManager, ResourceFile resourceFile);
+	ResourceFuture loadFile(ResourceManager resourceManager, ResourceFile resourceFile);
 
 	/**
 	 * Gets the priority level for this file loader. When loading a file, the file
@@ -35,5 +35,13 @@ public interface FileLoader
 	 *
 	 * @return The priority value of this file loader.
 	 */
-	public int getPriority();
+	int getPriority();
+
+	/**
+	 * This methods creates a new instance for writing resource data into.
+	 * 
+	 * @return a new data type instance for the type of resource that this file
+	 *         loader represents.
+	 */
+	ResourceData createDataInstace();
 }

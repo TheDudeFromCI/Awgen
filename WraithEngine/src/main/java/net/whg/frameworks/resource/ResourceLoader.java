@@ -47,7 +47,18 @@ public class ResourceLoader
 			throw new IllegalStateException(
 					String.format("Not a supported file type! (%s)", resourceFile));
 
-		return loader.loadFile(resourceManager, resourceFile);
+		ResourceData data = loader.createDataInstace();
+		resource = new Resource(resourceManager, resourceFile, data);
+		resourceManager.getResourceDatabase().addResource(resource);
+
+		ResourceFuture future = loader.loadFile(resourceManager, resourceFile);
+		resource.setResourceFuture(future);
+
+		Thread thread = new Thread(future);
+		thread.setDaemon(true);
+		thread.start();
+
+		return resource;
 	}
 
 	/**

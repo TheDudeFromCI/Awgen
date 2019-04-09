@@ -9,12 +9,6 @@ import net.whg.frameworks.resource.ResourceDatabase;
 import net.whg.frameworks.resource.ResourceLoader;
 import net.whg.frameworks.resource.ResourceManager;
 import net.whg.frameworks.resource.SimpleFileDatabase;
-import net.whg.we.client_logic.resources.graphics.GLSLShaderLoader;
-import net.whg.we.client_logic.resources.graphics.MeshLoader;
-import net.whg.we.client_logic.resources.graphics.TextureLoader;
-import net.whg.we.client_logic.resources.scene.FontLoader;
-import net.whg.we.client_logic.resources.scene.MaterialLoader;
-import net.whg.we.client_logic.resources.scene.ModelLoader;
 import net.whg.we.commands.CommandUtils;
 import net.whg.we.main.GameState;
 import net.whg.we.main.PluginLoader;
@@ -29,12 +23,12 @@ public class ServerGameState implements GameState
 		ResourceDatabase resourceDatabase = new ResourceDatabase();
 		ResourceLoader resourceLoader = new ResourceLoader();
 
-		resourceLoader.addFileLoader(new GLSLShaderLoader());
-		resourceLoader.addFileLoader(new MeshLoader());
-		resourceLoader.addFileLoader(new TextureLoader());
-		resourceLoader.addFileLoader(new MaterialLoader());
-		resourceLoader.addFileLoader(new ModelLoader());
-		resourceLoader.addFileLoader(new FontLoader());
+		// resourceLoader.addFileLoader(new GLSLShaderLoader());
+		// resourceLoader.addFileLoader(new MeshLoader());
+		// resourceLoader.addFileLoader(new TextureLoader());
+		// resourceLoader.addFileLoader(new MaterialLoader());
+		// resourceLoader.addFileLoader(new ModelLoader());
+		// resourceLoader.addFileLoader(new FontLoader());
 
 		return new ResourceManager(resourceDatabase, resourceLoader, fileDatabase);
 	}
