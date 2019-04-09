@@ -17,7 +17,7 @@ public class FileUtilsTest
 
 		Assert.assertEquals("txt", FileUtils.getFileExtention("abc.txt"));
 		Assert.assertEquals("txt0", FileUtils.getFileExtention("abc/def.txt0"));
-		Assert.assertEquals("fbx", FileUtils.getFileExtention("abc/file.fbx:human"));
+		Assert.assertEquals("fbx:human", FileUtils.getFileExtention("abc/file.fbx:human"));
 	}
 
 	@Test
@@ -29,29 +29,31 @@ public class FileUtilsTest
 		Assert.assertEquals("folder", FileUtils.getSimpleFileName("path/to/folder"));
 		Assert.assertEquals("image.png", FileUtils.getSimpleFileName("image.png"));
 		Assert.assertEquals("", FileUtils.getSimpleFileName(""));
-		Assert.assertEquals("model.fbx", FileUtils.getSimpleFileName("abc/model.fbx:human"));
+		Assert.assertEquals("model.fbx:human", FileUtils.getSimpleFileName("abc/model.fbx:human"));
 	}
 
 	@Test
-	public void correctPathname()
+	public void isValidPathname()
 	{
-		Assert.assertNull(FileUtils.getPathnameWithoutResource(null));
+		Assert.assertFalse(FileUtils.isValidPathname("12.30.bat"));
+		Assert.assertFalse(FileUtils.isValidPathname("abdbat."));
+		Assert.assertFalse(FileUtils.isValidPathname(" abd.bat"));
+		Assert.assertFalse(FileUtils.isValidPathname("123//abd.bat123"));
+		Assert.assertFalse(FileUtils.isValidPathname("/123/a/abd.bat123"));
+		Assert.assertFalse(FileUtils.isValidPathname("123/a/abd.bat123/"));
+		Assert.assertFalse(FileUtils.isValidPathname(".123/a/abd.bat123"));
+		Assert.assertFalse(FileUtils.isValidPathname("a%basd"));
+		Assert.assertFalse(FileUtils.isValidPathname("file.txt 2"));
 
-		Assert.assertEquals("path/to/file.txt",
-				FileUtils.getPathnameWithoutResource("path/to/file.txt"));
-		Assert.assertEquals("folder", FileUtils.getPathnameWithoutResource("folder"));
-		Assert.assertEquals("red", FileUtils.getPathnameWithoutResource("red:blue"));
-		Assert.assertEquals("", FileUtils.getPathnameWithoutResource(""));
-	}
-
-	@Test
-	public void correctAssetName()
-	{
-		Assert.assertNull(FileUtils.getPathnameOnlyResource(null));
-
-		Assert.assertEquals("default", FileUtils.getPathnameOnlyResource("path/to/file.txt"));
-		Assert.assertEquals("default", FileUtils.getPathnameOnlyResource("folder"));
-		Assert.assertEquals("blue", FileUtils.getPathnameOnlyResource("red:blue"));
-		Assert.assertEquals("default", FileUtils.getPathnameOnlyResource(""));
+		Assert.assertTrue(FileUtils.isValidPathname("abd.bat"));
+		Assert.assertTrue(FileUtils.isValidPathname("1230.bat"));
+		Assert.assertTrue(FileUtils.isValidPathname("abd_123.bat"));
+		Assert.assertTrue(FileUtils.isValidPathname("abd.bat123"));
+		Assert.assertTrue(FileUtils.isValidPathname("123/abd.bat123"));
+		Assert.assertTrue(FileUtils.isValidPathname("123 asd/a/abd.bat123"));
+		Assert.assertTrue(FileUtils.isValidPathname("123 asd/a_1/abasdd.baast123"));
+		Assert.assertTrue(FileUtils.isValidPathname("123 asd/a_1/abasd.123"));
+		Assert.assertTrue(FileUtils.isValidPathname("abd/a/b/cd._d_"));
+		Assert.assertTrue(FileUtils.isValidPathname("abd.bat_"));
 	}
 }

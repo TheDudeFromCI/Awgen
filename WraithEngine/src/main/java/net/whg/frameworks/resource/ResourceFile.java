@@ -10,7 +10,6 @@ import net.whg.frameworks.util.FileUtils;
 public class ResourceFile
 {
 	private String _pathname;
-	private String _assetname;
 	private String _extension;
 
 	/**
@@ -25,19 +24,11 @@ public class ResourceFile
 	 */
 	public ResourceFile(String pathname)
 	{
-		_pathname = FileUtils.getPathnameWithoutResource(pathname);
-		_assetname = FileUtils.getPathnameOnlyResource(pathname);
-		_extension = FileUtils.getFileExtention(pathname);
-	}
+		if (!FileUtils.isValidPathname(pathname))
+			throw new IllegalArgumentException("Pathname not valid! '" + pathname + "'");
 
-	/**
-	 * Gets the name of this resource within the resource file.
-	 *
-	 * @return The name of this resource.
-	 */
-	public String getName()
-	{
-		return _assetname;
+		_pathname = pathname;
+		_extension = FileUtils.getFileExtention(pathname);
 	}
 
 	/**
@@ -48,20 +39,6 @@ public class ResourceFile
 	public String getPathname()
 	{
 		return _pathname;
-	}
-
-	/**
-	 * Gets the file name and relative path of this resource, as well as the
-	 * resource it points to. This method is equal to calling:<br>
-	 * <br>
-	 * <code>getPathname() + ":" + getName()</code>
-	 *
-	 * @return The name of this resource file and it's relative path, including the
-	 *         resource name.
-	 */
-	public String getFullPathname()
-	{
-		return getPathname() + ":" + getName();
 	}
 
 	/**
@@ -77,7 +54,7 @@ public class ResourceFile
 	@Override
 	public String toString()
 	{
-		return "[Res: " + getFullPathname() + "]";
+		return "[Res: " + _pathname + "]";
 	}
 
 	@Override
@@ -87,13 +64,12 @@ public class ResourceFile
 			return false;
 
 		ResourceFile a = (ResourceFile) other;
-
-		return _pathname.equals(a._pathname) && _assetname.equals(a._assetname);
+		return _pathname.equals(a._pathname);
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return _pathname.hashCode() ^ _assetname.hashCode();
+		return _pathname.hashCode();
 	}
 }
