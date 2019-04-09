@@ -77,7 +77,7 @@ public class ResourceLoaderTest
 	}
 
 	@Test
-	public void loadResource_Normal()
+	public void loadResource_Normal() throws InterruptedException
 	{
 		ResourceLoader loader = new ResourceLoader();
 		ResourceDatabase database = Mockito.mock(ResourceDatabase.class);
@@ -87,6 +87,17 @@ public class ResourceLoaderTest
 
 		ResourceFile resourceFile = new ResourceFile("abc.txt");
 		ResourceFuture future = Mockito.mock(ResourceFuture.class);
+
+		boolean[] didRun = new boolean[1];
+		Thread mainThread = Thread.currentThread();
+		Mockito.doAnswer(a ->
+		{
+			didRun[0] = true;
+
+			Thread workingThread = Thread.currentThread();
+			Assert.assertNotEquals(mainThread, workingThread);
+			return null;
+		}).when(future).run();
 
 		FileLoader fileLoader = Mockito.mock(FileLoader.class);
 		Mockito.when(fileLoader.getTargetFileTypes()).thenReturn(new String[]
@@ -102,6 +113,10 @@ public class ResourceLoaderTest
 
 		Assert.assertEquals(resourceFile, resource.getResourceFile());
 		Mockito.verify(future).sync(Mockito.any(ResourceData.class));
+
+		Thread.sleep(100);
+
+		Assert.assertTrue(didRun[0]);
 	}
 
 	@Test(expected = UnsupportedFileFormat.class)
