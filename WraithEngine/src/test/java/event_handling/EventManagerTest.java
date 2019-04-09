@@ -1,10 +1,10 @@
 package event_handling;
 
-import net.whg.we.event.EventCallerBase;
-import net.whg.we.event.EventManager;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+import net.whg.frameworks.event.EventCallerBase;
+import net.whg.frameworks.event.EventManager;
 
 public class EventManagerTest
 {
@@ -38,30 +38,30 @@ public class EventManagerTest
 	@Test
 	public void registerEventCallerWithSameNameAndPlugin()
 	{
-
+		// TODO
 	}
 
 	@Test
 	public void registerEventCallerTwice()
 	{
-
+		// TODO
 	}
 
 	@Test
 	public void getEventCallerByPluginAndName()
 	{
-
+		// TODO
 	}
 
 	@Test
 	public void getMultipleEventCallersByName()
 	{
-
+		// TODO
 	}
 
 	@Test
 	public void disallowRegisterEventNoPlugin()
 	{
-
+		// TODO
 	}
 }

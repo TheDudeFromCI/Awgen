@@ -3,8 +3,8 @@ package net.whg.we.client_logic.rendering;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 import org.joml.Vector4f;
-import net.whg.we.utils.Color;
-import net.whg.we.utils.logging.Log;
+import net.whg.frameworks.logging.Log;
+import net.whg.we.legacy.Color;
 
 public class Shader
 {

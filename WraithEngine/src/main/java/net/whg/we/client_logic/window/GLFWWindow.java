@@ -6,8 +6,8 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
+import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.rendering.Graphics;
-import net.whg.we.utils.logging.Log;
 
 public class GLFWWindow implements Window
 {

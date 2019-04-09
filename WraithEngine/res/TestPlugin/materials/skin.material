@@ -1,4 +1,0 @@
-name: skin
-shader: shaders/vertex_lit.glsl
-textures:
-  _diffuse: textures/human/young_lightskinned_male_diffuse2.png

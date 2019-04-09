@@ -1,6 +1,6 @@
 package net.whg.we.client_logic.ui;
 
-import net.whg.we.utils.Poolable;
+import net.whg.frameworks.util.Poolable;
 
 public class TypedKeyInput implements Poolable
 {

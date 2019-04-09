@@ -3,8 +3,8 @@ package net.whg.we.client_logic.rendering.opengl;
 import java.nio.FloatBuffer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.rendering.VShader;
-import net.whg.we.utils.logging.Log;
 
 public class GLVShader implements VShader
 {

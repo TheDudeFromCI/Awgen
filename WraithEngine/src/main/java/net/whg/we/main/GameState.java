@@ -1,90 +1,25 @@
 package net.whg.we.main;
 
-import net.whg.we.client_logic.resources.ResourceManager;
-import net.whg.we.client_logic.resources.graphics.GLSLShaderLoader;
-import net.whg.we.client_logic.resources.graphics.MeshLoader;
-import net.whg.we.client_logic.resources.graphics.TextureLoader;
-import net.whg.we.client_logic.resources.scene.FontLoader;
-import net.whg.we.client_logic.resources.scene.MaterialLoader;
-import net.whg.we.client_logic.resources.scene.ModelLoader;
-import net.whg.we.command.CommandManager;
-import net.whg.we.commands.CommandUtils;
-import net.whg.we.event.EventManager;
-import net.whg.we.scene.GameLoop;
+import net.whg.frameworks.network.connect.PlayerList;
+import net.whg.frameworks.network.multiplayer.NetworkHandler;
+import net.whg.frameworks.resource.ResourceManager;
+import net.whg.we.legacy.SceneManager;
 
-public class GameState
+/**
+ * The game state is the class in charge of handling the current active state of
+ * the game. This includes all active scenes, resources, players, and so on.
+ *
+ * @author TheDudeFromCI
+ */
+public interface GameState
 {
-    private ResourceManager _resourceManager;
-    private PluginLoader _pluginLoader;
-    private EventManager _eventManager;
-    private GameLoop _gameLoop;
-    private CommandManager _commandManager;
-    private boolean _isClient;
+	GameLoop getGameLoop();
 
-    public GameState(ResourceManager resourceManager, GameLoop gameLoop,
-            boolean isClient)
-    {
-        _resourceManager = resourceManager;
-        _pluginLoader = new PluginLoader();
-        _eventManager = new EventManager();
-        _commandManager = new CommandManager();// TODO Command manager should
-                                               // only exist on the server game
-                                               // state.
-        _gameLoop = gameLoop;
-        _isClient = isClient;
+	SceneManager getSceneManager();
 
-        CommandUtils.addAdvancedCommands(_commandManager.getCommandList(),
-                this);
-    }
+	PlayerList getPlayerList();
 
-    public void run()
-    {
-        // Load file loaders
-        _resourceManager.getResourceLoader()
-                .addFileLoader(new GLSLShaderLoader());
-        _resourceManager.getResourceLoader().addFileLoader(new MeshLoader());
-        _resourceManager.getResourceLoader().addFileLoader(new TextureLoader());
-        _resourceManager.getResourceLoader().addFileLoader(
-                new MaterialLoader(_resourceManager.getFileDatabase()));
-        _resourceManager.getResourceLoader().addFileLoader(
-                new ModelLoader(_resourceManager.getFileDatabase()));
-        _resourceManager.getResourceLoader().addFileLoader(new FontLoader());
+	ResourceManager getResourceManager();
 
-        // Load plugins
-        _pluginLoader.loadPluginsFromFile(_resourceManager.getFileDatabase());
-        _pluginLoader.enableAllPlugins();
-
-        // Start game loop
-        _gameLoop.run();
-    }
-
-    public ResourceManager getResourceManager()
-    {
-        return _resourceManager;
-    }
-
-    public PluginLoader getPluginLoader()
-    {
-        return _pluginLoader;
-    }
-
-    public EventManager getEventManager()
-    {
-        return _eventManager;
-    }
-
-    public GameLoop getGameLoop()
-    {
-        return _gameLoop;
-    }
-
-    public CommandManager getCommandManager()
-    {
-        return _commandManager;
-    }
-
-    public boolean isClient()
-    {
-        return _isClient;
-    }
+	NetworkHandler getNetworkHandler();
 }

@@ -1,4 +1,0 @@
-name: hair
-shader: shaders/vertex_lit.glsl
-textures:
-  _diffuse: textures/human/short01_diffuse.png

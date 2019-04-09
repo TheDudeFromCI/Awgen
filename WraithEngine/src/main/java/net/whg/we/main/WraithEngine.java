@@ -1,17 +1,12 @@
 package net.whg.we.main;
 
-import java.io.File;
 import org.lwjgl.Version;
-import net.whg.we.client_logic.resources.FileDatabase;
-import net.whg.we.client_logic.resources.ResourceDatabase;
-import net.whg.we.client_logic.resources.ResourceLoader;
-import net.whg.we.client_logic.resources.ResourceManager;
-import net.whg.we.client_logic.resources.SimpleFileDatabase;
-import net.whg.we.client_logic.scene.WindowedGameLoop;
-import net.whg.we.network.multiplayer.NetworkManager;
-import net.whg.we.network.multiplayer.ServerGameLoop;
-import net.whg.we.scene.GameLoop;
-import net.whg.we.utils.logging.Log;
+import net.whg.frameworks.logging.Log;
+import net.whg.frameworks.network.multiplayer.MultiplayerClient;
+import net.whg.frameworks.network.multiplayer.MultiplayerServer;
+import net.whg.frameworks.network.multiplayer.NetworkManager;
+import net.whg.we.legacy.ClientGameState;
+import net.whg.we.legacy.ServerGameState;
 
 /**
  * The program entry class. This class is used for the purpose of initializing
@@ -53,26 +48,21 @@ public class WraithEngine
 
 		NetworkManager networkManager = NetworkManager.parseArgs(args);
 
+		// Start server
 		if (networkManager.hasServer())
 		{
-			// Start server
-
+			MultiplayerServer server = networkManager.getServer();
 			Thread thread = new Thread(() ->
 			{
 				try
 				{
-					ResourceManager resourceManager = buildResourceManager();
-					GameLoop gameLoop = new ServerGameLoop(networkManager.getServer(),
-							resourceManager, networkManager.isLocalHost());
-
-					GameState gameState = new GameState(resourceManager, gameLoop, false);
-					networkManager.getServer().getPacketHandler().setGameState(gameState);
-
-					gameState.run();
+					ServerGameState gameState =
+							new ServerGameState(server, networkManager.isLocalHost());
+					gameState.getGameLoop().run();
 				}
 				finally
 				{
-					networkManager.getServer().stopServer();
+					server.stopServer();
 				}
 			});
 			thread.setDaemon(false);
@@ -80,21 +70,16 @@ public class WraithEngine
 			thread.start();
 		}
 
+		// Start client
 		if (networkManager.hasClient())
 		{
-			// Start client
-
+			MultiplayerClient client = networkManager.getClient();
 			Thread thread = new Thread(() ->
 			{
 				try
 				{
-					ResourceManager resourceManager = buildResourceManager();
-					GameLoop gameLoop =
-							new WindowedGameLoop(resourceManager, networkManager.getClient());
-					GameState gameState = new GameState(resourceManager, gameLoop, true);
-					networkManager.getClient().getPacketHandler().setGameState(gameState);
-
-					gameState.run();
+					ClientGameState gameState = new ClientGameState(client);
+					gameState.getGameLoop().run();
 				}
 				finally
 				{
@@ -105,15 +90,6 @@ public class WraithEngine
 			thread.setName("client_main");
 			thread.start();
 		}
-	}
-
-	private static ResourceManager buildResourceManager()
-	{
-		File baseFolder = new File(System.getProperty("user.dir"));
-		FileDatabase fileDatabase = new SimpleFileDatabase(baseFolder);
-		ResourceDatabase resourceDatabase = new ResourceDatabase();
-		ResourceLoader resourceLoader = new ResourceLoader();
-		return new ResourceManager(resourceDatabase, resourceLoader, fileDatabase);
 	}
 
 	private static boolean setLogLevel(String[] args)

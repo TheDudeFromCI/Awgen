@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
-import net.whg.we.client_logic.resources.FileDatabase;
-import net.whg.we.utils.logging.Log;
+import net.whg.frameworks.logging.Log;
+import net.whg.we.resource.ServerFileDatabase;
 
 public class PluginLoader
 {
@@ -38,7 +38,7 @@ public class PluginLoader
 		return null;
 	}
 
-	void loadPluginsFromFile(FileDatabase fileDatabase)
+	public void loadPluginsFromFile(ServerFileDatabase fileDatabase)
 	{
 		for (File file : fileDatabase.getJarLibraries())
 		{
@@ -136,7 +136,7 @@ public class PluginLoader
 		Log.unindent();
 	}
 
-	void enableAllPlugins()
+	public void enableAllPlugins()
 	{
 		Log.debug("Enabling plugins...");
 		Log.indent();

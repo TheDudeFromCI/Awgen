@@ -5,13 +5,13 @@ import static org.junit.Assert.assertTrue;
 import org.joml.Vector3f;
 import org.junit.Before;
 import org.junit.Test;
-import net.whg.we.client_logic.rendering.Camera;
-import net.whg.we.client_logic.utils.FirstPersonCamera;
-import net.whg.we.client_logic.utils.Input;
-import net.whg.we.client_logic.utils.Screen;
+import net.whg.frameworks.scene.Transform3D;
+import net.whg.frameworks.util.MathUtils;
 import net.whg.we.client_logic.window.KeyState;
-import net.whg.we.utils.MathUtils;
-import net.whg.we.utils.Time;
+import net.whg.we.legacy.Input;
+import net.whg.we.legacy.Screen;
+import net.whg.we.legacy.Time;
+import net.whg.we.scene.FirstPersonNode;
 
 public class FirstPersonCameraTest
 {
@@ -22,7 +22,7 @@ public class FirstPersonCameraTest
 	 */
 	public void testInstantiation()
 	{
-		FirstPersonCamera fpc = new FirstPersonCamera(new Camera());
+		FirstPersonNode fpc = new FirstPersonNode();
 		fpc.setMouseSensitivity(5f);
 		fpc.setMoveSpeed(8f);
 		assertTrue(fpc.getMouseSensitivity() == 5f);
@@ -64,7 +64,7 @@ public class FirstPersonCameraTest
 	public void testUpdateCameraRotation()
 	{
 		float delta = 0.0001f;
-		FirstPersonCamera fpc = new FirstPersonCamera(new Camera());
+		FirstPersonNode fpc = new FirstPersonNode();
 
 		Vector3f pre_base = fpc.getBaseRotation();
 		Vector3f pre_extra = fpc.getExtraRotation();
@@ -73,14 +73,14 @@ public class FirstPersonCameraTest
 		Input.endFrame();
 		Input.setMousePosition(0, 0);
 		Input.endFrame();
-		fpc.updateCameraRotation();
+		fpc.updateFrame();
 
 		Vector3f post_base = fpc.getBaseRotation();
 		Vector3f post_extra = fpc.getExtraRotation();
 		assertTrue(pre_base.equals(post_base, delta) && pre_extra.equals(post_extra, delta));
 
 		Input.setMousePosition(10, 5);
-		fpc.updateCameraRotation();
+		fpc.updateFrame();
 
 		post_base = fpc.getBaseRotation();
 		post_extra = fpc.getExtraRotation();
@@ -91,18 +91,20 @@ public class FirstPersonCameraTest
 	public void testUpdateCameraPosition()
 	{
 		float delta = 0.0001f;
-		FirstPersonCamera fpc = new FirstPersonCamera(new Camera());
-		Vector3f pre = fpc.getLocation().getPosition();
+		FirstPersonNode fpc = new FirstPersonNode();
 
-		fpc.updateCameraPosition();
+		Transform3D transform = (Transform3D) fpc.getTransform();
+		Vector3f pre = new Vector3f(transform.getPosition());
 
-		Vector3f post = fpc.getLocation().getPosition();
+		fpc.updateFrame();
+
+		Vector3f post = transform.getPosition();
 		assertTrue(pre.equals(post, delta));
 
 		Input.setKeyPressed(Input.getKeyId("w"), KeyState.PRESSED, 0);
-		fpc.updateCameraPosition();
+		fpc.updateFrame();
 
-		post = fpc.getLocation().getPosition();
+		post = transform.getPosition();
 
 		assertFalse(pre.equals(post, delta));
 	}

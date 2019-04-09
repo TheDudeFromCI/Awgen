@@ -1,7 +1,7 @@
 package net.whg.we.client_logic.rendering;
 
 import java.util.ArrayList;
-import net.whg.we.scene.Model;
+import net.whg.we.legacy.Model;
 
 // TODO Refactor
 public class MeshScene

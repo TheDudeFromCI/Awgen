@@ -1,9 +1,9 @@
 package net.whg.we.client_logic.rendering;
 
-import net.whg.we.utils.DefaultWindowListener;
-import net.whg.we.client_logic.utils.Screen;
 import net.whg.we.client_logic.window.QueuedWindow;
 import net.whg.we.client_logic.window.WindowBuilder;
+import net.whg.we.legacy.DefaultWindowListener;
+import net.whg.we.legacy.Screen;
 
 public class GraphicsPipeline
 {

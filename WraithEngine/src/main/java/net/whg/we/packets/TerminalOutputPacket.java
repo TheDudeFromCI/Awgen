@@ -1,15 +1,15 @@
 package net.whg.we.packets;
 
 import java.nio.charset.StandardCharsets;
-import net.whg.we.client_logic.scene.WindowedGameLoop;
+import net.whg.frameworks.logging.Log;
+import net.whg.frameworks.network.packet.Packet;
+import net.whg.frameworks.network.packet.PacketHandler;
+import net.whg.frameworks.network.packet.PacketType;
+import net.whg.frameworks.util.ByteReader;
+import net.whg.frameworks.util.ByteWriter;
 import net.whg.we.client_logic.ui.terminal.ConsoleOutput;
+import net.whg.we.legacy.WindowedGameLoop;
 import net.whg.we.main.GameState;
-import net.whg.we.network.packet.Packet;
-import net.whg.we.network.packet.PacketHandler;
-import net.whg.we.network.packet.PacketType;
-import net.whg.we.utils.ByteReader;
-import net.whg.we.utils.ByteWriter;
-import net.whg.we.utils.logging.Log;
 
 public class TerminalOutputPacket implements PacketType
 {

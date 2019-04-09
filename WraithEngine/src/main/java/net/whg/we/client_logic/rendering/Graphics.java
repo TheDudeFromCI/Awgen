@@ -1,6 +1,6 @@
 package net.whg.we.client_logic.rendering;
 
-import net.whg.we.utils.Color;
+import net.whg.we.legacy.Color;
 
 public interface Graphics
 {

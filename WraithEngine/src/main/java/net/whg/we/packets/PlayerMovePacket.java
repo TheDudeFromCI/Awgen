@@ -3,19 +3,14 @@ package net.whg.we.packets;
 import java.nio.charset.StandardCharsets;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import net.whg.we.client_logic.connect.ClientPlayer;
-import net.whg.we.network.connect.PlayerList;
-import net.whg.we.network.multiplayer.ClientPacketHandler;
-import net.whg.we.network.multiplayer.MultiplayerClient;
-import net.whg.we.network.multiplayer.MultiplayerServer;
-import net.whg.we.network.multiplayer.ServerPacketHandler;
-import net.whg.we.network.packet.Packet;
-import net.whg.we.network.packet.PacketHandler;
-import net.whg.we.network.packet.PacketType;
-import net.whg.we.network.server.OnlinePlayer;
-import net.whg.we.scene.Location;
-import net.whg.we.utils.ByteReader;
-import net.whg.we.utils.ByteWriter;
+import net.whg.frameworks.network.connect.PlayerList;
+import net.whg.frameworks.network.packet.Packet;
+import net.whg.frameworks.network.packet.PacketHandler;
+import net.whg.frameworks.network.packet.PacketType;
+import net.whg.frameworks.network.server.OnlinePlayer;
+import net.whg.frameworks.scene.Transform3D;
+import net.whg.frameworks.util.ByteReader;
+import net.whg.frameworks.util.ByteWriter;
 
 /**
  * This packet is sent when a player joins a server to tell the clients to spawn
@@ -23,7 +18,7 @@ import net.whg.we.utils.ByteWriter;
  */
 public class PlayerMovePacket implements PacketType
 {
-	public void build(Packet packet, String token, Location location)
+	public void build(Packet packet, String token, Transform3D location)
 	{
 		packet.getData().put("token", token);
 		packet.getData().put("pos", location.getPosition());
@@ -87,21 +82,11 @@ public class PlayerMovePacket implements PacketType
 
 		if (handler.isClient())
 		{
-			MultiplayerClient client = ((ClientPacketHandler) handler).getClient();
-			ClientPlayer player = (ClientPlayer) client.getPlayerList().getPlayerByToken(token);
-
-			if (player == null)
-				return;
-
-			player.getLocation().setPosition(pos);
-			player.getLocation().setRotation(rot);
-
-			player.getCameraSync().sync();
+			// TODO Find player model and move it
 		}
 		else
 		{
-			MultiplayerServer server = ((ServerPacketHandler) handler).getServer();
-			PlayerList playerList = server.getPlayerList();
+			PlayerList playerList = handler.getGameState().getPlayerList();
 			OnlinePlayer player = (OnlinePlayer) playerList.getPlayerByToken(token);
 
 			if (player == null)

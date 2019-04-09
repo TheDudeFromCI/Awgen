@@ -4,20 +4,18 @@ import java.nio.charset.StandardCharsets;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
-import net.whg.we.main.GameState;
-import net.whg.we.network.multiplayer.ClientEvent;
-import net.whg.we.network.multiplayer.ServerEvent;
-import net.whg.we.network.netty.Client;
-import net.whg.we.network.netty.Server;
-import net.whg.we.network.netty.UserConnection;
-import net.whg.we.network.packet.DefaultPacketFactory;
-import net.whg.we.network.packet.Packet;
-import net.whg.we.network.packet.PacketHandler;
-import net.whg.we.network.packet.PacketManagerHandler;
-import net.whg.we.network.packet.PacketType;
-import net.whg.we.utils.ByteReader;
-import net.whg.we.utils.ByteWriter;
-import net.whg.we.utils.logging.Log;
+import net.whg.frameworks.network.multiplayer.ClientEvent;
+import net.whg.frameworks.network.multiplayer.DefaultPacketHandler;
+import net.whg.frameworks.network.multiplayer.ServerEvent;
+import net.whg.frameworks.network.netty.Client;
+import net.whg.frameworks.network.netty.Server;
+import net.whg.frameworks.network.netty.UserConnection;
+import net.whg.frameworks.network.packet.DefaultPacketFactory;
+import net.whg.frameworks.network.packet.Packet;
+import net.whg.frameworks.network.packet.PacketManagerHandler;
+import net.whg.frameworks.network.packet.PacketType;
+import net.whg.frameworks.util.ByteReader;
+import net.whg.frameworks.util.ByteWriter;
 
 public class EchoServerTest
 {
@@ -25,12 +23,11 @@ public class EchoServerTest
 	@Test(timeout = 5000)
 	public void echoServer() throws InterruptedException
 	{
-		Log.setLogLevel(Log.TRACE);
 		final int port = 8123;
 
 		// Build packet handles
-		StoreMessagePacketHandler serverHandler = new StoreMessagePacketHandler();
-		StoreMessagePacketHandler clientHandler = new StoreMessagePacketHandler();
+		StoreMessagePacketHandler serverHandler = new StoreMessagePacketHandler(false);
+		StoreMessagePacketHandler clientHandler = new StoreMessagePacketHandler(true);
 		PacketManagerHandler packetManagerServer =
 				PacketManagerHandler.createPacketManagerHandler(serverHandler, false);
 		PacketManagerHandler packetManagerClient =
@@ -128,25 +125,13 @@ public class EchoServerTest
 		client.stop();
 	}
 
-	public class StoreMessagePacketHandler implements PacketHandler
+	public class StoreMessagePacketHandler extends DefaultPacketHandler
 	{
+		public StoreMessagePacketHandler(boolean isClient)
+		{
+			super(isClient);
+		}
+
 		public String message;
-
-		@Override
-		public void setGameState(GameState gameState)
-		{
-		}
-
-		@Override
-		public boolean isClient()
-		{
-			return false;
-		}
-
-		@Override
-		public GameState getGameState()
-		{
-			return null;
-		}
 	}
 }

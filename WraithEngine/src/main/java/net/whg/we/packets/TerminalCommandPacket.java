@@ -1,18 +1,19 @@
 package net.whg.we.packets;
 
 import java.nio.charset.StandardCharsets;
-import net.whg.we.command.CommandManager;
+import net.whg.frameworks.command.CommandManager;
+import net.whg.frameworks.logging.Log;
+import net.whg.frameworks.network.connect.Player;
+import net.whg.frameworks.network.connect.PlayerList;
+import net.whg.frameworks.network.netty.UserConnection;
+import net.whg.frameworks.network.packet.Packet;
+import net.whg.frameworks.network.packet.PacketHandler;
+import net.whg.frameworks.network.packet.PacketType;
+import net.whg.frameworks.network.server.OnlinePlayer;
+import net.whg.frameworks.util.ByteReader;
+import net.whg.frameworks.util.ByteWriter;
+import net.whg.we.legacy.ServerGameState;
 import net.whg.we.main.GameState;
-import net.whg.we.network.multiplayer.ServerPacketHandler;
-import net.whg.we.network.netty.UserConnection;
-import net.whg.we.network.packet.Packet;
-import net.whg.we.network.packet.PacketHandler;
-import net.whg.we.network.packet.PacketType;
-import net.whg.we.network.server.OnlinePlayer;
-import net.whg.we.network.server.ServerPlayerList;
-import net.whg.we.utils.ByteReader;
-import net.whg.we.utils.ByteWriter;
-import net.whg.we.utils.logging.Log;
 
 public class TerminalCommandPacket implements PacketType
 {
@@ -68,16 +69,14 @@ public class TerminalCommandPacket implements PacketType
 			return;
 		}
 
-		ServerPacketHandler s_handler = (ServerPacketHandler) handler;
-		ServerPlayerList playerList = s_handler.getServer().getPlayerList();
-		OnlinePlayer player = (OnlinePlayer) playerList
-				.getPlayerByToken(userConnection.getUserState().getToken());
+		GameState gameState = handler.getGameState();
+		PlayerList playerList = gameState.getPlayerList();
+		Player player = playerList.getPlayerByToken(userConnection.getUserState().getToken());
 
 		Log.infof("Recieved command '%s' from '%s'.", command, player.getUsername());
 		Log.debugf("User token: %s", player.getToken());
 
-		GameState gameState = handler.getGameState();
-		CommandManager commandManager = gameState.getCommandManager();
-		commandManager.execute(command, player.getCommandSender());
+		CommandManager commandManager = ((ServerGameState) gameState).getCommandManager();
+		commandManager.execute(command, ((OnlinePlayer) player).getCommandSender());
 	}
 }
