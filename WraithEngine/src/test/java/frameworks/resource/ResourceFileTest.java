@@ -25,6 +25,14 @@ public class ResourceFileTest
 	}
 
 	@Test
+	public void equals_DifferentType()
+	{
+		ResourceFile a = new ResourceFile("path/to/file.txt");
+
+		Assert.assertNotEquals(a, new Object());
+	}
+
+	@Test
 	public void getPathname()
 	{
 		ResourceFile res = new ResourceFile("file.txt");
