@@ -48,7 +48,7 @@ public class ResourceLoader
 					String.format("Not a supported file type! (%s)", resourceFile));
 
 		ResourceData data = loader.createDataInstace();
-		resource = new Resource(resourceManager, resourceFile, data);
+		resource = new Resource(resourceFile, data);
 		resourceManager.getResourceDatabase().addResource(resource);
 
 		ResourceFuture future = loader.loadFile(resourceManager, resourceFile);

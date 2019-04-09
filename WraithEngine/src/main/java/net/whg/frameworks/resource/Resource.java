@@ -10,14 +10,11 @@ public class Resource
 {
 	private ResourceState _state;
 	private ResourceFile _resourceFile;
-	private ResourceManager _resourceManager;
 	private ResourceFuture _future;
 	private ResourceData _resourceData;
 
-	public Resource(ResourceManager resourceManager, ResourceFile resourceFile,
-			ResourceData resourceData)
+	public Resource(ResourceFile resourceFile, ResourceData resourceData)
 	{
-		_resourceManager = resourceManager;
 		_resourceFile = resourceFile;
 		_state = ResourceState.UNLOADED;
 		_resourceData = resourceData;
@@ -70,18 +67,10 @@ public class Resource
 			_state = ResourceState.FULLY_LOADED;
 		else if (sync == ResourceFuture.UNABLE_TO_LOAD)
 			_state = ResourceState.UNABLE_TO_LOAD;
+		else
+			throw new UnexpectedResourceState("Unexpected ResourceFuture response! " + sync);
 
 		return true;
-	}
-
-	/**
-	 * Gets the resource manager that this resource is currently acting under.
-	 *
-	 * @return The resource manager which created this resource.
-	 */
-	public ResourceManager getResourceManager()
-	{
-		return _resourceManager;
 	}
 
 	/**
@@ -122,6 +111,11 @@ public class Resource
 				_state = ResourceState.OUTDATED;
 			else
 				_state = ResourceState.UNLOADED;
+		}
+		else
+		{
+			if (_state == ResourceState.PARTIALLY_LOADED)
+				_state = ResourceState.FULLY_LOADED;
 		}
 
 		_future = future;
