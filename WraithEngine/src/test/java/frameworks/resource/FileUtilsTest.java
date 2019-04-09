@@ -2,7 +2,7 @@ package frameworks.resource;
 
 import org.junit.Assert;
 import org.junit.Test;
-import net.whg.frameworks.util.FileUtils;
+import net.whg.frameworks.resource.FileUtils;
 
 public class FileUtilsTest
 {

@@ -1,4 +1,4 @@
-package net.whg.frameworks.util;
+package net.whg.frameworks.resource;
 
 /**
  * A collection of various utility functions for dealing with file and folder

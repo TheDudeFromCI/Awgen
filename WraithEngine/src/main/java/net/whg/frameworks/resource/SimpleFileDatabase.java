@@ -3,7 +3,6 @@ package net.whg.frameworks.resource;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import net.whg.frameworks.util.FileUtils;
 
 public class SimpleFileDatabase implements FileDatabase
 {

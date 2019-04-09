@@ -1,7 +1,5 @@
 package net.whg.frameworks.resource;
 
-import net.whg.frameworks.util.FileUtils;
-
 /**
  * A resource file is a pointer to a loaded or unloaded resource.
  *
