@@ -17,7 +17,7 @@ public class ResourceLoader
 	 *            - The resource file to load.
 	 * @param database
 	 *            - The database to load the resource from.
-	 * @return
+	 * @return The resource based on the given resource file.
 	 */
 	public Resource loadResource(ResourceFile resourceFile, ResourceManager resourceManager)
 	{
@@ -27,24 +27,9 @@ public class ResourceLoader
 
 		Log.infof("Loading the resource %s.", resourceFile);
 
-		FileLoader loader = null;
-		int priority = Integer.MIN_VALUE;
-
-		file_loader:
-		for (FileLoader l : _fileLoaders)
-		{
-			if (l.getPriority() <= priority)
-				continue;
-			for (String s : l.getTargetFileTypes())
-				if (s.equals(resourceFile.getFileExtension()))
-				{
-					loader = l;
-					continue file_loader;
-				}
-		}
-
+		FileLoader loader = getFileLoader(resourceFile.getFileExtension());
 		if (loader == null)
-			throw new IllegalStateException(
+			throw new UnsupportedFileFormat(
 					String.format("Not a supported file type! (%s)", resourceFile));
 
 		ResourceData data = loader.createDataInstace();
@@ -59,6 +44,15 @@ public class ResourceLoader
 		thread.start();
 
 		return resource;
+	}
+
+	private FileLoader getFileLoader(String extention)
+	{
+		for (FileLoader l : _fileLoaders)
+			for (String s : l.getTargetFileTypes())
+				if (s.equals(extention))
+					return l;
+		return null;
 	}
 
 	/**

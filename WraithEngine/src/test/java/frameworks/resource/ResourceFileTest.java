@@ -53,4 +53,22 @@ public class ResourceFileTest
 	{
 		new ResourceFile("/broken pathname %");
 	}
+
+	@Test
+	public void hashCode_equals()
+	{
+		ResourceFile a = new ResourceFile("path/to/file.txt");
+		ResourceFile b = new ResourceFile("path/to/file.txt");
+
+		Assert.assertEquals(a.hashCode(), b.hashCode());
+	}
+
+	@Test
+	public void hashCode_notEquals()
+	{
+		ResourceFile a = new ResourceFile("path/to/file1.txt");
+		ResourceFile b = new ResourceFile("path/to/file2.txt");
+
+		Assert.assertNotEquals(a.hashCode(), b.hashCode());
+	}
 }

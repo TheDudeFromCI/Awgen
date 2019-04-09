@@ -29,17 +29,8 @@ public interface FileLoader
 	ResourceFuture loadFile(ResourceManager resourceManager, ResourceFile resourceFile);
 
 	/**
-	 * Gets the priority level for this file loader. When loading a file, the file
-	 * loader with the highest priority value is used. The default priority value is
-	 * 0.
-	 *
-	 * @return The priority value of this file loader.
-	 */
-	int getPriority();
-
-	/**
 	 * This methods creates a new instance for writing resource data into.
-	 * 
+	 *
 	 * @return a new data type instance for the type of resource that this file
 	 *         loader represents.
 	 */
