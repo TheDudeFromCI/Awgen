@@ -2,101 +2,109 @@ package net.whg.we.client_logic.ui.font;
 
 import net.whg.we.client_logic.rendering.Graphics;
 import net.whg.we.client_logic.rendering.Material;
-import net.whg.we.client_logic.rendering.Mesh;
+import net.whg.we.client_logic.rendering.VertexData;
 import net.whg.we.client_logic.ui.TextHolder;
 import net.whg.we.client_logic.ui.UIImage;
 import net.whg.we.client_logic.ui.UIUtils;
+import net.whg.we.resource.MeshData;
 
 public class UIString extends UIImage implements TextHolder
 {
-    private Font _font;
-    private String _text;
-    private float _size = 12f;
-    private UICursor _cursor;
-    private UISelection _selection;
+	private static MeshData buildMeshData(Graphics graphics, VertexData vertexData)
+	{
+		MeshData meshData = new MeshData(graphics);
+		meshData.setVertexData(vertexData);
 
-    public UIString(Font font, String text, Graphics graphics,
-            Material material, Mesh quadMesh, Material cursorMat,
-            Material selMat)
-    {
-        super(new Mesh("TextMesh", UIUtils.textVertexData(font, text),
-                graphics), material);
+		return meshData;
+	}
 
-        _font = font;
-        _text = text;
+	private Font _font;
+	private String _text;
+	private float _size = 12f;
+	private UICursor _cursor;
+	private UISelection _selection;
 
-        getTransform().setSize(_size, _size);
+	public UIString(Font font, String text, Graphics graphics, Material material, MeshData quadMesh,
+			Material cursorMat, Material selMat)
+	{
+		super(buildMeshData(graphics, UIUtils.textVertexData(font, text)), material);
 
-        _cursor = new UICursor(quadMesh, cursorMat, this);
-        _cursor.getTransform().setParent(getTransform());
+		_font = font;
+		_text = text;
 
-        _selection = new UISelection(quadMesh, selMat, this);
-    }
+		getTransform().setSize(_size, _size);
 
-    @Override
-    public String getText()
-    {
-        return _text;
-    }
+		_cursor = new UICursor(quadMesh, cursorMat, this);
+		_cursor.getTransform().setParent(getTransform());
 
-    @Override
-    public void setText(String text)
-    {
-        if (_text.equals(text))
-            return;
+		_selection = new UISelection(quadMesh, selMat, this);
+	}
 
-        _text = text;
+	@Override
+	public String getText()
+	{
+		return _text;
+	}
 
-        getMesh().rebuild(UIUtils.textVertexData(_font, _text));
-        _cursor.updateCaretPos();
-        _selection.updateSelectionPos();
-    }
+	@Override
+	public void setText(String text)
+	{
+		if (_text.equals(text))
+			return;
 
-    public float getFontSize()
-    {
-        return _size;
-    }
+		_text = text;
 
-    public void setFontSize(float size)
-    {
-        _size = size;
-        getTransform().setSize(_size, _size);
-    }
+		getMesh().setVertexData(UIUtils.textVertexData(_font, _text));
+		_cursor.updateCaretPos();
+		_selection.updateSelectionPos();
+	}
 
-    @Override
-    public void dispose()
-    {
-        getMesh().dispose();
-        super.dispose();
-    }
+	public float getFontSize()
+	{
+		return _size;
+	}
 
-    @Override
-    public void render()
-    {
-        super.render();
-        _cursor.render();
-        _selection.render();
-    }
+	public void setFontSize(float size)
+	{
+		_size = size;
+		getTransform().setSize(_size, _size);
+	}
 
-    public Font getFont()
-    {
-        return _font;
-    }
+	@Override
+	public void dispose()
+	{
+		getMesh().dispose();
+		super.dispose();
+	}
 
-    public float getMonoWidth(boolean normalized)
-    {
-        if (normalized)
-            return _font.getGlyphs()[0].getWidth();
-        return _font.getGlyphs()[0].getWidth() * _size;
-    }
+	@Override
+	public void render()
+	{
+		super.render();
+		_cursor.render();
+		_selection.render();
+	}
 
-    public Cursor getCursor()
-    {
-        return _cursor;
-    }
+	@Override
+	public Font getFont()
+	{
+		return _font;
+	}
 
-    public TextSelection getTextSelection()
-    {
-        return _selection;
-    }
+	public float getMonoWidth(boolean normalized)
+	{
+		if (normalized)
+			return _font.getGlyphs()[0].getWidth();
+		return _font.getGlyphs()[0].getWidth() * _size;
+	}
+
+	public Cursor getCursor()
+	{
+		return _cursor;
+	}
+
+	public TextSelection getTextSelection()
+	{
+		return _selection;
+	}
 }
