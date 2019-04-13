@@ -17,6 +17,16 @@ public class MeshData implements ResourceData
 		_vMesh = graphics.prepareMesh(_vertexData);
 	}
 
+	public MeshData(Graphics graphics, VertexData vertexData)
+	{
+		if (vertexData == null)
+			emptyMeshData();
+		else
+			_vertexData = vertexData;
+
+		_vMesh = graphics.prepareMesh(_vertexData);
+	}
+
 	private void emptyMeshData()
 	{
 		_vertexData = new VertexData(new float[0], new short[0], new ShaderAttributes());

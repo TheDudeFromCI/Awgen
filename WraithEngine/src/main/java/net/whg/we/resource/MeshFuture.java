@@ -2,9 +2,12 @@ package net.whg.we.resource;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
 import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.resource.ResourceData;
 import net.whg.frameworks.resource.ResourceFuture;
+import net.whg.frameworks.util.ByteReader;
+import net.whg.we.client_logic.rendering.ShaderAttributes;
 import net.whg.we.client_logic.rendering.VertexData;
 
 public class MeshFuture implements ResourceFuture
@@ -24,9 +27,10 @@ public class MeshFuture implements ResourceFuture
 	@Override
 	public void run()
 	{
-		try (FileInputStream in = new FileInputStream(_file))
+		try (FileInputStream fileInputStream = new FileInputStream(_file))
 		{
-			int fileVersion = in.read();
+			ByteReader in = new ByteReader(fileInputStream);
+			int fileVersion = in.getInt();
 
 			switch (fileVersion)
 			{
@@ -69,8 +73,31 @@ public class MeshFuture implements ResourceFuture
 		}
 	}
 
-	private void parseFile_Version001(FileInputStream in)
+	private void parseFile_Version001(ByteReader in)
 	{
-		// TODO Wrap input steam in byte reader
+		int attributes = in.getByte();
+		ShaderAttributes shaderAttributes = new ShaderAttributes(attributes);
+		for (int i = 0; i < attributes; i++)
+		{
+			String attName = in.getString(StandardCharsets.UTF_8);
+			int size = in.getByte();
+
+			shaderAttributes.addAttribute(attName, size);
+		}
+
+		int vertexSize = shaderAttributes.getVertexSize();
+		int vertexCount = in.getInt();
+		int indexCount = in.getInt();
+
+		float[] vertices = new float[vertexCount * vertexSize];
+		short[] indices = new short[indexCount];
+
+		for (int i = 0; i < vertices.length; i++)
+			vertices[i] = in.getFloat();
+
+		for (int i = 0; i < indices.length; i++)
+			indices[i] = in.getShort();
+
+		_vertexData = new VertexData(vertices, indices, shaderAttributes);
 	}
 }
