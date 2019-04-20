@@ -9,6 +9,7 @@ public class SimpleObjectPool<T extends Poolable> extends ObjectPool<T>
 		_classReference = classReference;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected T build()
 	{

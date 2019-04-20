@@ -9,11 +9,6 @@ import net.whg.we.client_logic.rendering.Graphics;
 
 public class MeshLoader implements FileLoader
 {
-	private static final String[] FILE_TYPES =
-	{
-			"asset_mesh"
-	};
-
 	private Graphics _graphics;
 
 	public MeshLoader(Graphics graphics)
@@ -24,11 +19,15 @@ public class MeshLoader implements FileLoader
 	@Override
 	public String[] getTargetFileTypes()
 	{
-		return FILE_TYPES;
+		return new String[]
+		{
+				"asset_mesh"
+		};
 	}
 
 	@Override
-	public ResourceFuture loadFile(ResourceManager resourceManager, ResourceFile resourceFile)
+	public ResourceFuture loadFile(ResourceManager resourceManager,
+			ResourceFile resourceFile)
 	{
 		return new MeshFuture(resourceManager.getFile(resourceFile));
 	}

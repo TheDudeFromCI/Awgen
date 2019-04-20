@@ -49,9 +49,8 @@ public class ResourceLoader
 	private FileLoader getFileLoader(String extention)
 	{
 		for (FileLoader l : _fileLoaders)
-			for (String s : l.getTargetFileTypes())
-				if (s.equals(extention))
-					return l;
+			if (l.getTargetFileTypes().equals(extention))
+				return l;
 		return null;
 	}
 

@@ -19,16 +19,17 @@ public class PluginLoader
 
 	static
 	{
-		_pluginSorter = (a, b) -> Integer.compare(a.getPriority(), b.getPriority());
+		_pluginSorter =
+				(a, b) -> Integer.compare(a.getPriority(), b.getPriority());
 	}
 
 	/**
 	 * Attempts to load a plugin by the given name. Case sensitive.
 	 *
 	 * @param name
-	 *            - The name of the plugin to load.
-	 * @return The first plugin found with the given name or null if no plugin is
-	 *         found.
+	 *     - The name of the plugin to load.
+	 * @return The first plugin found with the given name or null if no plugin
+	 *     is found.
 	 */
 	public static Plugin GetPlugin(String name)
 	{
@@ -52,6 +53,7 @@ public class PluginLoader
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private Plugin attemptLoadPlugin(File file)
 	{
 		try
@@ -60,28 +62,33 @@ public class PluginLoader
 			{
 					file.toURI().toURL()
 			};
-			URLClassLoader classLoader = new URLClassLoader(url, this.getClass().getClassLoader());
-			InputStream pluginProperties = classLoader.getResourceAsStream("plugin.yml");
+			URLClassLoader classLoader =
+					new URLClassLoader(url, this.getClass().getClassLoader());
+			InputStream pluginProperties =
+					classLoader.getResourceAsStream("plugin.yml");
 
 			Yaml yaml = new Yaml();
 			Map<String, Object> map = yaml.load(pluginProperties);
 
 			String mainClassPath = (String) map.get("MainClass");
 
-			Class<?> mainClass = Class.forName(mainClassPath, true, classLoader);
+			Class<?> mainClass =
+					Class.forName(mainClassPath, true, classLoader);
 			Plugin plugin = (Plugin) mainClass.newInstance();
 
 			return plugin;
 		}
 		catch (MalformedURLException exception)
 		{
-			Log.errorf("Failed to read file for plugin %s!", exception, file.getName());
+			Log.errorf("Failed to read file for plugin %s!", exception,
+					file.getName());
 			return null;
 		}
-		catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| ClassCastException exception)
+		catch (ClassNotFoundException | InstantiationException
+				| IllegalAccessException | ClassCastException exception)
 		{
-			Log.errorf("Failed to load main class for plugin %s!", exception, file.getName());
+			Log.errorf("Failed to load main class for plugin %s!", exception,
+					file.getName());
 			return null;
 		}
 	}
@@ -90,7 +97,8 @@ public class PluginLoader
 	{
 		if (_plugins.contains(plugin))
 		{
-			Log.tracef("Failed to add plugin %s to list, plugin already exists.",
+			Log.tracef(
+					"Failed to add plugin %s to list, plugin already exists.",
 					plugin.getPluginName());
 			return;
 		}
@@ -108,17 +116,21 @@ public class PluginLoader
 
 			plugin.initPlugin();
 
-			// Reset the indention to previous value, in case the plugin forgot to reset it
+			// Reset the indention to previous value, in case the plugin forgot
+			// to reset it
 			Log.setIndentLevel(indent);
 		}
 		catch (Exception exception)
 		{
-			// As the plugin has failed to initialize, we can assume any ajustments to the
+			// As the plugin has failed to initialize, we can assume any
+			// ajustments to the
 			// log indention level have never been corrected. Let's do that now.
 			Log.setIndentLevel(indent);
 
-			Log.errorf("Failed to initialize plugin %s!", exception, plugin.getPluginName());
-			Log.warnf("Unloading uninitialized plugin, %s.", plugin.getPluginName());
+			Log.errorf("Failed to initialize plugin %s!", exception,
+					plugin.getPluginName());
+			Log.warnf("Unloading uninitialized plugin, %s.",
+					plugin.getPluginName());
 			_plugins.remove(plugin);
 		}
 
@@ -156,7 +168,8 @@ public class PluginLoader
 			catch (Exception exception)
 			{
 				Log.setIndentLevel(indent);
-				Log.errorf("Failed to enable plugin %s!", exception, p.getPluginName());
+				Log.errorf("Failed to enable plugin %s!", exception,
+						p.getPluginName());
 			}
 		}
 
