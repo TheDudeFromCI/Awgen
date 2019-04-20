@@ -16,9 +16,8 @@ public class MeshConverterLoader implements FileLoader
 	{
 		return new String[]
 		{
-				"fbx", "obj", "dae", "gltf", "glb", "blend", "3ds", "ase",
-				"ifc", "xgl", "zgl", "ply", "lwo", "lws", "lxo", "stl", "x",
-				"ac", "ms3d"
+			"fbx", "obj", "dae", "gltf", "glb", "blend", "3ds", "ase", "ifc",
+			"xgl", "zgl", "ply", "lwo", "lws", "lxo", "stl", "x", "ac", "ms3d"
 		};
 	}
 
@@ -34,8 +33,7 @@ public class MeshConverterLoader implements FileLoader
 		 */
 
 		String destFolder = resourceFile.getPathname().replace('.', '_');
-		return new MeshConverterFuture(_graphics,
-				resourceManager.getResourceDatabase(),
+		return new MeshConverterFuture(_graphics, resourceManager,
 				resourceManager.getFile(resourceFile), destFolder);
 	}
 

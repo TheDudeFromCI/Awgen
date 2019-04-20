@@ -9,9 +9,9 @@ import org.lwjgl.assimp.Assimp;
 import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.resource.Resource;
 import net.whg.frameworks.resource.ResourceData;
-import net.whg.frameworks.resource.ResourceDatabase;
 import net.whg.frameworks.resource.ResourceFile;
 import net.whg.frameworks.resource.ResourceFuture;
+import net.whg.frameworks.resource.ResourceManager;
 import net.whg.we.client_logic.rendering.Graphics;
 
 public class MeshConverterFuture implements ResourceFuture
@@ -22,16 +22,17 @@ public class MeshConverterFuture implements ResourceFuture
 	private File _file;
 	private int _loadState;
 	private List<UncompiledMesh> _meshes;
-	private ResourceDatabase _database;
+	private ResourceManager _resourceManager;
 	private String _destinationFolder;
 
-	public MeshConverterFuture(Graphics graphics, ResourceDatabase database,
-			File file, String destinationFolder)
+	public MeshConverterFuture(Graphics graphics,
+			ResourceManager resourceManager, File file,
+			String destinationFolder)
 	{
 		_graphics = graphics;
 		_file = file;
 		_loadState = ResourceFuture.NO_CHANGE;
-		_database = database;
+		_resourceManager = resourceManager;
 		_destinationFolder = destinationFolder;
 	}
 
@@ -63,6 +64,7 @@ public class MeshConverterFuture implements ResourceFuture
 			// Load scene meshes
 			for (int i = 0; i < meshCount; i++)
 			{
+				// Load each mesh from the file
 				UncompiledMesh m = new UncompiledMesh();
 
 				AIMesh mesh = AIMesh.create(scene.mMeshes().get(i));
@@ -74,12 +76,12 @@ public class MeshConverterFuture implements ResourceFuture
 						_destinationFolder + "/" + m.name + ".asset_mesh");
 
 				meshes.add(m);
+
+				// And save each mesh while we're here
+				MeshSaver.save(m, _resourceManager.getFile(m.path));
 			}
 
 			scene.free();
-
-			// Now that everything is loaded, let's compile it all.
-			saveResources();
 
 			synchronized (LOCK)
 			{
@@ -97,11 +99,6 @@ public class MeshConverterFuture implements ResourceFuture
 		}
 	}
 
-	private void saveResources()
-	{
-		// TODO
-	}
-
 	@Override
 	public int sync(ResourceData data)
 	{
@@ -115,12 +112,13 @@ public class MeshConverterFuture implements ResourceFuture
 
 			for (int i = 0; i < resourceCount; i++)
 			{
+				// Compile each mesh as we push over the data
 				UncompiledMesh mesh = _meshes.get(i);
 
 				MeshData meshData = new MeshData(_graphics, mesh.vertexData);
 				Resource resource = new Resource(mesh.path, meshData);
 
-				_database.addResource(resource);
+				_resourceManager.getResourceDatabase().addResource(resource);
 				resourceFiles[i] = mesh.path;
 			}
 
