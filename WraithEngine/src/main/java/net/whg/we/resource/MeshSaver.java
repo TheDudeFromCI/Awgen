@@ -54,7 +54,7 @@ public class MeshSaver
 			{
 				out.writeString(att.getAttributeName(i),
 						StandardCharsets.UTF_8);
-				out.writeByte(att.getAttributeSize(i));
+				out.writeByte((byte) att.getAttributeSize(i));
 			}
 
 			out.writeInt(mesh.vertexData.getVertexCount());

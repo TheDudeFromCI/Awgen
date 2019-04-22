@@ -8,20 +8,22 @@ public class ResourceLoader
 	private ArrayList<FileLoader> _fileLoaders = new ArrayList<>();
 
 	/**
-	 * Loads a resource from a file. If the resource already exists in the database,
-	 * that instance of the resource is returned instead. The resource is added to
-	 * the database after it is loaded. This method will also cause any resources
-	 * that this resource depends on to also be loaded.
+	 * Loads a resource from a file. If the resource already exists in the
+	 * database, that instance of the resource is returned instead. The resource
+	 * is added to the database after it is loaded. This method will also cause
+	 * any resources that this resource depends on to also be loaded.
 	 *
 	 * @param resourceFile
-	 *            - The resource file to load.
+	 *     - The resource file to load.
 	 * @param database
-	 *            - The database to load the resource from.
+	 *     - The database to load the resource from.
 	 * @return The resource based on the given resource file.
 	 */
-	public Resource loadResource(ResourceFile resourceFile, ResourceManager resourceManager)
+	public Resource loadResource(ResourceFile resourceFile,
+			ResourceManager resourceManager)
 	{
-		Resource resource = resourceManager.getResourceDatabase().getResource(resourceFile);
+		Resource resource =
+				resourceManager.getResourceDatabase().getResource(resourceFile);
 		if (resource != null)
 			return resource;
 
@@ -29,8 +31,8 @@ public class ResourceLoader
 
 		FileLoader loader = getFileLoader(resourceFile.getFileExtension());
 		if (loader == null)
-			throw new UnsupportedFileFormat(
-					String.format("Not a supported file type! (%s)", resourceFile));
+			throw new UnsupportedFileFormat(String
+					.format("Not a supported file type! (%s)", resourceFile));
 
 		ResourceData data = loader.createDataInstace();
 		resource = new Resource(resourceFile, data);
@@ -49,8 +51,9 @@ public class ResourceLoader
 	private FileLoader getFileLoader(String extention)
 	{
 		for (FileLoader l : _fileLoaders)
-			if (l.getTargetFileTypes().equals(extention))
-				return l;
+			for (String s : l.getTargetFileTypes())
+				if (s.equals(extention))
+					return l;
 		return null;
 	}
 
@@ -59,7 +62,7 @@ public class ResourceLoader
 	 * already added, nothing happens. This method is thread safe.
 	 *
 	 * @param fileLoader
-	 *            - The file loader to add.
+	 *     - The file loader to add.
 	 */
 	public void addFileLoader(FileLoader fileLoader)
 	{
@@ -72,11 +75,11 @@ public class ResourceLoader
 	}
 
 	/**
-	 * Removes a file loader from the local references. If the file load is not in
-	 * the local references, nothing happens. This method is thread safe.
+	 * Removes a file loader from the local references. If the file load is not
+	 * in the local references, nothing happens. This method is thread safe.
 	 *
 	 * @param fileLoader
-	 *            - The file loader to remove.
+	 *     - The file loader to remove.
 	 */
 	public void removeFileLoader(FileLoader fileLoader)
 	{
@@ -87,10 +90,11 @@ public class ResourceLoader
 	}
 
 	/**
-	 * Gets the number of file loaders currently attched to this resource loader.
+	 * Gets the number of file loaders currently attched to this resource
+	 * loader.
 	 *
 	 * @return The number of file loaders currently attached to this resource
-	 *         loader.
+	 *     loader.
 	 */
 	public int getFileLoaderCount()
 	{
@@ -98,12 +102,12 @@ public class ResourceLoader
 	}
 
 	/**
-	 * Gets the file loader at the specified index. A file loader's index can change
-	 * anytime a new file loader is added or removed. This method is indented to be
-	 * used for iteration purposes only.
+	 * Gets the file loader at the specified index. A file loader's index can
+	 * change anytime a new file loader is added or removed. This method is
+	 * indented to be used for iteration purposes only.
 	 *
 	 * @param index
-	 *            - The index of the file loader.
+	 *     - The index of the file loader.
 	 * @return The file loader at the specified index.
 	 */
 	public FileLoader getFileLoader(int index)

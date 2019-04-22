@@ -46,12 +46,12 @@ public class ByteReader
 
 	public short getShort()
 	{
-		int value = 0;
+		short value = 0;
 
 		value |= (getByte() & 0xFF) << 8;
 		value |= getByte() & 0xFF;
 
-		return (short) value;
+		return value;
 	}
 
 	public int getInt()
@@ -70,14 +70,14 @@ public class ByteReader
 	{
 		long value = 0;
 
-		value |= (getByte() & 0xFF) << 56L;
-		value |= (getByte() & 0xFF) << 48L;
-		value |= (getByte() & 0xFF) << 40L;
-		value |= (getByte() & 0xFF) << 32L;
-		value |= (getByte() & 0xFF) << 24L;
-		value |= (getByte() & 0xFF) << 16L;
-		value |= (getByte() & 0xFF) << 8L;
-		value |= getByte() & 0xFF;
+		value |= (getByte() & 0xFFL) << 56L;
+		value |= (getByte() & 0xFFL) << 48L;
+		value |= (getByte() & 0xFFL) << 40L;
+		value |= (getByte() & 0xFFL) << 32L;
+		value |= (getByte() & 0xFFL) << 24L;
+		value |= (getByte() & 0xFFL) << 16L;
+		value |= (getByte() & 0xFFL) << 8L;
+		value |= getByte() & 0xFFL;
 
 		return value;
 	}
@@ -94,8 +94,6 @@ public class ByteReader
 
 	public void getBytes(byte[] bytes, int pos, int length)
 	{
-		_pos += length;
-
 		if (_inputStream != null)
 		{
 			try
@@ -104,8 +102,9 @@ public class ByteReader
 			}
 			catch (IOException e)
 			{
-				Log.errorf("Failed to read byte!", e);
+				Log.errorf("Failed to read bytes!", e);
 			}
+			_pos += length;
 			return;
 		}
 
@@ -140,28 +139,24 @@ public class ByteReader
 	public int getCapacity()
 	{
 		if (_inputStream != null)
-			try
-			{
-				return _inputStream.available();
-			}
-			catch (IOException e)
-			{
-				Log.errorf("Failed to estimate remaining bytes!", e);
-				return 0;
-			}
+			return -1;
 
 		return _bytes.length;
 	}
 
 	public int getRemainingBytes()
 	{
+		if (_inputStream != null)
+			return -1;
+
 		return getCapacity() - getPos();
 	}
 
 	public void setPos(int pos)
 	{
 		if (_inputStream != null)
-			throw new IllegalStateException("Operation not supported for input streams!");
+			throw new IllegalStateException(
+					"Operation not supported for input streams!");
 
 		_pos = pos;
 	}

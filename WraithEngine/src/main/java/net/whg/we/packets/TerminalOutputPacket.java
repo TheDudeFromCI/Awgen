@@ -41,7 +41,7 @@ public class TerminalOutputPacket implements PacketType
 		ByteWriter out = packet.getByteWriter();
 
 		int type = (int) packet.getData().get("type");
-		out.writeByte(type);
+		out.writeByte((byte) type);
 
 		if (type == SET_LINE_TYPE)
 		{
@@ -88,8 +88,8 @@ public class TerminalOutputPacket implements PacketType
 	{
 		if (!handler.isClient())
 		{
-			Log.warnf("Client %s has attempted to send %s packet!", packet.getSender().getIP(),
-					getTypePath());
+			Log.warnf("Client %s has attempted to send %s packet!",
+					packet.getSender().getIP(), getTypePath());
 			return;
 		}
 

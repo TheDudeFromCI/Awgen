@@ -6,19 +6,19 @@ import net.whg.frameworks.util.ByteWriter;
 public class SceneNodeUtils
 {
 	/**
-	 * Attempts to write a transform to the byte writer output. This method not not
-	 * correctly handle all given transforms, and currently only supports the
-	 * following transform subclasses:
+	 * Attempts to write a transform to the byte writer output. This method not
+	 * not correctly handle all given transforms, and currently only supports
+	 * the following transform subclasses:
 	 * <ul>
 	 * <li>{@link net.whg.frameworks.scene.Transform3D}</li>
 	 * </ul>
 	 *
 	 * @param out
-	 *            - The byte writer to write to.
+	 *     - The byte writer to write to.
 	 * @param transform
-	 *            - The transform to attempt to serialize.
+	 *     - The transform to attempt to serialize.
 	 * @throws IllegalStateException
-	 *             If the transform is not currently a supported type.
+	 *     If the transform is not currently a supported type.
 	 */
 	public static void writeTransform(ByteWriter out, ITransform transform)
 	{
@@ -27,7 +27,7 @@ public class SceneNodeUtils
 
 		if (transform instanceof Transform3D)
 		{
-			out.writeByte(1); // id
+			out.writeByte((byte) 1); // id
 
 			Transform3D t = (Transform3D) transform;
 			out.writeFloat(t.getPosition().x);
@@ -47,12 +47,12 @@ public class SceneNodeUtils
 	}
 
 	/**
-	 * Attempts to read a transform from the byte array. This method only works if
-	 * the transform was written with the corrosponding
+	 * Attempts to read a transform from the byte array. This method only works
+	 * if the transform was written with the corrosponding
 	 * {@link #writeTransform(ByteWriter, ITransform)} function in this class.
 	 *
 	 * @param in
-	 *            - The byte reader to reader from
+	 *     - The byte reader to reader from
 	 * @return A newly created transform, loaded from the byte array.
 	 */
 	public static ITransform readTransform(ByteReader in)

@@ -23,14 +23,13 @@ public class ByteWriter
 		_pos = 0;
 	}
 
-	public ByteWriter writeByte(int value)
+	public ByteWriter writeByte(byte b)
 	{
-		byte b = (byte) (value & 0xFF);
-
 		if (_outputStream != null)
 			try
 			{
 				_outputStream.write(b);
+				_pos++;
 			}
 			catch (IOException e)
 			{
@@ -44,39 +43,39 @@ public class ByteWriter
 
 	public ByteWriter writeBool(boolean value)
 	{
-		writeByte(value ? 1 : 0);
+		writeByte((byte) (value ? 1 : 0));
 
 		return this;
 	}
 
-	public ByteWriter writeShort(int value)
+	public ByteWriter writeShort(short value)
 	{
-		writeByte(value >> 8);
-		writeByte(value);
+		writeByte((byte) (value >> 8));
+		writeByte((byte) value);
 
 		return this;
 	}
 
 	public ByteWriter writeInt(int value)
 	{
-		writeByte(value >> 24);
-		writeByte(value >> 16);
-		writeByte(value >> 8);
-		writeByte(value);
+		writeByte((byte) (value >> 24));
+		writeByte((byte) (value >> 16));
+		writeByte((byte) (value >> 8));
+		writeByte((byte) value);
 
 		return this;
 	}
 
 	public ByteWriter writeLong(long value)
 	{
-		writeByte((int) (value >> 56L));
-		writeByte((int) (value >> 48L));
-		writeByte((int) (value >> 40L));
-		writeByte((int) (value >> 32L));
-		writeByte((int) (value >> 24L));
-		writeByte((int) (value >> 16L));
-		writeByte((int) (value >> 8L));
-		writeByte((int) value);
+		writeByte((byte) (value >> 56));
+		writeByte((byte) (value >> 48));
+		writeByte((byte) (value >> 40));
+		writeByte((byte) (value >> 32));
+		writeByte((byte) (value >> 24));
+		writeByte((byte) (value >> 16));
+		writeByte((byte) (value >> 8));
+		writeByte((byte) value);
 
 		return this;
 	}
@@ -101,6 +100,7 @@ public class ByteWriter
 			try
 			{
 				_outputStream.write(bytes, pos, length);
+				_pos += length;
 			}
 			catch (IOException e)
 			{
@@ -143,16 +143,26 @@ public class ByteWriter
 
 	public int getCapacity()
 	{
+		if (_outputStream != null)
+			return -1;
+
 		return _bytes.length;
 	}
 
 	public int getRemainingBytes()
 	{
+		if (_outputStream != null)
+			return -1;
+
 		return getCapacity() - getPos();
 	}
 
 	public void setPos(int pos)
 	{
+		if (_outputStream != null)
+			throw new IllegalStateException(
+					"Operation not supported for input streams!");
+
 		_pos = pos;
 	}
 }
