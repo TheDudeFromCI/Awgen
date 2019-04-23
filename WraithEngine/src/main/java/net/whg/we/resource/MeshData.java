@@ -29,13 +29,15 @@ public class MeshData implements ResourceData
 
 	private void emptyMeshData()
 	{
-		_vertexData = new VertexData(new float[0], new short[0], new ShaderAttributes());
+		_vertexData = new VertexData(new float[0], new short[0],
+				new ShaderAttributes());
 	}
 
 	@Override
 	public void dispose()
 	{
 		_vMesh.dispose();
+		_vMesh = null;
 	}
 
 	public VertexData getVertexData()
