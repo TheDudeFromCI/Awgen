@@ -17,6 +17,14 @@ public class ShaderData implements ResourceData
 		_vShader = graphics.prepareShader(_vertShader, _geoShader, _fragShader);
 	}
 
+	public ShaderData(Graphics graphics, String vert, String geo, String frag)
+	{
+		_vertShader = vert;
+		_geoShader = geo;
+		_fragShader = frag;
+		_vShader = graphics.prepareShader(_vertShader, _geoShader, _fragShader);
+	}
+
 	private void emptyShader()
 	{
 		_vertShader = "void main(){gl_Position = vec4(0.0, 0.0, 0.0, 1.0);}";

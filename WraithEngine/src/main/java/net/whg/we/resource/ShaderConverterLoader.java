@@ -7,11 +7,11 @@ import net.whg.frameworks.resource.ResourceFuture;
 import net.whg.frameworks.resource.ResourceManager;
 import net.whg.we.client_logic.rendering.Graphics;
 
-public class MeshConverterLoader implements FileLoader
+public class ShaderConverterLoader implements FileLoader
 {
 	private Graphics _graphics;
 
-	public MeshConverterLoader(Graphics graphics)
+	public ShaderConverterLoader(Graphics graphics)
 	{
 		_graphics = graphics;
 	}
@@ -21,8 +21,7 @@ public class MeshConverterLoader implements FileLoader
 	{
 		return new String[]
 		{
-			"fbx", "obj", "dae", "gltf", "glb", "blend", "3ds", "ase", "ifc",
-			"xgl", "zgl", "ply", "lwo", "lws", "lxo", "stl", "x", "ac", "ms3d"
+			"glsl"
 		};
 	}
 
@@ -31,7 +30,7 @@ public class MeshConverterLoader implements FileLoader
 			ResourceFile resourceFile)
 	{
 		String destFolder = resourceFile.getPathname().replace('.', '_');
-		return new MeshConverterFuture(_graphics, resourceManager,
+		return new ShaderConverterFuture(_graphics, resourceManager,
 				resourceManager.getFile(resourceFile), destFolder);
 	}
 
