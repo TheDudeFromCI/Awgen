@@ -7,11 +7,11 @@ import net.whg.frameworks.resource.ResourceFuture;
 import net.whg.frameworks.resource.ResourceManager;
 import net.whg.we.client_logic.rendering.Graphics;
 
-public class MeshLoader implements FileLoader
+public class ShaderLoader implements FileLoader
 {
 	private Graphics _graphics;
 
-	public MeshLoader(Graphics graphics)
+	public ShaderLoader(Graphics graphics)
 	{
 		_graphics = graphics;
 	}
@@ -21,7 +21,7 @@ public class MeshLoader implements FileLoader
 	{
 		return new String[]
 		{
-			"asset_mesh"
+			"asset_shader"
 		};
 	}
 
@@ -29,12 +29,12 @@ public class MeshLoader implements FileLoader
 	public ResourceFuture loadFile(ResourceManager resourceManager,
 			ResourceFile resourceFile)
 	{
-		return new MeshFuture(resourceManager.getFile(resourceFile));
+		return new ShaderFuture(resourceManager.getFile(resourceFile));
 	}
 
 	@Override
 	public ResourceData createDataInstace()
 	{
-		return new MeshData(_graphics);
+		return new ShaderData(_graphics);
 	}
 }
