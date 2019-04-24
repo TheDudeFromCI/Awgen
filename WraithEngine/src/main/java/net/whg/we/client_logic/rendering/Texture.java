@@ -1,5 +1,7 @@
 package net.whg.we.client_logic.rendering;
 
+import net.whg.we.resource.TextureProperties;
+
 public class Texture
 {
     private TextureProperties _properties;

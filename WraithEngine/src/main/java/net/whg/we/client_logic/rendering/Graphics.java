@@ -1,6 +1,7 @@
 package net.whg.we.client_logic.rendering;
 
 import net.whg.we.legacy.Color;
+import net.whg.we.resource.TextureProperties;
 
 public interface Graphics
 {
