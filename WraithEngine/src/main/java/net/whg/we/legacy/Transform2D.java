@@ -6,6 +6,8 @@ import net.whg.frameworks.scene.ITransform;
 
 public class Transform2D implements ITransform
 {
+	private static final long serialVersionUID = -3785736015804856470L;
+
 	private Transform2D _parent;
 	private Vector2f _position = new Vector2f(0f, 0f);
 	private Vector2f _size = new Vector2f(1f, 1f);
@@ -100,5 +102,21 @@ public class Transform2D implements ITransform
 	public void setParent(Transform2D parent)
 	{
 		_parent = parent;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return _position.hashCode() ^ Float.floatToIntBits(_rotation);
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (!(obj instanceof Transform2D))
+			return false;
+
+		Transform2D o = (Transform2D) obj;
+		return _position.equals(o._position) && _rotation == o._rotation;
 	}
 }

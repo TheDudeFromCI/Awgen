@@ -179,7 +179,6 @@ public class Transform3D implements ITransform
 			return false;
 
 		Transform3D o = (Transform3D) obj;
-
 		return _position.equals(o._position) && _rotation.equals(o._rotation)
 				&& _size.equals(o._size);
 	}
