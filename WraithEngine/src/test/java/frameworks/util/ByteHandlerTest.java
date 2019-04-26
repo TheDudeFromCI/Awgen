@@ -6,6 +6,7 @@ import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
 import org.junit.Assert;
 import org.junit.Test;
+import net.whg.frameworks.scene.Transform3D;
 import net.whg.frameworks.util.ByteReader;
 import net.whg.frameworks.util.ByteWriter;
 
@@ -131,5 +132,44 @@ public class ByteHandlerTest
 		Assert.assertEquals(-1, in.getCapacity());
 		Assert.assertEquals(3, in.getPos());
 		Assert.assertEquals(-1, in.getRemainingBytes());
+	}
+
+	@Test
+	public void read_write_object_stream() throws IOException
+	{
+		PipedInputStream inputStream = new PipedInputStream();
+		PipedOutputStream outputStream = new PipedOutputStream(inputStream);
+
+		Transform3D original = new Transform3D();
+		original.setPosition(15f, 12f, 23f);
+		original.getRotation().x = 19f;
+		original.setSize(123f, -12f, 30f);
+
+		ByteWriter out = new ByteWriter(outputStream);
+		out.writeObject(original);
+
+		ByteReader in = new ByteReader(inputStream);
+		Transform3D clone = (Transform3D) in.readObject();
+
+		Assert.assertEquals(original, clone);
+	}
+
+	@Test
+	public void read_write_object_bytes() throws IOException
+	{
+		byte[] bytes = new byte[1024];
+
+		Transform3D original = new Transform3D();
+		original.setPosition(15f, 12f, 23f);
+		original.getRotation().x = 19f;
+		original.setSize(123f, -12f, 30f);
+
+		ByteWriter out = new ByteWriter(bytes);
+		out.writeObject(original);
+
+		ByteReader in = new ByteReader(bytes);
+		Transform3D clone = (Transform3D) in.readObject();
+
+		Assert.assertEquals(original, clone);
 	}
 }

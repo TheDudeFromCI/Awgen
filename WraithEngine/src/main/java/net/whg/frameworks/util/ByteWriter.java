@@ -1,6 +1,8 @@
 package net.whg.frameworks.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import net.whg.frameworks.logging.Log;
@@ -161,8 +163,29 @@ public class ByteWriter
 	{
 		if (_outputStream != null)
 			throw new IllegalStateException(
-					"Operation not supported for input streams!");
+					"Operation not supported for output streams!");
 
 		_pos = pos;
+	}
+
+	public void writeObject(Object obj)
+	{
+		try
+		{
+			if (_outputStream == null)
+			{
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				new ObjectOutputStream(stream).writeObject(obj);
+				stream.close();
+
+				writeBytes(stream.toByteArray());
+			}
+			else
+				new ObjectOutputStream(_outputStream).writeObject(obj);
+		}
+		catch (IOException e)
+		{
+			Log.errorf("Failed to write bytes!", e);
+		}
 	}
 }

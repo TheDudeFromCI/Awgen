@@ -1,7 +1,9 @@
 package net.whg.frameworks.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.nio.charset.Charset;
 import net.whg.frameworks.logging.Log;
 
@@ -159,5 +161,27 @@ public class ByteReader
 					"Operation not supported for input streams!");
 
 		_pos = pos;
+	}
+
+	public Object readObject()
+	{
+		try
+		{
+			if (_inputStream == null)
+			{
+				ByteArrayInputStream stream = new ByteArrayInputStream(_bytes);
+				Object obj = new ObjectInputStream(stream).readObject();
+				stream.close();
+
+				return obj;
+			}
+			else
+				return new ObjectInputStream(_inputStream).readObject();
+		}
+		catch (Exception e)
+		{
+			Log.errorf("Failed to read bytes!", e);
+			return null;
+		}
 	}
 }
