@@ -1,15 +1,31 @@
 package net.whg.we.resource;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.nio.ByteBuffer;
 import net.whg.we.legacy.Color;
 
 public class IntRGBAColorData implements TextureColorData
 {
+	private static final int FILE_VERSION = 1;
+
 	private int _width;
 	private int _height;
 	private int[] _rgba;
 
+	public IntRGBAColorData()
+	{
+		// This constructor exists mostly for Externalize to work correctly.
+		this(0, 0);
+	}
+
 	public IntRGBAColorData(int width, int height)
+	{
+		resize(width, height);
+	}
+
+	public void resize(int width, int height)
 	{
 		_width = width;
 		_height = height;
@@ -72,5 +88,34 @@ public class IntRGBAColorData implements TextureColorData
 		pix |= Math.round(color.a * 255f) << 24;
 
 		_rgba[y * _width + x] = pix;
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput out) throws IOException
+	{
+		out.writeInt(FILE_VERSION);
+		out.writeInt(_width);
+		out.writeInt(_height);
+		out.writeObject(_rgba);
+	}
+
+	@Override
+	public void readExternal(ObjectInput in)
+			throws IOException, ClassNotFoundException
+	{
+		int fileVersion = in.readInt();
+
+		switch (fileVersion)
+		{
+			case 1:
+				_width = in.readInt();
+				_height = in.readInt();
+				_rgba = (int[]) in.readObject();
+				return;
+
+			default:
+				throw new IllegalStateException(
+						"Unknown file version: " + fileVersion + "!");
+		}
 	}
 }
