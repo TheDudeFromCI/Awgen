@@ -37,7 +37,10 @@ public class MeshSaver
 	public static void save(UncompiledMesh mesh, File file) throws IOException
 	{
 		if (!file.exists())
+		{
+			file.getParentFile().mkdirs();
 			file.createNewFile();
+		}
 
 		try (FileOutputStream fileOutputStream = new FileOutputStream(file))
 		{

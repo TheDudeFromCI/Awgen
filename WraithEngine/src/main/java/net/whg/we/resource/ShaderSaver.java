@@ -22,7 +22,10 @@ public class ShaderSaver
 			throws IOException
 	{
 		if (!file.exists())
+		{
+			file.getParentFile().mkdirs();
 			file.createNewFile();
+		}
 
 		try (FileOutputStream fileOutputStream = new FileOutputStream(file))
 		{
