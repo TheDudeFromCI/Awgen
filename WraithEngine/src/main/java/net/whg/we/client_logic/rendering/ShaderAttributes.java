@@ -4,6 +4,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Arrays;
 
 /**
  * Represents a specification of how vertices are formatted, as well as which
@@ -275,5 +276,22 @@ public class ShaderAttributes implements Externalizable
 				throw new IllegalStateException(
 						"Unknown file version: " + fileVersion + "!");
 		}
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return _attribNames.hashCode() ^ _attribSizes.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (!(obj instanceof ShaderAttributes))
+			return false;
+
+		ShaderAttributes o = (ShaderAttributes) obj;
+		return _count == o._count && Arrays.equals(_attribSizes, o._attribSizes)
+				&& Arrays.equals(_attribNames, o._attribNames);
 	}
 }

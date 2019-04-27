@@ -4,6 +4,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Arrays;
 
 /**
  * Represents a structure of triangles and vertices which are used to contruct a
@@ -151,5 +152,23 @@ public class VertexData implements Externalizable
 				throw new IllegalStateException(
 						"Unknown file version: " + fileVersion + "!");
 		}
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return _data.hashCode() ^ _triangles.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (!(obj instanceof VertexData))
+			return false;
+
+		VertexData o = (VertexData) obj;
+		return Arrays.equals(_data, o._data)
+				&& Arrays.equals(_triangles, o._triangles)
+				&& _attributes.equals(o._attributes);
 	}
 }

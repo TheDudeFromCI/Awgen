@@ -69,4 +69,48 @@ public class UncompiledMesh implements Externalizable
 						"Unknown file version: " + fileVersion + "!");
 		}
 	}
+
+	@Override
+	public int hashCode()
+	{
+		int hash = 0;
+
+		if (name != null)
+			hash |= name.hashCode();
+
+		if (vertexData != null)
+			hash ^= vertexData.hashCode();
+
+		if (skeleton != null)
+			hash ^= skeleton.hashCode();
+
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (!(obj instanceof UncompiledMesh))
+			return false;
+
+		UncompiledMesh o = (UncompiledMesh) obj;
+		return safeEquals(name, o.name) && safeEquals(vertexData, o.vertexData)
+				&& safeEquals(skeleton, o.skeleton);
+	}
+
+	private boolean safeEquals(Object a, Object b)
+	{
+		if (a == null != (b == null))
+			return false;
+		if (a == null)
+			return true;
+
+		return a.equals(b);
+	}
+
+	@Override
+	public String toString()
+	{
+		return "mesh: " + name;
+	}
 }
