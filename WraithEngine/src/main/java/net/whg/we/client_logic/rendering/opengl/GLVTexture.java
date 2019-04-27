@@ -10,14 +10,14 @@ import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.rendering.TextureSampleMode;
 import net.whg.we.client_logic.rendering.VTexture;
 import net.whg.we.resource.TextureColorData;
-import net.whg.we.resource.TextureProperties;
+import net.whg.we.resource.UncompiledTexture;
 
 public class GLVTexture implements VTexture
 {
 	private OpenGLGraphics _opengl;
 	private int _textureId;
 
-	GLVTexture(OpenGLGraphics opengl, TextureProperties properties)
+	GLVTexture(OpenGLGraphics opengl, UncompiledTexture properties)
 	{
 		_opengl = opengl;
 
@@ -115,7 +115,7 @@ public class GLVTexture implements VTexture
 	}
 
 	@Override
-	public void recompile(TextureProperties properties)
+	public void recompile(UncompiledTexture properties)
 	{
 		dispose();
 

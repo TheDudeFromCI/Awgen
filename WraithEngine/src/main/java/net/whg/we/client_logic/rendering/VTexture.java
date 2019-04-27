@@ -1,6 +1,6 @@
 package net.whg.we.client_logic.rendering;
 
-import net.whg.we.resource.TextureProperties;
+import net.whg.we.resource.UncompiledTexture;
 
 public interface VTexture
 {
@@ -8,5 +8,5 @@ public interface VTexture
 
 	void dispose();
 
-	void recompile(TextureProperties properties);
+	void recompile(UncompiledTexture data);
 }

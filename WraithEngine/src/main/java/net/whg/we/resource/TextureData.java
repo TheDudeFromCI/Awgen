@@ -6,26 +6,24 @@ import net.whg.we.client_logic.rendering.VTexture;
 
 public class TextureData implements ResourceData
 {
-	private TextureProperties _textureProperties;
+	private UncompiledTexture _data;
 	private VTexture _vTexture;
 
 	public TextureData(Graphics graphics)
 	{
 		emptyTexture();
-		_vTexture = graphics.prepareTexture(_textureProperties);
+		_vTexture = graphics.prepareTexture(_data);
 	}
 
-	public TextureData(Graphics graphics, TextureProperties textureProperties)
+	public TextureData(Graphics graphics, UncompiledTexture data)
 	{
-		_textureProperties = textureProperties;
-		_vTexture = graphics.prepareTexture(_textureProperties);
+		_data = data;
+		_vTexture = graphics.prepareTexture(_data);
 	}
 
 	private void emptyTexture()
 	{
-		_textureProperties = new TextureProperties();
-		_textureProperties.mipmapping = false;
-		_textureProperties.colorData = new IntRGBAColorData(4, 4);
+		_data = new UncompiledTexture();
 	}
 
 	@Override
@@ -34,9 +32,9 @@ public class TextureData implements ResourceData
 		_vTexture.dispose();
 	}
 
-	public TextureProperties getTextureProperties()
+	public UncompiledTexture get()
 	{
-		return _textureProperties;
+		return _data;
 	}
 
 	public void bind(int textureSlot)
@@ -44,11 +42,11 @@ public class TextureData implements ResourceData
 		_vTexture.bind(textureSlot);
 	}
 
-	public void setTextureProperties(TextureProperties textureProperties)
+	public void set(UncompiledTexture texture)
 	{
-		_textureProperties = textureProperties;
+		_data = texture;
 
-		if (_textureProperties == null)
+		if (_data == null)
 			emptyTexture();
 
 		updateVTexture();
@@ -56,6 +54,6 @@ public class TextureData implements ResourceData
 
 	public void updateVTexture()
 	{
-		_vTexture.recompile(_textureProperties);
+		_vTexture.recompile(_data);
 	}
 }

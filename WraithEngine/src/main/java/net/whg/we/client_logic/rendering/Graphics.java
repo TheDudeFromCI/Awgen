@@ -1,21 +1,21 @@
 package net.whg.we.client_logic.rendering;
 
 import net.whg.we.legacy.Color;
-import net.whg.we.resource.TextureProperties;
+import net.whg.we.resource.UncompiledTexture;
 
 public interface Graphics
 {
-    public void init();
+	void init();
 
-    public VMesh prepareMesh(VertexData vertexData);
+	VMesh prepareMesh(VertexData vertexData);
 
-    public VTexture prepareTexture(TextureProperties properties);
+	VTexture prepareTexture(UncompiledTexture data);
 
-    public VShader prepareShader(String vert, String geo, String frag);
+	VShader prepareShader(String vert, String geo, String frag);
 
-    public void clearScreenPass(ScreenClearType screenClear);
+	void clearScreenPass(ScreenClearType screenClear);
 
-    public void setClearScreenColor(Color color);
+	void setClearScreenColor(Color color);
 
-    public void dispose();
+	void dispose();
 }
