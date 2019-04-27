@@ -83,9 +83,6 @@ public class TextureSaver
 
 	private static UncompiledTexture load_v001(ByteReader in)
 	{
-		// TODO Because we're using serialization, compatabily may break
-		// in future versions. A more appropreiate handling method should be
-		// used.
 		return (UncompiledTexture) in.readObject();
 	}
 }

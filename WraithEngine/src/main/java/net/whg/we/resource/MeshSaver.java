@@ -5,11 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import net.whg.frameworks.util.ByteReader;
 import net.whg.frameworks.util.ByteWriter;
-import net.whg.we.client_logic.rendering.ShaderAttributes;
-import net.whg.we.client_logic.rendering.VertexData;
 
 /**
  * A utility class used to save and load mesh file resources.
@@ -46,27 +43,7 @@ public class MeshSaver
 		{
 			ByteWriter out = new ByteWriter(fileOutputStream);
 			out.writeInt(FILE_VERSION);
-
-			ShaderAttributes att = mesh.vertexData.getAttributeSizes();
-			out.writeInt(att.getCount());
-
-			for (int i = 0; i < att.getCount(); i++)
-			{
-				out.writeString(att.getAttributeName(i),
-						StandardCharsets.UTF_8);
-				out.writeByte((byte) att.getAttributeSize(i));
-			}
-
-			out.writeInt(mesh.vertexData.getVertexCount());
-			out.writeInt(mesh.vertexData.getTriangleCount());
-
-			float[] vertices = mesh.vertexData.getDataArray();
-			for (float vertex : vertices)
-				out.writeFloat(vertex);
-
-			short[] indices = mesh.vertexData.getTriangles();
-			for (short index : indices)
-				out.writeShort(index);
+			out.writeObject(mesh);
 		}
 	}
 
@@ -105,32 +82,6 @@ public class MeshSaver
 
 	private static UncompiledMesh load_v001(ByteReader in)
 	{
-		int attributes = in.getByte();
-		ShaderAttributes shaderAttributes = new ShaderAttributes(attributes);
-		for (int i = 0; i < attributes; i++)
-		{
-			String attName = in.getString(StandardCharsets.UTF_8);
-			int size = in.getByte();
-
-			shaderAttributes.addAttribute(attName, size);
-		}
-
-		int vertexSize = shaderAttributes.getVertexSize();
-		int vertexCount = in.getInt();
-		int indexCount = in.getInt();
-
-		float[] vertices = new float[vertexCount * vertexSize];
-		short[] indices = new short[indexCount];
-
-		for (int i = 0; i < vertices.length; i++)
-			vertices[i] = in.getFloat();
-
-		for (int i = 0; i < indices.length; i++)
-			indices[i] = in.getShort();
-
-		UncompiledMesh m = new UncompiledMesh();
-		m.vertexData = new VertexData(vertices, indices, shaderAttributes);
-
-		return m;
+		return (UncompiledMesh) in.readObject();
 	}
 }
