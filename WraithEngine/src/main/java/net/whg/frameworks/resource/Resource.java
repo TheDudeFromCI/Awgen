@@ -15,8 +15,13 @@ public class Resource
 
 	public Resource(ResourceFile resourceFile, ResourceData resourceData)
 	{
+		this(resourceFile, resourceData, ResourceState.UNLOADED);
+	}
+
+	public Resource(ResourceFile resourceFile, ResourceData resourceData, ResourceState resourceState)
+	{
 		_resourceFile = resourceFile;
-		_state = ResourceState.UNLOADED;
+		_state = resourceState;
 		_resourceData = resourceData;
 	}
 
@@ -47,7 +52,7 @@ public class Resource
 	 * reload is not currently required, nothing happens.
 	 *
 	 * @return True if the data this resource contains has been updated, or false if
-	 *         nothing has changed.
+	 *     nothing has changed.
 	 */
 	public boolean reload()
 	{
@@ -88,7 +93,7 @@ public class Resource
 	 * the resource owner's main thread.
 	 *
 	 * @return The data for this resource, or null if this resource state does not
-	 *         contain usable information for some reason.
+	 *     contain usable information for some reason.
 	 */
 	public ResourceData getData()
 	{

@@ -34,19 +34,18 @@ public class VertexData implements Externalizable
 	 * Creates a new vertex data object based on the given input information.
 	 *
 	 * @param data
-	 *     - The vertex data array. The vertices are stored as a list of floats
-	 *     as specified by the given shader attribute object.
+	 *     - The vertex data array. The vertices are stored as a list of floats as
+	 *     specified by the given shader attribute object.
 	 * @param triangles
-	 *     - An array of vertex pointers to determine the individual triangles
-	 *     of this vertex data. A single triangle is 3 continuous steps along
-	 *     this array, with each index pointing to a vertex data at that corner
-	 *     of the triangle.
+	 *     - An array of vertex pointers to determine the individual triangles of
+	 *     this vertex data. A single triangle is 3 continuous steps along this
+	 *     array, with each index pointing to a vertex data at that corner of the
+	 *     triangle.
 	 * @param attributes
-	 *     - The shader attribute object that is used to determine how vertices
-	 *     are layed out within the vertex float array.
+	 *     - The shader attribute object that is used to determine how vertices are
+	 *     layed out within the vertex float array.
 	 */
-	public VertexData(float[] data, short[] triangles,
-			ShaderAttributes attributes)
+	public VertexData(float[] data, short[] triangles, ShaderAttributes attributes)
 	{
 		_data = data;
 		_triangles = triangles;
@@ -54,8 +53,8 @@ public class VertexData implements Externalizable
 	}
 
 	/**
-	 * Returns the array of floats used to specify vertices within this vertex
-	 * data. The array contains all vertices formated as specified by the shader
+	 * Returns the array of floats used to specify vertices within this vertex data.
+	 * The array contains all vertices formated as specified by the shader
 	 * attributes object.
 	 *
 	 * @return The array of vertices within this vertex data object.
@@ -88,12 +87,12 @@ public class VertexData implements Externalizable
 	}
 
 	/**
-	 * Gets an array of all triangles and the indices of the vertices they point
-	 * to. A single triangle is 3 consecutive indice, where each indice is a
-	 * pointer to the corrosponding index of the vertex in question.
+	 * Gets an array of all triangles and the indices of the vertices they point to.
+	 * A single triangle is 3 consecutive indice, where each indice is a pointer to
+	 * the corrosponding index of the vertex in question.
 	 *
-	 * @return The array of all indices within this vertex data, used to
-	 *     construct triangles.
+	 * @return The array of all indices within this vertex data, used to construct
+	 *     triangles.
 	 */
 	public short[] getTriangles()
 	{
@@ -107,7 +106,7 @@ public class VertexData implements Externalizable
 	 */
 	public int getTriangleCount()
 	{
-		return _triangles.length;
+		return _triangles.length / 3;
 	}
 
 	/**
@@ -135,13 +134,11 @@ public class VertexData implements Externalizable
 	}
 
 	@Override
-	public void readExternal(ObjectInput in)
-			throws IOException, ClassNotFoundException
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
 	{
 		int fileVersion = in.readInt();
 
-		switch (fileVersion)
-		{
+		switch (fileVersion) {
 			case 1:
 				_data = (float[]) in.readObject();
 				_triangles = (short[]) in.readObject();
@@ -149,8 +146,7 @@ public class VertexData implements Externalizable
 				return;
 
 			default:
-				throw new IllegalStateException(
-						"Unknown file version: " + fileVersion + "!");
+				throw new IllegalStateException("Unknown file version: " + fileVersion + "!");
 		}
 	}
 
@@ -167,8 +163,7 @@ public class VertexData implements Externalizable
 			return false;
 
 		VertexData o = (VertexData) obj;
-		return Arrays.equals(_data, o._data)
-				&& Arrays.equals(_triangles, o._triangles)
+		return Arrays.equals(_data, o._data) && Arrays.equals(_triangles, o._triangles)
 				&& _attributes.equals(o._attributes);
 	}
 }

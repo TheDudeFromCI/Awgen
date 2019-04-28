@@ -52,8 +52,7 @@ class AssimpMeshParser
 			Log.trace("Shader Attributes:");
 			Log.indent();
 			for (int i = 0; i < attributes.getCount(); i++)
-				Log.tracef("%s: Size = %s", attributes.getAttributeName(i),
-						attributes.getAttributeSize(i));
+				Log.tracef("%s: Size = %s", attributes.getAttributeName(i), attributes.getAttributeSize(i));
 			Log.unindent();
 			Log.unindent();
 			Log.unindent();
@@ -76,15 +75,21 @@ class AssimpMeshParser
 			vertices[index++] = normal.y();
 			vertices[index++] = normal.z();
 
-			AIVector3D tangent = mesh.mTangents().get(v);
-			vertices[index++] = tangent.x();
-			vertices[index++] = tangent.y();
-			vertices[index++] = tangent.z();
+			if (mesh.mTangents() != null)
+			{
+				AIVector3D tangent = mesh.mTangents().get(v);
+				vertices[index++] = tangent.x();
+				vertices[index++] = tangent.y();
+				vertices[index++] = tangent.z();
+			}
 
-			AIVector3D bitangent = mesh.mBitangents().get(v);
-			vertices[index++] = bitangent.x();
-			vertices[index++] = bitangent.y();
-			vertices[index++] = bitangent.z();
+			if (mesh.mBitangents() != null)
+			{
+				AIVector3D bitangent = mesh.mBitangents().get(v);
+				vertices[index++] = bitangent.x();
+				vertices[index++] = bitangent.y();
+				vertices[index++] = bitangent.z();
+			}
 
 			int texIndex = 0;
 			while (mesh.mTextureCoords(texIndex) != null)

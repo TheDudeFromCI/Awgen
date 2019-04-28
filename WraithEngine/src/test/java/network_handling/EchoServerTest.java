@@ -20,29 +20,24 @@ import net.whg.frameworks.util.ByteWriter;
 
 public class EchoServerTest
 {
-
 	@Test(timeout = 5000)
 	public void echoServer() throws InterruptedException
 	{
 		final int port = 8123;
 
 		// Build packet handles
-		StoreMessagePacketHandler serverHandler =
-				new StoreMessagePacketHandler(false);
-		StoreMessagePacketHandler clientHandler =
-				new StoreMessagePacketHandler(true);
-		PacketManagerHandler packetManagerServer = PacketManagerHandler
-				.createPacketManagerHandler(serverHandler, false);
-		PacketManagerHandler packetManagerClient = PacketManagerHandler
-				.createPacketManagerHandler(clientHandler, false);
+		StoreMessagePacketHandler serverHandler = new StoreMessagePacketHandler(false);
+		StoreMessagePacketHandler clientHandler = new StoreMessagePacketHandler(true);
+		PacketManagerHandler packetManagerServer =
+				PacketManagerHandler.createPacketManagerHandler(serverHandler, false);
+		PacketManagerHandler packetManagerClient =
+				PacketManagerHandler.createPacketManagerHandler(clientHandler, false);
 
 		// Build dummy echo packet
 		PacketType echoPacket = Mockito.mock(PacketType.class);
 		Mockito.when(echoPacket.getTypePath()).thenReturn("test.echo");
-		((DefaultPacketFactory) packetManagerServer.factory())
-				.addPacketType(echoPacket);
-		((DefaultPacketFactory) packetManagerClient.factory())
-				.addPacketType(echoPacket);
+		((DefaultPacketFactory) packetManagerServer.factory()).addPacketType(echoPacket);
+		((DefaultPacketFactory) packetManagerClient.factory()).addPacketType(echoPacket);
 
 		Mockito.doAnswer(a ->
 		{
@@ -83,8 +78,7 @@ public class EchoServerTest
 			{
 				// Send packet from server to client
 				Packet p2 = packetManagerServer.pool().get();
-				p2.setPacketType(packetManagerServer.factory()
-						.findPacketType("test.echo"));
+				p2.setPacketType(packetManagerServer.factory().findPacketType("test.echo"));
 				p2.getData().put("message", "Hello Client!");
 				p2.getData().put("client", false);
 
@@ -93,15 +87,13 @@ public class EchoServerTest
 			}
 
 			return null;
-		}).when(echoPacket).process(ArgumentMatchers.any(),
-				ArgumentMatchers.any());
+		}).when(echoPacket).process(ArgumentMatchers.any(), ArgumentMatchers.any());
 
 		// Build and start server and client
 		ServerEvent serverEvent = Mockito.mock(ServerEvent.class);
 		ClientEvent clientEvent = Mockito.mock(ClientEvent.class);
 		Server server = new Server(port, packetManagerServer, serverEvent);
-		Client client =
-				new Client("localhost", port, packetManagerClient, clientEvent);
+		Client client = new Client("localhost", port, packetManagerClient, clientEvent);
 		server.start();
 		client.start();
 
@@ -111,8 +103,7 @@ public class EchoServerTest
 
 		// Send packet from client to server
 		Packet packet = packetManagerClient.pool().get();
-		packet.setPacketType(
-				packetManagerClient.factory().findPacketType("test.echo"));
+		packet.setPacketType(packetManagerClient.factory().findPacketType("test.echo"));
 		packet.getData().put("message", "Hello Server!");
 		packet.getData().put("client", true);
 		client.send(packet);
