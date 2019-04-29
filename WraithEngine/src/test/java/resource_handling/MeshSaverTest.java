@@ -59,7 +59,7 @@ public class MeshSaverTest
 		Assert.assertEquals(mesh, mesh2);
 	}
 
-	@Test(timeout = 2000)
+	@Test(timeout = 20000)
 	public void loadFbx() throws IOException, InterruptedException
 	{
 		Graphics graphics = Mockito.mock(Graphics.class);

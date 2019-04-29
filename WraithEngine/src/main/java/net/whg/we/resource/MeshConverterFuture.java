@@ -3,9 +3,9 @@ package net.whg.we.resource;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.lwjgl.assimp.AIMesh;
-import org.lwjgl.assimp.AIScene;
-import org.lwjgl.assimp.Assimp;
+import net.whg.frameworks.external.AssimpAPI;
+import net.whg.frameworks.external.AssimpMesh;
+import net.whg.frameworks.external.AssimpScene;
 import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.resource.Resource;
 import net.whg.frameworks.resource.ResourceData;
@@ -25,14 +25,17 @@ public class MeshConverterFuture implements ResourceFuture
 	private List<UncompiledMesh> _meshes;
 	private ResourceManager _resourceManager;
 	private String _destinationFolder;
+	private AssimpAPI _assimp;
 
-	public MeshConverterFuture(Graphics graphics, ResourceManager resourceManager, File file, String destinationFolder)
+	public MeshConverterFuture(Graphics graphics, ResourceManager resourceManager, File file, String destinationFolder,
+			AssimpAPI assimp)
 	{
 		_graphics = graphics;
 		_file = file;
 		_loadState = ResourceFuture.NO_CHANGE;
 		_resourceManager = resourceManager;
 		_destinationFolder = destinationFolder;
+		_assimp = assimp;
 	}
 
 	@Override
@@ -41,18 +44,14 @@ public class MeshConverterFuture implements ResourceFuture
 		try
 		{
 			// Load the scene file
-			AIScene scene = Assimp.aiImportFile(_file.toString(),
-					Assimp.aiProcess_Triangulate | Assimp.aiProcess_GenSmoothNormals | Assimp.aiProcess_FlipUVs
-							| Assimp.aiProcess_CalcTangentSpace | Assimp.aiProcess_LimitBoneWeights
-							| Assimp.aiProcess_SplitLargeMeshes | Assimp.aiProcess_OptimizeMeshes
-							| Assimp.aiProcess_JoinIdenticalVertices);
+			AssimpScene scene = _assimp.load(_file);
 
 			// If scene could not be loaded, return null
 			if (scene == null)
 				throw new IllegalStateException("Failed to load scene!");
 
 			// Count scene information
-			int meshCount = scene.mNumMeshes();
+			int meshCount = scene.getMeshCount();
 
 			_meshes = new ArrayList<>();
 
@@ -62,10 +61,12 @@ public class MeshConverterFuture implements ResourceFuture
 				// Load each mesh from the file
 				UncompiledMesh m = new UncompiledMesh();
 
-				AIMesh mesh = AIMesh.create(scene.mMeshes().get(i));
-				m.name = mesh.mName().dataString();
+				AssimpMesh mesh = scene.getMesh(i);
+				m.name = mesh.getName();
 				m.vertexData = AssimpMeshParser.loadMesh(mesh);
-				m.skeleton = AssimpSkeletonParser.loadSkeleton(scene, mesh, m.vertexData);
+
+				// TODO Skeleton importing is broken!
+				// m.skeleton = AssimpSkeletonParser.loadSkeleton(scene, mesh, m.vertexData);
 				m.path = new ResourceFile(_destinationFolder + "/" + m.name + ".asset_mesh");
 
 				_meshes.add(m);
@@ -73,8 +74,6 @@ public class MeshConverterFuture implements ResourceFuture
 				// And save each mesh while we're here
 				MeshSaver.save(m, _resourceManager.getFile(m.path));
 			}
-
-			scene.free();
 
 			synchronized (LOCK)
 			{

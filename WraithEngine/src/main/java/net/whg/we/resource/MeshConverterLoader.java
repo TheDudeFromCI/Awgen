@@ -1,5 +1,7 @@
 package net.whg.we.resource;
 
+import net.whg.frameworks.external.AssimpAPI;
+import net.whg.frameworks.external.AssimpAPIBridge;
 import net.whg.frameworks.resource.FileLoader;
 import net.whg.frameworks.resource.ResourceData;
 import net.whg.frameworks.resource.ResourceFile;
@@ -10,10 +12,18 @@ import net.whg.we.client_logic.rendering.Graphics;
 public class MeshConverterLoader implements FileLoader
 {
 	private Graphics _graphics;
+	private AssimpAPI _assimp;
 
 	public MeshConverterLoader(Graphics graphics)
 	{
 		_graphics = graphics;
+		_assimp = new AssimpAPIBridge();
+	}
+
+	public MeshConverterLoader(Graphics graphics, AssimpAPI assimp)
+	{
+		_graphics = graphics;
+		_assimp = assimp;
 	}
 
 	@Override
@@ -21,18 +31,17 @@ public class MeshConverterLoader implements FileLoader
 	{
 		return new String[]
 		{
-			"fbx", "obj", "dae", "gltf", "glb", "blend", "3ds", "ase", "ifc",
-			"xgl", "zgl", "ply", "lwo", "lws", "lxo", "stl", "x", "ac", "ms3d"
+			"fbx", "obj", "dae", "gltf", "glb", "blend", "3ds", "ase", "ifc", "xgl", "zgl", "ply", "lwo", "lws", "lxo",
+			"stl", "x", "ac", "ms3d"
 		};
 	}
 
 	@Override
-	public ResourceFuture loadFile(ResourceManager resourceManager,
-			ResourceFile resourceFile)
+	public ResourceFuture loadFile(ResourceManager resourceManager, ResourceFile resourceFile)
 	{
 		String destFolder = resourceFile.getPathname().replace('.', '_');
-		return new MeshConverterFuture(_graphics, resourceManager,
-				resourceManager.getFile(resourceFile), destFolder);
+		return new MeshConverterFuture(_graphics, resourceManager, resourceManager.getFile(resourceFile), destFolder,
+				_assimp);
 	}
 
 	@Override

@@ -1,37 +1,38 @@
 package net.whg.we.resource;
 
-import org.lwjgl.assimp.AIFace;
-import org.lwjgl.assimp.AIMesh;
-import org.lwjgl.assimp.AIVector3D;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
+import net.whg.frameworks.external.AssimpMesh;
 import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.rendering.ShaderAttributes;
 import net.whg.we.client_logic.rendering.VertexData;
 
 class AssimpMeshParser
 {
-	static VertexData loadMesh(AIMesh mesh)
+	static VertexData loadMesh(AssimpMesh mesh)
 	{
 		// Count mesh information
-		int boneCount = mesh.mNumBones();
-		int vertexCount = mesh.mNumVertices();
-		int triCount = mesh.mNumFaces();
+		int boneCount = mesh.getBoneCount();
+		int vertexCount = mesh.getVertexCount();
+		int triCount = mesh.getTriangleCount();
 
 		ShaderAttributes attributes = new ShaderAttributes();
 		attributes.addAttribute("pos", 3);
 		attributes.addAttribute("normal", 3);
-		attributes.addAttribute("tangent", 3);
-		attributes.addAttribute("bitangent", 3);
 
-		if (mesh.mTextureCoords(0) != null)
+		if (mesh.hasTangents())
+			attributes.addAttribute("tangent", 3);
+
+		if (mesh.hasBitangents())
+			attributes.addAttribute("bitangent", 3);
+
+		if (mesh.getUVCount() > 0)
 		{
 			attributes.addAttribute("uv", 2);
 
-			int i = 1;
-			while (mesh.mTextureCoords(i) != null)
-			{
-				attributes.addAttribute("uv" + (i + 1), 2);
-				i++;
-			}
+			for (int i = 2; i <= mesh.getUVCount(); i++)
+				attributes.addAttribute("uv" + i, 2);
 		}
 
 		if (boneCount > 0)
@@ -64,40 +65,38 @@ class AssimpMeshParser
 		for (int v = 0; v < vertexCount; v++)
 		{
 			// Get position data
-			AIVector3D pos = mesh.mVertices().get(v);
+			Vector3f pos = mesh.getVertPosition(v);
 			vertices[index++] = pos.x();
 			vertices[index++] = pos.y();
 			vertices[index++] = pos.z();
 
 			// Get normal data
-			AIVector3D normal = mesh.mNormals().get(v);
+			Vector3f normal = mesh.getVertNormal(v);
 			vertices[index++] = normal.x();
 			vertices[index++] = normal.y();
 			vertices[index++] = normal.z();
 
-			if (mesh.mTangents() != null)
+			if (mesh.hasTangents())
 			{
-				AIVector3D tangent = mesh.mTangents().get(v);
+				Vector3f tangent = mesh.getVertTangent(v);
 				vertices[index++] = tangent.x();
 				vertices[index++] = tangent.y();
 				vertices[index++] = tangent.z();
 			}
 
-			if (mesh.mBitangents() != null)
+			if (mesh.hasBitangents())
 			{
-				AIVector3D bitangent = mesh.mBitangents().get(v);
+				Vector3f bitangent = mesh.getVertBitangent(v);
 				vertices[index++] = bitangent.x();
 				vertices[index++] = bitangent.y();
 				vertices[index++] = bitangent.z();
 			}
 
-			int texIndex = 0;
-			while (mesh.mTextureCoords(texIndex) != null)
+			for (int texIndex = 0; texIndex < mesh.getUVCount(); texIndex++)
 			{
-				AIVector3D uv = mesh.mTextureCoords(texIndex).get(v);
+				Vector2f uv = mesh.getVertUV(v, texIndex);
 				vertices[index++] = uv.x();
 				vertices[index++] = uv.y();
-				texIndex++;
 			}
 
 			// Add bone weight buffer, if needed
@@ -111,10 +110,10 @@ class AssimpMeshParser
 		for (int f = 0; f < triCount; f++)
 		{
 			// Get vertex indices
-			AIFace face = mesh.mFaces().get(f);
-			triangles[index++] = (short) face.mIndices().get(0);
-			triangles[index++] = (short) face.mIndices().get(1);
-			triangles[index++] = (short) face.mIndices().get(2);
+			Vector3i face = mesh.getTriangle(f);
+			triangles[index++] = (short) face.x();
+			triangles[index++] = (short) face.y();
+			triangles[index++] = (short) face.z();
 		}
 
 		return new VertexData(vertices, triangles, attributes);
