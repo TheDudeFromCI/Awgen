@@ -1,6 +1,5 @@
 package frameworks.resource;
 
-import java.util.UUID;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
@@ -107,7 +106,7 @@ public class ResourceLoaderTest
 			"txt"
 		});
 		Mockito.when(fileLoader.loadFile(manager, resourceFile)).thenReturn(future);
-		Mockito.when(fileLoader.createDataInstace(UUID.randomUUID())).thenReturn(Mockito.mock(ResourceData.class));
+		Mockito.when(fileLoader.createDataInstace(ArgumentMatchers.any())).thenReturn(Mockito.mock(ResourceData.class));
 		loader.addFileLoader(fileLoader);
 
 		Resource resource = loader.loadResource(resourceFile, manager);
