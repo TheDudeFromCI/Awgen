@@ -1,5 +1,6 @@
 package net.whg.we.resource;
 
+import java.util.UUID;
 import net.whg.frameworks.resource.ResourceData;
 import net.whg.frameworks.resource.ResourceFile;
 
@@ -13,13 +14,15 @@ import net.whg.frameworks.resource.ResourceFile;
 public class ConverterData implements ResourceData
 {
 	private ResourceFile[] _newResources;
+	private UUID _uuid;
 
 	/**
 	 * Creates a new ConverterData object.
 	 */
-	public ConverterData()
+	public ConverterData(UUID uuid)
 	{
 		_newResources = new ResourceFile[0];
+		_uuid = uuid;
 	}
 
 	@Override
@@ -29,10 +32,10 @@ public class ConverterData implements ResourceData
 	}
 
 	/**
-	 * Gets all the resource files that were generated as the output of the
-	 * input file which was converted. The resources are also loaded during this
-	 * process. The ResourceFiles returned can be used to retreive the new
-	 * resources from the Resource Database.
+	 * Gets all the resource files that were generated as the output of the input
+	 * file which was converted. The resources are also loaded during this process.
+	 * The ResourceFiles returned can be used to retreive the new resources from the
+	 * Resource Database.
 	 *
 	 * @return An array of ResourceFiles, pointing to all the newly converted
 	 *     resource.
@@ -57,5 +60,11 @@ public class ConverterData implements ResourceData
 			newResources = new ResourceFile[0];
 
 		_newResources = newResources;
+	}
+
+	@Override
+	public UUID getUUID()
+	{
+		return _uuid;
 	}
 }

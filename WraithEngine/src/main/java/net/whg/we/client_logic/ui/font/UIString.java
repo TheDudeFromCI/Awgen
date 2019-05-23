@@ -1,5 +1,6 @@
 package net.whg.we.client_logic.ui.font;
 
+import java.util.UUID;
 import net.whg.we.client_logic.rendering.Graphics;
 import net.whg.we.client_logic.rendering.Material;
 import net.whg.we.client_logic.rendering.VertexData;
@@ -12,7 +13,7 @@ public class UIString extends UIImage implements TextHolder
 {
 	private static MeshData buildMeshData(Graphics graphics, VertexData vertexData)
 	{
-		MeshData meshData = new MeshData(graphics);
+		MeshData meshData = new MeshData(graphics, UUID.randomUUID());
 		meshData.setVertexData(vertexData);
 
 		return meshData;
@@ -24,8 +25,8 @@ public class UIString extends UIImage implements TextHolder
 	private UICursor _cursor;
 	private UISelection _selection;
 
-	public UIString(Font font, String text, Graphics graphics, Material material, MeshData quadMesh,
-			Material cursorMat, Material selMat)
+	public UIString(Font font, String text, Graphics graphics, Material material, MeshData quadMesh, Material cursorMat,
+			Material selMat)
 	{
 		super(buildMeshData(graphics, UIUtils.textVertexData(font, text)), material);
 

@@ -3,6 +3,7 @@ package net.whg.we.resource;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.UUID;
 import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.resource.Resource;
 import net.whg.frameworks.resource.ResourceData;
@@ -22,8 +23,7 @@ public class ShaderConverterFuture implements ResourceFuture
 	private ResourceManager _resourceManager;
 	private String _destinationFolder;
 
-	public ShaderConverterFuture(Graphics graphics,
-			ResourceManager resourceManager, File file,
+	public ShaderConverterFuture(Graphics graphics, ResourceManager resourceManager, File file,
 			String destinationFolder)
 	{
 		_graphics = graphics;
@@ -60,8 +60,7 @@ public class ShaderConverterFuture implements ResourceFuture
 					mode++;
 
 					if (mode == 3)
-						throw new RuntimeException(
-								"Unable to parse shader file format! Too many states defined.");
+						throw new RuntimeException("Unable to parse shader file format! Too many states defined.");
 				}
 				else if (mode == 0)
 					vertShader.append(line).append("\n");
@@ -72,8 +71,7 @@ public class ShaderConverterFuture implements ResourceFuture
 			}
 
 			if (mode != 2)
-				throw new RuntimeException(
-						"Unable to parse shader file format! Incorrect number of states defined.");
+				throw new RuntimeException("Unable to parse shader file format! Incorrect number of states defined.");
 
 			if (vertShader.length() > 0)
 				_shader.vertShader = vertShader.toString();
@@ -84,8 +82,7 @@ public class ShaderConverterFuture implements ResourceFuture
 			if (fragShader.length() > 0)
 				_shader.fragShader = fragShader.toString();
 
-			_shader.path = new ResourceFile(
-					_destinationFolder + "/" + _shader.name + ".asset_mesh");
+			_shader.path = new ResourceFile(_destinationFolder + "/" + _shader.name + ".asset_mesh");
 
 			ShaderSaver.save(_shader, _resourceManager.getFile(_shader.path));
 
@@ -113,8 +110,8 @@ public class ShaderConverterFuture implements ResourceFuture
 			if (_loadState != ResourceFuture.FULLY_LOADED)
 				return _loadState;
 
-			ShaderData shaderData = new ShaderData(_graphics,
-					_shader.vertShader, _shader.geoShader, _shader.fragShader);
+			ShaderData shaderData = new ShaderData(_graphics, _shader.vertShader, _shader.geoShader, _shader.fragShader,
+					UUID.randomUUID());
 			Resource resource = new Resource(_shader.path, shaderData);
 
 			_resourceManager.getResourceDatabase().addResource(resource);

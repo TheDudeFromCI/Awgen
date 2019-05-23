@@ -1,5 +1,6 @@
 package net.whg.we.client_logic.ui.terminal;
 
+import java.util.UUID;
 import org.joml.Matrix4f;
 import net.whg.frameworks.command.Console;
 import net.whg.we.client_logic.rendering.Graphics;
@@ -34,7 +35,7 @@ public class ConsoleOutput implements UIComponent
 	public void setLine(int lineIndex, String text)
 	{
 		if (_lines[lineIndex] == null)
-			_lines[lineIndex] = new MeshData(_graphics);
+			_lines[lineIndex] = new MeshData(_graphics, UUID.randomUUID());
 
 		_lines[lineIndex].setVertexData(UIUtils.textVertexData(_font, text));
 	}

@@ -1,5 +1,6 @@
 package net.whg.we.resource;
 
+import java.util.UUID;
 import net.whg.frameworks.resource.FileLoader;
 import net.whg.frameworks.resource.ResourceData;
 import net.whg.frameworks.resource.ResourceFile;
@@ -26,15 +27,14 @@ public class TextureLoader implements FileLoader
 	}
 
 	@Override
-	public ResourceFuture loadFile(ResourceManager resourceManager,
-			ResourceFile resourceFile)
+	public ResourceFuture loadFile(ResourceManager resourceManager, ResourceFile resourceFile)
 	{
 		return new TextureFuture(resourceManager.getFile(resourceFile));
 	}
 
 	@Override
-	public ResourceData createDataInstace()
+	public ResourceData createDataInstace(UUID uuid)
 	{
-		return new TextureData(_graphics);
+		return new TextureData(_graphics, uuid);
 	}
 }

@@ -3,6 +3,7 @@ package net.whg.we.resource;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import net.whg.frameworks.external.AssimpAPI;
 import net.whg.frameworks.external.AssimpMesh;
 import net.whg.frameworks.external.AssimpScene;
@@ -107,7 +108,7 @@ public class MeshConverterFuture implements ResourceFuture
 				// Compile each mesh as we push over the data
 				UncompiledMesh mesh = _meshes.get(i);
 
-				MeshData meshData = new MeshData(_graphics, mesh.vertexData);
+				MeshData meshData = new MeshData(_graphics, mesh.vertexData, UUID.randomUUID());
 				Resource resource = new Resource(mesh.path, meshData, ResourceState.FULLY_LOADED);
 
 				_resourceManager.getResourceDatabase().addResource(resource);

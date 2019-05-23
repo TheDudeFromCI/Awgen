@@ -1,5 +1,6 @@
 package net.whg.we.resource;
 
+import java.util.UUID;
 import net.whg.frameworks.external.AssimpAPI;
 import net.whg.frameworks.external.AssimpAPIBridge;
 import net.whg.frameworks.resource.FileLoader;
@@ -45,8 +46,8 @@ public class MeshConverterLoader implements FileLoader
 	}
 
 	@Override
-	public ResourceData createDataInstace()
+	public ResourceData createDataInstace(UUID uuid)
 	{
-		return new ConverterData();
+		return new ConverterData(uuid);
 	}
 }

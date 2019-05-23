@@ -1,5 +1,7 @@
 package net.whg.frameworks.resource;
 
+import java.util.UUID;
+
 public interface FileLoader
 {
 	/**
@@ -10,18 +12,16 @@ public interface FileLoader
 	String[] getTargetFileTypes();
 
 	/**
-	 * Creates a new ResourceFuture instance to load the given resource file
-	 * with.
+	 * Creates a new ResourceFuture instance to load the given resource file with.
 	 *
 	 * @param resourceManager
 	 *     - The resource manager currently in charge of loading this file.
 	 * @param resourceFile
 	 *     - The resource to load.
-	 * @return The newly created resource future instance which will be used to
-	 *     load the file.
+	 * @return The newly created resource future instance which will be used to load
+	 *     the file.
 	 */
-	ResourceFuture loadFile(ResourceManager resourceManager,
-			ResourceFile resourceFile);
+	ResourceFuture loadFile(ResourceManager resourceManager, ResourceFile resourceFile);
 
 	/**
 	 * This methods creates a new instance for writing resource data into.
@@ -29,5 +29,5 @@ public interface FileLoader
 	 * @return a new data type instance for the type of resource that this file
 	 *     loader represents.
 	 */
-	ResourceData createDataInstace();
+	ResourceData createDataInstace(UUID uuid);
 }

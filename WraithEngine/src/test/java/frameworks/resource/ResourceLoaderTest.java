@@ -1,7 +1,9 @@
 package frameworks.resource;
 
+import java.util.UUID;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import net.whg.frameworks.resource.FileDatabase;
 import net.whg.frameworks.resource.FileLoader;
@@ -83,7 +85,7 @@ public class ResourceLoaderTest
 		ResourceDatabase database = Mockito.mock(ResourceDatabase.class);
 		FileDatabase fileDatabase = Mockito.mock(FileDatabase.class);
 		ResourceManager manager = new ResourceManager(database, loader, fileDatabase);
-		Mockito.when(database.getResource(Mockito.any())).thenReturn(null);
+		Mockito.when(database.getResource(ArgumentMatchers.any())).thenReturn(null);
 
 		ResourceFile resourceFile = new ResourceFile("abc.txt");
 		ResourceFuture future = Mockito.mock(ResourceFuture.class);
@@ -102,17 +104,17 @@ public class ResourceLoaderTest
 		FileLoader fileLoader = Mockito.mock(FileLoader.class);
 		Mockito.when(fileLoader.getTargetFileTypes()).thenReturn(new String[]
 		{
-				"txt"
+			"txt"
 		});
 		Mockito.when(fileLoader.loadFile(manager, resourceFile)).thenReturn(future);
-		Mockito.when(fileLoader.createDataInstace()).thenReturn(Mockito.mock(ResourceData.class));
+		Mockito.when(fileLoader.createDataInstace(UUID.randomUUID())).thenReturn(Mockito.mock(ResourceData.class));
 		loader.addFileLoader(fileLoader);
 
 		Resource resource = loader.loadResource(resourceFile, manager);
 		resource.reload();
 
 		Assert.assertEquals(resourceFile, resource.getResourceFile());
-		Mockito.verify(future).sync(Mockito.any(ResourceData.class));
+		Mockito.verify(future).sync(ArgumentMatchers.any(ResourceData.class));
 
 		Thread.sleep(100);
 
@@ -126,7 +128,7 @@ public class ResourceLoaderTest
 		ResourceDatabase database = Mockito.mock(ResourceDatabase.class);
 		FileDatabase fileDatabase = Mockito.mock(FileDatabase.class);
 		ResourceManager manager = new ResourceManager(database, loader, fileDatabase);
-		Mockito.when(database.getResource(Mockito.any())).thenReturn(null);
+		Mockito.when(database.getResource(ArgumentMatchers.any())).thenReturn(null);
 
 		ResourceFile resourceFile = new ResourceFile("abc.txt");
 		loader.loadResource(resourceFile, manager);
@@ -139,22 +141,22 @@ public class ResourceLoaderTest
 		ResourceDatabase database = Mockito.mock(ResourceDatabase.class);
 		FileDatabase fileDatabase = Mockito.mock(FileDatabase.class);
 		ResourceManager manager = new ResourceManager(database, loader, fileDatabase);
-		Mockito.when(database.getResource(Mockito.any())).thenReturn(null);
+		Mockito.when(database.getResource(ArgumentMatchers.any())).thenReturn(null);
 
 		FileLoader fileLoader1 = Mockito.mock(FileLoader.class);
 		FileLoader fileLoader2 = Mockito.mock(FileLoader.class);
 		FileLoader fileLoader3 = Mockito.mock(FileLoader.class);
 		Mockito.when(fileLoader1.getTargetFileTypes()).thenReturn(new String[]
 		{
-				"a", "b", "c"
+			"a", "b", "c"
 		});
 		Mockito.when(fileLoader2.getTargetFileTypes()).thenReturn(new String[]
 		{
-				"1", "2"
+			"1", "2"
 		});
 		Mockito.when(fileLoader3.getTargetFileTypes()).thenReturn(new String[]
 		{
-				"abc"
+			"abc"
 		});
 
 		loader.addFileLoader(fileLoader1);

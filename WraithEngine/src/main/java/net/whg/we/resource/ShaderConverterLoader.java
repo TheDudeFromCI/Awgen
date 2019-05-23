@@ -1,5 +1,6 @@
 package net.whg.we.resource;
 
+import java.util.UUID;
 import net.whg.frameworks.resource.FileLoader;
 import net.whg.frameworks.resource.ResourceData;
 import net.whg.frameworks.resource.ResourceFile;
@@ -26,17 +27,15 @@ public class ShaderConverterLoader implements FileLoader
 	}
 
 	@Override
-	public ResourceFuture loadFile(ResourceManager resourceManager,
-			ResourceFile resourceFile)
+	public ResourceFuture loadFile(ResourceManager resourceManager, ResourceFile resourceFile)
 	{
 		String destFolder = resourceFile.getPathname().replace('.', '_');
-		return new ShaderConverterFuture(_graphics, resourceManager,
-				resourceManager.getFile(resourceFile), destFolder);
+		return new ShaderConverterFuture(_graphics, resourceManager, resourceManager.getFile(resourceFile), destFolder);
 	}
 
 	@Override
-	public ResourceData createDataInstace()
+	public ResourceData createDataInstace(UUID uuid)
 	{
-		return new ConverterData();
+		return new ConverterData(uuid);
 	}
 }

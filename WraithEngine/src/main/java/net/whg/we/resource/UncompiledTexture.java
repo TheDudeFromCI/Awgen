@@ -30,8 +30,8 @@ public class UncompiledTexture implements Externalizable
 
 	/*
 	 * A temporary pointer to the resource file, used while saving and loading
-	 * texture data. This field is transient and may be null or outdata outside
-	 * of saving or loading.
+	 * texture data. This field is transient and may be null or outdata outside of
+	 * saving or loading.
 	 */
 	public transient ResourceFile path;
 
@@ -42,17 +42,17 @@ public class UncompiledTexture implements Externalizable
 	public boolean mipmapping = true;
 
 	/**
-	 * This determines how the texture should be sampled when it is rendered.
-	 * The default setting is bilinear.
+	 * This determines how the texture should be sampled when it is rendered. The
+	 * default setting is bilinear.
 	 */
 	public TextureSampleMode sampleMode = TextureSampleMode.BILINEAR;
 
 	/**
-	 * If this texture represnets a normal map, this determines which direction
-	 * the normals are facing in the texture. If this texture is not a normal
-	 * map, this value is assigned as non_normalmap.
+	 * If this texture represnets a normal map, this determines which direction the
+	 * normals are facing in the texture. If this texture is not a normal map, this
+	 * value is assigned as non_normalmap.
 	 */
-	NormalMapType normalMapType = NormalMapType.NON_NORMALMAP;
+	public NormalMapType normalMapType = NormalMapType.NON_NORMALMAP;
 
 	/**
 	 * Creates an empty, uncompiled texture object. This is given the default
@@ -73,21 +73,18 @@ public class UncompiledTexture implements Externalizable
 	}
 
 	@Override
-	public void readExternal(ObjectInput in)
-			throws IOException, ClassNotFoundException
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
 	{
 		int fileVersion = in.readInt();
 
-		switch (fileVersion)
-		{
+		switch (fileVersion) {
 			case 1:
 				name = (String) in.readObject();
 				colorData = (TextureColorData) in.readObject();
 				return;
 
 			default:
-				throw new IllegalStateException(
-						"Unknown file version: " + fileVersion + "!");
+				throw new IllegalStateException("Unknown file version: " + fileVersion + "!");
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package net.whg.we.resource;
 
+import java.util.UUID;
 import net.whg.frameworks.resource.ResourceData;
 import net.whg.we.client_logic.rendering.Graphics;
 import net.whg.we.client_logic.rendering.VShader;
@@ -10,27 +11,29 @@ public class ShaderData implements ResourceData
 	private String _geoShader;
 	private String _fragShader;
 	private VShader _vShader;
+	private UUID _uuid;
 
-	public ShaderData(Graphics graphics)
+	public ShaderData(Graphics graphics, UUID uuid)
 	{
 		emptyShader();
 		_vShader = graphics.prepareShader(_vertShader, _geoShader, _fragShader);
+		_uuid = uuid;
 	}
 
-	public ShaderData(Graphics graphics, String vert, String geo, String frag)
+	public ShaderData(Graphics graphics, String vert, String geo, String frag, UUID uuid)
 	{
 		_vertShader = vert;
 		_geoShader = geo;
 		_fragShader = frag;
 		_vShader = graphics.prepareShader(_vertShader, _geoShader, _fragShader);
+		_uuid = uuid;
 	}
 
 	private void emptyShader()
 	{
 		_vertShader = "void main(){gl_Position = vec4(0.0, 0.0, 0.0, 1.0);}";
 		_geoShader = null;
-		_fragShader =
-				"out vec4 color;void main(){color = vec4(1.0, 1.0, 1.0, 1.0);}";
+		_fragShader = "out vec4 color;void main(){color = vec4(1.0, 1.0, 1.0, 1.0);}";
 	}
 
 	@Override
@@ -69,5 +72,11 @@ public class ShaderData implements ResourceData
 	public VShader getVShader()
 	{
 		return _vShader;
+	}
+
+	@Override
+	public UUID getUUID()
+	{
+		return _uuid;
 	}
 }

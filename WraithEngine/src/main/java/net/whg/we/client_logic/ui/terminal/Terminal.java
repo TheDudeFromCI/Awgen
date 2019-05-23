@@ -1,5 +1,6 @@
 package net.whg.we.client_logic.ui.terminal;
 
+import java.util.UUID;
 import net.whg.we.client_logic.ui.SimpleContainer;
 import net.whg.we.client_logic.ui.UIUtils;
 import net.whg.we.legacy.AnimatedProperty;
@@ -20,7 +21,7 @@ public class Terminal extends SimpleContainer
 	public Terminal(ClientGameState gameState)
 	{
 		_gameState = gameState;
-		_imageMesh = new MeshData(_gameState.getGraphicsPipeline().getGraphics());
+		_imageMesh = new MeshData(_gameState.getGraphicsPipeline().getGraphics(), UUID.randomUUID());
 		_imageMesh.setVertexData(UIUtils.defaultImageVertexData());
 
 		_verticalPos = new AnimatedProperty(1f);

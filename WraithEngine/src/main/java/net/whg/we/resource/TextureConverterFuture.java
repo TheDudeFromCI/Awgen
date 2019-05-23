@@ -2,6 +2,7 @@ package net.whg.we.resource;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.UUID;
 import javax.imageio.ImageIO;
 import net.whg.frameworks.logging.Log;
 import net.whg.frameworks.resource.Resource;
@@ -22,8 +23,7 @@ public class TextureConverterFuture implements ResourceFuture
 	private ResourceManager _resourceManager;
 	private String _destinationFolder;
 
-	public TextureConverterFuture(Graphics graphics,
-			ResourceManager resourceManager, File file,
+	public TextureConverterFuture(Graphics graphics, ResourceManager resourceManager, File file,
 			String destinationFolder)
 	{
 		_graphics = graphics;
@@ -42,17 +42,13 @@ public class TextureConverterFuture implements ResourceFuture
 
 			_texture = new UncompiledTexture();
 
-			IntRGBAColorData colorData =
-					new IntRGBAColorData(image.getWidth(), image.getHeight());
-			image.getRGB(0, 0, image.getWidth(), image.getHeight(),
-					colorData.getAsIntArray(), 0, image.getWidth());
+			IntRGBAColorData colorData = new IntRGBAColorData(image.getWidth(), image.getHeight());
+			image.getRGB(0, 0, image.getWidth(), image.getHeight(), colorData.getAsIntArray(), 0, image.getWidth());
 			_texture.colorData = colorData;
 
-			_texture.path = new ResourceFile(_destinationFolder + "/"
-					+ _texture.name + ".asset_texture");
+			_texture.path = new ResourceFile(_destinationFolder + "/" + _texture.name + ".asset_texture");
 
-			TextureSaver.save(_texture,
-					_resourceManager.getFile(_texture.path));
+			TextureSaver.save(_texture, _resourceManager.getFile(_texture.path));
 
 			synchronized (LOCK)
 			{
@@ -78,7 +74,7 @@ public class TextureConverterFuture implements ResourceFuture
 			if (_loadState != ResourceFuture.FULLY_LOADED)
 				return _loadState;
 
-			TextureData textureData = new TextureData(_graphics, _texture);
+			TextureData textureData = new TextureData(_graphics, _texture, UUID.randomUUID());
 			Resource resource = new Resource(_texture.path, textureData);
 			_resourceManager.getResourceDatabase().addResource(resource);
 
