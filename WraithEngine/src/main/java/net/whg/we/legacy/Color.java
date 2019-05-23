@@ -47,4 +47,31 @@ public class Color
 		g = lum;
 		b = lum;
 	}
+
+	@Override
+	public int hashCode()
+	{
+		return Float.floatToIntBits(r) ^ ~Float.floatToIntBits(g) ^ Float.floatToIntBits(b) ^ ~Float.floatToIntBits(a);
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (!(obj instanceof Color))
+			return false;
+
+		float e = 0.00001f;
+
+		Color o = (Color) obj;
+		return Math.abs(r - o.r) < e && Math.abs(g - o.g) < e && Math.abs(b - o.b) < e && Math.abs(a - o.a) < e;
+	}
+
+	@Override
+	public String toString()
+	{
+		if (a < 1f)
+			return String.format("Color: R:%.2f, G:%.2f, B:%.2f", r, g, b);
+
+		return String.format("Color: R:%.2f, G:%.2f, B:%.2f, A:%.2f", r, g, b, a);
+	}
 }
