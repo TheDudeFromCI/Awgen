@@ -66,4 +66,9 @@ public class TextureData implements ResourceData
 	{
 		return _uuid;
 	}
+
+	public TextureColorData getColorData()
+	{
+		return _data.colorData;
+	}
 }

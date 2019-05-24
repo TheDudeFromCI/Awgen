@@ -67,9 +67,11 @@ public class UncompiledTexture implements Externalizable
 	@Override
 	public void writeExternal(ObjectOutput out) throws IOException
 	{
-		out.write(FILE_VERSION);
+		out.writeInt(FILE_VERSION);
 		out.writeObject(name);
 		out.writeObject(colorData);
+		out.writeObject(sampleMode);
+		out.writeObject(normalMapType);
 	}
 
 	@Override
@@ -81,10 +83,39 @@ public class UncompiledTexture implements Externalizable
 			case 1:
 				name = (String) in.readObject();
 				colorData = (TextureColorData) in.readObject();
+				sampleMode = (TextureSampleMode) in.readObject();
+				normalMapType = (NormalMapType) in.readObject();
 				return;
 
 			default:
 				throw new IllegalStateException("Unknown file version: " + fileVersion + "!");
 		}
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return name.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (!(obj instanceof UncompiledTexture))
+			return false;
+
+		UncompiledTexture o = (UncompiledTexture) obj;
+		return name.equals(o.name) && sampleMode == o.sampleMode && normalMapType == o.normalMapType
+				&& safeEquals(colorData, o.colorData);
+	}
+
+	private boolean safeEquals(Object a, Object b)
+	{
+		if (a == null != (b == null))
+			return false;
+		if (a == null)
+			return true;
+
+		return a.equals(b);
 	}
 }

@@ -10,6 +10,7 @@ import net.whg.frameworks.resource.ResourceData;
 import net.whg.frameworks.resource.ResourceFile;
 import net.whg.frameworks.resource.ResourceFuture;
 import net.whg.frameworks.resource.ResourceManager;
+import net.whg.frameworks.resource.ResourceState;
 import net.whg.we.client_logic.rendering.Graphics;
 
 public class TextureConverterFuture implements ResourceFuture
@@ -75,7 +76,7 @@ public class TextureConverterFuture implements ResourceFuture
 				return _loadState;
 
 			TextureData textureData = new TextureData(_graphics, _texture, UUID.randomUUID());
-			Resource resource = new Resource(_texture.path, textureData);
+			Resource resource = new Resource(_texture.path, textureData, ResourceState.FULLY_LOADED);
 			_resourceManager.getResourceDatabase().addResource(resource);
 
 			ResourceFile[] resourceFiles = new ResourceFile[]

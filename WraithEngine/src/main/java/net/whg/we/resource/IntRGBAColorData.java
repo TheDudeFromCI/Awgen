@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import net.whg.we.legacy.Color;
 
 public class IntRGBAColorData implements TextureColorData
@@ -100,13 +101,11 @@ public class IntRGBAColorData implements TextureColorData
 	}
 
 	@Override
-	public void readExternal(ObjectInput in)
-			throws IOException, ClassNotFoundException
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
 	{
 		int fileVersion = in.readInt();
 
-		switch (fileVersion)
-		{
+		switch (fileVersion) {
 			case 1:
 				_width = in.readInt();
 				_height = in.readInt();
@@ -114,8 +113,23 @@ public class IntRGBAColorData implements TextureColorData
 				return;
 
 			default:
-				throw new IllegalStateException(
-						"Unknown file version: " + fileVersion + "!");
+				throw new IllegalStateException("Unknown file version: " + fileVersion + "!");
 		}
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Arrays.hashCode(_rgba);
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (!(obj instanceof IntRGBAColorData))
+			return false;
+
+		IntRGBAColorData o = (IntRGBAColorData) obj;
+		return _width == o._width && _height == o._height && Arrays.equals(_rgba, o._rgba);
 	}
 }

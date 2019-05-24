@@ -57,6 +57,8 @@ public class MeshSaverTest
 
 		// Compare
 		Assert.assertEquals(mesh, mesh2);
+
+		file.delete();
 	}
 
 	@Test(timeout = 20000)
