@@ -5,6 +5,8 @@
 
 ### Come Join Us!
 
+Hello!
+
 WraithEngine has an official Discord server! Come check it out and get to know the community. Have an awesome feature request? Maybe a few questions about getting started? How can we help? We have lots of game developers and hobbyist who would love to hear from you. Feel free to stop in at anytime.<br><br>
 [Click Here to Join!](https://discord.gg/CREBDQV)
 
