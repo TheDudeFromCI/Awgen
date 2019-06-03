@@ -12,6 +12,7 @@ import net.whg.we.client_logic.rendering.VShader;
 import net.whg.we.client_logic.rendering.VTexture;
 import net.whg.we.client_logic.rendering.VertexData;
 import net.whg.we.legacy.Color;
+import net.whg.we.resource.UncompiledShader;
 import net.whg.we.resource.UncompiledTexture;
 
 public class OpenGLGraphics implements Graphics
@@ -42,8 +43,7 @@ public class OpenGLGraphics implements Graphics
 	@Override
 	public void clearScreenPass(ScreenClearType screenClear)
 	{
-		switch (screenClear)
-		{
+		switch (screenClear) {
 			case CLEAR_COLOR:
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 				return;
@@ -51,12 +51,10 @@ public class OpenGLGraphics implements Graphics
 				GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 				return;
 			case CLEAR_COLOR_AND_DEPTH:
-				GL11.glClear(
-						GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 				return;
 			default:
-				throw new IllegalArgumentException(
-						"Unknown screen clear operation!");
+				throw new IllegalArgumentException("Unknown screen clear operation!");
 		}
 	}
 
@@ -94,8 +92,7 @@ public class OpenGLGraphics implements Graphics
 		{
 			String errorName;
 
-			switch (error)
-			{
+			switch (error) {
 				case GL11.GL_INVALID_ENUM:
 					errorName = "Invalid Enum";
 					break;
@@ -150,8 +147,8 @@ public class OpenGLGraphics implements Graphics
 	}
 
 	@Override
-	public VShader prepareShader(String vert, String geo, String frag)
+	public VShader prepareShader(UncompiledShader shader)
 	{
-		return new GLVShader(this, vert, geo, frag);
+		return new GLVShader(this, shader);
 	}
 }

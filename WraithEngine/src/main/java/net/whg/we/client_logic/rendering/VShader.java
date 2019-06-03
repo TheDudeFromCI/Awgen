@@ -1,10 +1,11 @@
 package net.whg.we.client_logic.rendering;
 
 import java.nio.FloatBuffer;
+import net.whg.we.resource.UncompiledShader;
 
 public interface VShader
 {
-	void recompile(String vert, String geo, String frag);
+	void recompile(UncompiledShader shader);
 
 	void bind();
 

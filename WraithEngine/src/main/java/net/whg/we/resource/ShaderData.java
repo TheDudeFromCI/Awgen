@@ -7,33 +7,30 @@ import net.whg.we.client_logic.rendering.VShader;
 
 public class ShaderData implements ResourceData
 {
-	private String _vertShader;
-	private String _geoShader;
-	private String _fragShader;
 	private VShader _vShader;
+	private UncompiledShader _shader;
 	private UUID _uuid;
 
 	public ShaderData(Graphics graphics, UUID uuid)
 	{
 		emptyShader();
-		_vShader = graphics.prepareShader(_vertShader, _geoShader, _fragShader);
+		_vShader = graphics.prepareShader(_shader);
 		_uuid = uuid;
 	}
 
-	public ShaderData(Graphics graphics, String vert, String geo, String frag, UUID uuid)
+	public ShaderData(Graphics graphics, UncompiledShader shader, UUID uuid)
 	{
-		_vertShader = vert;
-		_geoShader = geo;
-		_fragShader = frag;
-		_vShader = graphics.prepareShader(_vertShader, _geoShader, _fragShader);
+		_shader = shader;
+		_vShader = graphics.prepareShader(_shader);
 		_uuid = uuid;
 	}
 
 	private void emptyShader()
 	{
-		_vertShader = "void main(){gl_Position = vec4(0.0, 0.0, 0.0, 1.0);}";
-		_geoShader = null;
-		_fragShader = "out vec4 color;void main(){color = vec4(1.0, 1.0, 1.0, 1.0);}";
+		_shader = new UncompiledShader();
+		_shader.name = "default_shader";
+		_shader.vertShader = "void main(){gl_Position = vec4(0.0, 0.0, 0.0, 1.0);}";
+		_shader.fragShader = "out vec4 color;void main(){color = vec4(1.0, 1.0, 1.0, 1.0);}";
 	}
 
 	@Override
@@ -43,30 +40,33 @@ public class ShaderData implements ResourceData
 			_vShader.dispose();
 
 		_vShader = null;
+		_shader = null;
 	}
 
-	public void compile(String vert, String geo, String frag)
+	public void setShaderData(UncompiledShader shader)
 	{
-		_vertShader = vert;
-		_geoShader = geo;
-		_fragShader = frag;
+		_shader = shader;
+		_vShader.recompile(_shader);
+	}
 
-		_vShader.recompile(vert, geo, frag);
+	public String getName()
+	{
+		return _shader.name;
 	}
 
 	public String getVertexShaderCode()
 	{
-		return _vertShader;
+		return _shader.vertShader;
 	}
 
 	public String getGeometryShaderCode()
 	{
-		return _geoShader;
+		return _shader.geoShader;
 	}
 
 	public String getFragmentShaderCode()
 	{
-		return _fragShader;
+		return _shader.fragShader;
 	}
 
 	public VShader getVShader()

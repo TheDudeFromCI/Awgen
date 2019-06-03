@@ -10,6 +10,7 @@ import net.whg.frameworks.resource.ResourceData;
 import net.whg.frameworks.resource.ResourceFile;
 import net.whg.frameworks.resource.ResourceFuture;
 import net.whg.frameworks.resource.ResourceManager;
+import net.whg.frameworks.resource.ResourceState;
 import net.whg.we.client_logic.rendering.Graphics;
 
 public class ShaderConverterFuture implements ResourceFuture
@@ -82,7 +83,7 @@ public class ShaderConverterFuture implements ResourceFuture
 			if (fragShader.length() > 0)
 				_shader.fragShader = fragShader.toString();
 
-			_shader.path = new ResourceFile(_destinationFolder + "/" + _shader.name + ".asset_mesh");
+			_shader.path = new ResourceFile(_destinationFolder + "/" + _shader.name + ".asset_shader");
 
 			ShaderSaver.save(_shader, _resourceManager.getFile(_shader.path));
 
@@ -110,9 +111,8 @@ public class ShaderConverterFuture implements ResourceFuture
 			if (_loadState != ResourceFuture.FULLY_LOADED)
 				return _loadState;
 
-			ShaderData shaderData = new ShaderData(_graphics, _shader.vertShader, _shader.geoShader, _shader.fragShader,
-					UUID.randomUUID());
-			Resource resource = new Resource(_shader.path, shaderData);
+			ShaderData shaderData = new ShaderData(_graphics, _shader, UUID.randomUUID());
+			Resource resource = new Resource(_shader.path, shaderData, ResourceState.FULLY_LOADED);
 
 			_resourceManager.getResourceDatabase().addResource(resource);
 

@@ -5,15 +5,20 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.rendering.VShader;
+import net.whg.we.resource.UncompiledShader;
 
 public class GLVShader implements VShader
 {
 	private int _shaderId;
 	private OpenGLGraphics _opengl;
 
-	GLVShader(OpenGLGraphics opengl, String vert, String geo, String frag)
+	GLVShader(OpenGLGraphics opengl, UncompiledShader shader)
 	{
 		_opengl = opengl;
+
+		String vert = shader.vertShader;
+		String geo = shader.geoShader;
+		String frag = shader.fragShader;
 
 		Log.tracef("Compiling Shader.  Vert Source:\n%s", vert);
 		Log.tracef("Compiling Shader.  Geo Source:\n%s", geo);
@@ -31,8 +36,7 @@ public class GLVShader implements VShader
 		if (GL20.glGetShaderi(vId, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE)
 		{
 			String logMessage = GL20.glGetShaderInfoLog(vId);
-			throw new RuntimeException(
-					"Failed to compiled vertex shader! '" + logMessage + "'");
+			throw new RuntimeException("Failed to compiled vertex shader! '" + logMessage + "'");
 		}
 
 		if (gId != -1)
@@ -43,9 +47,7 @@ public class GLVShader implements VShader
 			if (GL20.glGetShaderi(gId, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE)
 			{
 				String logMessage = GL20.glGetShaderInfoLog(gId);
-				throw new RuntimeException(
-						"Failed to compiled geometry shader! '" + logMessage
-								+ "'");
+				throw new RuntimeException("Failed to compiled geometry shader! '" + logMessage + "'");
 			}
 		}
 
@@ -55,8 +57,7 @@ public class GLVShader implements VShader
 		if (GL20.glGetShaderi(fId, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE)
 		{
 			String logMessage = GL20.glGetShaderInfoLog(fId);
-			throw new RuntimeException(
-					"Failed to compiled fragment shader! '" + logMessage + "'");
+			throw new RuntimeException("Failed to compiled fragment shader! '" + logMessage + "'");
 		}
 
 		_shaderId = GL20.glCreateProgram();
@@ -70,8 +71,7 @@ public class GLVShader implements VShader
 		if (GL20.glGetProgrami(_shaderId, GL20.GL_LINK_STATUS) != GL11.GL_TRUE)
 		{
 			String logMessage = GL20.glGetProgramInfoLog(_shaderId);
-			throw new RuntimeException(
-					"Failed to link shader program! '" + logMessage + "'");
+			throw new RuntimeException("Failed to link shader program! '" + logMessage + "'");
 		}
 
 		GL20.glDeleteShader(vId);
@@ -178,10 +178,14 @@ public class GLVShader implements VShader
 	}
 
 	@Override
-	public void recompile(String vert, String geo, String frag)
+	public void recompile(UncompiledShader shader)
 	{
 		// Destroy old shader
 		dispose();
+
+		String vert = shader.vertShader;
+		String geo = shader.geoShader;
+		String frag = shader.fragShader;
 
 		// Build new shader
 		Log.tracef("Compiling Shader.  Vert Source:\n%s", vert);
@@ -200,8 +204,7 @@ public class GLVShader implements VShader
 		if (GL20.glGetShaderi(vId, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE)
 		{
 			String logMessage = GL20.glGetShaderInfoLog(vId);
-			throw new RuntimeException(
-					"Failed to compiled vertex shader! '" + logMessage + "'");
+			throw new RuntimeException("Failed to compiled vertex shader! '" + logMessage + "'");
 		}
 
 		if (gId != -1)
@@ -212,9 +215,7 @@ public class GLVShader implements VShader
 			if (GL20.glGetShaderi(gId, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE)
 			{
 				String logMessage = GL20.glGetShaderInfoLog(gId);
-				throw new RuntimeException(
-						"Failed to compiled geometry shader! '" + logMessage
-								+ "'");
+				throw new RuntimeException("Failed to compiled geometry shader! '" + logMessage + "'");
 			}
 		}
 
@@ -224,8 +225,7 @@ public class GLVShader implements VShader
 		if (GL20.glGetShaderi(fId, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE)
 		{
 			String logMessage = GL20.glGetShaderInfoLog(fId);
-			throw new RuntimeException(
-					"Failed to compiled fragment shader! '" + logMessage + "'");
+			throw new RuntimeException("Failed to compiled fragment shader! '" + logMessage + "'");
 		}
 
 		_shaderId = GL20.glCreateProgram();
@@ -239,8 +239,7 @@ public class GLVShader implements VShader
 		if (GL20.glGetProgrami(_shaderId, GL20.GL_LINK_STATUS) != GL11.GL_TRUE)
 		{
 			String logMessage = GL20.glGetProgramInfoLog(_shaderId);
-			throw new RuntimeException(
-					"Failed to link shader program! '" + logMessage + "'");
+			throw new RuntimeException("Failed to link shader program! '" + logMessage + "'");
 		}
 
 		GL20.glDeleteShader(vId);

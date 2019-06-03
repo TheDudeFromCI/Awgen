@@ -51,8 +51,7 @@ public class ShaderFuture implements ResourceFuture
 				return _loadState;
 
 			ShaderData shaderData = (ShaderData) data;
-			shaderData.compile(_shader.vertShader, _shader.geoShader,
-					_shader.fragShader);
+			shaderData.setShaderData(_shader);
 
 			return ResourceFuture.FULLY_LOADED;
 		}

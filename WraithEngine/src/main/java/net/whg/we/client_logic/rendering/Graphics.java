@@ -1,6 +1,7 @@
 package net.whg.we.client_logic.rendering;
 
 import net.whg.we.legacy.Color;
+import net.whg.we.resource.UncompiledShader;
 import net.whg.we.resource.UncompiledTexture;
 
 public interface Graphics
@@ -11,7 +12,7 @@ public interface Graphics
 
 	VTexture prepareTexture(UncompiledTexture data);
 
-	VShader prepareShader(String vert, String geo, String frag);
+	VShader prepareShader(UncompiledShader data);
 
 	void clearScreenPass(ScreenClearType screenClear);
 
