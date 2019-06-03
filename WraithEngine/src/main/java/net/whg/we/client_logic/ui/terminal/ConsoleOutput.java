@@ -1,20 +1,21 @@
 package net.whg.we.client_logic.ui.terminal;
 
+import java.util.UUID;
 import org.joml.Matrix4f;
 import net.whg.frameworks.command.Console;
 import net.whg.we.client_logic.rendering.Graphics;
 import net.whg.we.client_logic.rendering.Material;
-import net.whg.we.client_logic.rendering.Mesh;
 import net.whg.we.client_logic.ui.UIComponent;
 import net.whg.we.client_logic.ui.UIUtils;
 import net.whg.we.client_logic.ui.font.Font;
 import net.whg.we.legacy.Transform2D;
+import net.whg.we.resource.MeshData;
 
 public class ConsoleOutput implements UIComponent
 {
 	public static final int SHOWN_ROWS = 25;
 
-	private Mesh[] _lines = new Mesh[Console.LINE_COUNT];
+	private MeshData[] _lines = new MeshData[Console.LINE_COUNT];
 	private Transform2D _transform = new Transform2D();
 
 	private Matrix4f _lineBuffer = new Matrix4f();
@@ -34,9 +35,9 @@ public class ConsoleOutput implements UIComponent
 	public void setLine(int lineIndex, String text)
 	{
 		if (_lines[lineIndex] == null)
-			_lines[lineIndex] = new Mesh("", UIUtils.textVertexData(_font, text), _graphics);
-		else
-			_lines[lineIndex].rebuild(UIUtils.textVertexData(_font, text));
+			_lines[lineIndex] = new MeshData(_graphics, UUID.randomUUID());
+
+		_lines[lineIndex].setVertexData(UIUtils.textVertexData(_font, text));
 	}
 
 	public void setScroll(int scrollPos)

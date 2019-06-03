@@ -11,6 +11,8 @@ import org.joml.Vector3f;
  */
 public class Transform3D implements ITransform
 {
+	private static final long serialVersionUID = 7429104977413470225L;
+
 	// Fields
 	private Vector3f _position = new Vector3f();
 	private Quaternionf _rotation = new Quaternionf();
@@ -32,10 +34,11 @@ public class Transform3D implements ITransform
 	}
 
 	/**
-	 * Sets the position of this transform based on the values given by the input.
+	 * Sets the position of this transform based on the values given by the
+	 * input.
 	 *
 	 * @param position
-	 *            - The position vector to copy the values from.
+	 *     - The position vector to copy the values from.
 	 */
 	public void setPosition(Vector3f position)
 	{
@@ -43,14 +46,15 @@ public class Transform3D implements ITransform
 	}
 
 	/**
-	 * Sets the position of this transform based on the values given by the input.
+	 * Sets the position of this transform based on the values given by the
+	 * input.
 	 *
 	 * @param x
-	 *            - The x position.
+	 *     - The x position.
 	 * @param y
-	 *            - The y position.
+	 *     - The y position.
 	 * @param z
-	 *            - The z position.
+	 *     - The z position.
 	 */
 	public void setPosition(float x, float y, float z)
 	{
@@ -71,7 +75,7 @@ public class Transform3D implements ITransform
 	 * Gets the size of this transform based on the values given by the inout.
 	 *
 	 * @param size
-	 *            - The size vector to copt the values from.
+	 *     - The size vector to copt the values from.
 	 */
 	public void setSize(Vector3f size)
 	{
@@ -82,7 +86,7 @@ public class Transform3D implements ITransform
 	 * Gets the size of this transform based on the values given by the inout.
 	 *
 	 * @param size
-	 *            - The uniform scaling value.
+	 *     - The uniform scaling value.
 	 */
 	public void setSize(float size)
 	{
@@ -93,11 +97,11 @@ public class Transform3D implements ITransform
 	 * Gets the size of this transform based on the values given by the inout.
 	 *
 	 * @param x
-	 *            - The x scale.
+	 *     - The x scale.
 	 * @param y
-	 *            - The y scale.
+	 *     - The y scale.
 	 * @param z
-	 *            - The z scale.
+	 *     - The z scale.
 	 */
 	public void setSize(float x, float y, float z)
 	{
@@ -118,7 +122,7 @@ public class Transform3D implements ITransform
 	 * Sets the rotation of this transform.
 	 *
 	 * @param rot
-	 *            - The quaternion to copy the rotation from.
+	 *     - The quaternion to copy the rotation from.
 	 */
 	public void setRotation(Quaternionf rot)
 	{
@@ -152,7 +156,7 @@ public class Transform3D implements ITransform
 	 * Calculates the inverse of this local matrix.
 	 *
 	 * @param out
-	 *            - The matrix to write the output to.
+	 *     - The matrix to write the output to.
 	 */
 	public void getInverseMatrix(Matrix4f out)
 	{
@@ -160,5 +164,22 @@ public class Transform3D implements ITransform
 		out.rotate(_rotation.invert(_quaternionBuffer));
 		out.translate(_position.negate(_vectorBuffer));
 		out.scale(_size.negate(_vectorBuffer));
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return _position.hashCode() ^ _rotation.hashCode() ^ _size.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (!(obj instanceof Transform3D))
+			return false;
+
+		Transform3D o = (Transform3D) obj;
+		return _position.equals(o._position) && _rotation.equals(o._rotation)
+				&& _size.equals(o._size);
 	}
 }

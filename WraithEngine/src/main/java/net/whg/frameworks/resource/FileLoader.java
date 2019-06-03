@@ -1,18 +1,13 @@
 package net.whg.frameworks.resource;
 
+import java.util.UUID;
+
 public interface FileLoader
 {
 	/**
-	 * Gets a string array of file types that are supported by the this file loader.
-	 * File types are a string representing the extention type of a file.<br>
-	 * <br>
-	 * Examples:
+	 * Gets the file formats that this file loader supports.
 	 *
-	 * <pre>
-	 *   "png", "txt", "jpeg", "html"
-	 * </pre>
-	 *
-	 * @return A String array of supported file types.
+	 * @return An array of names of supported file types.
 	 */
 	String[] getTargetFileTypes();
 
@@ -20,11 +15,11 @@ public interface FileLoader
 	 * Creates a new ResourceFuture instance to load the given resource file with.
 	 *
 	 * @param resourceManager
-	 *            - The resource manager currently in charge of loading this file.
+	 *     - The resource manager currently in charge of loading this file.
 	 * @param resourceFile
-	 *            - The resource to load.
+	 *     - The resource to load.
 	 * @return The newly created resource future instance which will be used to load
-	 *         the file.
+	 *     the file.
 	 */
 	ResourceFuture loadFile(ResourceManager resourceManager, ResourceFile resourceFile);
 
@@ -32,7 +27,7 @@ public interface FileLoader
 	 * This methods creates a new instance for writing resource data into.
 	 *
 	 * @return a new data type instance for the type of resource that this file
-	 *         loader represents.
+	 *     loader represents.
 	 */
-	ResourceData createDataInstace();
+	ResourceData createDataInstace(UUID uuid);
 }

@@ -1,9 +1,15 @@
 package net.whg.frameworks.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.nio.charset.Charset;
+import net.whg.frameworks.logging.Log;
 
 public class ByteReader
 {
+	private InputStream _inputStream;
 	private byte[] _bytes;
 	private int _pos;
 
@@ -13,8 +19,25 @@ public class ByteReader
 		_pos = 0;
 	}
 
+	public ByteReader(InputStream inputStream)
+	{
+		_inputStream = inputStream;
+	}
+
 	public byte getByte()
 	{
+		if (_inputStream != null)
+			try
+			{
+				_pos++;
+				return (byte) _inputStream.read();
+			}
+			catch (IOException e)
+			{
+				Log.errorf("Failed to read byte!", e);
+				return 0;
+			}
+
 		return _bytes[_pos++];
 	}
 
@@ -25,22 +48,22 @@ public class ByteReader
 
 	public short getShort()
 	{
-		int value = 0;
+		short value = 0;
 
-		value |= (_bytes[_pos++] & 0xFF) << 8;
-		value |= _bytes[_pos++] & 0xFF;
+		value |= (getByte() & 0xFF) << 8;
+		value |= getByte() & 0xFF;
 
-		return (short) value;
+		return value;
 	}
 
 	public int getInt()
 	{
 		int value = 0;
 
-		value |= (_bytes[_pos++] & 0xFF) << 24;
-		value |= (_bytes[_pos++] & 0xFF) << 16;
-		value |= (_bytes[_pos++] & 0xFF) << 8;
-		value |= _bytes[_pos++] & 0xFF;
+		value |= (getByte() & 0xFF) << 24;
+		value |= (getByte() & 0xFF) << 16;
+		value |= (getByte() & 0xFF) << 8;
+		value |= getByte() & 0xFF;
 
 		return value;
 	}
@@ -49,14 +72,14 @@ public class ByteReader
 	{
 		long value = 0;
 
-		value |= (_bytes[_pos++] & 0xFF) << 56L;
-		value |= (_bytes[_pos++] & 0xFF) << 48L;
-		value |= (_bytes[_pos++] & 0xFF) << 40L;
-		value |= (_bytes[_pos++] & 0xFF) << 32L;
-		value |= (_bytes[_pos++] & 0xFF) << 24L;
-		value |= (_bytes[_pos++] & 0xFF) << 16L;
-		value |= (_bytes[_pos++] & 0xFF) << 8L;
-		value |= _bytes[_pos++] & 0xFF;
+		value |= (getByte() & 0xFFL) << 56L;
+		value |= (getByte() & 0xFFL) << 48L;
+		value |= (getByte() & 0xFFL) << 40L;
+		value |= (getByte() & 0xFFL) << 32L;
+		value |= (getByte() & 0xFFL) << 24L;
+		value |= (getByte() & 0xFFL) << 16L;
+		value |= (getByte() & 0xFFL) << 8L;
+		value |= getByte() & 0xFFL;
 
 		return value;
 	}
@@ -73,6 +96,20 @@ public class ByteReader
 
 	public void getBytes(byte[] bytes, int pos, int length)
 	{
+		if (_inputStream != null)
+		{
+			try
+			{
+				_inputStream.read(bytes, pos, length);
+			}
+			catch (IOException e)
+			{
+				Log.errorf("Failed to read bytes!", e);
+			}
+			_pos += length;
+			return;
+		}
+
 		for (int i = 0; i < length; i++)
 			bytes[i + pos] = getByte();
 	}
@@ -103,16 +140,48 @@ public class ByteReader
 
 	public int getCapacity()
 	{
+		if (_inputStream != null)
+			return -1;
+
 		return _bytes.length;
 	}
 
 	public int getRemainingBytes()
 	{
+		if (_inputStream != null)
+			return -1;
+
 		return getCapacity() - getPos();
 	}
 
 	public void setPos(int pos)
 	{
+		if (_inputStream != null)
+			throw new IllegalStateException(
+					"Operation not supported for input streams!");
+
 		_pos = pos;
+	}
+
+	public Object readObject()
+	{
+		try
+		{
+			if (_inputStream == null)
+			{
+				ByteArrayInputStream stream = new ByteArrayInputStream(_bytes);
+				Object obj = new ObjectInputStream(stream).readObject();
+				stream.close();
+
+				return obj;
+			}
+			else
+				return new ObjectInputStream(_inputStream).readObject();
+		}
+		catch (Exception e)
+		{
+			Log.errorf("Failed to read bytes!", e);
+			return null;
+		}
 	}
 }

@@ -5,175 +5,248 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import net.whg.frameworks.logging.Log;
 import net.whg.we.client_logic.rendering.VShader;
+import net.whg.we.resource.UncompiledShader;
 
 public class GLVShader implements VShader
 {
-    private int _shaderId;
-    private OpenGLGraphics _opengl;
+	private int _shaderId;
+	private OpenGLGraphics _opengl;
 
-    GLVShader(OpenGLGraphics opengl, String vert, String geo, String frag)
-    {
-        _opengl = opengl;
+	GLVShader(OpenGLGraphics opengl, UncompiledShader shader)
+	{
+		_opengl = opengl;
 
-        Log.tracef("Compiling Shader.  Vert Source:\n%s", vert);
-        Log.tracef("Compiling Shader.  Geo Source:\n%s", geo);
-        Log.tracef("Compiling Shader.  Frag Source:\n%s", frag);
+		String vert = shader.vertShader;
+		String geo = shader.geoShader;
+		String frag = shader.fragShader;
 
-        int vId = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
-        int gId = -1;
-        // if (geo != null && !geo.isEmpty())
-        // gId = GL20.glCreateShader(GL32.GL_GEOMETRY_SHADER);
-        int fId = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
+		Log.tracef("Compiling Shader.  Vert Source:\n%s", vert);
+		Log.tracef("Compiling Shader.  Geo Source:\n%s", geo);
+		Log.tracef("Compiling Shader.  Frag Source:\n%s", frag);
 
-        GL20.glShaderSource(vId, vert);
-        GL20.glCompileShader(vId);
+		int vId = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
+		int gId = -1;
+		// if (geo != null && !geo.isEmpty())
+		// gId = GL20.glCreateShader(GL32.GL_GEOMETRY_SHADER);
+		int fId = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
 
-        if (GL20.glGetShaderi(vId, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE)
-        {
-            String logMessage = GL20.glGetShaderInfoLog(vId);
-            throw new RuntimeException(
-                    "Failed to compiled vertex shader! '" + logMessage + "'");
-        }
+		GL20.glShaderSource(vId, vert);
+		GL20.glCompileShader(vId);
 
-        if (gId != -1)
-        {
-            GL20.glShaderSource(gId, geo);
-            GL20.glCompileShader(gId);
+		if (GL20.glGetShaderi(vId, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE)
+		{
+			String logMessage = GL20.glGetShaderInfoLog(vId);
+			throw new RuntimeException("Failed to compiled vertex shader! '" + logMessage + "'");
+		}
 
-            if (GL20.glGetShaderi(gId, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE)
-            {
-                String logMessage = GL20.glGetShaderInfoLog(gId);
-                throw new RuntimeException(
-                        "Failed to compiled geometry shader! '" + logMessage
-                                + "'");
-            }
-        }
+		if (gId != -1)
+		{
+			GL20.glShaderSource(gId, geo);
+			GL20.glCompileShader(gId);
 
-        GL20.glShaderSource(fId, frag);
-        GL20.glCompileShader(fId);
+			if (GL20.glGetShaderi(gId, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE)
+			{
+				String logMessage = GL20.glGetShaderInfoLog(gId);
+				throw new RuntimeException("Failed to compiled geometry shader! '" + logMessage + "'");
+			}
+		}
 
-        if (GL20.glGetShaderi(fId, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE)
-        {
-            String logMessage = GL20.glGetShaderInfoLog(fId);
-            throw new RuntimeException(
-                    "Failed to compiled fragment shader! '" + logMessage + "'");
-        }
+		GL20.glShaderSource(fId, frag);
+		GL20.glCompileShader(fId);
 
-        _shaderId = GL20.glCreateProgram();
-        GL20.glAttachShader(_shaderId, vId);
-        if (gId != -1)
-            GL20.glAttachShader(_shaderId, gId);
-        GL20.glAttachShader(_shaderId, fId);
+		if (GL20.glGetShaderi(fId, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE)
+		{
+			String logMessage = GL20.glGetShaderInfoLog(fId);
+			throw new RuntimeException("Failed to compiled fragment shader! '" + logMessage + "'");
+		}
 
-        GL20.glLinkProgram(_shaderId);
+		_shaderId = GL20.glCreateProgram();
+		GL20.glAttachShader(_shaderId, vId);
+		if (gId != -1)
+			GL20.glAttachShader(_shaderId, gId);
+		GL20.glAttachShader(_shaderId, fId);
 
-        if (GL20.glGetProgrami(_shaderId, GL20.GL_LINK_STATUS) != GL11.GL_TRUE)
-        {
-            String logMessage = GL20.glGetProgramInfoLog(_shaderId);
-            throw new RuntimeException(
-                    "Failed to link shader program! '" + logMessage + "'");
-        }
+		GL20.glLinkProgram(_shaderId);
 
-        GL20.glDeleteShader(vId);
-        if (gId != -1)
-            GL20.glDeleteShader(gId);
-        GL20.glDeleteShader(fId);
+		if (GL20.glGetProgrami(_shaderId, GL20.GL_LINK_STATUS) != GL11.GL_TRUE)
+		{
+			String logMessage = GL20.glGetProgramInfoLog(_shaderId);
+			throw new RuntimeException("Failed to link shader program! '" + logMessage + "'");
+		}
 
-        _opengl.checkForErrors("Loaded Shader");
-    }
+		GL20.glDeleteShader(vId);
+		if (gId != -1)
+			GL20.glDeleteShader(gId);
+		GL20.glDeleteShader(fId);
 
-    @Override
-    public void bind()
-    {
-        if (_opengl.getBoundShaderId() == _shaderId)
-            return;
+		_opengl.checkForErrors("Loaded Shader");
+	}
 
-        GL20.glUseProgram(_shaderId);
-        _opengl.setBoundShaderId(_shaderId);
-        _opengl.checkForErrors(Log.TRACE, "Bound Shader");
-    }
+	@Override
+	public void bind()
+	{
+		if (_opengl.getBoundShaderId() == _shaderId)
+			return;
 
-    @Override
-    public boolean isBound()
-    {
-        return _opengl.getBoundShaderId() == _shaderId;
-    }
+		GL20.glUseProgram(_shaderId);
+		_opengl.setBoundShaderId(_shaderId);
+		_opengl.checkForErrors(Log.TRACE, "Bound Shader");
+	}
 
-    @Override
-    public void dispose()
-    {
-        if (_opengl.getBoundShaderId() == _shaderId)
-        {
-            _opengl.setBoundShaderId(0);
-            GL20.glUseProgram(0);
-        }
+	@Override
+	public boolean isBound()
+	{
+		return _opengl.getBoundShaderId() == _shaderId;
+	}
 
-        GL20.glDeleteProgram(_shaderId);
-        _opengl.checkForErrors(Log.TRACE, "Disposed Shader");
-    }
+	@Override
+	public void dispose()
+	{
+		if (_opengl.getBoundShaderId() == _shaderId)
+		{
+			_opengl.setBoundShaderId(0);
+			GL20.glUseProgram(0);
+		}
 
-    @Override
-    public int getShaderId()
-    {
-        return _shaderId;
-    }
+		GL20.glDeleteProgram(_shaderId);
+		_opengl.checkForErrors(Log.TRACE, "Disposed Shader");
+	}
 
-    @Override
-    public int getUniformLocation(String name)
-    {
-        int location = GL20.glGetUniformLocation(_shaderId, name);
-        _opengl.checkForErrors(Log.TRACE, "Got Shader Uniform Location");
-        return location;
-    }
+	@Override
+	public int getShaderId()
+	{
+		return _shaderId;
+	}
 
-    @Override
-    public void setUniformMat4(int location, FloatBuffer value)
-    {
-        setUniformMat4Array(location, value);
-    }
+	@Override
+	public int getUniformLocation(String name)
+	{
+		int location = GL20.glGetUniformLocation(_shaderId, name);
+		_opengl.checkForErrors(Log.TRACE, "Got Shader Uniform Location");
+		return location;
+	}
 
-    @Override
-    public void setUniformMat4Array(int location, FloatBuffer value)
-    {
-        if (isBound())
-            GL20.glUniformMatrix4fv(location, false, value);
-        else
-        {
-            GL20.glUseProgram(_shaderId);
-            GL20.glUniformMatrix4fv(location, false, value);
-            GL20.glUseProgram(_opengl.getBoundShaderId());
-        }
+	@Override
+	public void setUniformMat4(int location, FloatBuffer value)
+	{
+		setUniformMat4Array(location, value);
+	}
 
-        _opengl.checkForErrors(Log.TRACE, "Set Shader Uniform Matrix Array");
-    }
+	@Override
+	public void setUniformMat4Array(int location, FloatBuffer value)
+	{
+		if (isBound())
+			GL20.glUniformMatrix4fv(location, false, value);
+		else
+		{
+			GL20.glUseProgram(_shaderId);
+			GL20.glUniformMatrix4fv(location, false, value);
+			GL20.glUseProgram(_opengl.getBoundShaderId());
+		}
 
-    @Override
-    public void setUniformInt(int location, int value)
-    {
-        if (isBound())
-            GL20.glUniform1i(location, value);
-        else
-        {
-            GL20.glUseProgram(_shaderId);
-            GL20.glUniform1i(location, value);
-            GL20.glUseProgram(_opengl.getBoundShaderId());
-        }
+		_opengl.checkForErrors(Log.TRACE, "Set Shader Uniform Matrix Array");
+	}
 
-        _opengl.checkForErrors(Log.TRACE, "Set Shader Uniform Int");
-    }
+	@Override
+	public void setUniformInt(int location, int value)
+	{
+		if (isBound())
+			GL20.glUniform1i(location, value);
+		else
+		{
+			GL20.glUseProgram(_shaderId);
+			GL20.glUniform1i(location, value);
+			GL20.glUseProgram(_opengl.getBoundShaderId());
+		}
 
-    @Override
-    public void setUniformVec4(int location, float x, float y, float z, float w)
-    {
-        if (isBound())
-            GL20.glUniform4f(location, x, y, z, w);
-        else
-        {
-            GL20.glUseProgram(_shaderId);
-            GL20.glUniform4f(location, x, y, z, w);
-            GL20.glUseProgram(_opengl.getBoundShaderId());
-        }
+		_opengl.checkForErrors(Log.TRACE, "Set Shader Uniform Int");
+	}
 
-        _opengl.checkForErrors(Log.TRACE, "Set Shader Uniform Int");
-    }
+	@Override
+	public void setUniformVec4(int location, float x, float y, float z, float w)
+	{
+		if (isBound())
+			GL20.glUniform4f(location, x, y, z, w);
+		else
+		{
+			GL20.glUseProgram(_shaderId);
+			GL20.glUniform4f(location, x, y, z, w);
+			GL20.glUseProgram(_opengl.getBoundShaderId());
+		}
+
+		_opengl.checkForErrors(Log.TRACE, "Set Shader Uniform Int");
+	}
+
+	@Override
+	public void recompile(UncompiledShader shader)
+	{
+		// Destroy old shader
+		dispose();
+
+		String vert = shader.vertShader;
+		String geo = shader.geoShader;
+		String frag = shader.fragShader;
+
+		// Build new shader
+		Log.tracef("Compiling Shader.  Vert Source:\n%s", vert);
+		Log.tracef("Compiling Shader.  Geo Source:\n%s", geo);
+		Log.tracef("Compiling Shader.  Frag Source:\n%s", frag);
+
+		int vId = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
+		int gId = -1;
+		// if (geo != null && !geo.isEmpty())
+		// gId = GL20.glCreateShader(GL32.GL_GEOMETRY_SHADER);
+		int fId = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
+
+		GL20.glShaderSource(vId, vert);
+		GL20.glCompileShader(vId);
+
+		if (GL20.glGetShaderi(vId, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE)
+		{
+			String logMessage = GL20.glGetShaderInfoLog(vId);
+			throw new RuntimeException("Failed to compiled vertex shader! '" + logMessage + "'");
+		}
+
+		if (gId != -1)
+		{
+			GL20.glShaderSource(gId, geo);
+			GL20.glCompileShader(gId);
+
+			if (GL20.glGetShaderi(gId, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE)
+			{
+				String logMessage = GL20.glGetShaderInfoLog(gId);
+				throw new RuntimeException("Failed to compiled geometry shader! '" + logMessage + "'");
+			}
+		}
+
+		GL20.glShaderSource(fId, frag);
+		GL20.glCompileShader(fId);
+
+		if (GL20.glGetShaderi(fId, GL20.GL_COMPILE_STATUS) != GL11.GL_TRUE)
+		{
+			String logMessage = GL20.glGetShaderInfoLog(fId);
+			throw new RuntimeException("Failed to compiled fragment shader! '" + logMessage + "'");
+		}
+
+		_shaderId = GL20.glCreateProgram();
+		GL20.glAttachShader(_shaderId, vId);
+		if (gId != -1)
+			GL20.glAttachShader(_shaderId, gId);
+		GL20.glAttachShader(_shaderId, fId);
+
+		GL20.glLinkProgram(_shaderId);
+
+		if (GL20.glGetProgrami(_shaderId, GL20.GL_LINK_STATUS) != GL11.GL_TRUE)
+		{
+			String logMessage = GL20.glGetProgramInfoLog(_shaderId);
+			throw new RuntimeException("Failed to link shader program! '" + logMessage + "'");
+		}
+
+		GL20.glDeleteShader(vId);
+		if (gId != -1)
+			GL20.glDeleteShader(gId);
+		GL20.glDeleteShader(fId);
+
+		_opengl.checkForErrors("Loaded Shader");
+	}
 }

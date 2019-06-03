@@ -1,25 +1,27 @@
 package net.whg.we.client_logic.rendering;
 
 import java.nio.FloatBuffer;
+import net.whg.we.resource.UncompiledShader;
 
 public interface VShader
 {
-    public void bind();
+	void recompile(UncompiledShader shader);
 
-    public boolean isBound();
+	void bind();
 
-    public void dispose();
+	boolean isBound();
 
-    public int getShaderId();
+	void dispose();
 
-    public int getUniformLocation(String name);
+	int getShaderId();
 
-    public void setUniformMat4(int location, FloatBuffer value);
+	int getUniformLocation(String name);
 
-    public void setUniformMat4Array(int location, FloatBuffer value);
+	void setUniformMat4(int location, FloatBuffer value);
 
-    public void setUniformInt(int location, int value);
+	void setUniformMat4Array(int location, FloatBuffer value);
 
-    public void setUniformVec4(int location, float x, float y, float z,
-            float w);
+	void setUniformInt(int location, int value);
+
+	void setUniformVec4(int location, float x, float y, float z, float w);
 }

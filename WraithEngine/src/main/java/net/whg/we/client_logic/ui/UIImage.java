@@ -1,18 +1,18 @@
 package net.whg.we.client_logic.ui;
 
 import net.whg.we.client_logic.rendering.Material;
-import net.whg.we.client_logic.rendering.Mesh;
 import net.whg.we.legacy.Transform2D;
+import net.whg.we.resource.MeshData;
 
 public class UIImage implements UIComponent
 {
 	private Transform2D _transform = new Transform2D();
-	private Mesh _mesh;
+	private MeshData _mesh;
 	private Material _material;
 	private boolean _visible = true;
 	private boolean _disposed;
 
-	public UIImage(Mesh mesh, Material material)
+	public UIImage(MeshData mesh, Material material)
 	{
 		_mesh = mesh;
 		_material = material;
@@ -67,7 +67,7 @@ public class UIImage implements UIComponent
 		return _disposed;
 	}
 
-	public Mesh getMesh()
+	public MeshData getMesh()
 	{
 		return _mesh;
 	}
@@ -77,7 +77,7 @@ public class UIImage implements UIComponent
 		return _material;
 	}
 
-	public void setMesh(Mesh mesh)
+	public void setMesh(MeshData mesh)
 	{
 		_mesh = mesh;
 	}

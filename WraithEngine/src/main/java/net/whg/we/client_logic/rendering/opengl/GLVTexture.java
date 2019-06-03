@@ -7,136 +7,191 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 import net.whg.frameworks.logging.Log;
-import net.whg.we.client_logic.rendering.TextureProperties;
 import net.whg.we.client_logic.rendering.TextureSampleMode;
 import net.whg.we.client_logic.rendering.VTexture;
-import net.whg.we.legacy.Color;
+import net.whg.we.resource.TextureColorData;
+import net.whg.we.resource.UncompiledTexture;
 
 public class GLVTexture implements VTexture
 {
-    private OpenGLGraphics _opengl;
-    private int _textureId;
+	private OpenGLGraphics _opengl;
+	private int _textureId;
 
-    GLVTexture(OpenGLGraphics opengl, TextureProperties properties)
-    {
-        _opengl = opengl;
+	GLVTexture(OpenGLGraphics opengl, UncompiledTexture properties)
+	{
+		_opengl = opengl;
 
-        ByteBuffer pixels = BufferUtils.createByteBuffer(
-                properties.getWidth() * properties.getHeight() * 4);
+		TextureColorData colorData = properties.colorData;
+		ByteBuffer pixels = BufferUtils.createByteBuffer(colorData.width()
+				* colorData.height() * colorData.bytesPerPixel());
 
-        Color[] pixelsColor = properties.getPixels();
-        int[] pixelsInt = properties.getPixelsInt();
+		colorData.put(pixels);
+		pixels.flip();
 
-        int x, y;
-        Color color;
-        int colorInt;
-        for (y = 0; y < properties.getHeight(); y++)
-        {
-            for (x = 0; x < properties.getWidth(); x++)
-            {
-                if (pixelsColor != null)
-                {
-                    color = pixelsColor[y * properties.getWidth() + x];
+		_textureId = GL11.glGenTextures();
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, _textureId);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S,
+				GL11.GL_REPEAT);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T,
+				GL11.GL_REPEAT);
 
-                    pixels.put((byte) Math.round(color.r * 255));
-                    pixels.put((byte) Math.round(color.g * 255));
-                    pixels.put((byte) Math.round(color.b * 255));
-                    pixels.put((byte) Math.round(color.a * 255));
-                }
-                else
-                {
-                    colorInt = pixelsInt[y * properties.getWidth() + x];
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8,
+				colorData.width(), colorData.height(), 0, GL11.GL_RGBA,
+				GL11.GL_UNSIGNED_BYTE, pixels);
 
-                    pixels.put((byte) ((colorInt >> 16) & 0xFF));
-                    pixels.put((byte) ((colorInt >> 8) & 0xFF));
-                    pixels.put((byte) (colorInt & 0xFF));
-                    pixels.put((byte) ((colorInt >> 24) & 0xFF));
-                }
-            }
-        }
+		// TODO Color data is currently expected to be in GL_RGBA8 form, only
+		// Will fail on other color data states
 
-        pixels.flip();
+		if (properties.mipmapping)
+		{
+			GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 
-        _textureId = GL11.glGenTextures();
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, _textureId);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S,
-                GL11.GL_REPEAT);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T,
-                GL11.GL_REPEAT);
+			if (properties.sampleMode == TextureSampleMode.NEAREST)
+			{
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MIN_FILTER,
+						GL11.GL_NEAREST_MIPMAP_NEAREST);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+			}
+			else if (properties.sampleMode == TextureSampleMode.BILINEAR)
+			{
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MIN_FILTER,
+						GL11.GL_LINEAR_MIPMAP_NEAREST);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			}
+			else
+			{
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MIN_FILTER,
+						GL11.GL_LINEAR_MIPMAP_LINEAR);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			}
+		}
+		else
+		{
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL14.GL_GENERATE_MIPMAP,
+					GL11.GL_FALSE);
 
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8,
-                properties.getWidth(), properties.getHeight(), 0, GL11.GL_RGBA,
-                GL11.GL_UNSIGNED_BYTE, pixels);
+			if (properties.sampleMode == TextureSampleMode.NEAREST)
+			{
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+			}
+			else
+			{
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			}
+		}
 
-        if (properties.hasMipmapping())
-        {
-            GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
-            if (properties.getSampleMode() == TextureSampleMode.NEAREST)
-            {
-                GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
-                        GL11.GL_TEXTURE_MIN_FILTER,
-                        GL11.GL_NEAREST_MIPMAP_NEAREST);
-                GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
-                        GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-            }
-            else if (properties.getSampleMode() == TextureSampleMode.BILINEAR)
-            {
-                GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
-                        GL11.GL_TEXTURE_MIN_FILTER,
-                        GL11.GL_LINEAR_MIPMAP_NEAREST);
-                GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
-                        GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-            }
-            else
-            {
-                GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
-                        GL11.GL_TEXTURE_MIN_FILTER,
-                        GL11.GL_LINEAR_MIPMAP_LINEAR);
-                GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
-                        GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-            }
-        }
-        else
-        {
-            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL14.GL_GENERATE_MIPMAP,
-                    GL11.GL_FALSE);
+		_opengl.checkForErrors("Loaded Texture");
+	}
 
-            if (properties.getSampleMode() == TextureSampleMode.NEAREST)
-            {
-                GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
-                        GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-                GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
-                        GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-            }
-            else
-            {
-                GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
-                        GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-                GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
-                        GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-            }
-        }
+	@Override
+	public void bind(int textureSlot)
+	{
+		GL13.glActiveTexture(GL13.GL_TEXTURE0 + textureSlot);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, _textureId);
 
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+		_opengl.checkForErrors(Log.TRACE, "Bound Texture");
+	}
 
-        _opengl.checkForErrors("Loaded Texture");
-    }
+	@Override
+	public void dispose()
+	{
+		GL11.glDeleteTextures(_textureId);
 
-    @Override
-    public void bind(int textureSlot)
-    {
-        GL13.glActiveTexture(GL13.GL_TEXTURE0 + textureSlot);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, _textureId);
+		_opengl.checkForErrors("Disposed Texture");
+	}
 
-        _opengl.checkForErrors(Log.TRACE, "Bound Texture");
-    }
+	@Override
+	public void recompile(UncompiledTexture properties)
+	{
+		dispose();
 
-    @Override
-    public void dispose()
-    {
-        GL11.glDeleteTextures(_textureId);
+		TextureColorData colorData = properties.colorData;
+		ByteBuffer pixels = BufferUtils.createByteBuffer(colorData.width()
+				* colorData.height() * colorData.bytesPerPixel());
 
-        _opengl.checkForErrors("Disposed Texture");
-    }
+		colorData.put(pixels);
+		pixels.flip();
+
+		_textureId = GL11.glGenTextures();
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, _textureId);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S,
+				GL11.GL_REPEAT);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T,
+				GL11.GL_REPEAT);
+
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8,
+				colorData.width(), colorData.height(), 0, GL11.GL_RGBA,
+				GL11.GL_UNSIGNED_BYTE, pixels);
+
+		// TODO Color data is currently expected to be in GL_RGBA8 form, only
+		// Will fail on other color data states
+
+		if (properties.mipmapping)
+		{
+			GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+
+			if (properties.sampleMode == TextureSampleMode.NEAREST)
+			{
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MIN_FILTER,
+						GL11.GL_NEAREST_MIPMAP_NEAREST);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+			}
+			else if (properties.sampleMode == TextureSampleMode.BILINEAR)
+			{
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MIN_FILTER,
+						GL11.GL_LINEAR_MIPMAP_NEAREST);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			}
+			else
+			{
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MIN_FILTER,
+						GL11.GL_LINEAR_MIPMAP_LINEAR);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			}
+		}
+		else
+		{
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL14.GL_GENERATE_MIPMAP,
+					GL11.GL_FALSE);
+
+			if (properties.sampleMode == TextureSampleMode.NEAREST)
+			{
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+			}
+			else
+			{
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+						GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			}
+		}
+
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+
+		_opengl.checkForErrors("Loaded Texture");
+	}
 }

@@ -1,6 +1,7 @@
 package net.whg.frameworks.resource;
 
 import java.util.ArrayList;
+import java.util.UUID;
 import net.whg.frameworks.logging.Log;
 
 public class ResourceLoader
@@ -14,9 +15,9 @@ public class ResourceLoader
 	 * that this resource depends on to also be loaded.
 	 *
 	 * @param resourceFile
-	 *            - The resource file to load.
+	 *     - The resource file to load.
 	 * @param database
-	 *            - The database to load the resource from.
+	 *     - The database to load the resource from.
 	 * @return The resource based on the given resource file.
 	 */
 	public Resource loadResource(ResourceFile resourceFile, ResourceManager resourceManager)
@@ -29,10 +30,9 @@ public class ResourceLoader
 
 		FileLoader loader = getFileLoader(resourceFile.getFileExtension());
 		if (loader == null)
-			throw new UnsupportedFileFormat(
-					String.format("Not a supported file type! (%s)", resourceFile));
+			throw new UnsupportedFileFormat(String.format("Not a supported file type! (%s)", resourceFile));
 
-		ResourceData data = loader.createDataInstace();
+		ResourceData data = loader.createDataInstace(UUID.randomUUID());
 		resource = new Resource(resourceFile, data);
 		resourceManager.getResourceDatabase().addResource(resource);
 
@@ -60,12 +60,11 @@ public class ResourceLoader
 	 * already added, nothing happens. This method is thread safe.
 	 *
 	 * @param fileLoader
-	 *            - The file loader to add.
+	 *     - The file loader to add.
 	 */
 	public void addFileLoader(FileLoader fileLoader)
 	{
-		Log.debugf("Adding a file loader to the ResourceLoader, %s.",
-				fileLoader.getClass().getName());
+		Log.debugf("Adding a file loader to the ResourceLoader, %s.", fileLoader.getClass().getName());
 
 		if (_fileLoaders.contains(fileLoader))
 			return;
@@ -77,12 +76,11 @@ public class ResourceLoader
 	 * the local references, nothing happens. This method is thread safe.
 	 *
 	 * @param fileLoader
-	 *            - The file loader to remove.
+	 *     - The file loader to remove.
 	 */
 	public void removeFileLoader(FileLoader fileLoader)
 	{
-		Log.debugf("Removing a file loader from the ResourceLoader, %s.",
-				fileLoader.getClass().getName());
+		Log.debugf("Removing a file loader from the ResourceLoader, %s.", fileLoader.getClass().getName());
 
 		_fileLoaders.remove(fileLoader);
 	}
@@ -91,7 +89,7 @@ public class ResourceLoader
 	 * Gets the number of file loaders currently attched to this resource loader.
 	 *
 	 * @return The number of file loaders currently attached to this resource
-	 *         loader.
+	 *     loader.
 	 */
 	public int getFileLoaderCount()
 	{
@@ -104,7 +102,7 @@ public class ResourceLoader
 	 * used for iteration purposes only.
 	 *
 	 * @param index
-	 *            - The index of the file loader.
+	 *     - The index of the file loader.
 	 * @return The file loader at the specified index.
 	 */
 	public FileLoader getFileLoader(int index)

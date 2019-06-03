@@ -1,5 +1,6 @@
 package net.whg.frameworks.scene;
 
+import java.io.Serializable;
 import org.joml.Matrix4f;
 
 /**
@@ -7,14 +8,14 @@ import org.joml.Matrix4f;
  *
  * @author TheDudeFromCI
  */
-public interface ITransform
+public interface ITransform extends Serializable
 {
 	/**
-	 * Calculates the local matrix for this transform, and stores it in the output
-	 * matrix parameter.
+	 * Calculates the local matrix for this transform, and stores it in the
+	 * output matrix parameter.
 	 *
 	 * @param out
-	 *            - The matrix to store the output into.
+	 *     - The matrix to store the output into.
 	 */
 	void getLocalMatrix(Matrix4f out);
 
@@ -28,9 +29,9 @@ public interface ITransform
 	 * for the given transforms.
 	 *
 	 * @param parent
-	 *            - The parent transform to reference.
+	 *     - The parent transform to reference.
 	 * @param out
-	 *            - The matrix to store the output into.
+	 *     - The matrix to store the output into.
 	 */
 	void getFullMatrix(Matrix4f parent, Matrix4f out);
 }
