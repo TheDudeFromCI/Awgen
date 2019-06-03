@@ -47,7 +47,17 @@ public class SimpleFileDatabase implements ServerFileDatabase
 	@Override
 	public File getFile(ResourceFile file)
 	{
-		File folder = new File(_baseFolder, RESOURCE_FOLDER_NAME);
-		return new File(folder, file.getPathname());
+		return getFile(file.getPathname());
+	}
+
+	public File getRootFolder()
+	{
+		return _baseFolder;
+	}
+
+	public File getFile(String pathname)
+	{
+		File folder = new File(getRootFolder(), RESOURCE_FOLDER_NAME);
+		return new File(folder, pathname);
 	}
 }

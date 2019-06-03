@@ -1,5 +1,7 @@
 package net.whg.frameworks.resource;
 
+import java.io.File;
+
 /**
  * A collection of various utility functions for dealing with file and folder
  * management.
@@ -14,9 +16,9 @@ public class FileUtils
 	 * is specified, null is returned.
 	 *
 	 * @param pathname
-	 *            - The pathname to check.
+	 *     - The pathname to check.
 	 * @return A string representing the file extension of this parhname, or null if
-	 *         this parhname does not have a file extention, or points to a folder.
+	 *     this parhname does not have a file extention, or points to a folder.
 	 */
 	public static String getFileExtention(String pathname)
 	{
@@ -36,7 +38,7 @@ public class FileUtils
 	 * the file, without the partent folder heirarchy.
 	 *
 	 * @param pathname
-	 *            - A pathname of a folder or file.
+	 *     - A pathname of a folder or file.
 	 * @return The regular name of the folder or file, or null if pathname is null.
 	 */
 	public static String getSimpleFileName(String pathname)
@@ -62,12 +64,32 @@ public class FileUtils
 	 * forward slash.
 	 *
 	 * @param pathname
-	 *            - The pathname to validate.
+	 *     - The pathname to validate.
 	 * @return True if the pathname is a valid pathname, false otherwise.
 	 */
 	public static boolean isValidPathname(String pathname)
 	{
-		return pathname
-				.matches("^(([\\w][\\w ]*[\\w]|[\\w])\\/?)*([\\w][\\w ]*[\\w]|[\\w])\\.\\w+$");
+		return pathname.matches("^(([\\w][\\w ]*[\\w]|[\\w])\\/?)*([\\w][\\w ]*[\\w]|[\\w])\\.\\w+$");
+	}
+
+	/**
+	 * Deletes a file or directory. If the directory is not empty, all files within
+	 * the directory are deleted recursively, then the directory is deleted.
+	 * 
+	 * @param file
+	 *     - The file or directory to delete.
+	 */
+	public static void deleteDirectory(File file)
+	{
+		if (!file.exists())
+			return;
+
+		if (file.isDirectory())
+		{
+			for (File f : file.listFiles())
+				deleteDirectory(f);
+		}
+
+		file.delete();
 	}
 }
