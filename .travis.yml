@@ -7,8 +7,7 @@ before_install:
   - cd WraithEngine
 
 env:
-  - org.lwjgl.util.Debug=true
-  - org.lwjgl.util.DebugLoader=true
+  - Dorg.lwjgl.util.Debug=true Dorg.lwjgl.util.DebugLoader=true
 
 after_success:
   - mvn jacoco:report coveralls:report
