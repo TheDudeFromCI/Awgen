@@ -21,7 +21,7 @@ matrix:
     - env:
         - DESC="tests and deploy"
         - CMD="mvn clean -B"
-        - CMD="mvn test -B -Dorg.lwjgl.util.Debug=true -Dorg.lwjgl.util.DebugLoader=true"
+        - CMD="mvn test -B -Ddebug=true -Dorg.lwjgl.util.Debug=true -Dorg.lwjgl.util.DebugLoader=true"
 
 after_success:
   - mvn jacoco:report coveralls:report
