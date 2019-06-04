@@ -74,7 +74,16 @@ public class Log
 	private static Log getInstance()
 	{
 		if (_instance == null)
+		{
 			_instance = new Log(new LogPrintWriterOut(new PrintWriter(System.out)));
+			
+			try
+			{
+				if (Boolean.valueOf(System.getProperty("debug", "false")))
+					_instance._logLevel = TRACE;
+			}
+			catch(Exception exception){}
+		}
 
 		return _instance;
 	}
