@@ -93,8 +93,7 @@ public class GLVShader implements VShader
 		_opengl.checkForErrors(Log.TRACE, "Bound Shader");
 	}
 
-	@Override
-	public boolean isBound()
+	private boolean isBound()
 	{
 		return _opengl.getBoundShaderId() == _shaderId;
 	}

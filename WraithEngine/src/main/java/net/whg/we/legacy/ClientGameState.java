@@ -7,26 +7,33 @@ import net.whg.frameworks.resource.ResourceDatabase;
 import net.whg.frameworks.resource.ResourceLoader;
 import net.whg.frameworks.resource.ResourceManager;
 import net.whg.we.client_logic.connect.ClientPlayerList;
+import net.whg.we.client_logic.rendering.Graphics;
 import net.whg.we.client_logic.rendering.GraphicsPipeline;
 import net.whg.we.main.GameState;
+import net.whg.we.resource.MeshConverterLoader;
+import net.whg.we.resource.MeshLoader;
+import net.whg.we.resource.ShaderConverterLoader;
+import net.whg.we.resource.ShaderLoader;
 import net.whg.we.resource.SimpleFileDatabase;
+import net.whg.we.resource.TextureConverterLoader;
+import net.whg.we.resource.TextureLoader;
 import net.whg.we.scene.SceneListManager;
 
 public class ClientGameState implements GameState
 {
-	private static ResourceManager buildResourceManager()
+	private static ResourceManager buildResourceManager(Graphics graphics)
 	{
 		File baseFolder = new File(System.getProperty("user.dir"));
 		FileDatabase fileDatabase = new SimpleFileDatabase(baseFolder);
 		ResourceDatabase resourceDatabase = new ResourceDatabase();
 		ResourceLoader resourceLoader = new ResourceLoader();
 
-		// resourceLoader.addFileLoader(new GLSLShaderLoader());
-		// resourceLoader.addFileLoader(new MeshLoader());
-		// resourceLoader.addFileLoader(new TextureLoader());
-		// resourceLoader.addFileLoader(new MaterialLoader());
-		// resourceLoader.addFileLoader(new ModelLoader());
-		// resourceLoader.addFileLoader(new FontLoader());
+		resourceLoader.addFileLoader(new MeshConverterLoader(graphics));
+		resourceLoader.addFileLoader(new MeshLoader(graphics));
+		resourceLoader.addFileLoader(new TextureConverterLoader(graphics));
+		resourceLoader.addFileLoader(new TextureLoader(graphics));
+		resourceLoader.addFileLoader(new ShaderConverterLoader(graphics));
+		resourceLoader.addFileLoader(new ShaderLoader(graphics));
 
 		return new ResourceManager(resourceDatabase, resourceLoader, fileDatabase);
 	}
@@ -40,11 +47,11 @@ public class ClientGameState implements GameState
 
 	public ClientGameState(MultiplayerClient client)
 	{
-		_resourceManager = buildResourceManager();
+		_graphicsPipeline = new GraphicsPipeline();
+		_resourceManager = buildResourceManager(_graphicsPipeline.getGraphics());
 		_gameLoop = new WindowedGameLoop(this);
 		_sceneManager = new SceneListManager();
 		_playerList = new ClientPlayerList(client.getUsername(), client.getToken());
-		_graphicsPipeline = new GraphicsPipeline();
 		_networkHandler = client;
 	}
 

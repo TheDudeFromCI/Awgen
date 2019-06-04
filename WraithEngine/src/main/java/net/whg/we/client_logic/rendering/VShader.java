@@ -9,8 +9,6 @@ public interface VShader
 
 	void bind();
 
-	boolean isBound();
-
 	void dispose();
 
 	int getShaderId();
