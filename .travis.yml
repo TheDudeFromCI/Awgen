@@ -11,17 +11,10 @@ cache:
   apt: true
   directories:
     - ~/.m2
-install:
-  -
 
-matrix:
-  fast_finish: true
-  include:
-    - jdk: oraclejdk8
-    - env:
-        - DESC="tests and deploy"
-        - CMD="mvn clean -B"
-        - CMD="mvn -Ddebug=true -Dorg.lwjgl.util.Debug=true -Dorg.lwjgl.util.DebugLoader=true test -B"
+install: true
+script:
+  - mvn -Ddebug=true -Dorg.lwjgl.util.Debug=true -Dorg.lwjgl.util.DebugLoader=true test -B;
 
 after_success:
   - mvn jacoco:report coveralls:report
