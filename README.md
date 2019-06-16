@@ -1,5 +1,5 @@
 ![Build Status](https://travis-ci.com/Wraithaven/Awgen.svg?branch=master "Build Status")
-[![Coverage Status](https://coveralls.io/repos/github/Wraithaven/Awgen/badge.svg?branch=master)](https://coveralls.io/github/Wraithaven/Awgen?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Wraithaven/WraithEngine3/badge.svg?branch=master)](https://coveralls.io/github/Wraithaven/WraithEngine3?branch=master)
 
 ---
 
