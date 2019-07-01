@@ -16,7 +16,6 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<awgen-shell.version>14eca50</awgen-shell.version>
-		<awgen-lib.version>521cc90</awgen-lib.version>
 	</properties>
 
 	<repositories>
@@ -127,14 +126,14 @@
 			<version>${awgen-shell.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.Wraithaven</groupId>
-			<artifactId>Awgen-Lib</artifactId>
-			<version>${awgen-lib.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-model</artifactId>
 			<version>3.3.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.wraithaven.games</groupId>
+			<artifactId>Awgen-Lib</artifactId>
+			<version>v0.1.0a</version>
 		</dependency>
 	</dependencies>
 </project>
