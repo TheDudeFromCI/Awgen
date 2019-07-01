@@ -5,6 +5,7 @@ import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.whg.awgenshell.CommandSender;
+import net.whg.awgenshell.Module;
 import net.whg.awgenshell.ShellEnvironment;
 
 public class TerminalInput implements CommandSender
@@ -54,5 +55,10 @@ public class TerminalInput implements CommandSender
 			if (!commands.isEmpty())
 				shell.runCommand(commands.removeFirst());
 		}
+	}
+
+	public void loadModule(Module module)
+	{
+		shell.loadModule(module);
 	}
 }

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.whg.awgen.lib.gameloop.GameLoopAdapter;
 import net.whg.awgen.lib.util.GameLoopPhysicsYield;
+import net.whg.awgen.server.commands.CommandModule;
 import net.whg.awgen.server.core.GameState;
 
 public class Main
@@ -21,6 +22,8 @@ public class Main
 
 		GameState game = new GameState();
 		TerminalInput input = new TerminalInput();
+
+		input.loadModule(CommandModule.build(game));
 
 		game.getGameLoop().getEvents().addListener(new GameLoopPhysicsYield());
 		game.getGameLoop().getEvents().addListener(new GameLoopAdapter()
