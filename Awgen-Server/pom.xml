@@ -15,7 +15,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<awgen-shell.version>2b41cb5faa</awgen-shell.version>
+		<awgen-shell.version>ce3c85bbd7</awgen-shell.version>
 	</properties>
 
 	<repositories>
