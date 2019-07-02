@@ -30,6 +30,33 @@ public class SceneCommand implements CommandHandler
 			return new CommandResult("", true, true);
 		}
 
+		if (args.length == 2)
+		{
+			String a0 = args[0].getValue();
+
+			if (a0.equalsIgnoreCase("remove"))
+			{
+				String a1 = args[1].getValue();
+
+				SceneNode node = gameState.getScene().findNode(a1);
+				if (node == null)
+				{
+					shell.getCommandSender().println("Node not found: '" + a1 + "'!");
+					return CommandResult.ERROR;
+				}
+
+				if (node.getParent() == null)
+					gameState.getScene().setRoot(new SceneNode());
+				else
+					node.setParent(null);
+
+				return new CommandResult("", true, true);
+			}
+
+			shell.getCommandSender().println("Unknown subcommmand: '" + a0 + "'!");
+			return CommandResult.ERROR;
+		}
+
 		if (args.length == 3)
 		{
 			String a0 = args[0].getValue();
@@ -54,6 +81,23 @@ public class SceneCommand implements CommandHandler
 				}
 
 				parent.addChild(child);
+
+				return new CommandResult("", true, true);
+			}
+
+			if (a0.equalsIgnoreCase("rename"))
+			{
+				String a1 = args[1].getValue();
+				String a2 = args[2].getValue();
+
+				SceneNode node = gameState.getScene().findNode(a1);
+				if (node == null)
+				{
+					shell.getCommandSender().println("Node not found: '" + a1 + "'!");
+					return CommandResult.ERROR;
+				}
+
+				node.setName(a2);
 
 				return new CommandResult("", true, true);
 			}
