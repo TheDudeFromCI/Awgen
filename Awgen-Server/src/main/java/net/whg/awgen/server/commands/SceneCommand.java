@@ -50,7 +50,7 @@ public class SceneCommand implements CommandHandler
 				else
 					node.setParent(null);
 
-				return new CommandResult("", true, true);
+				return new CommandResult(a1, true, true);
 			}
 
 			shell.getCommandSender().println("Unknown subcommmand: '" + a0 + "'!");
@@ -82,7 +82,7 @@ public class SceneCommand implements CommandHandler
 
 				parent.addChild(child);
 
-				return new CommandResult("", true, true);
+				return new CommandResult(child.getUUID().toString(), true, true);
 			}
 
 			if (a0.equalsIgnoreCase("rename"))
