@@ -122,5 +122,11 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.29</version>
         </dependency>
+
+        <dependency>
+            <groupId>net.whg</groupId>
+            <artifactId>wraithengine</artifactId>
+            <version>build_2</version>
+        </dependency>
 	</dependencies>
 </project>
