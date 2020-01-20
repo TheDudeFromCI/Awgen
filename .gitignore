@@ -29,6 +29,3 @@ hs_err_pid*
 Awgen-Client/target/
 Awgen-Lib/target/
 Awgen-Server/target/
-Awgen-Client/dependency-reduced-pom.xml
-Awgen-Lib/dependency-reduced-pom.xml
-Awgen-Server/dependency-reduced-pom.xml
