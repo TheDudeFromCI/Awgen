@@ -29,3 +29,5 @@ hs_err_pid*
 Awgen-Client/target/
 Awgen-Lib/target/
 Awgen-Server/target/
+
+*.code-workspace
