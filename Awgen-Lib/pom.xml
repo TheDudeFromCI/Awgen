@@ -8,6 +8,10 @@
 	<version>dev_build</version>
 	<packaging>jar</packaging>
 
+	<properties>
+		<sonar.projectKey>TheDudeFromCI_Awgen-Lib</sonar.projectKey>
+	</properties>
+
 	<parent>
 		<groupId>net.whg</groupId>
 		<artifactId>Awgen</artifactId>
