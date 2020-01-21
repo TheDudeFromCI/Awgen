@@ -20,13 +20,4 @@
 
 	<name>Awgen-Lib</name>
 	<url>http://maven.apache.org</url>
-
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-	</build>
 </project>
