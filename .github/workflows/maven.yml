@@ -36,9 +36,8 @@ jobs:
           GITHUB_REPO_ACCESS: ${{ secrets.GITHUB_REPO_ACCESS }}
 
       - name: Build with Maven
-        uses: xlui/action-maven-cli/jdk8@master
-        with:
-          args: -B clean jacoco:prepare-agent package --file pom.xml jacoco:report sonar:sonar
+        run: |
+          mvn -B --settings ~/.m2/settings.xml clean jacoco:prepare-agent test jacoco:report sonar:sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -91,4 +90,4 @@ jobs:
 
       - name: Maven Deploy
         run: |
-          mvn -B deploy
+          mvn -B --settings ~/.m2/settings.xml clean deploy
