@@ -76,6 +76,31 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: thedudefromci
         run: |
+
+          # Create Settings file
           mkdir -p ~/.m2
-          echo "<settings><servers><server><id>github</id><username>${USERNAME}</username><password>${GITHUB_TOKEN}</password></server></servers></settings>" > ~/.m2/settings.xml
+          echo "<settings>" > ~/.m2/settings.xml
+
+          # Add active profile
+          echo "<activeProfiles><activeProfile>github</activeProfile></activeProfiles>" >> ~/.m2/settings.xml
+
+          # Start repo list
+          echo "<profiles><profile><id>github</id><repositories>" >> ~/.m2/settings.xml
+
+          # Add Maven Central repo
+          echo "<repository><id>central</id><url>https://repo1.maven.org/maven2</url><releases><enabled>true</enabled></releases><snapshots><enabled>false</enabled></snapshots></repository>" >> ~/.m2/settings.xml
+
+          # Add WraithEngine repo
+          echo "<repository><id>github</id><name>GitHub thedudefromci Apache Maven Packages</name><url>https://maven.pkg.github.com/thedudefromci/WraithEngine</url></repository>" >> ~/.m2/settings.xml
+
+          # End repo list
+          echo "</repositories></profile></profiles>" >> ~/.m2/settings.xml
+
+          # Add authentication
+          echo "<servers><server><id>github</id><username>${USERNAME}</username><password>${GITHUB_TOKEN}</password></server></servers>" >> ~/.m2/settings.xml
+
+          # Finish settings file
+          echo "</settings>" >> ~/.m2/settings.xml
+
+          # Trigger deploy
           mvn -B deploy
