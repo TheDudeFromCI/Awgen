@@ -31,9 +31,9 @@ jobs:
       - name: Copy Maven settings.xml
         run: |
           mkdir -p ~/.m2
-          sed "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" .github/workflows/settings.xml > ~/.m2/settings.xml
+          sed "s/GITHUB_REPO_ACCESS/${GITHUB_REPO_ACCESS}/" .github/workflows/settings.xml > ~/.m2/settings.xml
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO_ACCESS: ${{ secrets.GITHUB_REPO_ACCESS }}
 
       - name: Build with Maven
         uses: xlui/action-maven-cli/jdk8@master
@@ -85,9 +85,9 @@ jobs:
       - name: Copy Maven settings.xml
         run: |
           mkdir -p ~/.m2
-          sed "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" .github/workflows/settings.xml > ~/.m2/settings.xml
+          sed "s/GITHUB_REPO_ACCESS/${GITHUB_REPO_ACCESS}/" .github/workflows/settings.xml > ~/.m2/settings.xml
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO_ACCESS: ${{ secrets.GITHUB_REPO_ACCESS }}
 
       - name: Maven Deploy
         run: |

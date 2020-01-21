@@ -1,5 +1,5 @@
 <!--
-    This file is the ~/.m2/settings.xml to use when running the CI build and CI deploy jobs.
+    This file is the ~/.m2/settings.xml to use when running the CI build and deploy jobs.
 -->
 
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
@@ -35,7 +35,7 @@
     <server>
       <id>github</id>
       <username>thedudefromci</username>
-      <password>GITHUB_TOKEN</password>
+      <password>GITHUB_REPO_ACCESS</password>
     </server>
   </servers>
 </settings>
