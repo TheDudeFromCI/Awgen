@@ -5,6 +5,7 @@ on:
     paths:
       - "**.java"
       - "pom.xml"
+      - "**/pom.xml"
       - ".github/**"
   pull_request:
     paths:
@@ -27,6 +28,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: Copy Maven settings.xml
+        run: |
+          mkdir -p ~/.m2
+          sed "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" .github/workflows/settings.xml > ~/.m2/settings.xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build with Maven
         uses: xlui/action-maven-cli/jdk8@master
         with:
@@ -38,8 +46,8 @@ jobs:
       - name: Show Error Logs
         if: failure()
         run: |
-          cat hs_err_pid*
-          rm hs_err_pid*
+          cat hs_err_pid* 2> /dev/null || true
+          rm hs_err_pid* 2> /dev/null || true
 
   deploy:
     name: Deploy
@@ -70,37 +78,17 @@ jobs:
       - name: Apply build number
         run: |
           sed -i "s|<version>dev_build</version>|<version>build_$BUILD_NUMBER</version>|g" pom.xml
+          sed -i "s|<version>dev_build</version>|<version>build_$BUILD_NUMBER</version>|g" Awgen-Client/pom.xml
+          sed -i "s|<version>dev_build</version>|<version>build_$BUILD_NUMBER</version>|g" Awgen-Lib/pom.xml
+          sed -i "s|<version>dev_build</version>|<version>build_$BUILD_NUMBER</version>|g" Awgen-Server/pom.xml
 
-      - name: Configure Maven Deploy
+      - name: Copy Maven settings.xml
+        run: |
+          mkdir -p ~/.m2
+          sed "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" .github/workflows/settings.xml > ~/.m2/settings.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          USERNAME: thedudefromci
+
+      - name: Maven Deploy
         run: |
-
-          # Create Settings file
-          mkdir -p ~/.m2
-          echo "<settings>" > ~/.m2/settings.xml
-
-          # Add active profile
-          echo "<activeProfiles><activeProfile>github</activeProfile></activeProfiles>" >> ~/.m2/settings.xml
-
-          # Start repo list
-          echo "<profiles><profile><id>github</id><repositories>" >> ~/.m2/settings.xml
-
-          # Add Maven Central repo
-          echo "<repository><id>central</id><url>https://repo1.maven.org/maven2</url><releases><enabled>true</enabled></releases><snapshots><enabled>false</enabled></snapshots></repository>" >> ~/.m2/settings.xml
-
-          # Add WraithEngine repo
-          echo "<repository><id>github</id><name>GitHub thedudefromci Apache Maven Packages</name><url>https://maven.pkg.github.com/thedudefromci/WraithEngine</url></repository>" >> ~/.m2/settings.xml
-
-          # End repo list
-          echo "</repositories></profile></profiles>" >> ~/.m2/settings.xml
-
-          # Add authentication
-          echo "<servers><server><id>github</id><username>${USERNAME}</username><password>${GITHUB_TOKEN}</password></server></servers>" >> ~/.m2/settings.xml
-
-          # Finish settings file
-          echo "</settings>" >> ~/.m2/settings.xml
-
-          # Trigger deploy
           mvn -B deploy
